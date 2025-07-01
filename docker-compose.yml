@@ -1,0 +1,45 @@
+services:
+    # client:
+    #   build:
+    #   context: ./client
+    #   dockerfile: Dockerfile
+    #   env_file:
+    #     - ./client/.env
+    #   ports:
+    #     - "3000:3000"
+    #   depends_on:
+    #     - server
+
+    # server:
+    #   server:
+    #   build:
+    #     context: ./server
+    #     dockerfile: Dockerfile
+    #   env_file:
+    #     - ./server/.env
+    #   ports:
+    #     - "5000:5000"
+
+#     mlflow_inference_server:
+#         build:
+#             context: ./ml_model/container_scripts/mlflow_inference_server
+#         # image: ${MLFLOW_MODEL_IMAGE_NAME}
+#         container_name: mlflow_inference_server
+#         restart: always
+#         ports:
+#             - "${MLFLOW_INFERENCE_SERVER_PORT}:${MLFLOW_INFERENCE_SERVER_PORT}"
+#         environment:
+#             - MLFLOW_TRACKING_URI=http://${MLFLOW_TRACKING_SERVER_HOST}:${MLFLOW_TRACKING_SERVER_PORT}
+#             - MLFLOW_MODEL_NAME=${MLFLOW_MODEL_NAME}
+#             - MLFLOW_INFERENCE_SERVER_HOST=${MLFLOW_INFERENCE_SERVER_HOST}
+#             - MLFLOW_INFERENCE_SERVER_PORT=${MLFLOW_INFERENCE_SERVER_PORT}
+#             # - MLFLOW_S3_ENDPOINT_URL=http://${MINIO_HOST}:${MINIO_API_PORT}
+#             # - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
+#             # - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_ACCESS_KEY}
+#             # - AWS_DEFAULT_REGION=${AWS_REGION}
+#         networks:
+#             - ml_model_mlflow_network
+
+# networks:
+#     ml_model_mlflow_network:
+#         external: true

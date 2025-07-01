@@ -1,0 +1,10 @@
+{
+    "accuracy": 0.7688888888888888,
+    "macro_avg_f1-score": 0.5753407264017298,
+    "recall_class_certain": 0.8888888888888888,
+    "recall_class_likely": 0.828125,
+    "recall_class_possible": 0.9701492537313433,
+    "recall_class_unlikely": 0.0,
+    "recall_class_unclassified": 1.0,
+    "recall_class_unclassifiable": 0.0
+}

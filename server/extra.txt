@@ -1,0 +1,246 @@
+ causality_assessment_level = (
+        db.query(CausalityAssessmentLevelModel)
+        .options(
+            joinedload(CausalityAssessmentLevelModel.reviews)
+            .joinedload(ReviewModel.user)
+            .load_only(
+                UserModel.id,
+                UserModel.username,
+                UserModel.first_name,
+                UserModel.last_name,
+            )
+        )
+        .filter(CausalityAssessmentLevelModel.id == causality_assessment_level_id)
+        .first()
+    )
+
+
+
+
+
+@app.post("/api/v1/adr", status_code=status.HTTP_201_CREATED)
+async def post_adr(
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
+    adr: ADRPostRequest,
+    db: Session = Depends(get_db),
+):
+    # Get ML Model
+    ml_model = get_ml_model()
+
+    # Get encoders
+    one_hot_encoder, ordinal_encoder = get_encoders()
+
+    # Save data as temp df
+    temp_df = pd.DataFrame([adr.model_dump()])
+
+    categorical_columns = get_categorical_columns()
+
+    # Encode df
+    cat_encoded = one_hot_encoder.transform(temp_df[categorical_columns])
+    cat_encoded = pd.DataFrame(
+        cat_encoded,
+        columns=one_hot_encoder.get_feature_names_out(categorical_columns),
+    )
+
+    # Define columns for prediction
+    prediction_columns = get_prediction_columns()
+
+    # Extract prediction input
+    prediction_input = cat_encoded[prediction_columns]
+
+    # Predict using the ML model
+    prediction = ml_model.predict(prediction_input)
+
+    # Get Background Data
+    background_data_csv = "data.csv"
+    background_data_df = pd.read_csv(background_data_csv)
+    background_data_df = background_data_df[categorical_columns]
+
+    cat_encoded_background = one_hot_encoder.transform(background_data_df)
+    cat_encoded_background = pd.DataFrame(
+        cat_encoded_background,
+        columns=one_hot_encoder.get_feature_names_out(categorical_columns),
+    )
+
+    # background_data_for_prediction = cat_encoded_background[prediction_columns]
+
+    # # Explain with SHAP
+    # explainer = shap.KernelExplainer(
+    #     ml_model.predict_proba, background_data_for_prediction
+    # )
+    # shap_values = explainer.shap_values(prediction_input)
+
+    # print(shap_values)
+    # # Convert SHAP explanation to a more understandable format
+    # feature_names = prediction_input.columns
+    # shap_summary = []
+
+    # # Loop through each class and its corresponding SHAP values
+    # for class_index, shap_class_values in enumerate(shap_values):
+    #     class_explanation = {
+    #         "class": class_index,
+    #         "shap_values": [
+    #             {"feature": feature, "shap_value": value.item()}
+    #             for feature, value in zip(feature_names, shap_class_values)
+    #         ],
+    #     }
+    #     shap_summary.append(class_explanation)
+
+    # Decode prediction using ordinal encoder
+    decoded_prediction = ordinal_encoder.inverse_transform(prediction.reshape(-1, 1))[
+        0
+    ][0]
+
+    # Add prediction to ADRModel instance
+    # adr.causality_assessment_level = CausalityAssessmentLevelEnum(decoded_prediction)
+    # Create an ADRBaseModel object using ADRPostRequest fields
+    # adr_full = ADRBaseModel(
+    #     **adr.model_dump(),
+    #     causality_assessment_level=CausalityAssessmentLevelEnum(decoded_prediction),
+    # )
+
+    # Get user id
+    db_user = (
+        db.query(UserModel).filter(UserModel.username == current_user.username).first()
+    )
+
+    adr_model = ADRModel(
+        **adr.model_dump(),
+        user_id=db_user.id,
+    )
+    # adr_model.user = current_user
+    # adr_model.user_id = current_user.id
+    db.add(adr_model)
+    db.commit()
+    db.refresh(adr_model)
+
+    # Add causality assessment level
+    casuality_assessment_level_model = CausalityAssessmentLevelModel(
+        adr_id=adr_model.id,
+        causality_assessment_level_value=CausalityAssessmentLevelEnum(
+            decoded_prediction
+        ),
+    )
+
+    db.add(casuality_assessment_level_model)
+    db.commit()
+    db.refresh(casuality_assessment_level_model)
+
+    # To load the causality assessment levels
+    content = db.query(ADRModel).filter(ADRModel.id == adr_model.id).first()
+
+    return JSONResponse(
+        # content={"model": jsonable_encoder(content), "shap": shap_summary},
+        content=jsonable_encoder(content),
+        status_code=status.HTTP_201_CREATED,
+    )
+
+
+@app.put("/api/v1/adr/{adr_id}", status_code=status.HTTP_200_OK)
+async def update_adr(
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
+    updated_adr: ADRPostRequest,
+    adr_id: str = Path(..., description="ID of the ADR record to update"),
+    db: Session = Depends(get_db),
+):
+    # Step 1: Get existing ADR record
+    adr_model = db.query(ADRModel).filter(ADRModel.id == adr_id).first()
+    if not adr_model:
+        raise HTTPException(status_code=404, detail="ADR record not found")
+
+    # Step 2: Update ADR fields
+    for key, value in updated_adr.model_dump().items():
+        setattr(adr_model, key, value)
+
+    db.commit()
+    db.refresh(adr_model)
+
+    # Step 3: Load ML model and encoders
+    ml_model = get_ml_model()
+
+    one_hot_encoder, ordinal_encoder = get_encoders()
+
+    # Step 4: Create dataframe from updated data
+    categorical_columns = get_categorical_columns()
+
+    temp_df = pd.DataFrame([updated_adr.model_dump()])
+
+    # Step 5: Encode data
+    cat_encoded = one_hot_encoder.transform(temp_df[categorical_columns])
+    cat_encoded = pd.DataFrame(
+        cat_encoded, columns=one_hot_encoder.get_feature_names_out(categorical_columns)
+    )
+
+    prediction_columns = get_prediction_columns()
+    prediction_input = cat_encoded[prediction_columns]
+
+    # Step 6: Predict and decode
+    prediction = ml_model.predict(prediction_input)
+    decoded_prediction = ordinal_encoder.inverse_transform(prediction.reshape(-1, 1))[
+        0
+    ][0]
+
+    # Step 7: Update causality assessment model
+    causality_record = (
+        db.query(CausalityAssessmentLevelModel)
+        .filter(CausalityAssessmentLevelModel.adr_id == adr_model.id)
+        .first()
+    )
+
+    if causality_record:
+        causality_record.causality_assessment_level_value = (
+            CausalityAssessmentLevelEnum(decoded_prediction)
+        )
+        db.commit()
+        db.refresh(causality_record)
+    else:
+        new_causality = CausalityAssessmentLevelModel(
+            adr_id=adr_model.id,
+            causality_assessment_level_value=CausalityAssessmentLevelEnum(
+                decoded_prediction
+            ),
+        )
+        db.add(new_causality)
+        db.commit()
+        db.refresh(new_causality)
+
+    # Step 8: Return updated record with causality details
+    content = db.query(ADRModel).filter(ADRModel.id == adr_model.id).first()
+
+    return JSONResponse(
+        content=jsonable_encoder(content),
+        status_code=status.HTTP_200_OK,
+    )
+
+
+
+{
+  'SMSMessageData': {
+    'Message': 'Sent to 0/1 Total Cost: 0',
+    'Recipients': [
+      {
+        'cost': '0',
+        'messageId': 'None',
+        'number': '+254792701195',
+        'status': 'UserInBlacklist',
+        'statusCode': 406
+      }
+    ]
+  }
+}
+
+{
+  'SMSMessageData': {
+    'Message': 'Sent to 1/1 Total Cost: KES 0.8000',
+    'Recipients': [
+      {
+        'cost': 'KES 0.8000',
+        'messageId': 'ATXid_02cd8a6b3066879794a958312b718f25',
+        'messageParts': 1,
+        'number': '+254777529295',
+        'status': 'Success',
+        'statusCode': 100
+      }
+    ]
+  }
+}

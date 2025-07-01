@@ -1,0 +1,100 @@
+services:
+    mlflow_tracking_server:
+        restart: always
+        build: ./container_scripts/mlflow_tracking_server
+        container_name: mlflow_tracking_server
+        ports:
+            - "${MLFLOW_TRACKING_SERVER_PORT:-5001}:5000"
+            - "${MLFLOW_INFERENCE_SERVER_PORT}:${MLFLOW_INFERENCE_SERVER_PORT}"
+        environment:
+            - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
+            - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_ACCESS_KEY}
+            - AWS_DEFAULT_REGION=${AWS_REGION}
+            - MLFLOW_S3_ENDPOINT_URL=http://minio:${MINIO_API_PORT}
+            - MLFLOW_S3_IGNORE_TLS=${MLFLOW_S3_IGNORE_TLS:-true}
+            - MLFLOW_MODEL_NAME=${MLFLOW_MODEL_NAME}
+            - MLFLOW_MODEL_ALIAS=${MLFLOW_MODEL_ALIAS}
+            - MLFLOW_TRACKING_URI=http://mlflow_tracking_server:5000
+            - MLFLOW_INFERENCE_SERVER_PORT=${MLFLOW_INFERENCE_SERVER_PORT}
+        command: >
+            /bin/bash -c "apt-get update && apt-get install -y curl &&
+            chmod +x /start_inference_server.sh &&
+            mlflow server 
+            --backend-store-uri postgresql+psycopg2://${MLFLOW_DB_USER}:${MLFLOW_DB_PASSWORD}@mlflow_db/mlflow 
+            --host ${MINIO_HOST}
+            --default-artifact-root s3://${MINIO_BUCKET_NAME}/
+            --artifacts-destination s3://${MINIO_BUCKET_NAME}/"
+        depends_on:
+            - mlflow_db
+            - minio_setup
+        volumes:
+            - ./container_scripts/mlflow_tracking_server/start_inference_server.sh:/start_inference_server.sh
+
+        env_file:
+            - ../.env
+        networks:
+            - mlflow_network
+
+    mlflow_db:
+        image: postgres:latest
+        container_name: mlflow_db
+        restart: always
+        ports:
+            - "${MLFLOW_DB_PORT:-5432}:5432"
+        environment:
+            - POSTGRES_USER=${MLFLOW_DB_USER}
+            - POSTGRES_PASSWORD=${MLFLOW_DB_PASSWORD}
+            - POSTGRES_DB=${MLFLOW_DB_NAME}
+        volumes:
+            - mlflow_db_data:/var/lib/postgresql/data
+            - ./container_scripts/mlflow_db/init.sql:/docker-entrypoint-initdb.d/init.sql
+        env_file:
+            - ../.env
+        networks:
+            - mlflow_network
+
+    minio:
+        image: quay.io/minio/minio
+        container_name: minio
+        restart: always
+        ports:
+            - "${MINIO_API_PORT:-9000}:9000"
+            - "${MINIO_CONSOLE_PORT:-9001}:9001"
+        environment:
+            - MINIO_ROOT_USER=${MINIO_ACCESS_KEY}
+            - MINIO_ROOT_PASSWORD=${MINIO_SECRET_ACCESS_KEY}
+            - MINIO_STORAGE_USE_HTTPS=${MINIO_STORAGE_USE_HTTPS:-false}
+        command: server /data --console-address ":${MINIO_CONSOLE_PORT:-9001}"
+        volumes:
+            - minio_data:/data
+
+        env_file:
+            - ../.env
+        networks:
+            - mlflow_network
+
+    minio_setup:
+        image: quay.io/minio/mc
+        container_name: minio_setup
+        environment:
+            - MINIO_ROOT_USER=${MINIO_ACCESS_KEY}
+            - MINIO_ROOT_PASSWORD=${MINIO_SECRET_ACCESS_KEY}
+            - MINIO_API_PORT=${MINIO_API_PORT}
+        volumes:
+            - ./container_scripts/minio/create_bucket.sh:/create_bucket.sh
+        depends_on:
+            - minio
+        entrypoint: /bin/sh
+        command: -c "chmod +x /create_bucket.sh && /create_bucket.sh"
+        env_file:
+            - ../.env
+        networks:
+            - mlflow_network
+
+volumes:
+    mlflow_db_data:
+    minio_data:
+
+networks:
+    mlflow_network:
+        driver: bridge
