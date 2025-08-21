@@ -4,7 +4,7 @@ from uuid import uuid4
 import pandas as pd
 from engines import engine
 
-from models import (
+from basemodels import (
     CausalityAssessmentLevelEnum,
     CausalityAssessmentLevelModel,
     UserModel,

@@ -1,0 +1,401 @@
+id,causality_assessment_level_id,user_id,approved,proposed_causality_level,reason
+af3b85ce-ab8f-42b1-a273-df0a9dba4b51,202a49a5-b6b1-4dc7-9509-e7251344cc8d,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,True,,
+c7d6fabc-3141-418b-9be0-571a8a15af08,202a49a5-b6b1-4dc7-9509-e7251344cc8d,eee2a028-7fff-4082-9dfc-77442f6e3ea7,False,unlikely,Contradicts known patterns.
+565d84ef-e888-40e1-81e2-462ec6029d36,202a49a5-b6b1-4dc7-9509-e7251344cc8d,72370d4f-2bbc-47b9-991c-071e6a81dc64,True,,
+e1c86832-4842-475f-9add-ad5c2f831db4,202a49a5-b6b1-4dc7-9509-e7251344cc8d,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,False,certain,Needs expert second opinion.
+df44fe93-325b-4651-abb5-6554aff6b7ec,202a49a5-b6b1-4dc7-9509-e7251344cc8d,47ee406e-8976-4b89-aef4-41fc55ba45a4,False,unclassified,Contradicts known patterns.
+88edf67b-f28c-4957-ab1b-452b6090091c,202a49a5-b6b1-4dc7-9509-e7251344cc8d,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,True,,
+cff4e3b6-2a66-4681-ad96-c2c64bad75fd,202a49a5-b6b1-4dc7-9509-e7251344cc8d,d1340087-115c-4223-88da-99e890496d0a,False,unlikely,Needs expert second opinion.
+be52545a-3f20-4dcc-b71e-206e63ad6337,202a49a5-b6b1-4dc7-9509-e7251344cc8d,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,False,unclassifiable,Contradicts known patterns.
+7e774b06-5fa0-41fc-989b-eda4382147b7,202a49a5-b6b1-4dc7-9509-e7251344cc8d,b9951ee1-fa33-4da2-a628-579bf091cc2c,True,,
+64af815f-a413-4f78-bd83-4a28522ec0df,202a49a5-b6b1-4dc7-9509-e7251344cc8d,3756bed1-aef0-4a9a-b422-8aedcfb61675,True,,
+1e0c672d-ebcc-495e-abf7-ff872801f6e5,202a49a5-b6b1-4dc7-9509-e7251344cc8d,53138b97-dbe7-4b15-886b-9c41e414661d,True,,
+5976b030-1efb-44cd-9864-f3c14ad254e0,202a49a5-b6b1-4dc7-9509-e7251344cc8d,345a5264-c00e-400d-9247-e1a1dc346aeb,True,,
+d548e2e7-c40b-4e9c-a5fd-b69099606790,202a49a5-b6b1-4dc7-9509-e7251344cc8d,f686e1a1-723c-429b-bb47-f73b16ff83b6,False,likely,
+0a4d9797-8c39-4332-bee8-80620c31f57e,202a49a5-b6b1-4dc7-9509-e7251344cc8d,3522234b-03f3-477a-a2e2-73f3eda7cf68,True,,
+31fd2b4f-1e32-4398-a5e0-d2a29140f6c8,202a49a5-b6b1-4dc7-9509-e7251344cc8d,0a608a9a-40cc-406f-ac37-83914df136d5,False,certain,Missing key symptom analysis.
+2d7b0433-fa98-498d-b07a-a8f9ef4d8e5a,202a49a5-b6b1-4dc7-9509-e7251344cc8d,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,True,,
+f99cb760-bfe2-4df4-b0c9-e957ea041994,202a49a5-b6b1-4dc7-9509-e7251344cc8d,a38a16c3-7a7d-4021-aced-39f74c2204ce,False,unclassified,
+c1b6ebee-70aa-4014-8f24-21071c75e04e,202a49a5-b6b1-4dc7-9509-e7251344cc8d,498a3e20-031a-4141-8a54-3d169a7387ee,False,unclassifiable,Contradicts known patterns.
+7ee2b2ee-8af9-4eb5-839b-cb3c282f225e,202a49a5-b6b1-4dc7-9509-e7251344cc8d,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+fbc1b9a8-ead1-4286-9545-d04a8e770f73,202a49a5-b6b1-4dc7-9509-e7251344cc8d,6a946e13-4317-41d8-86fe-a4f9906dcf84,False,likely,Sufficient evidence provided.
+ad05ba25-cf0b-4b3c-acf4-99ed68319bda,51c584f6-0d0e-43f0-9c49-4598978aa5cb,3e1f3e67-210b-4c06-8db3-7996b60a1a85,False,likely,Reviewed and agreed.
+0224c131-146a-4abc-aa88-54dde1901d6c,51c584f6-0d0e-43f0-9c49-4598978aa5cb,0a608a9a-40cc-406f-ac37-83914df136d5,False,unclassifiable,Missing key symptom analysis.
+deedbbdd-1c6c-4e20-9f94-65a71f0dbbe1,51c584f6-0d0e-43f0-9c49-4598978aa5cb,33446ef3-36f8-4466-9c1e-38ca24846e37,False,likely,
+aac504ac-89c8-4522-98f5-558aa5f3345c,51c584f6-0d0e-43f0-9c49-4598978aa5cb,345a5264-c00e-400d-9247-e1a1dc346aeb,True,,
+567d6643-d247-4865-9a45-417c78ae8fe1,51c584f6-0d0e-43f0-9c49-4598978aa5cb,87146ff2-3730-4a23-b274-bde296bcb9d3,True,,
+d668e124-386b-478a-aa4c-3cedac9c7f86,51c584f6-0d0e-43f0-9c49-4598978aa5cb,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,False,certain,Needs expert second opinion.
+bc02c60e-d831-46c1-a430-540d6492f218,51c584f6-0d0e-43f0-9c49-4598978aa5cb,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,False,likely,Missing key symptom analysis.
+23f72267-e7c9-4376-94db-68f1e675e068,51c584f6-0d0e-43f0-9c49-4598978aa5cb,5295210d-c83d-491d-a9f4-7cbda5b0249d,True,,
+18dc3a3c-f588-477d-81a0-d863ef9e28ec,51c584f6-0d0e-43f0-9c49-4598978aa5cb,27efeab9-bbd2-489f-82ec-048f10ad8c03,False,unlikely,Reviewed and agreed.
+d746813b-1212-49ca-b4bf-cfb8f88a97d4,51c584f6-0d0e-43f0-9c49-4598978aa5cb,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,True,,
+ce85ab6a-6dd0-4eb8-aae8-aae482a396b8,51c584f6-0d0e-43f0-9c49-4598978aa5cb,3756bed1-aef0-4a9a-b422-8aedcfb61675,False,certain,Needs expert second opinion.
+faa3c606-8c46-4859-ae32-0534f447a29f,51c584f6-0d0e-43f0-9c49-4598978aa5cb,6a946e13-4317-41d8-86fe-a4f9906dcf84,False,unclassifiable,Missing key symptom analysis.
+dc2b6820-f228-4a8e-9b0d-05c7789cabd2,51c584f6-0d0e-43f0-9c49-4598978aa5cb,eee2a028-7fff-4082-9dfc-77442f6e3ea7,True,,
+257faa72-beb1-422e-93bf-e35173191026,51c584f6-0d0e-43f0-9c49-4598978aa5cb,498a3e20-031a-4141-8a54-3d169a7387ee,False,unclassifiable,Missing key symptom analysis.
+c3d69b81-0e87-4888-a877-4d4237fbeff6,51c584f6-0d0e-43f0-9c49-4598978aa5cb,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,False,likely,
+e0cb3664-499a-4331-8ca2-feb184879102,51c584f6-0d0e-43f0-9c49-4598978aa5cb,47ee406e-8976-4b89-aef4-41fc55ba45a4,True,,
+91c9ff65-0981-4723-84d1-a9b541bbef2e,51c584f6-0d0e-43f0-9c49-4598978aa5cb,3522234b-03f3-477a-a2e2-73f3eda7cf68,True,,
+5f85c12c-24b5-4ec2-bea3-5deb5e1499e4,51c584f6-0d0e-43f0-9c49-4598978aa5cb,b9951ee1-fa33-4da2-a628-579bf091cc2c,True,,
+9eb83939-24de-482b-be0f-9c6c43c70a6d,51c584f6-0d0e-43f0-9c49-4598978aa5cb,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+2c2155ef-15c6-43cb-bd67-ffe366d2b032,51c584f6-0d0e-43f0-9c49-4598978aa5cb,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,True,,
+e646e64a-5a66-489c-aff5-d4b23df4c955,e9921032-fd8e-47d5-98c9-0525c80814f0,3522234b-03f3-477a-a2e2-73f3eda7cf68,True,,
+74e200a7-bf94-4099-9669-4586585a3927,e9921032-fd8e-47d5-98c9-0525c80814f0,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,True,,
+ef5c88bd-f04a-4a2e-8e2b-c98edbb36e1b,e9921032-fd8e-47d5-98c9-0525c80814f0,53138b97-dbe7-4b15-886b-9c41e414661d,True,,
+fa7bc404-2013-4659-baa1-fdd50adc75f2,e9921032-fd8e-47d5-98c9-0525c80814f0,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,True,,
+75d62971-16f8-4f70-8a3d-aa2641f76eb4,e9921032-fd8e-47d5-98c9-0525c80814f0,27efeab9-bbd2-489f-82ec-048f10ad8c03,False,possible,Reviewed and agreed.
+61f55af0-1b8c-4cbd-9a13-78e76aca515d,e9921032-fd8e-47d5-98c9-0525c80814f0,f686e1a1-723c-429b-bb47-f73b16ff83b6,False,unclassifiable,Reviewed and agreed.
+0717a2a3-4c29-4f42-8e49-381a6f2d2f1a,e9921032-fd8e-47d5-98c9-0525c80814f0,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,True,,
+54a6e066-974b-46ea-b13c-bb932ea56f0d,e9921032-fd8e-47d5-98c9-0525c80814f0,498a3e20-031a-4141-8a54-3d169a7387ee,False,unclassified,Reviewed and agreed.
+2a2abf95-814a-4510-92ff-b6f98480da3a,e9921032-fd8e-47d5-98c9-0525c80814f0,d1340087-115c-4223-88da-99e890496d0a,False,certain,Reviewed and agreed.
+ea89acf5-7ad1-455e-9357-ab2bcb1aa4cb,e9921032-fd8e-47d5-98c9-0525c80814f0,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,True,,
+9ac26427-3f79-46c4-a81e-95972086079a,e9921032-fd8e-47d5-98c9-0525c80814f0,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+e2cb045c-9e31-4ad2-8554-4acc123ad95d,e9921032-fd8e-47d5-98c9-0525c80814f0,a38a16c3-7a7d-4021-aced-39f74c2204ce,True,,
+a2c09cb7-c46d-40af-bc5a-c8d5032726fc,e9921032-fd8e-47d5-98c9-0525c80814f0,72370d4f-2bbc-47b9-991c-071e6a81dc64,False,unclassified,Sufficient evidence provided.
+20fdea29-f628-4b4b-b72e-29f1fa1eb8e0,e9921032-fd8e-47d5-98c9-0525c80814f0,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,True,,
+6e3c3f6e-05ca-45e5-b8b7-7ad66c32eeb6,e9921032-fd8e-47d5-98c9-0525c80814f0,6a946e13-4317-41d8-86fe-a4f9906dcf84,True,,
+a666a644-4eec-4933-afc9-962dbdbf0ee2,e9921032-fd8e-47d5-98c9-0525c80814f0,87146ff2-3730-4a23-b274-bde296bcb9d3,False,certain,Sufficient evidence provided.
+d965b15b-c585-4ab0-8f7f-f96673838455,e9921032-fd8e-47d5-98c9-0525c80814f0,47ee406e-8976-4b89-aef4-41fc55ba45a4,True,,
+b074ea0b-aa8c-435e-9203-f4ead882592d,e9921032-fd8e-47d5-98c9-0525c80814f0,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,False,unclassified,
+a543b4fe-9e42-407d-b92a-6391dd62d81e,e9921032-fd8e-47d5-98c9-0525c80814f0,33446ef3-36f8-4466-9c1e-38ca24846e37,True,,
+2470e1cd-6183-43e1-b5c3-5f7127bd847d,e9921032-fd8e-47d5-98c9-0525c80814f0,0a608a9a-40cc-406f-ac37-83914df136d5,False,unlikely,Sufficient evidence provided.
+22e958a7-05bd-4c12-a9a0-e77fa1508325,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,True,,
+7974bf81-aec2-45d3-8299-16a0730eff6e,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,b9951ee1-fa33-4da2-a628-579bf091cc2c,True,,
+f4766de1-5627-4594-87e7-fa46f77dd35c,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,3e1f3e67-210b-4c06-8db3-7996b60a1a85,True,,
+0b3a6a3c-5b79-40b4-ab92-2128e900d495,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,6a946e13-4317-41d8-86fe-a4f9906dcf84,False,likely,
+0f32d28f-dda6-40d6-a3db-3afa33ee2a21,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,87146ff2-3730-4a23-b274-bde296bcb9d3,False,possible,
+d006fcba-4a9e-458d-b9e2-d234bea52131,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,d1340087-115c-4223-88da-99e890496d0a,False,unclassified,Contradicts known patterns.
+5d70ced2-6f2e-42ac-8137-c4c17645b269,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,33446ef3-36f8-4466-9c1e-38ca24846e37,True,,
+ea22a2d9-05c3-4f5c-8e43-2daf60c41609,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,498a3e20-031a-4141-8a54-3d169a7387ee,False,certain,Missing key symptom analysis.
+38ff6e8e-1731-4a53-939a-685465dfbb93,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,53138b97-dbe7-4b15-886b-9c41e414661d,False,likely,Contradicts known patterns.
+4e2d24ab-7469-4fc5-bd89-752f0e085c48,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+48f0ed8c-be0e-4f75-91b0-8959b6653020,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,False,possible,Sufficient evidence provided.
+30e69cd2-4a7d-470f-aaf3-5023393ec9c4,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,0a608a9a-40cc-406f-ac37-83914df136d5,True,,
+10531df9-03f5-4a51-ab0a-b7b65a6413ba,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,f686e1a1-723c-429b-bb47-f73b16ff83b6,False,unlikely,Sufficient evidence provided.
+ee816659-31de-4201-9ede-a97e5d31183e,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,True,,
+4e6b15e3-c137-4af8-aa36-915ddb4829fc,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,3756bed1-aef0-4a9a-b422-8aedcfb61675,True,,
+4e004cc7-a2a7-4020-8b3b-52827d93d242,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,True,,
+ed1e4def-955e-4bf8-8783-053cad7b4c0d,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,5295210d-c83d-491d-a9f4-7cbda5b0249d,True,,
+fefc8856-d122-4731-ac19-fbc91933b9d9,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,27efeab9-bbd2-489f-82ec-048f10ad8c03,False,unclassifiable,Sufficient evidence provided.
+99545f10-15bd-483c-8423-894792907294,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,3522234b-03f3-477a-a2e2-73f3eda7cf68,False,unclassified,Sufficient evidence provided.
+54d5f0d3-db6a-4a8c-b1ac-4306c25b05ba,ba84ee1a-fdc6-46dc-ac7f-2127e80d8a01,72370d4f-2bbc-47b9-991c-071e6a81dc64,True,,
+1035e59b-5549-4e23-a22c-ed85bffd8b5d,874965ad-1877-425f-9a78-c59997248445,53138b97-dbe7-4b15-886b-9c41e414661d,False,possible,
+81072b03-3c5b-4112-861b-37d2d20a1030,874965ad-1877-425f-9a78-c59997248445,5295210d-c83d-491d-a9f4-7cbda5b0249d,False,possible,Needs expert second opinion.
+803970db-6c7c-4132-be88-46c533579c8a,874965ad-1877-425f-9a78-c59997248445,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,True,,
+cebc4b06-35cb-4fc1-816e-3ee910eb930e,874965ad-1877-425f-9a78-c59997248445,498a3e20-031a-4141-8a54-3d169a7387ee,False,unclassified,Reviewed and agreed.
+dc7ae0a0-fd5e-411d-8cf9-73e164030549,874965ad-1877-425f-9a78-c59997248445,0a608a9a-40cc-406f-ac37-83914df136d5,True,,
+97135eb6-134c-49a9-b0c1-da45b9b45e1b,874965ad-1877-425f-9a78-c59997248445,3e1f3e67-210b-4c06-8db3-7996b60a1a85,False,possible,Needs expert second opinion.
+710aa85f-17bb-44a3-8816-fe351abd3d6e,874965ad-1877-425f-9a78-c59997248445,3756bed1-aef0-4a9a-b422-8aedcfb61675,False,unlikely,Missing key symptom analysis.
+9a8c0f97-20ac-4bb2-80dd-05018040f3c5,874965ad-1877-425f-9a78-c59997248445,47ee406e-8976-4b89-aef4-41fc55ba45a4,True,,
+408f8c60-8615-46af-9614-b9e821f58de9,874965ad-1877-425f-9a78-c59997248445,33446ef3-36f8-4466-9c1e-38ca24846e37,False,unclassified,Missing key symptom analysis.
+3b0d8dfb-2aea-43c6-9b7f-108e6b1eb8d2,874965ad-1877-425f-9a78-c59997248445,b9951ee1-fa33-4da2-a628-579bf091cc2c,False,unclassifiable,Missing key symptom analysis.
+56f7095c-2427-4172-af12-19db42f260b9,874965ad-1877-425f-9a78-c59997248445,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,False,unclassified,Reviewed and agreed.
+67f5b1a0-673f-41aa-b158-bda63d0ee7e1,874965ad-1877-425f-9a78-c59997248445,eee2a028-7fff-4082-9dfc-77442f6e3ea7,False,possible,Needs expert second opinion.
+d671ad05-4f2c-46eb-a4e2-20affc1fc319,874965ad-1877-425f-9a78-c59997248445,3522234b-03f3-477a-a2e2-73f3eda7cf68,True,,
+18350dfd-f445-4c01-9072-5e8b9b291210,874965ad-1877-425f-9a78-c59997248445,f686e1a1-723c-429b-bb47-f73b16ff83b6,False,unclassifiable,Sufficient evidence provided.
+d6db8ce5-d4a0-4793-a342-9ac20ee47fb2,874965ad-1877-425f-9a78-c59997248445,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,False,unclassified,Reviewed and agreed.
+6503abef-bba6-4963-a040-b1995b0ca01f,874965ad-1877-425f-9a78-c59997248445,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+197f13f8-fd43-4efe-b4c2-b37767f1a19e,874965ad-1877-425f-9a78-c59997248445,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,False,likely,Missing key symptom analysis.
+119e21b3-d287-4fe8-bfb7-e8bbdea25dbf,874965ad-1877-425f-9a78-c59997248445,d1340087-115c-4223-88da-99e890496d0a,True,,
+a531c00a-c5aa-42f5-90a4-2d573eda59d4,874965ad-1877-425f-9a78-c59997248445,87146ff2-3730-4a23-b274-bde296bcb9d3,True,,
+62d84672-eca6-41ec-ad82-7c7d6882341d,874965ad-1877-425f-9a78-c59997248445,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,False,unlikely,Sufficient evidence provided.
+cee1344f-80f3-404b-8bbd-368d320c3a66,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,47ee406e-8976-4b89-aef4-41fc55ba45a4,False,possible,Reviewed and agreed.
+dba9067a-6cc9-472c-af24-e7dc1883e07a,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+dd5061da-d269-4054-816e-c7e9bd393986,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,27efeab9-bbd2-489f-82ec-048f10ad8c03,False,possible,Contradicts known patterns.
+92152b4d-8d25-4222-82a9-e53db9a53d9b,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,True,,
+11aa715c-d930-45f6-bd21-9b1c3929eaf6,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,f686e1a1-723c-429b-bb47-f73b16ff83b6,True,,
+f30b9fb6-dd6b-434d-8902-936e9c2c7ac9,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,3756bed1-aef0-4a9a-b422-8aedcfb61675,True,,
+8ddc58aa-169e-4745-b0c2-af50749d94e1,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,498a3e20-031a-4141-8a54-3d169a7387ee,True,,
+97e497ca-3062-424a-a312-dcbfdb502f47,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,True,,
+9ef497ba-74f7-44f7-9431-d613ec8e0c07,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,72370d4f-2bbc-47b9-991c-071e6a81dc64,False,possible,Needs expert second opinion.
+9d401f9f-3f0f-4415-9eeb-667bba0e865b,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,0a608a9a-40cc-406f-ac37-83914df136d5,False,unclassified,Contradicts known patterns.
+011c1367-a1c5-41a0-83b3-a5d9aa04ecae,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,False,likely,Needs expert second opinion.
+d03cb4be-bf64-40b2-ae4c-938d15a374d3,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,a38a16c3-7a7d-4021-aced-39f74c2204ce,False,unlikely,Missing key symptom analysis.
+8b09123c-0ea6-4876-b720-1b3e87d19577,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,53138b97-dbe7-4b15-886b-9c41e414661d,False,unlikely,Needs expert second opinion.
+4829157b-fab2-45c8-be10-7d6779d083b8,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,33446ef3-36f8-4466-9c1e-38ca24846e37,True,,
+2fe83504-0b94-45ef-94c8-e2340497f309,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,False,unlikely,Reviewed and agreed.
+104f57d7-6b3a-41bb-bea1-9dca24bd1f5d,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,3522234b-03f3-477a-a2e2-73f3eda7cf68,False,possible,Reviewed and agreed.
+d4a73bd5-d3d2-4a69-af5f-53f4089b2859,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,3e1f3e67-210b-4c06-8db3-7996b60a1a85,True,,
+636c8381-d38f-4906-8065-9c7636eb5b5a,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,b9951ee1-fa33-4da2-a628-579bf091cc2c,False,unclassifiable,
+ca9fffb8-0045-4741-afd6-5a5df1d70a8a,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,345a5264-c00e-400d-9247-e1a1dc346aeb,False,unclassifiable,Needs expert second opinion.
+05de74e6-5363-43a9-8906-72dda6777036,c56c19e6-baa3-4d28-a9ca-5737766fc0b1,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,True,,
+db86987f-1c34-415c-9e00-736958aac4d2,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,345a5264-c00e-400d-9247-e1a1dc346aeb,True,,
+c4e26f6e-eb18-4e34-a67b-09be24857dbd,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,47ee406e-8976-4b89-aef4-41fc55ba45a4,True,,
+d44e3030-562e-4bbf-875d-6b64805535c8,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,6a946e13-4317-41d8-86fe-a4f9906dcf84,True,,
+f6d6f937-3908-4738-8b33-28895832d804,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,3e1f3e67-210b-4c06-8db3-7996b60a1a85,True,,
+8db3409b-65e0-45c7-a1b9-24e65bb9f529,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,0a608a9a-40cc-406f-ac37-83914df136d5,False,likely,Missing key symptom analysis.
+45331087-40a1-4e18-a1dd-b21f728c36d1,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,5295210d-c83d-491d-a9f4-7cbda5b0249d,True,,
+b80a7071-8743-4e56-b205-dd92ee85346a,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,True,,
+cbeba974-f881-40f4-a35d-138c0a8e8ac6,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,eee2a028-7fff-4082-9dfc-77442f6e3ea7,False,likely,Reviewed and agreed.
+4b546e62-272e-4b19-9cb9-3b1eb2ae48c4,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,f686e1a1-723c-429b-bb47-f73b16ff83b6,False,possible,
+ea6428bc-dd38-43c3-a115-073f5cb722a5,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,27efeab9-bbd2-489f-82ec-048f10ad8c03,True,,
+e06533e2-b838-4572-822c-3299063c0a86,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,False,certain,Missing key symptom analysis.
+f66f91a0-736f-4a3b-b5d6-3cc3d2923308,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,False,unlikely,
+5f7571fe-f39d-497f-abab-5116f5683675,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,3756bed1-aef0-4a9a-b422-8aedcfb61675,True,,
+97be0e35-6fc3-4bfe-a3ea-780989db570f,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,True,,
+b51b29eb-f73d-4928-81fc-d2adfe602c93,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,498a3e20-031a-4141-8a54-3d169a7387ee,True,,
+d143ba82-668b-4f1e-9d57-fc3cc4d382f6,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,72370d4f-2bbc-47b9-991c-071e6a81dc64,False,unclassifiable,Sufficient evidence provided.
+f9345a01-7836-4962-a0fd-698a46518ab5,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,True,,
+f7590879-ef71-4d9f-bcac-f89851ac3d3c,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,33446ef3-36f8-4466-9c1e-38ca24846e37,False,likely,Sufficient evidence provided.
+4afee931-ec76-4d29-906d-e7222bafdbc1,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,87146ff2-3730-4a23-b274-bde296bcb9d3,True,,
+c3aca419-07f3-4cd0-b633-eee025030093,a3b56be4-c9aa-48a7-a962-32f3d39e96d4,b9951ee1-fa33-4da2-a628-579bf091cc2c,False,unclassified,Sufficient evidence provided.
+6c22ced5-349f-4219-bdec-d09d75b354d4,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,d1340087-115c-4223-88da-99e890496d0a,False,likely,Contradicts known patterns.
+32f2f617-2c56-4835-8ad9-9f906a2e51f5,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,6a946e13-4317-41d8-86fe-a4f9906dcf84,True,,
+32d4ec54-787c-464f-b97e-0a0683f8b18f,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,3e1f3e67-210b-4c06-8db3-7996b60a1a85,False,unlikely,Needs expert second opinion.
+cf554b81-7c84-42e2-bc89-ec226d322fe6,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,498a3e20-031a-4141-8a54-3d169a7387ee,True,,
+1021b091-8574-42a9-97be-46100022c432,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,True,,
+265d9236-1a31-4551-861a-fddc6551b447,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,False,unclassified,Missing key symptom analysis.
+ef2736c5-895b-4876-b41a-9e8832e05dfd,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,3522234b-03f3-477a-a2e2-73f3eda7cf68,False,unclassifiable,Needs expert second opinion.
+952c1b25-a6c5-404e-89a4-4a5c63193440,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,a38a16c3-7a7d-4021-aced-39f74c2204ce,True,,
+3254110e-c9d2-42d9-bfb2-be203246e6b9,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,47ee406e-8976-4b89-aef4-41fc55ba45a4,True,,
+94b8d2d9-faa7-4d0e-b744-b71b0c33172e,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,87146ff2-3730-4a23-b274-bde296bcb9d3,False,certain,Missing key symptom analysis.
+52352411-a143-4466-b838-193fcbcaf3d6,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,True,,
+0f6e281f-0a93-4bfb-93f9-07b722bab70c,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,53138b97-dbe7-4b15-886b-9c41e414661d,False,certain,Sufficient evidence provided.
+7f9bb475-d08f-4085-adaa-3ffb6ed29e3e,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,33446ef3-36f8-4466-9c1e-38ca24846e37,False,unclassified,Reviewed and agreed.
+97973b06-a3f8-4cb1-bbf2-be6bb224dc36,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,True,,
+27fbe48c-c300-4d66-87ce-b668faa5d5d5,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,5295210d-c83d-491d-a9f4-7cbda5b0249d,False,possible,Missing key symptom analysis.
+d0c0fd12-5600-4201-851f-3d67ea7234a2,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,b9951ee1-fa33-4da2-a628-579bf091cc2c,False,unlikely,Sufficient evidence provided.
+ea6868cc-484d-46ec-81f8-696caf46a339,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,False,unlikely,
+ff514c9b-aaad-4ccd-85fe-1c2a6bb242b3,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,345a5264-c00e-400d-9247-e1a1dc346aeb,False,unclassified,Contradicts known patterns.
+2b47d885-a938-41bf-8f82-5df57337d280,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,f686e1a1-723c-429b-bb47-f73b16ff83b6,True,,
+84d60994-fa5b-42ee-91e7-bc916b0319c7,6308d2e7-cb7c-497d-adcf-f61cd5574b8d,72370d4f-2bbc-47b9-991c-071e6a81dc64,False,unclassifiable,Needs expert second opinion.
+2dab37ad-4399-48a1-a102-f7b2539a7b13,1ed79c99-d1c9-4a63-a1ec-3057f2194819,345a5264-c00e-400d-9247-e1a1dc346aeb,True,,
+55a73518-0dee-4d8b-a9b6-883d38d21dba,1ed79c99-d1c9-4a63-a1ec-3057f2194819,0a608a9a-40cc-406f-ac37-83914df136d5,False,likely,Reviewed and agreed.
+6a2634ec-8a46-4136-b822-f3114d7fe0fa,1ed79c99-d1c9-4a63-a1ec-3057f2194819,3522234b-03f3-477a-a2e2-73f3eda7cf68,True,,
+a0b3a663-e02b-4275-bda0-cc8f1ae8aba1,1ed79c99-d1c9-4a63-a1ec-3057f2194819,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,True,,
+f5e63ef9-6fd5-482f-a1d7-5ac9b5d682f2,1ed79c99-d1c9-4a63-a1ec-3057f2194819,72370d4f-2bbc-47b9-991c-071e6a81dc64,True,,
+8f784a79-996e-4728-9f45-ec7416cfb099,1ed79c99-d1c9-4a63-a1ec-3057f2194819,eee2a028-7fff-4082-9dfc-77442f6e3ea7,False,unclassifiable,Reviewed and agreed.
+e11d908e-5496-4bd2-85ab-c31593148e6b,1ed79c99-d1c9-4a63-a1ec-3057f2194819,3756bed1-aef0-4a9a-b422-8aedcfb61675,True,,
+0291ffb4-d4ab-4736-8c5e-0067cf7bd53f,1ed79c99-d1c9-4a63-a1ec-3057f2194819,53138b97-dbe7-4b15-886b-9c41e414661d,True,,
+7ef3cd3c-6596-4e31-adcc-4b56ca5825b4,1ed79c99-d1c9-4a63-a1ec-3057f2194819,87146ff2-3730-4a23-b274-bde296bcb9d3,True,,
+1bfd7b28-1fc1-416f-ac98-67ca9c82c8c7,1ed79c99-d1c9-4a63-a1ec-3057f2194819,a38a16c3-7a7d-4021-aced-39f74c2204ce,True,,
+bcb34169-aea9-4b47-8d6f-f41844fa6ec5,1ed79c99-d1c9-4a63-a1ec-3057f2194819,f686e1a1-723c-429b-bb47-f73b16ff83b6,True,,
+531e7fb7-fc1d-40d5-a058-c9c74f8834e0,1ed79c99-d1c9-4a63-a1ec-3057f2194819,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,False,possible,Contradicts known patterns.
+00f58c27-e9df-43bf-83c0-4ed8c636c5df,1ed79c99-d1c9-4a63-a1ec-3057f2194819,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,False,unclassifiable,Sufficient evidence provided.
+b623dce9-e640-43c4-8e89-37195f30abdc,1ed79c99-d1c9-4a63-a1ec-3057f2194819,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,False,unclassified,Sufficient evidence provided.
+f61c2d3a-2e25-4083-b926-ad0943d67367,1ed79c99-d1c9-4a63-a1ec-3057f2194819,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,True,,
+50574c6d-a2bb-4910-9008-72212907a036,1ed79c99-d1c9-4a63-a1ec-3057f2194819,b9951ee1-fa33-4da2-a628-579bf091cc2c,False,possible,
+5b5bcf4b-06bc-4103-a836-62fa8cfb71b8,1ed79c99-d1c9-4a63-a1ec-3057f2194819,47ee406e-8976-4b89-aef4-41fc55ba45a4,False,likely,Needs expert second opinion.
+ee4ace63-f6b0-46a9-9ee1-ac70a47aac3c,1ed79c99-d1c9-4a63-a1ec-3057f2194819,6a946e13-4317-41d8-86fe-a4f9906dcf84,False,unclassified,
+151fff7a-3f80-4b12-90c7-52f54c865ba2,1ed79c99-d1c9-4a63-a1ec-3057f2194819,d1340087-115c-4223-88da-99e890496d0a,False,likely,Needs expert second opinion.
+5d135d74-b453-48f9-85fe-01c32d26d13c,1ed79c99-d1c9-4a63-a1ec-3057f2194819,3e1f3e67-210b-4c06-8db3-7996b60a1a85,True,,
+34113d0a-bbde-45a1-adee-5327e9653c31,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,True,,
+18123362-21e0-4c1e-a5c6-edeec0e1ef65,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,True,,
+9d312e03-32b0-407d-a9d3-cbaa21026b3f,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,eee2a028-7fff-4082-9dfc-77442f6e3ea7,False,unclassifiable,Reviewed and agreed.
+29ea6f63-bf51-4a42-8a9b-6d35eae0cc95,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,3e1f3e67-210b-4c06-8db3-7996b60a1a85,False,unclassified,Sufficient evidence provided.
+70199bc9-43d4-4eb2-a5e5-58200db2a88c,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+40f788e7-c80d-4354-82f8-05b0d041413d,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,True,,
+58f4cf03-f08f-4572-bbc0-4a8db6cd10a1,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,6a946e13-4317-41d8-86fe-a4f9906dcf84,False,likely,Missing key symptom analysis.
+e498bf68-63c3-4918-aec4-c5570fe1c863,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,33446ef3-36f8-4466-9c1e-38ca24846e37,True,,
+ed3913be-b89e-4f73-8947-c4a451b8f83e,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,True,,
+bc311377-b8d5-4221-9ec8-1f415ae12f7d,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,345a5264-c00e-400d-9247-e1a1dc346aeb,True,,
+50b91c7f-1deb-4f8b-8a60-563228baacf4,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,a38a16c3-7a7d-4021-aced-39f74c2204ce,True,,
+bbbd8484-c4a6-45d0-a22b-533d26f8a3bc,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,False,unlikely,Missing key symptom analysis.
+322b0095-37bb-428a-afcd-bbeac15b8809,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,0a608a9a-40cc-406f-ac37-83914df136d5,False,possible,Missing key symptom analysis.
+ddcc95ef-1981-4366-b214-57ae5c8f0392,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,3756bed1-aef0-4a9a-b422-8aedcfb61675,True,,
+dea40954-ce4b-4df3-af36-4984bd8f8593,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,87146ff2-3730-4a23-b274-bde296bcb9d3,True,,
+29851ee3-db6a-45e2-88c0-1d3d6c9ac69d,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,53138b97-dbe7-4b15-886b-9c41e414661d,False,likely,Sufficient evidence provided.
+486c7850-1aef-4cd7-a22f-51047fb3193d,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,3522234b-03f3-477a-a2e2-73f3eda7cf68,False,unlikely,Missing key symptom analysis.
+b828dd58-4fa8-413b-beb7-552ab52902f9,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,d1340087-115c-4223-88da-99e890496d0a,True,,
+8b71cf0d-c2b8-45ef-a2d5-d520984ab1c8,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,b9951ee1-fa33-4da2-a628-579bf091cc2c,False,unclassifiable,Contradicts known patterns.
+b1985445-9230-464c-9a0c-7f69d2b2c4c0,75b50eae-6f6c-48ef-a3a3-b0e78713cb7f,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,False,unclassifiable,Sufficient evidence provided.
+58b47b51-4592-4038-a8d8-bad9a25acee2,cb793fa3-8243-4ece-874c-36502f334cd5,87146ff2-3730-4a23-b274-bde296bcb9d3,False,likely,Needs expert second opinion.
+4ec59af2-ea4c-4873-9890-5c97b86977f3,cb793fa3-8243-4ece-874c-36502f334cd5,3756bed1-aef0-4a9a-b422-8aedcfb61675,True,,
+4b9813e4-fd2d-437b-b777-a559e8933439,cb793fa3-8243-4ece-874c-36502f334cd5,72370d4f-2bbc-47b9-991c-071e6a81dc64,False,certain,Needs expert second opinion.
+f2a081e6-8210-432b-832f-7f4b48c99fbc,cb793fa3-8243-4ece-874c-36502f334cd5,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,False,likely,Needs expert second opinion.
+96b3f9d8-7029-4560-b13d-26a8f092e0a9,cb793fa3-8243-4ece-874c-36502f334cd5,345a5264-c00e-400d-9247-e1a1dc346aeb,True,,
+e8cd1afc-6fa8-42ec-8d12-10283f44788a,cb793fa3-8243-4ece-874c-36502f334cd5,3e1f3e67-210b-4c06-8db3-7996b60a1a85,True,,
+a7ab66ba-1ea1-495e-9e24-cfa8a430058f,cb793fa3-8243-4ece-874c-36502f334cd5,47ee406e-8976-4b89-aef4-41fc55ba45a4,False,unclassifiable,Contradicts known patterns.
+3ce2cff4-ce88-4a6d-8210-fc663e1643fc,cb793fa3-8243-4ece-874c-36502f334cd5,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,False,unclassifiable,Missing key symptom analysis.
+1bfe78fa-a671-428e-85de-71ca020234d5,cb793fa3-8243-4ece-874c-36502f334cd5,27efeab9-bbd2-489f-82ec-048f10ad8c03,False,unclassified,Sufficient evidence provided.
+6e69bb9a-81dd-45b9-8543-b0fdd26edd12,cb793fa3-8243-4ece-874c-36502f334cd5,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,False,likely,Contradicts known patterns.
+2fad6708-aa18-4782-b5cc-624bd8725d9c,cb793fa3-8243-4ece-874c-36502f334cd5,0a608a9a-40cc-406f-ac37-83914df136d5,True,,
+4b03682a-0964-4d6a-b544-e4d1d730a04d,cb793fa3-8243-4ece-874c-36502f334cd5,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,True,,
+83fae136-6453-4795-9c49-023f2985c7c1,cb793fa3-8243-4ece-874c-36502f334cd5,b9951ee1-fa33-4da2-a628-579bf091cc2c,False,likely,Missing key symptom analysis.
+75c4f0b3-853c-4fe4-8a80-36126bc5d074,cb793fa3-8243-4ece-874c-36502f334cd5,eee2a028-7fff-4082-9dfc-77442f6e3ea7,True,,
+30ac62a9-95be-4744-b469-97ff7a78e766,cb793fa3-8243-4ece-874c-36502f334cd5,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+d1a0e622-6288-45d7-8512-8a9dc492ea80,cb793fa3-8243-4ece-874c-36502f334cd5,a38a16c3-7a7d-4021-aced-39f74c2204ce,False,unlikely,Missing key symptom analysis.
+78ef22e5-1061-448e-9f68-2a98ca6c6fb7,cb793fa3-8243-4ece-874c-36502f334cd5,3522234b-03f3-477a-a2e2-73f3eda7cf68,False,unclassified,Reviewed and agreed.
+a37380dd-981d-44f5-8ede-c55891e7593a,cb793fa3-8243-4ece-874c-36502f334cd5,498a3e20-031a-4141-8a54-3d169a7387ee,False,possible,Needs expert second opinion.
+cf1f3e6a-dfe6-4223-819f-f688f195befc,cb793fa3-8243-4ece-874c-36502f334cd5,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,False,unclassifiable,Needs expert second opinion.
+1df54aaf-b0cc-4d52-b9a9-2fbaf9c3bb81,cb793fa3-8243-4ece-874c-36502f334cd5,53138b97-dbe7-4b15-886b-9c41e414661d,False,possible,Needs expert second opinion.
+767f7b47-f442-4c8c-996e-2d011305b4d5,a1482d58-cdf6-4d47-8a80-ec190499ab65,3e1f3e67-210b-4c06-8db3-7996b60a1a85,True,,
+bc49e181-7ef6-4877-9d3c-c541a5931e3c,a1482d58-cdf6-4d47-8a80-ec190499ab65,d1340087-115c-4223-88da-99e890496d0a,True,,
+cef0f7e5-ccb2-4c5e-885a-ef06df9dccec,a1482d58-cdf6-4d47-8a80-ec190499ab65,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,False,unlikely,Contradicts known patterns.
+ba191437-4b9c-4516-8ccc-8c8789655132,a1482d58-cdf6-4d47-8a80-ec190499ab65,27efeab9-bbd2-489f-82ec-048f10ad8c03,True,,
+cae94af4-323e-4de4-bc59-6957df800a88,a1482d58-cdf6-4d47-8a80-ec190499ab65,33446ef3-36f8-4466-9c1e-38ca24846e37,True,,
+1aed22b0-5922-44de-b212-dae2a794e4cc,a1482d58-cdf6-4d47-8a80-ec190499ab65,a38a16c3-7a7d-4021-aced-39f74c2204ce,True,,
+3bef1422-228e-48af-9994-c42cc098e6bb,a1482d58-cdf6-4d47-8a80-ec190499ab65,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,True,,
+2b4bfbe0-596d-4fa8-a46a-3fc924d92bfe,a1482d58-cdf6-4d47-8a80-ec190499ab65,47ee406e-8976-4b89-aef4-41fc55ba45a4,True,,
+fd19a4e0-d571-4737-9b45-f8f1b0e3467b,a1482d58-cdf6-4d47-8a80-ec190499ab65,b9951ee1-fa33-4da2-a628-579bf091cc2c,True,,
+4ea9254e-0c41-463b-bc64-4911c1581891,a1482d58-cdf6-4d47-8a80-ec190499ab65,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,False,certain,
+be3b147f-62db-47ae-b683-f225f85813bf,a1482d58-cdf6-4d47-8a80-ec190499ab65,6a946e13-4317-41d8-86fe-a4f9906dcf84,True,,
+852fc411-ddbb-44b9-8967-30d1de309ecd,a1482d58-cdf6-4d47-8a80-ec190499ab65,f686e1a1-723c-429b-bb47-f73b16ff83b6,True,,
+026fadf9-0387-47e7-bc55-5895c5500070,a1482d58-cdf6-4d47-8a80-ec190499ab65,498a3e20-031a-4141-8a54-3d169a7387ee,False,likely,Contradicts known patterns.
+753cb81f-2cf7-4d05-9d37-1a9d05fc5ca3,a1482d58-cdf6-4d47-8a80-ec190499ab65,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,False,unclassifiable,Reviewed and agreed.
+96b9d092-b193-40b9-a261-f62bd5b676f2,a1482d58-cdf6-4d47-8a80-ec190499ab65,3522234b-03f3-477a-a2e2-73f3eda7cf68,True,,
+a69c01fb-9e64-4f83-9c5d-5fca53cfc87e,a1482d58-cdf6-4d47-8a80-ec190499ab65,72370d4f-2bbc-47b9-991c-071e6a81dc64,False,unclassifiable,Sufficient evidence provided.
+c0edc5e0-3b88-4f2f-b4a3-8f634a055521,a1482d58-cdf6-4d47-8a80-ec190499ab65,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,True,,
+475f175e-1c14-4f3d-bbda-3b328cd770cd,a1482d58-cdf6-4d47-8a80-ec190499ab65,345a5264-c00e-400d-9247-e1a1dc346aeb,True,,
+98a12c98-878e-4691-8384-3a015d4919f5,a1482d58-cdf6-4d47-8a80-ec190499ab65,eee2a028-7fff-4082-9dfc-77442f6e3ea7,False,unclassified,Missing key symptom analysis.
+181ebea0-91e6-47c3-abae-ca36709c9035,a1482d58-cdf6-4d47-8a80-ec190499ab65,53138b97-dbe7-4b15-886b-9c41e414661d,True,,
+8aaf0f7d-b592-46dd-a940-cde0dd5a1e08,f81fa394-bc1a-411d-b076-0baea6bb8665,3522234b-03f3-477a-a2e2-73f3eda7cf68,False,unclassifiable,Sufficient evidence provided.
+c2dcc7b8-f47d-4add-8e78-49e60d90bcc5,f81fa394-bc1a-411d-b076-0baea6bb8665,345a5264-c00e-400d-9247-e1a1dc346aeb,True,,
+15bd2812-ec4a-4f03-a1f8-549398d398a7,f81fa394-bc1a-411d-b076-0baea6bb8665,47ee406e-8976-4b89-aef4-41fc55ba45a4,True,,
+acb89921-8475-4929-8595-3c7ecdb489cc,f81fa394-bc1a-411d-b076-0baea6bb8665,5295210d-c83d-491d-a9f4-7cbda5b0249d,True,,
+a46645d4-70f1-449b-8057-12e83f213c2b,f81fa394-bc1a-411d-b076-0baea6bb8665,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,True,,
+0658203b-e535-4dbf-b14a-51d8d3db0632,f81fa394-bc1a-411d-b076-0baea6bb8665,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,False,unlikely,Reviewed and agreed.
+c9b9a6c5-c906-4de4-99d6-2f6757f53f6b,f81fa394-bc1a-411d-b076-0baea6bb8665,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,True,,
+076dd41a-1c64-44ce-87cf-b99ba2f790e4,f81fa394-bc1a-411d-b076-0baea6bb8665,498a3e20-031a-4141-8a54-3d169a7387ee,True,,
+5f4b051b-5d5b-442f-a254-9bdcd87559b0,f81fa394-bc1a-411d-b076-0baea6bb8665,f686e1a1-723c-429b-bb47-f73b16ff83b6,False,unclassifiable,Reviewed and agreed.
+288b0086-35ac-4d26-b2b2-4440d781f43d,f81fa394-bc1a-411d-b076-0baea6bb8665,3756bed1-aef0-4a9a-b422-8aedcfb61675,False,likely,Contradicts known patterns.
+b5ecf36c-6a0b-4f7a-bb42-80c23c83191f,f81fa394-bc1a-411d-b076-0baea6bb8665,b9951ee1-fa33-4da2-a628-579bf091cc2c,True,,
+6e86444a-d230-4791-a35a-4ff7b0e617eb,f81fa394-bc1a-411d-b076-0baea6bb8665,72370d4f-2bbc-47b9-991c-071e6a81dc64,True,,
+33882762-5d69-44e6-b421-c3797ef67c58,f81fa394-bc1a-411d-b076-0baea6bb8665,87146ff2-3730-4a23-b274-bde296bcb9d3,False,possible,
+dcc45e5c-6a2b-40e2-9085-7a8e4e5c9f2d,f81fa394-bc1a-411d-b076-0baea6bb8665,6a946e13-4317-41d8-86fe-a4f9906dcf84,False,likely,Sufficient evidence provided.
+df030ec2-a9f6-4f16-a081-205bdff6c33c,f81fa394-bc1a-411d-b076-0baea6bb8665,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,False,certain,Reviewed and agreed.
+fb29a74f-c840-48c9-9de5-f3addd4d362a,f81fa394-bc1a-411d-b076-0baea6bb8665,27efeab9-bbd2-489f-82ec-048f10ad8c03,True,,
+44eb6312-5ea0-41eb-a348-698d7510a2d0,f81fa394-bc1a-411d-b076-0baea6bb8665,a38a16c3-7a7d-4021-aced-39f74c2204ce,True,,
+f45f6d63-6c94-4e7f-9c3a-4da8bcc825c0,f81fa394-bc1a-411d-b076-0baea6bb8665,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+e9bbb5ca-3256-41e8-82c3-6b9d895cd05f,f81fa394-bc1a-411d-b076-0baea6bb8665,eee2a028-7fff-4082-9dfc-77442f6e3ea7,False,unlikely,
+bd67d76f-5a8d-42a4-8d4e-cbf085d338bd,f81fa394-bc1a-411d-b076-0baea6bb8665,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,True,,
+d467a8eb-f795-4da2-8203-e8923ce21161,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,87146ff2-3730-4a23-b274-bde296bcb9d3,False,possible,Contradicts known patterns.
+c47de8a2-55f3-46d8-a8ae-758483a738a0,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,True,,
+17c91416-50e5-43a1-a84c-3f1f8dc93aa5,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,3522234b-03f3-477a-a2e2-73f3eda7cf68,False,possible,Reviewed and agreed.
+14b551f9-857d-4e84-b995-9ae95bccc937,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,True,,
+92a6a9bd-782b-4181-820c-efd3fb138902,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,a38a16c3-7a7d-4021-aced-39f74c2204ce,True,,
+84e5c71b-0ccb-49b7-9258-9675192269dc,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,True,,
+c84aabfd-b916-43c5-b5d1-dbcdc425e124,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,d1340087-115c-4223-88da-99e890496d0a,False,unclassified,Contradicts known patterns.
+6b60c827-6930-4283-9751-994c273cc6c0,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,6a946e13-4317-41d8-86fe-a4f9906dcf84,True,,
+aca6cf09-94a7-4808-b90c-5a806cbe9e68,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,f686e1a1-723c-429b-bb47-f73b16ff83b6,True,,
+98e6c863-98df-42d3-96a3-125e87086021,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,33446ef3-36f8-4466-9c1e-38ca24846e37,True,,
+23013068-49df-4fd0-af9c-a50a1c04913b,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,345a5264-c00e-400d-9247-e1a1dc346aeb,False,unlikely,Contradicts known patterns.
+5cf5ba8e-948b-415f-a375-2e20b340a977,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,eee2a028-7fff-4082-9dfc-77442f6e3ea7,True,,
+165af059-6d29-42d8-a5f6-37b4d0feb5d3,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,5295210d-c83d-491d-a9f4-7cbda5b0249d,True,,
+ee71c49a-ecf1-425f-85b7-105d6863c727,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+e0faf98f-86cf-438d-9871-bd8f1862c76f,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,72370d4f-2bbc-47b9-991c-071e6a81dc64,True,,
+f0c117fe-1c1c-4572-8c5c-74ae3e034bf1,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,47ee406e-8976-4b89-aef4-41fc55ba45a4,True,,
+2943b95e-a4ef-4453-b6b2-d3a8dadf1178,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,3e1f3e67-210b-4c06-8db3-7996b60a1a85,True,,
+8cae34fe-ee1a-4c06-9fba-10ae9bdc69dc,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,498a3e20-031a-4141-8a54-3d169a7387ee,True,,
+8fa47697-b8f8-49b3-851b-79e06f133273,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,53138b97-dbe7-4b15-886b-9c41e414661d,False,certain,Reviewed and agreed.
+a8bf60cc-f8e0-4b19-a203-8a543379736b,6c7daff5-3edd-42f1-86e6-8d3f1e23977f,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,True,,
+6b83d167-895e-4b16-b3dd-0a28834ade74,277c7e4d-6ab1-46b1-888b-062e56664cbc,498a3e20-031a-4141-8a54-3d169a7387ee,True,,
+89b3643d-78db-4c99-9e87-12486376c39b,277c7e4d-6ab1-46b1-888b-062e56664cbc,b9951ee1-fa33-4da2-a628-579bf091cc2c,True,,
+7c8b910f-cf82-4403-b344-da94ffbbea06,277c7e4d-6ab1-46b1-888b-062e56664cbc,47ee406e-8976-4b89-aef4-41fc55ba45a4,False,possible,Sufficient evidence provided.
+a8b835d4-1062-4c0e-ab04-219659d2434a,277c7e4d-6ab1-46b1-888b-062e56664cbc,eee2a028-7fff-4082-9dfc-77442f6e3ea7,True,,
+8396190f-e0ef-421c-80e7-b57d9d0f9b55,277c7e4d-6ab1-46b1-888b-062e56664cbc,72370d4f-2bbc-47b9-991c-071e6a81dc64,True,,
+936b5f91-ef7d-4a24-b5d8-a5e806f480f5,277c7e4d-6ab1-46b1-888b-062e56664cbc,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,False,unclassified,Needs expert second opinion.
+9f6d9549-6dd1-4522-80bd-c06404497e72,277c7e4d-6ab1-46b1-888b-062e56664cbc,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,True,,
+f9dc8d1b-aa2f-4784-96ab-1294268a0805,277c7e4d-6ab1-46b1-888b-062e56664cbc,0a608a9a-40cc-406f-ac37-83914df136d5,True,,
+7dc09162-eca5-496c-867f-d2d917abefd8,277c7e4d-6ab1-46b1-888b-062e56664cbc,a38a16c3-7a7d-4021-aced-39f74c2204ce,True,,
+75bc7be6-c63f-4c9c-a5ef-ff8b8c5bfe23,277c7e4d-6ab1-46b1-888b-062e56664cbc,6a946e13-4317-41d8-86fe-a4f9906dcf84,True,,
+d8e4c6ac-c83b-4323-a218-fcf03ff85f93,277c7e4d-6ab1-46b1-888b-062e56664cbc,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,False,unlikely,Contradicts known patterns.
+4ae4e492-ba51-4a83-8bd5-5ac105fa61cd,277c7e4d-6ab1-46b1-888b-062e56664cbc,53138b97-dbe7-4b15-886b-9c41e414661d,False,unlikely,Needs expert second opinion.
+9e021710-b947-401d-be50-bf8e3aa4a26f,277c7e4d-6ab1-46b1-888b-062e56664cbc,3e1f3e67-210b-4c06-8db3-7996b60a1a85,True,,
+67837273-16e6-45c5-8594-9938c2fcf974,277c7e4d-6ab1-46b1-888b-062e56664cbc,5295210d-c83d-491d-a9f4-7cbda5b0249d,True,,
+067408b4-e77a-46cc-ace8-cd5f0052c20c,277c7e4d-6ab1-46b1-888b-062e56664cbc,3756bed1-aef0-4a9a-b422-8aedcfb61675,True,,
+a337f8dd-ae6c-4897-b5de-f8ec79dbe209,277c7e4d-6ab1-46b1-888b-062e56664cbc,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,True,,
+bc58ba23-5844-4f97-8a88-bc8e5f974168,277c7e4d-6ab1-46b1-888b-062e56664cbc,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,True,,
+68d3c822-06bf-4f18-9fc5-3069e26e8f68,277c7e4d-6ab1-46b1-888b-062e56664cbc,87146ff2-3730-4a23-b274-bde296bcb9d3,False,unlikely,
+3cf6e00d-372b-4e11-b24d-2f766ed67a72,277c7e4d-6ab1-46b1-888b-062e56664cbc,33446ef3-36f8-4466-9c1e-38ca24846e37,False,likely,Contradicts known patterns.
+cacdca98-c587-4659-81a5-70b3e6941db7,277c7e4d-6ab1-46b1-888b-062e56664cbc,27efeab9-bbd2-489f-82ec-048f10ad8c03,True,,
+c171cc96-4c34-4f13-aff7-04ee2d45b130,cd754d07-8f8c-47fd-8c1b-9464c765531e,53138b97-dbe7-4b15-886b-9c41e414661d,True,,
+2f35ac03-3a17-4522-8e99-3ef20c2e2c8a,cd754d07-8f8c-47fd-8c1b-9464c765531e,72370d4f-2bbc-47b9-991c-071e6a81dc64,True,,
+e9c4101b-7cd1-499f-9926-762a1970c5a2,cd754d07-8f8c-47fd-8c1b-9464c765531e,d1340087-115c-4223-88da-99e890496d0a,False,certain,Contradicts known patterns.
+6ffdca6c-45fd-4e78-966e-305e0690b1b4,cd754d07-8f8c-47fd-8c1b-9464c765531e,eee2a028-7fff-4082-9dfc-77442f6e3ea7,True,,
+e5acc6c7-66c2-4489-a023-a7ab2261394e,cd754d07-8f8c-47fd-8c1b-9464c765531e,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,False,certain,Missing key symptom analysis.
+6068217f-d905-4eae-b1f9-11e5d633f6c2,cd754d07-8f8c-47fd-8c1b-9464c765531e,5295210d-c83d-491d-a9f4-7cbda5b0249d,False,unclassifiable,Contradicts known patterns.
+c6b960ca-de6c-4cbf-bfb2-5aa15c1ce0bf,cd754d07-8f8c-47fd-8c1b-9464c765531e,87146ff2-3730-4a23-b274-bde296bcb9d3,True,,
+63303fde-7180-4ad7-9d57-0727d9694e94,cd754d07-8f8c-47fd-8c1b-9464c765531e,3756bed1-aef0-4a9a-b422-8aedcfb61675,False,certain,Missing key symptom analysis.
+85b1fb45-6d7e-45b3-a0c2-685c3c27c1ab,cd754d07-8f8c-47fd-8c1b-9464c765531e,3e1f3e67-210b-4c06-8db3-7996b60a1a85,False,likely,Needs expert second opinion.
+e642e67b-bc18-4c14-9411-15868f5d8f3a,cd754d07-8f8c-47fd-8c1b-9464c765531e,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,False,unlikely,Missing key symptom analysis.
+c3748e1e-323c-4f07-b4d5-369e05ab479d,cd754d07-8f8c-47fd-8c1b-9464c765531e,f686e1a1-723c-429b-bb47-f73b16ff83b6,False,unlikely,Reviewed and agreed.
+765b7808-da75-44de-bdb1-84f59a1e93e4,cd754d07-8f8c-47fd-8c1b-9464c765531e,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+24968e00-b85e-4a1b-96f5-752c1aff5231,cd754d07-8f8c-47fd-8c1b-9464c765531e,47ee406e-8976-4b89-aef4-41fc55ba45a4,True,,
+e841d508-e6ff-4b75-a13b-c6c9e8f88095,cd754d07-8f8c-47fd-8c1b-9464c765531e,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,False,unclassifiable,Missing key symptom analysis.
+48ba3642-87cb-4bec-a4fb-370347a3d609,cd754d07-8f8c-47fd-8c1b-9464c765531e,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,False,certain,
+c4c77d46-e659-4470-a012-6e2d03782c87,cd754d07-8f8c-47fd-8c1b-9464c765531e,498a3e20-031a-4141-8a54-3d169a7387ee,False,certain,Needs expert second opinion.
+1cc20e2e-21b2-4bf7-b1f1-7e44bd7ab7b0,cd754d07-8f8c-47fd-8c1b-9464c765531e,6a946e13-4317-41d8-86fe-a4f9906dcf84,False,unclassified,
+1b03fc63-c705-4109-8174-9a0384f35350,cd754d07-8f8c-47fd-8c1b-9464c765531e,b9951ee1-fa33-4da2-a628-579bf091cc2c,False,unclassified,Sufficient evidence provided.
+487abf02-d823-4b5e-8dbd-2770321ed946,cd754d07-8f8c-47fd-8c1b-9464c765531e,345a5264-c00e-400d-9247-e1a1dc346aeb,True,,
+7de12928-3af9-4588-86ff-4cb7d5bf6bea,cd754d07-8f8c-47fd-8c1b-9464c765531e,0a608a9a-40cc-406f-ac37-83914df136d5,True,,
+69818372-4091-492b-985e-e97f9ba763f7,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,b9951ee1-fa33-4da2-a628-579bf091cc2c,True,,
+1a4edcb8-8179-446d-9cbe-493562978b1a,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,0a608a9a-40cc-406f-ac37-83914df136d5,False,certain,Contradicts known patterns.
+de1f7a04-d52f-4e9d-bab7-d42d91bd7046,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,345a5264-c00e-400d-9247-e1a1dc346aeb,True,,
+4b84a798-cf15-4731-9b41-d28e91b13510,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,47ee406e-8976-4b89-aef4-41fc55ba45a4,True,,
+418e838f-1ec7-47e9-b01c-debf479bbbc8,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,False,unclassified,Reviewed and agreed.
+27e240a7-19c3-4edd-b8f9-17b76d5c4e74,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,6a946e13-4317-41d8-86fe-a4f9906dcf84,True,,
+5b58165e-533d-452f-8802-089857b80025,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,f686e1a1-723c-429b-bb47-f73b16ff83b6,True,,
+9ed6a007-af66-44b1-b7f9-15c4ed577946,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,False,unlikely,Contradicts known patterns.
+555a7374-e5a1-4c71-ae22-0b97be3cf230,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,d1340087-115c-4223-88da-99e890496d0a,True,,
+2ba04b2e-d009-42be-a2d7-cd6f32606077,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,3e1f3e67-210b-4c06-8db3-7996b60a1a85,False,unclassified,Missing key symptom analysis.
+e9618177-d81d-47f7-8420-aa3203ad6284,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,False,unclassifiable,Needs expert second opinion.
+0db974c0-2f88-4e18-a217-462410e16966,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,87146ff2-3730-4a23-b274-bde296bcb9d3,True,,
+0c406dca-09a7-47bb-a1a3-dcff52f91d6d,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,72370d4f-2bbc-47b9-991c-071e6a81dc64,True,,
+eab6db7e-e4fd-4c4a-aa46-48c3a7f69ac5,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,3522234b-03f3-477a-a2e2-73f3eda7cf68,True,,
+18193bc2-c12a-4584-8c9c-201679c452e8,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,False,unclassified,Sufficient evidence provided.
+a79f9abd-10f4-47ea-95d1-171d8e6b9f45,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,5295210d-c83d-491d-a9f4-7cbda5b0249d,False,certain,Contradicts known patterns.
+694d8450-9b4b-4f30-8723-9aadc31c494c,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,a38a16c3-7a7d-4021-aced-39f74c2204ce,True,,
+af6ce193-5962-4b6a-b139-50e803b63722,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,27efeab9-bbd2-489f-82ec-048f10ad8c03,True,,
+b8ad9236-f822-4bd8-a1a5-b036a499ebbc,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,True,,
+2f2e3d69-6d91-48ea-ac00-07c3786eaaef,af4b5fb7-9e87-40cd-98e1-21c052dc19b5,33446ef3-36f8-4466-9c1e-38ca24846e37,False,possible,Reviewed and agreed.
+bf4472d9-52e5-4c17-8036-fc3ca68ed875,9feaf203-ea77-4f92-87a6-1e295ab7605a,6a946e13-4317-41d8-86fe-a4f9906dcf84,False,unclassified,Contradicts known patterns.
+ab016137-887c-470c-82f6-a5049d253410,9feaf203-ea77-4f92-87a6-1e295ab7605a,3e1f3e67-210b-4c06-8db3-7996b60a1a85,True,,
+209d0c16-1595-4ef4-9ede-9849ad656315,9feaf203-ea77-4f92-87a6-1e295ab7605a,d1340087-115c-4223-88da-99e890496d0a,True,,
+35372234-ab8e-440d-93d2-d4419819b005,9feaf203-ea77-4f92-87a6-1e295ab7605a,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,True,,
+b777f5fa-386b-494c-86be-64a2b02ceb76,9feaf203-ea77-4f92-87a6-1e295ab7605a,f686e1a1-723c-429b-bb47-f73b16ff83b6,False,likely,Reviewed and agreed.
+4f1cbe17-ad48-42bf-b906-c9ec340d2825,9feaf203-ea77-4f92-87a6-1e295ab7605a,0a608a9a-40cc-406f-ac37-83914df136d5,True,,
+9e988a86-5911-47ad-9e6b-9edf4f338c4f,9feaf203-ea77-4f92-87a6-1e295ab7605a,eee2a028-7fff-4082-9dfc-77442f6e3ea7,True,,
+a52072bf-5a5c-460a-ace2-2efa56927e3d,9feaf203-ea77-4f92-87a6-1e295ab7605a,53138b97-dbe7-4b15-886b-9c41e414661d,False,unclassifiable,Reviewed and agreed.
+bbb678bd-6983-49d5-8e79-aff33b128a13,9feaf203-ea77-4f92-87a6-1e295ab7605a,498a3e20-031a-4141-8a54-3d169a7387ee,True,,
+88a75f83-7eb0-44fd-9b63-b9b3090f5fd9,9feaf203-ea77-4f92-87a6-1e295ab7605a,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,True,,
+b92b848a-6472-4f3f-b34d-8b9869fddb1a,9feaf203-ea77-4f92-87a6-1e295ab7605a,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,False,unclassifiable,Reviewed and agreed.
+5a2bfc0d-b794-4177-8f9f-502693eb9e8f,9feaf203-ea77-4f92-87a6-1e295ab7605a,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,True,,
+a014f999-3a16-4a6b-8999-65bb4518d6c9,9feaf203-ea77-4f92-87a6-1e295ab7605a,b9951ee1-fa33-4da2-a628-579bf091cc2c,False,possible,
+87071dda-e00c-4b08-8777-1e66e83e2420,9feaf203-ea77-4f92-87a6-1e295ab7605a,72370d4f-2bbc-47b9-991c-071e6a81dc64,False,unlikely,
+95ba1e8c-187b-42de-a239-7917a23d04a7,9feaf203-ea77-4f92-87a6-1e295ab7605a,27efeab9-bbd2-489f-82ec-048f10ad8c03,False,likely,
+2ec3112d-7345-4d18-9d80-dab1f59d212f,9feaf203-ea77-4f92-87a6-1e295ab7605a,87146ff2-3730-4a23-b274-bde296bcb9d3,True,,
+1bb0b25b-0abd-4140-8f69-6286bc053d85,9feaf203-ea77-4f92-87a6-1e295ab7605a,a38a16c3-7a7d-4021-aced-39f74c2204ce,False,certain,Reviewed and agreed.
+db6760f8-a558-42af-bdbb-e0fb8ba0b236,9feaf203-ea77-4f92-87a6-1e295ab7605a,3522234b-03f3-477a-a2e2-73f3eda7cf68,False,possible,Sufficient evidence provided.
+a1d465fb-c49c-4f9d-9dd0-2f26944649ff,9feaf203-ea77-4f92-87a6-1e295ab7605a,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,True,,
+cf09ffe9-4708-4dd9-88ed-942a4ed6aa73,9feaf203-ea77-4f92-87a6-1e295ab7605a,3756bed1-aef0-4a9a-b422-8aedcfb61675,False,likely,Missing key symptom analysis.
+e54d9373-a143-4a5d-a109-7a4c179f392e,e81ea66c-e39c-4360-8bb3-cda346f5d27c,27efeab9-bbd2-489f-82ec-048f10ad8c03,True,,
+30f3a572-1c74-4fd6-8948-c0c9ddd0891e,e81ea66c-e39c-4360-8bb3-cda346f5d27c,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,True,,
+c0a4b728-fc6e-4db7-81cd-07bb8c8b9402,e81ea66c-e39c-4360-8bb3-cda346f5d27c,b9951ee1-fa33-4da2-a628-579bf091cc2c,True,,
+463b1e27-a7d5-45d9-8405-11014bfbec47,e81ea66c-e39c-4360-8bb3-cda346f5d27c,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,True,,
+07e1caae-12b3-4b37-af65-0156ccf57d51,e81ea66c-e39c-4360-8bb3-cda346f5d27c,345a5264-c00e-400d-9247-e1a1dc346aeb,True,,
+93677d68-7cf2-462e-9e72-ccbfdfd493bf,e81ea66c-e39c-4360-8bb3-cda346f5d27c,47ee406e-8976-4b89-aef4-41fc55ba45a4,True,,
+6ce7f359-2455-4381-8e24-13d075144970,e81ea66c-e39c-4360-8bb3-cda346f5d27c,498a3e20-031a-4141-8a54-3d169a7387ee,True,,
+fe9d7497-b649-4b79-88b4-d62c67e2b9dd,e81ea66c-e39c-4360-8bb3-cda346f5d27c,a38a16c3-7a7d-4021-aced-39f74c2204ce,True,,
+ddb4acda-f9b6-492a-9c42-46116c8c3528,e81ea66c-e39c-4360-8bb3-cda346f5d27c,f686e1a1-723c-429b-bb47-f73b16ff83b6,True,,
+2b172c0e-6566-47c0-9b2c-1f99457ce274,e81ea66c-e39c-4360-8bb3-cda346f5d27c,6a946e13-4317-41d8-86fe-a4f9906dcf84,True,,
+c0cfa034-8eda-484f-90fe-1fbb850e416c,e81ea66c-e39c-4360-8bb3-cda346f5d27c,3e1f3e67-210b-4c06-8db3-7996b60a1a85,True,,
+a32c1c25-f24f-45aa-9e43-dbf8a10638bb,e81ea66c-e39c-4360-8bb3-cda346f5d27c,5295210d-c83d-491d-a9f4-7cbda5b0249d,True,,
+e5172cad-2e05-4060-a3a1-e3796227342a,e81ea66c-e39c-4360-8bb3-cda346f5d27c,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,False,unlikely,Reviewed and agreed.
+7d57bd30-8737-4daf-8738-84022d2e504a,e81ea66c-e39c-4360-8bb3-cda346f5d27c,1f2bdbb7-f2bb-4a38-a5f0-e7edd9b786b1,False,unclassifiable,Missing key symptom analysis.
+cfcfd6fc-1d0c-41de-a70d-ca298f073597,e81ea66c-e39c-4360-8bb3-cda346f5d27c,33446ef3-36f8-4466-9c1e-38ca24846e37,True,,
+25a85a48-17bf-4b7c-9919-cac8814edbf9,e81ea66c-e39c-4360-8bb3-cda346f5d27c,53138b97-dbe7-4b15-886b-9c41e414661d,True,,
+9820a3f7-03a9-44a7-b09b-32b72fc7a1dc,e81ea66c-e39c-4360-8bb3-cda346f5d27c,0a608a9a-40cc-406f-ac37-83914df136d5,True,,
+77c76221-17d9-4fb3-9b20-c5d1510e8e69,e81ea66c-e39c-4360-8bb3-cda346f5d27c,3522234b-03f3-477a-a2e2-73f3eda7cf68,False,likely,Missing key symptom analysis.
+5d7cd3ac-bdc9-46d5-8f94-8123f30fd39c,e81ea66c-e39c-4360-8bb3-cda346f5d27c,3756bed1-aef0-4a9a-b422-8aedcfb61675,True,,
+1c249880-00d7-4ec4-87a3-a30f6449b880,e81ea66c-e39c-4360-8bb3-cda346f5d27c,b8ab476d-c082-4fbd-a430-e6e05fcc6be7,False,certain,Needs expert second opinion.
+8c7089e1-f1b3-471d-a947-bc95b69f57a8,7ff50f5e-90b1-4054-ac08-970d1c8ab416,eee2a028-7fff-4082-9dfc-77442f6e3ea7,False,unclassified,Reviewed and agreed.
+a1425ec7-7bc9-41ad-afa0-290bb898c937,7ff50f5e-90b1-4054-ac08-970d1c8ab416,d1340087-115c-4223-88da-99e890496d0a,False,likely,Reviewed and agreed.
+1a58f18a-33fd-444b-b5a4-19ffe9c224ce,7ff50f5e-90b1-4054-ac08-970d1c8ab416,27efeab9-bbd2-489f-82ec-048f10ad8c03,False,certain,
+10d519cf-2835-4f7f-bf6b-49ea943d6465,7ff50f5e-90b1-4054-ac08-970d1c8ab416,5295210d-c83d-491d-a9f4-7cbda5b0249d,False,unclassifiable,Needs expert second opinion.
+e98957ee-28f3-4f74-8e69-0c7ab9818532,7ff50f5e-90b1-4054-ac08-970d1c8ab416,b9951ee1-fa33-4da2-a628-579bf091cc2c,True,,
+4dbe04aa-c43d-4442-897d-f6844b4d2597,7ff50f5e-90b1-4054-ac08-970d1c8ab416,f0b69dcd-b5e2-4226-b894-a8956d0a68b5,True,,
+5dfc175f-055e-4ec3-87f2-b60fdc13bbca,7ff50f5e-90b1-4054-ac08-970d1c8ab416,498a3e20-031a-4141-8a54-3d169a7387ee,False,unlikely,
+45975d76-cc0d-4e44-8619-cd245b3479be,7ff50f5e-90b1-4054-ac08-970d1c8ab416,47ee406e-8976-4b89-aef4-41fc55ba45a4,False,unlikely,
+e1f1bbc1-4d11-4702-a699-c67044e6004b,7ff50f5e-90b1-4054-ac08-970d1c8ab416,0a608a9a-40cc-406f-ac37-83914df136d5,False,unclassified,Needs expert second opinion.
+1ece334f-a5ac-4826-be12-0c8220a80c74,7ff50f5e-90b1-4054-ac08-970d1c8ab416,fd3333f7-0f26-4249-aefe-7342a0b7d5b9,True,,
+72270285-f52b-4043-917a-1a4c5d241473,7ff50f5e-90b1-4054-ac08-970d1c8ab416,abf296e0-0b7e-47fb-937a-3e2a05e7a27b,True,,
+44a4305a-7bd4-4c2b-a9ae-10ea60cb2523,7ff50f5e-90b1-4054-ac08-970d1c8ab416,f686e1a1-723c-429b-bb47-f73b16ff83b6,True,,
+704a66bd-fddd-491a-bd21-adea3812f703,7ff50f5e-90b1-4054-ac08-970d1c8ab416,3756bed1-aef0-4a9a-b422-8aedcfb61675,False,likely,Needs expert second opinion.
+ba47edb5-d6ef-4221-8eb6-d53f53b48098,7ff50f5e-90b1-4054-ac08-970d1c8ab416,345a5264-c00e-400d-9247-e1a1dc346aeb,False,unlikely,
+01b642c5-1b81-4c3f-97b7-8699591b03fc,7ff50f5e-90b1-4054-ac08-970d1c8ab416,618fd6c1-f540-43ac-8c1d-a0a4f97da5cb,False,possible,Needs expert second opinion.
+640d4b72-ecd2-4f63-a1cd-2909f1fdbaa3,7ff50f5e-90b1-4054-ac08-970d1c8ab416,3e1f3e67-210b-4c06-8db3-7996b60a1a85,True,,
+048dbe40-dfa2-45d0-aa12-2bce71332eeb,7ff50f5e-90b1-4054-ac08-970d1c8ab416,72370d4f-2bbc-47b9-991c-071e6a81dc64,False,unclassified,Contradicts known patterns.
+939fdc2f-46a6-41bb-aebb-f94373b530ca,7ff50f5e-90b1-4054-ac08-970d1c8ab416,a38a16c3-7a7d-4021-aced-39f74c2204ce,False,possible,Sufficient evidence provided.
+d1c8c475-baa3-4577-bf73-2905f6f2a5a6,7ff50f5e-90b1-4054-ac08-970d1c8ab416,4c9438ea-e49c-4f55-b9ad-eb72de4b62b7,False,unclassifiable,Sufficient evidence provided.
+b04ea0f1-38e5-4ad1-b204-d6858f190c7e,7ff50f5e-90b1-4054-ac08-970d1c8ab416,6a946e13-4317-41d8-86fe-a4f9906dcf84,False,certain,Sufficient evidence provided.

@@ -1,16 +1,18 @@
 import datetime
 
 import jwt
-from basemodels import Token, TokenData, UserDetailsBaseModel
-from config import settings
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
-from typing_extensions import Annotated
 from sqlalchemy.orm import Session
-from basemodels import UserModel
-from dependencies import get_db
+from typing_extensions import Annotated
+
+from ..basemodels.auth import TokenData
+from ..basemodels.user import UserDetailsBaseModel
+from ..config import settings
+from ..dependencies import get_db
+from ..models.user import UserModel
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/token")
 
