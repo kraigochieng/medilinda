@@ -8,11 +8,11 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from typing_extensions import Annotated
 
-from ..basemodels.auth import TokenData
-from ..basemodels.user import UserDetailsBaseModel
-from ..config import settings
-from ..dependencies import get_db
-from ..models.user import UserModel
+from server.basemodels.auth import TokenData
+from server.basemodels.user import UserDetailsBaseModel
+from server.config import settings
+from server.dependencies import get_db
+from server.models.user import UserModel
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/token")
 
