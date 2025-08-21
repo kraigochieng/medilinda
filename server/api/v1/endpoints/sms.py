@@ -201,7 +201,7 @@ async def get_sms_message_with_adr_and_counts(
     }
 
 
-@router.post("/api/v1/send_individual_alert")
+@router.post("/send_individual_alert")
 def send_individual_alert(
     data: IndividualAlertPostRequest, db: Session = Depends(get_db)
 ):
@@ -273,7 +273,7 @@ def send_individual_alert(
     return JSONResponse(content=content, status_code=status.HTTP_200_OK)
 
 
-@router.post("/api/v1/send_additional_info_request")
+@router.post("/send_additional_info_request")
 def send_additional_info_request(
     data: AdditionalInfoPostRequest, db: Session = Depends(get_db)
 ):

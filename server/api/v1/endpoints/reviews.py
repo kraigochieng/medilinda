@@ -86,7 +86,7 @@ async def update_review_by_id(
 
 
 @router.delete(
-    "/api/v1/review/{review_id}",
+    "/review/{review_id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
 def delete_review_by_id(
@@ -107,7 +107,7 @@ def delete_review_by_id(
 
 
 @router.get(
-    "/api/v1/review_for_specific_user_and_causality_assessment_level",
+    "/review_for_specific_user_and_causality_assessment_level",
     status_code=status.HTTP_200_OK,
 )
 async def get_review_for_specific_user_and_causality_assessment_level(

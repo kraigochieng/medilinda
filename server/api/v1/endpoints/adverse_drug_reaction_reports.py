@@ -589,7 +589,7 @@ async def get_adrs_with_individual_alerts(
     }
 
 
-@router.get("/api/v1/additional-info-requests", response_model=Page[dict])
+@router.get("/additional-info-requests", response_model=Page[dict])
 async def get_adrs_with_additional_info_requests(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
     page: int = Query(1, ge=1),
@@ -688,7 +688,7 @@ async def get_adrs_with_additional_info_requests(
     }
 
 
-@router.get("/api/v1/to-be-sent-additional-info-requests", response_model=Page[dict])
+@router.get("/to-be-sent-additional-info-requests", response_model=Page[dict])
 async def get_adrs_to_be_sent_for_additional_info_requests(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
     page: int = Query(1, ge=1),
@@ -786,7 +786,7 @@ async def get_adrs_to_be_sent_for_additional_info_requests(
     }
 
 
-@router.get("/api/v1/to-be-sent-individual-alerts", response_model=Page[dict])
+@router.get("/to-be-sent-individual-alerts", response_model=Page[dict])
 async def get_adrs_to_be_sent_for_individual_alerts(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
     page: int = Query(1, ge=1),
@@ -885,7 +885,7 @@ async def get_adrs_to_be_sent_for_individual_alerts(
 
 
 
-@router.get("/api/v1/unclassifiable-causality", response_model=Page[dict])
+@router.get("/unclassifiable-causality", response_model=Page[dict])
 async def get_adrs_with_unclassifiable_causality(
     page: int = Query(1, ge=1),
     size: int = Query(50, ge=1, le=100),

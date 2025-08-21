@@ -161,7 +161,7 @@ async def get_reviews_for_causality_assessment_level(
     return paginate(content)
 
 @router.get(
-    "/api/v1/review_for_specific_user_and_causality_assessment_level",
+    "/review_for_specific_user_and_causality_assessment_level",
     status_code=status.HTTP_200_OK,
 )
 async def get_review_for_specific_user_and_causality_assessment_level(

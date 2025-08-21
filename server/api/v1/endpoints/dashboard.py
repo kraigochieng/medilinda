@@ -21,7 +21,7 @@ from server.models.sms import SMSMessageModel
 from server.services.auth import get_current_user
 from server.services.dashboard import get_sms_monthly_by_type
 
-router = APIRouter(prefix="", tags=["dashboard", "v1"])
+router = APIRouter(prefix="/api/v1/dashboard", tags=["dashboard", "v1"])
 
 
 @router.get("/adr_monitoring", status_code=status.HTTP_200_OK)
