@@ -1,88 +1,99 @@
-Goal: Create a classification model that will take ADR reports and assigns them a certain level of causality assessment
+# ADR Causality Assessment Classification Model
 
-Input Features
+## Goal
+Create a classification model that takes **ADR reports** and assigns them a **level of causality assessment**.
+
 ---
-The yellow ADR reporting form from PPB
 
-Challenges
+## Input Features
+- The **yellow ADR reporting form** from PPB
+
 ---
-- Getting real ADR reports that focus on first line antitubercular drugs that have been assigned to levels of causality assessment (Even a small portion can help, synthetic data can be used to increase the dataset size)
-Other features
 
-Other Features to come later
+## Challenges
+- Accessing real ADR reports that:
+  - Focus on **first-line antitubercular drugs**
+  - Already have **assigned causality levels**
+- Dataset size:
+  - Even a small portion of real data would help
+  - **Synthetic data** can be used to increase dataset size
+
 ---
-- Notification for reports with less details
 
-Christine
+## Other Features (Future Work)
+- Notifications for **incomplete or low-detail reports**
+
 ---
-- Data Access
-- Engaging PPB
 
+## Key Stakeholders
+- **Christine**
+  - Data Access
+  - Engaging PPB
+  - Clear thinking
 
-- Clear thinking
+- **Terry**
+- **Ken**
 
-includes
-- health use case
-- health benefit: patient safety
-    - why?
-
-big health impact -> 
-    patient safety -> pv -> digital health -> ai -> solution
-
-how does tech come in?
-
-PvERS can further be enhanced
-
-
-- include timelines (due to )
-- reduce ambition
-
-
-> synthetic data vs real data
-
-advise
 ---
-think of writing a paper
-ask for advice for how to write a paper
-cite properly
 
+## Health Use Case
+- **Health Benefit:** Patient safety
+  - Why?  
+    - Directly linked to **pharmacovigilance (Pv)**  
+    - Prevents harm by assessing causality of ADRs  
+    - Supports **digital health** solutions enhanced with AI  
 
-implementation science (applied research)
+- **Big Health Impact Pathway:**  
+  `Patient Safety → Pharmacovigilance → Digital Health → AI Solution`
 
-
-Update Career PDP
-- specific career goal?
-- area of AI application?
-- surveillance (detecting outbreaks, respond quickly, contain)? (it is a health science)
-
-
-encouragement
 ---
-- where are the greatest problems?
-- clear connection with problem and solution at scale
 
+## Research Approach
+- **Implementation Science** (applied research)  
+- Write with the mindset of preparing a **scientific paper**:
+  - Clearly state the problem
+  - Link to public health impact
+  - Show how technology (AI/ML) comes in
+  - **Cite properly**
+- Compare **synthetic vs. real data** use
+- Reduce ambition → define **timelines** and **scopes**
 
-
-reading points
 ---
-- surveillance (detecting outbreaks, respond)?
-- public health
 
+## Guidance & Encouragement
+- Focus on **where the greatest problems lie**  
+- Ensure a **clear connection** between:
+  - The **problem**
+  - The **solution at scale**
 
-
-online courses
 ---
-fundamentals of disease surveillance
 
+## Reading Points
+- **Surveillance**:
+  - Detecting outbreaks
+  - Responding quickly
+  - Containment  
+- **Public health**  
+- **Pharmacovigilance graphs** → Do not reinvent the wheel
 
-
-do not reeinvent the wheel => refer to pv(for graphs)
-
-
-terry
-christine
-ken
-
-MLFlow Commands
 ---
-mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 0.0.0.0 --port 8081
+
+## Online Courses
+- **Fundamentals of Disease Surveillance**
+
+---
+
+## Career PDP Update
+- Define **specific career goal**
+- Clarify **area of AI application**
+- Possible direction: **Surveillance AI for health science**
+
+---
+
+## MLflow Commands
+```bash
+mlflow server \
+  --backend-store-uri sqlite:///mlflow.db \
+  --default-artifact-root ./mlruns \
+  --host 0.0.0.0 \
+  --port 8081
