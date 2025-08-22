@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Boolean, Column, String
 from sqlalchemy.orm import relationship
 
 from ..db.base import Base
@@ -13,6 +13,7 @@ class UserModel(Base, IDMixin, TimestampMixin):
     password = Column(String, nullable=False, unique=True)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
+    disabled = Column(Boolean, nullable=False, default=False)
 
     reviews = relationship(
         "ReviewModel", back_populates="user", cascade="all, delete-orphan"
