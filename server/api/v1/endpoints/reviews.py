@@ -12,7 +12,7 @@ from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
 from server.models.review import ReviewModel
 from server.models.user import UserModel
-from server.services.auth import get_current_user
+from server.services.auth import get_current_active_user
 
 router = APIRouter(prefix="/api/v1/reviews", tags=["reviews", "v1"])
 
@@ -23,7 +23,7 @@ router = APIRouter(prefix="/api/v1/reviews", tags=["reviews", "v1"])
     status_code=status.HTTP_200_OK,
 )
 async def get_reviews(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     query: str = Query("", description="Search query(optional)"),
     db: Session = Depends(get_db),
 ):
@@ -41,7 +41,7 @@ async def get_reviews(
     status_code=status.HTTP_200_OK,
 )
 async def get_reviews_by_id(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     review_id: str = Path(..., description="Review ID"),
     db: Session = Depends(get_db),
 ):
@@ -58,7 +58,7 @@ async def get_reviews_by_id(
 
 @router.put("/{review_id}", status_code=status.HTTP_200_OK)
 async def update_review_by_id(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     review_update: ADRReviewCreateRequest,
     review_id: str = Path(..., description="ID of review to update"),
     db: Session = Depends(get_db),
@@ -86,7 +86,7 @@ async def update_review_by_id(
 
 
 @router.delete(
-    "/review/{review_id}",
+    "/{review_id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
 def delete_review_by_id(
@@ -104,33 +104,3 @@ def delete_review_by_id(
     db.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-
-@router.get(
-    "/review_for_specific_user_and_causality_assessment_level",
-    status_code=status.HTTP_200_OK,
-)
-async def get_review_for_specific_user_and_causality_assessment_level(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
-    causality_assessment_level_id: str = Query(
-        ..., description="ID of Causality Assessment to read"
-    ),
-    db: Session = Depends(get_db),
-):
-    db_user = (
-        db.query(UserModel).filter(UserModel.username == current_user.username).first()
-    )
-
-    review = (
-        db.query(ReviewModel)
-        .filter(
-            ReviewModel.causality_assessment_level_id == causality_assessment_level_id,
-            ReviewModel.user_id == db_user.id,
-        )
-        .first()
-    )
-
-    if not review:
-        raise HTTPException(status_code=404, detail="Review not found")
-
-    return review

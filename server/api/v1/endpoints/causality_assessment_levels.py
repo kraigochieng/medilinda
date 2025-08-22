@@ -18,11 +18,11 @@ from server.models.adverse_drug_reaction_report import ADRModel
 from server.models.causality_assessment_level import CausalityAssessmentLevelModel
 from server.models.review import ReviewModel
 from server.models.user import UserModel
-from server.services.auth import get_current_user
+from server.services.auth import get_current_active_user
 
 router = APIRouter(
-    prefix="/api/v1/causality_assessment_levels",
-    tags=["causality_assessment_levels", "v1"],
+    prefix="/api/v1/causality-assessment-levels",
+    tags=["causality-assessment-levels", "v1"],
 )
 
 
@@ -31,7 +31,7 @@ router = APIRouter(
     status_code=status.HTTP_200_OK,
 )
 async def get_causality_assessment_level_by_id(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     causality_assessment_level_id: str = Path(
         ..., description="ID of Causality Assessment to read"
     ),
@@ -118,13 +118,14 @@ def delete_causality_assessment_level_by_id(
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+
 @router.get(
     "/{causality_assessment_level_id}/review",
     response_model=Page[ReviewGetResponse],
     status_code=status.HTTP_200_OK,
 )
 async def get_reviews_for_causality_assessment_level(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     causality_assessment_level_id: str = Path(
         ..., description="ID of Causality Assessment to read"
     ),
@@ -160,42 +161,13 @@ async def get_reviews_for_causality_assessment_level(
 
     return paginate(content)
 
-@router.get(
-    "/review_for_specific_user_and_causality_assessment_level",
-    status_code=status.HTTP_200_OK,
-)
-async def get_review_for_specific_user_and_causality_assessment_level(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
-    causality_assessment_level_id: str = Query(
-        ..., description="ID of Causality Assessment to read"
-    ),
-    db: Session = Depends(get_db),
-):
-    db_user = (
-        db.query(UserModel).filter(UserModel.username == current_user.username).first()
-    )
-
-    review = (
-        db.query(ReviewModel)
-        .filter(
-            ReviewModel.causality_assessment_level_id == causality_assessment_level_id,
-            ReviewModel.user_id == db_user.id,
-        )
-        .first()
-    )
-
-    if not review:
-        raise HTTPException(status_code=404, detail="Review not found")
-
-    return review
-
 
 @router.post(
     "/{causality_assessment_level_id}/review",
     status_code=status.HTTP_201_CREATED,
 )
 async def post_review(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     review: ADRReviewCreateRequest,
     causality_assessment_level_id: str = Path(
         ..., description="ID of Causality Assessment to read"
@@ -230,29 +202,4 @@ async def post_review(
     return JSONResponse(
         content=jsonable_encoder(review_model),
         status_code=status.HTTP_201_CREATED,
-    )
-
-
-@router.put("/update-causalities-to-unclassifiable")
-def update_causalities_to_unclassifiable(
-    data: UnclassifiablePostRequest,
-    db: Session = Depends(get_db),
-):
-    for adr_id in data.adr_ids:
-        cals = (
-            db.query(CausalityAssessmentLevelModel)
-            .filter(CausalityAssessmentLevelModel.adr_id == adr_id)
-            .all()
-        )
-
-        for cal in cals:
-            cal.causality_assessment_level_value = (
-                CausalityAssessmentLevelEnum.unclassifiable
-            )
-
-    db.commit()
-    db.refresh()
-
-    return JSONResponse(
-        content="ADR models with unclassifiable set", status_code=status.HTTP_200_OK
     )

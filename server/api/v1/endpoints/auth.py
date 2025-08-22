@@ -15,7 +15,7 @@ from server.dependencies import get_db
 from server.models.user import UserModel
 from server.services.auth import (
     create_access_token,
-    create_refresh_token,
+    # create_refresh_token,
     get_password_hash,
     verify_password,
 )
@@ -23,7 +23,7 @@ from server.services.auth import (
 router = APIRouter(prefix="/api/v1/auth", tags=["auth", "v1"])
 
 
-@router.get("/token")
+@router.post("/token")
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Session = Depends(get_db),
@@ -54,19 +54,19 @@ async def login_for_access_token(
         data={"sub": existing_user.username}, expires_delta=access_token_expires
     )
 
-    refresh_token_expires = datetime.timedelta(
-        days=settings.server_refresh_token_expire_days
-    )
+    # refresh_token_expires = datetime.timedelta(
+    #     days=settings.server_refresh_token_expire_days
+    # )
 
-    refresh_token = create_refresh_token(
-        data={"sub": existing_user.username}, expires_delta=refresh_token_expires
-    )
+    # refresh_token = create_refresh_token(
+    #     data={"sub": existing_user.username}, expires_delta=refresh_token_expires
+    # )
 
     return JSONResponse(
         content=jsonable_encoder(
             {
                 "access_token": access_token,
-                "refresh_token": refresh_token,
+                # "refresh_token": refresh_token,
                 "token_type": "bearer",
             }
         ),
@@ -107,35 +107,35 @@ async def signup(user: UserSignupBaseModel, db: Session = Depends(get_db)):
     )
 
 
-@router.post("/token/refresh", status_code=status.HTTP_201_CREATED)
-async def refresh_access_token(refresh_token: str):
-    try:
-        payload = jwt.decode(
-            refresh_token,
-            settings.server_refresh_secret_key,
-            algorithms=[settings.server_refresh_algorithm],
-        )
-        username = payload.get("sub")
+# @router.post("/token/refresh", status_code=status.HTTP_201_CREATED)
+# async def refresh_access_token(refresh_token: str):
+#     try:
+#         payload = jwt.decode(
+#             refresh_token,
+#             settings.server_refresh_secret_key,
+#             algorithms=[settings.server_refresh_algorithm],
+#         )
+#         username = payload.get("sub")
 
-        if username is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token"
-            )
+#         if username is None:
+#             raise HTTPException(
+#                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token"
+#             )
 
-        # Generate new access token
-        new_access_token = create_access_token(
-            data={"sub": username},
-            expires_delta=datetime.timedelta(
-                minutes=settings.server_access_token_expire_minutes
-            ),
-        )
-        return {"access_token": new_access_token, "token_type": "bearer"}
+#         # Generate new access token
+#         new_access_token = create_access_token(
+#             data={"sub": username},
+#             expires_delta=datetime.timedelta(
+#                 minutes=settings.server_access_token_expire_minutes
+#             ),
+#         )
+#         return {"access_token": new_access_token, "token_type": "bearer"}
 
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token expired"
-        )
-    except jwt.JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token"
-        )
+#     except jwt.ExpiredSignatureError:
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token expired"
+#         )
+#     except jwt.JWTError:
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token"
+#         )

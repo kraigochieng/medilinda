@@ -18,7 +18,7 @@ from server.models.causality_assessment_level import (
 )
 from server.models.medical_institution import MedicalInstitutionModel
 from server.models.sms import SMSMessageModel
-from server.services.auth import get_current_user
+from server.services.auth import get_current_active_user
 from server.services.dashboard import get_sms_monthly_by_type
 
 router = APIRouter(prefix="/api/v1/dashboard", tags=["dashboard", "v1"])
@@ -26,7 +26,7 @@ router = APIRouter(prefix="/api/v1/dashboard", tags=["dashboard", "v1"])
 
 @router.get("/adr_monitoring", status_code=status.HTTP_200_OK)
 def get_adr_monitoring(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     start: str = Query(...),
     end: str = Query(...),
     db: Session = Depends(get_db),
