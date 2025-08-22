@@ -1,14 +1,6 @@
 from pydantic import BaseModel
 
 
-class User(BaseModel):
-    username: str
-    email: str | None = None
-    disabled: bool | None = None
-    
-class UserInDB(User):
-    hashed_password: str
-
 class UserSignupBaseModel(BaseModel):
     username: str
     password: str
@@ -21,6 +13,7 @@ class UserDetailsBaseModel(BaseModel):
     username: str
     first_name: str | None = None
     last_name: str | None = None
+    disabled: bool = False
 
 
 class UserLoginBaseModel(BaseModel):
