@@ -1,6 +1,6 @@
 import os
 from pprint import pprint
-
+import joblib
 import mlflow
 import numpy as np
 import pandas as pd
@@ -70,7 +70,7 @@ if mlflow.get_experiment_by_name(settings.mlflow_experiment_path) is None:
 mlflow.set_experiment(settings.mlflow_experiment_path)
 
 
-def train_model(df_path: str):
+def train_model(df_path: str) -> None:
     mlflow.autolog()
     df = pd.read_csv(df_path)
 
@@ -276,8 +276,17 @@ def train_model(df_path: str):
                 registered_model_name=registered_model_name,
                 signature=signature,
             )
-
             print("📦 Model logged to MLflow successfully.")
+
+            encoder_path = "ordinal_encoder.pkl"
+
+            try:
+                joblib.dump(ordinal_encoder, encoder_path)
+                mlflow.log_artifact(encoder_path, artifact_path="encoders")
+                print("📦 Ordinal encoder logged to MLflow successfully.")
+            finally:
+                if os.path.exists(encoder_path):
+                    os.remove(encoder_path)
 
         print("DONE")
 
