@@ -1,6 +1,6 @@
 import os
 from typing import TypedDict
-
+from pathlib import Path
 import joblib
 import mlflow
 from mlflow.pyfunc import PyFuncModel
@@ -20,7 +20,7 @@ def mlflow_setup(
     mlflow_experiment_path: str,
     mlflow_model_name: str,
     mlflow_model_version: str,
-    local_artifacts_path: str = "./artifacts",
+    local_artifacts_path: str | Path = "./server/artifacts",
 ) -> MLEnsemble:
     os.environ["DATABRICKS_HOST"] = databricks_host
     os.environ["DATABRICKS_TOKEN"] = databricks_token
@@ -43,7 +43,7 @@ def mlflow_setup(
     model = mlflow.pyfunc.load_model(model_uri)
 
     run_id = model.metadata.run_id
-    encoder_path_on_server = f"encoders/ordinal_encoder.pkl"
+    encoder_path_on_server = "encoders/ordinal_encoder.pkl"
 
     if not os.path.exists(local_artifacts_path):
         os.mkdir(local_artifacts_path)
