@@ -1,0 +1,1001 @@
+Gender,Pregnancy Status,Rechallenge,Dechallenge,Severity,Is Reaction Serious,Reason for Seriousness,Action Taken,Outcome,Causality Assessment
+Female,1st Trimester,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,No,No,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,2nd Trimester,N/A,No,Mild,Yes,None,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,Yes,Severe,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Male,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,No,Moderate,Yes,None,Recovering,Not recovered,Possible
+Male,Not applicable,Unknown,Yes,Severe,Yes,None,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,No,Mild,No,Life threatening,Unknown,Not recovered,Possible
+Female,3rd Trimester,Unknown,Yes,Unknown,Yes,None,Recovering,Not recovered,Possible
+Male,Not applicable,Unknown,No,Moderate,No,Life threatening,Not recovered,Recovered,Possible
+Male,Not applicable,No,Yes,Mild,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,3rd Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Unknown,No,Unknown,No,Hospitalisation,Not recovered,Not recovered,Possible
+Male,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,Yes,No,Mild,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Male,Not applicable,N/A,Yes,Moderate,Yes,None,Not recovered,Not recovered,Possible
+Female,1st Trimester,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,Yes,Severe,No,Hospitalisation,Unknown,Recovered,Possible
+Female,Not applicable,N/A,No,Severe,Yes,Life threatening,Recovering,Not recovered,Possible
+Female,Not applicable,No,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,Yes,No,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Female,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,2nd Trimester,Unknown,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,2nd Trimester,Yes,Yes,Severe,Yes,Hospitalisation,Drug withdrawn,Recovered,Certain
+Female,Not applicable,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,Yes,Yes,Severe,Yes,Life threatening,Dose reduced,Recovering,Certain
+Female,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,3rd Trimester,Yes,No,Moderate,Yes,Life threatening,Dose reduced,Recovered,Certain
+Female,Not applicable,Yes,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Male,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,2nd Trimester,Unknown,No,Unknown,Yes,None,Not recovered,Recovered,Possible
+Female,3rd Trimester,Yes,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Female,1st Trimester,Yes,No,Moderate,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Female,Not applicable,Unknown,No,Mild,No,None,Not recovered,Not recovered,Possible
+Male,Not applicable,N/A,Yes,Moderate,No,Life threatening,Unknown,Recovered,Possible
+Male,Not applicable,Unknown,Yes,Mild,Yes,Life threatening,Recovering,Not recovered,Possible
+Male,Not applicable,No,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,2nd Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,No,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Male,2nd Trimester,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,1st Trimester,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,Yes,Mild,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,Unknown,Yes,Severe,Yes,None,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,Yes,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,Yes,No,Severe,Yes,Hospitalisation,Drug withdrawn,Recovered,Certain
+Male,2nd Trimester,N/A,No,Unknown,Yes,Life threatening,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,No,Unknown,No,Hospitalisation,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,Unknown,No,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,Yes,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,Yes,Mild,No,Life threatening,Not recovered,Not recovered,Possible
+Female,Not applicable,No,Yes,Moderate,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,3rd Trimester,Yes,No,Severe,Yes,Life threatening,Dose reduced,Recovering,Certain
+Male,Not applicable,Unknown,Yes,Severe,Yes,Hospitalisation,Unknown,Recovered,Possible
+Male,Not applicable,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,Unknown,No,Mild,No,Hospitalisation,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,No,Severe,No,None,Not recovered,Not recovered,Possible
+Female,3rd Trimester,N/A,Yes,Unknown,Yes,None,Recovering,Not recovered,Possible
+Female,2nd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Mild,Yes,None,Unknown,Not recovered,Possible
+Male,1st Trimester,Unknown,Yes,Moderate,Yes,Life threatening,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,Yes,Severe,No,Life threatening,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,1st Trimester,Unknown,Yes,Moderate,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,2nd Trimester,Yes,No,Mild,Yes,Life threatening,Dose reduced,Recovering,Certain
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,1st Trimester,Yes,No,Severe,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Male,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,3rd Trimester,N/A,Yes,Unknown,Yes,Life threatening,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,Unknown,Yes,Moderate,Yes,None,Unknown,Not recovered,Possible
+Female,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,No,No,Moderate,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,Unknown,Yes,Mild,No,Hospitalisation,Recovering,Not recovered,Possible
+Female,Not applicable,No,No,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,3rd Trimester,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,Yes,Mild,Yes,Hospitalisation,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,Unknown,Yes,Severe,Yes,None,Unknown,Not recovered,Possible
+Male,2nd Trimester,N/A,No,Unknown,No,Hospitalisation,Recovering,Not recovered,Possible
+Female,Not applicable,No,Yes,Moderate,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,2nd Trimester,N/A,Yes,Mild,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,Yes,Unknown,No,Hospitalisation,Recovering,Recovered,Possible
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,2nd Trimester,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,Unknown,No,Moderate,No,Hospitalisation,Recovering,Not recovered,Possible
+Female,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,3rd Trimester,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Moderate,No,None,Unknown,Recovered,Possible
+Female,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,3rd Trimester,Unknown,Yes,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,1st Trimester,N/A,Yes,Severe,Yes,Life threatening,Not recovered,Not recovered,Possible
+Female,1st Trimester,Unknown,No,Mild,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Female,2nd Trimester,Unknown,Yes,Moderate,No,Hospitalisation,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,No,Moderate,Yes,Hospitalisation,Recovering,Recovered,Possible
+Male,1st Trimester,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,1st Trimester,N/A,No,Severe,No,Hospitalisation,Recovering,Not recovered,Possible
+Male,2nd Trimester,Unknown,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,Yes,Severe,No,None,Recovering,Recovered,Possible
+Female,3rd Trimester,N/A,Yes,Severe,Yes,Life threatening,Unknown,Not recovered,Possible
+Female,Not applicable,N/A,No,Unknown,Yes,Hospitalisation,Unknown,Recovered,Possible
+Male,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,2nd Trimester,No,No,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,Unknown,Yes,Moderate,Yes,None,Unknown,Recovered,Possible
+Female,1st Trimester,N/A,Yes,Severe,No,Life threatening,Recovering,Not recovered,Possible
+Male,2nd Trimester,Unknown,Yes,Moderate,Yes,Hospitalisation,Unknown,Recovered,Possible
+Male,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,2nd Trimester,Unknown,No,Moderate,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Severe,No,Hospitalisation,Not recovered,Recovered,Possible
+Male,1st Trimester,Unknown,No,Unknown,Yes,Life threatening,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,Yes,Moderate,Yes,None,Unknown,Recovered,Possible
+Male,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,2nd Trimester,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,Yes,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Certain
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,3rd Trimester,Unknown,No,Severe,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Severe,Yes,None,Not recovered,Recovered,Possible
+Male,Not applicable,N/A,Yes,Moderate,No,Hospitalisation,Unknown,Not recovered,Possible
+Male,Not applicable,No,Yes,Mild,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Male,1st Trimester,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Mild,Yes,Life threatening,Not recovered,Not recovered,Possible
+Male,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,Unknown,No,Severe,No,Life threatening,Unknown,Recovered,Possible
+Female,2nd Trimester,No,No,Moderate,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,1st Trimester,Unknown,Yes,Mild,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,Not applicable,Unknown,Yes,Unknown,Yes,None,Not recovered,Not recovered,Possible
+Female,Not applicable,Unknown,Yes,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,N/A,Yes,Mild,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Female,Not applicable,Unknown,No,Severe,Yes,Life threatening,Not recovered,Recovered,Possible
+Male,Not applicable,Unknown,No,Moderate,No,None,Not recovered,Not recovered,Possible
+Male,3rd Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,2nd Trimester,N/A,No,Moderate,Yes,None,Recovering,Not recovered,Possible
+Female,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,No,Moderate,Yes,Hospitalisation,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,Yes,Mild,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,3rd Trimester,No,No,Mild,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Male,Not applicable,Yes,No,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Female,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,2nd Trimester,Yes,Yes,Mild,Yes,Life threatening,Drug withdrawn,Recovering,Certain
+Female,Not applicable,Unknown,Yes,Unknown,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Male,2nd Trimester,Unknown,Yes,Mild,No,Life threatening,Not recovered,Not recovered,Possible
+Female,2nd Trimester,N/A,Yes,Mild,No,Life threatening,Recovering,Recovered,Possible
+Male,Not applicable,N/A,No,Moderate,Yes,Life threatening,Recovering,Recovered,Possible
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,1st Trimester,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,3rd Trimester,No,Yes,Mild,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,1st Trimester,Unknown,Yes,Mild,No,Life threatening,Recovering,Not recovered,Possible
+Female,1st Trimester,Yes,No,Severe,Yes,Life threatening,Dose reduced,Recovered,Certain
+Female,2nd Trimester,N/A,No,Moderate,Yes,None,Unknown,Not recovered,Possible
+Male,1st Trimester,Unknown,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Yes,Yes,Severe,Yes,Life threatening,Dose reduced,Recovering,Certain
+Male,2nd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,3rd Trimester,Unknown,Yes,Unknown,No,Hospitalisation,Not recovered,Not recovered,Possible
+Female,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,No,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,2nd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,1st Trimester,No,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Male,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,No,Yes,Mild,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,1st Trimester,No,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,3rd Trimester,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,Yes,Moderate,No,Hospitalisation,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,No,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,Unknown,No,Moderate,No,Life threatening,Recovering,Not recovered,Possible
+Female,1st Trimester,N/A,No,Severe,No,Life threatening,Not recovered,Not recovered,Possible
+Female,1st Trimester,Unknown,Yes,Unknown,Yes,Hospitalisation,Recovering,Not recovered,Possible
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,2nd Trimester,No,Yes,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,Unknown,No,Severe,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,Yes,Mild,No,Life threatening,Unknown,Recovered,Possible
+Female,2nd Trimester,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Unknown,Yes,None,Not recovered,Not recovered,Possible
+Male,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,1st Trimester,No,Yes,Moderate,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,Unknown,No,Severe,Yes,Life threatening,Not recovered,Not recovered,Possible
+Male,Not applicable,N/A,No,Moderate,Yes,Life threatening,Recovering,Not recovered,Possible
+Male,Not applicable,No,Yes,Mild,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,Unknown,No,Mild,No,Hospitalisation,Unknown,Recovered,Possible
+Female,Not applicable,Unknown,No,Moderate,No,None,Unknown,Recovered,Possible
+Male,Not applicable,No,Yes,Severe,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,2nd Trimester,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,Yes,Moderate,Yes,Hospitalisation,Unknown,Recovered,Possible
+Male,3rd Trimester,N/A,Yes,Severe,No,Life threatening,Not recovered,Not recovered,Possible
+Female,2nd Trimester,Unknown,No,Severe,Yes,None,Unknown,Recovered,Possible
+Male,Not applicable,N/A,Yes,Unknown,Yes,None,Not recovered,Recovered,Possible
+Female,2nd Trimester,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,2nd Trimester,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,1st Trimester,No,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,No,No,Moderate,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,2nd Trimester,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,1st Trimester,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,Unknown,No,Severe,No,Life threatening,Unknown,Recovered,Possible
+Male,3rd Trimester,Unknown,Yes,Unknown,No,Life threatening,Unknown,Recovered,Possible
+Male,Not applicable,N/A,No,Mild,No,None,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,Yes,Severe,No,Hospitalisation,Not recovered,Recovered,Possible
+Male,Not applicable,N/A,No,Mild,Yes,None,Unknown,Not recovered,Possible
+Female,2nd Trimester,Yes,Yes,Severe,Yes,Life threatening,Drug withdrawn,Recovering,Certain
+Male,3rd Trimester,Yes,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Male,1st Trimester,Unknown,Yes,Severe,No,None,Recovering,Not recovered,Possible
+Male,Not applicable,No,No,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,2nd Trimester,N/A,No,Mild,Yes,None,Recovering,Recovered,Possible
+Female,Not applicable,Unknown,No,Mild,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,1st Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,1st Trimester,Unknown,Yes,Mild,Yes,Hospitalisation,Unknown,Not recovered,Possible
+Male,2nd Trimester,Unknown,Yes,Mild,Yes,None,Unknown,Not recovered,Possible
+Male,Not applicable,Yes,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Certain
+Female,2nd Trimester,N/A,No,Unknown,Yes,Life threatening,Recovering,Not recovered,Possible
+Male,Not applicable,No,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Mild,No,Life threatening,Unknown,Recovered,Possible
+Female,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,2nd Trimester,N/A,Yes,Unknown,No,Life threatening,Unknown,Not recovered,Possible
+Male,2nd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,3rd Trimester,Unknown,No,Unknown,No,None,Not recovered,Recovered,Possible
+Male,Not applicable,N/A,No,Mild,Yes,Life threatening,Unknown,Not recovered,Possible
+Male,2nd Trimester,N/A,Yes,Severe,Yes,Hospitalisation,Unknown,Recovered,Possible
+Male,Not applicable,Unknown,Yes,Mild,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,1st Trimester,N/A,Yes,Severe,Yes,None,Not recovered,Recovered,Possible
+Male,3rd Trimester,No,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,N/A,Yes,Unknown,No,None,Recovering,Not recovered,Possible
+Female,3rd Trimester,Unknown,No,Unknown,Yes,Hospitalisation,Unknown,Recovered,Possible
+Male,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Moderate,No,None,Recovering,Recovered,Possible
+Male,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,3rd Trimester,Unknown,No,Mild,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,Unknown,No,Mild,Yes,None,Not recovered,Recovered,Possible
+Female,1st Trimester,No,Yes,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Male,Not applicable,Unknown,No,Mild,No,None,Unknown,Not recovered,Possible
+Male,Not applicable,Unknown,No,Moderate,Yes,Life threatening,Unknown,Recovered,Possible
+Male,Not applicable,Unknown,No,Severe,Yes,Life threatening,Not recovered,Not recovered,Possible
+Male,1st Trimester,N/A,No,Severe,Yes,Hospitalisation,Recovering,Recovered,Possible
+Male,Not applicable,N/A,No,Moderate,Yes,None,Recovering,Recovered,Possible
+Female,Not applicable,N/A,Yes,Severe,No,None,Recovering,Not recovered,Possible
+Female,Not applicable,Yes,No,Moderate,Yes,Life threatening,Dose reduced,Recovering,Certain
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,3rd Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,2nd Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,3rd Trimester,Unknown,No,Moderate,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,1st Trimester,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Unknown,Yes,Life threatening,Not recovered,Not recovered,Possible
+Male,Not applicable,N/A,No,Unknown,Yes,Life threatening,Not recovered,Not recovered,Possible
+Female,1st Trimester,No,Yes,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,Unknown,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,Yes,No,Moderate,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Female,2nd Trimester,No,Yes,Severe,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Male,3rd Trimester,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,3rd Trimester,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,Unknown,Yes,Mild,No,Life threatening,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,3rd Trimester,N/A,Yes,Moderate,No,Life threatening,Recovering,Not recovered,Possible
+Female,Not applicable,No,No,Mild,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,Unknown,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,Yes,Yes,Moderate,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Male,Not applicable,N/A,Yes,Severe,No,Hospitalisation,Recovering,Recovered,Possible
+Male,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Unknown,Yes,Hospitalisation,Unknown,Not recovered,Possible
+Male,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Yes,Yes,Severe,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,1st Trimester,No,Yes,Severe,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,N/A,Yes,Mild,No,Life threatening,Recovering,Recovered,Possible
+Male,Not applicable,No,Yes,Severe,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,3rd Trimester,N/A,No,Mild,Yes,None,Unknown,Recovered,Possible
+Male,Not applicable,No,No,Moderate,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,Unknown,Yes,Severe,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Male,Not applicable,No,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,Yes,No,Moderate,Yes,Life threatening,Dose reduced,Recovering,Certain
+Female,Not applicable,Unknown,Yes,Moderate,Yes,Hospitalisation,Recovering,Recovered,Possible
+Male,Not applicable,N/A,No,Severe,Yes,Hospitalisation,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,Yes,Moderate,No,Life threatening,Unknown,Recovered,Possible
+Female,3rd Trimester,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,Unknown,No,Mild,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,3rd Trimester,Unknown,No,Severe,Yes,Life threatening,Unknown,Recovered,Possible
+Female,Not applicable,Yes,No,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Male,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,Yes,Severe,Yes,None,Unknown,Not recovered,Possible
+Male,Not applicable,Unknown,No,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,Unknown,No,Severe,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,No,Moderate,No,None,Not recovered,Not recovered,Possible
+Female,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Mild,Yes,None,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,No,Mild,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,Yes,No,Mild,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Female,Not applicable,N/A,Yes,Moderate,No,None,Not recovered,Not recovered,Possible
+Female,Not applicable,N/A,Yes,Severe,Yes,None,Not recovered,Not recovered,Possible
+Male,Not applicable,Yes,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Female,1st Trimester,Unknown,No,Moderate,Yes,Hospitalisation,Recovering,Recovered,Possible
+Female,2nd Trimester,Unknown,Yes,Mild,Yes,None,Unknown,Not recovered,Possible
+Male,Not applicable,Yes,No,Mild,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Male,2nd Trimester,Yes,No,Severe,Yes,Life threatening,Dose reduced,Recovering,Certain
+Male,Not applicable,N/A,No,Severe,No,Life threatening,Not recovered,Recovered,Possible
+Female,Not applicable,Unknown,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,No,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Mild,Yes,None,Not recovered,Recovered,Possible
+Female,Not applicable,Yes,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,Unknown,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Male,Not applicable,Unknown,Yes,Severe,No,Hospitalisation,Unknown,Recovered,Possible
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,3rd Trimester,No,Yes,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Unknown,No,Mild,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,1st Trimester,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,3rd Trimester,N/A,No,Severe,No,Hospitalisation,Not recovered,Recovered,Possible
+Male,Not applicable,Yes,Yes,Moderate,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Severe,Yes,Hospitalisation,Recovering,Not recovered,Possible
+Female,Not applicable,Unknown,Yes,Mild,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,3rd Trimester,Unknown,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,No,No,Mild,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,No,Severe,No,Life threatening,Not recovered,Recovered,Possible
+Male,Not applicable,Unknown,Yes,Moderate,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,N/A,Yes,Moderate,No,None,Unknown,Recovered,Possible
+Male,3rd Trimester,N/A,Yes,Mild,Yes,None,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,Yes,Moderate,Yes,Life threatening,Unknown,Recovered,Possible
+Female,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Male,1st Trimester,No,Yes,Severe,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,1st Trimester,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,1st Trimester,Unknown,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Male,1st Trimester,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,1st Trimester,Unknown,Yes,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,1st Trimester,Unknown,No,Severe,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,Unknown,Yes,Moderate,Yes,None,Recovering,Recovered,Possible
+Female,1st Trimester,Unknown,No,Severe,No,None,Not recovered,Not recovered,Possible
+Male,Not applicable,No,No,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,N/A,No,Severe,Yes,Life threatening,Unknown,Not recovered,Possible
+Female,2nd Trimester,Unknown,No,Unknown,No,Hospitalisation,Recovering,Recovered,Possible
+Female,Not applicable,Yes,Yes,Severe,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Male,Not applicable,No,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Male,2nd Trimester,Unknown,Yes,Severe,Yes,None,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,3rd Trimester,Unknown,Yes,Mild,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,Unknown,No,Moderate,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,Not applicable,Unknown,Yes,Mild,No,None,Unknown,Recovered,Possible
+Female,3rd Trimester,Yes,Yes,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Male,3rd Trimester,Unknown,Yes,Moderate,No,Hospitalisation,Recovering,Not recovered,Possible
+Female,Not applicable,Unknown,Yes,Mild,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Mild,Yes,Life threatening,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,1st Trimester,N/A,Yes,Mild,No,None,Recovering,Not recovered,Possible
+Female,Not applicable,Yes,Yes,Moderate,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Male,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,1st Trimester,N/A,Yes,Mild,No,Hospitalisation,Recovering,Not recovered,Possible
+Female,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,3rd Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,Unknown,No,Moderate,No,Life threatening,Unknown,Not recovered,Possible
+Male,3rd Trimester,Unknown,No,Severe,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Male,2nd Trimester,No,Yes,Severe,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,2nd Trimester,Unknown,No,Moderate,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Male,3rd Trimester,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Female,2nd Trimester,Yes,No,Moderate,Yes,Life threatening,Dose reduced,Recovering,Certain
+Female,3rd Trimester,Unknown,Yes,Unknown,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Male,1st Trimester,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Unknown,Yes,Moderate,Yes,None,Recovering,Not recovered,Possible
+Male,Not applicable,No,No,Mild,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Male,3rd Trimester,Yes,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Male,1st Trimester,Unknown,No,Severe,No,Life threatening,Recovering,Recovered,Possible
+Male,Not applicable,No,No,Moderate,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Male,3rd Trimester,Unknown,Yes,Moderate,Yes,Hospitalisation,Recovering,Recovered,Possible
+Male,Not applicable,N/A,Yes,Moderate,Yes,None,Not recovered,Not recovered,Possible
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Mild,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Male,2nd Trimester,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,2nd Trimester,Unknown,Yes,Moderate,No,Hospitalisation,Unknown,Recovered,Possible
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,2nd Trimester,No,Yes,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,3rd Trimester,No,No,Moderate,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,Yes,No,Moderate,Yes,Life threatening,Drug withdrawn,Recovering,Certain
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,Unknown,No,Unknown,No,Life threatening,Recovering,Recovered,Possible
+Female,Not applicable,Yes,Yes,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Female,Not applicable,No,No,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,No,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,1st Trimester,No,Yes,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Male,Not applicable,N/A,Yes,Moderate,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Female,2nd Trimester,N/A,Yes,Severe,Yes,Hospitalisation,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,Yes,Moderate,Yes,Life threatening,Not recovered,Not recovered,Possible
+Male,Not applicable,No,No,Severe,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,2nd Trimester,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,No,Yes,Mild,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,1st Trimester,No,No,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,Yes,Moderate,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,No,Yes,Severe,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Male,2nd Trimester,No,No,Moderate,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,2nd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,Unknown,No,Moderate,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,Yes,No,Moderate,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Female,Not applicable,N/A,No,Severe,Yes,Hospitalisation,Unknown,Recovered,Possible
+Male,1st Trimester,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,No,Mild,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,Yes,Mild,Yes,Hospitalisation,Not recovered,Recovered,Possible
+Male,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,No,No,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,1st Trimester,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,No,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Severe,No,Life threatening,Not recovered,Recovered,Possible
+Male,Not applicable,Yes,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Certain
+Female,Not applicable,Unknown,No,Moderate,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,2nd Trimester,No,Yes,Moderate,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,3rd Trimester,N/A,Yes,Severe,Yes,None,Unknown,Not recovered,Possible
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,1st Trimester,N/A,Yes,Mild,Yes,None,Unknown,Recovered,Possible
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,Yes,No,Mild,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Female,3rd Trimester,Unknown,No,Severe,No,Life threatening,Unknown,Not recovered,Possible
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,No,Severe,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Male,3rd Trimester,No,No,Mild,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,3rd Trimester,No,Yes,Severe,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,1st Trimester,Unknown,No,Severe,Yes,None,Recovering,Not recovered,Possible
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,3rd Trimester,Yes,No,Moderate,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Female,2nd Trimester,Yes,Yes,Mild,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,Unknown,Yes,Unknown,No,None,Recovering,Recovered,Possible
+Female,3rd Trimester,N/A,No,Severe,No,Hospitalisation,Unknown,Recovered,Possible
+Female,Not applicable,N/A,No,Mild,Yes,None,Unknown,Recovered,Possible
+Male,3rd Trimester,No,Yes,Moderate,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,2nd Trimester,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,2nd Trimester,N/A,Yes,Moderate,Yes,Hospitalisation,Unknown,Not recovered,Possible
+Male,2nd Trimester,N/A,Yes,Mild,Yes,None,Unknown,Recovered,Possible
+Female,Not applicable,Unknown,No,Mild,Yes,None,Recovering,Not recovered,Possible
+Male,3rd Trimester,Unknown,No,Severe,No,None,Recovering,Recovered,Possible
+Female,Not applicable,Unknown,No,Unknown,Yes,None,Recovering,Not recovered,Possible
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,No,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,No,Yes,Moderate,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,3rd Trimester,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,1st Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Yes,No,Severe,Yes,Life threatening,Drug withdrawn,Recovering,Certain
+Male,Not applicable,No,Yes,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,Yes,Yes,Moderate,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Male,1st Trimester,Unknown,Yes,Mild,No,Life threatening,Not recovered,Recovered,Possible
+Female,2nd Trimester,Yes,Yes,Moderate,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Male,2nd Trimester,Yes,No,Moderate,Yes,Life threatening,Dose reduced,Recovering,Certain
+Female,Not applicable,Unknown,No,Moderate,No,None,Not recovered,Recovered,Possible
+Female,Not applicable,Unknown,No,Unknown,No,Life threatening,Unknown,Recovered,Possible
+Female,Not applicable,N/A,No,Severe,No,Life threatening,Not recovered,Recovered,Possible
+Female,2nd Trimester,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,1st Trimester,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Moderate,No,Life threatening,Not recovered,Recovered,Possible
+Male,Not applicable,Unknown,No,Severe,Yes,None,Unknown,Not recovered,Possible
+Male,Not applicable,Yes,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Female,3rd Trimester,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,No,Unknown,No,None,Not recovered,Recovered,Possible
+Male,3rd Trimester,No,Yes,Mild,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,No,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,Yes,Yes,Moderate,Yes,Life threatening,Dose reduced,Recovering,Certain
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,Yes,Mild,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,2nd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,3rd Trimester,No,No,Mild,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,2nd Trimester,No,Yes,Moderate,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,N/A,No,Unknown,No,Life threatening,Not recovered,Recovered,Possible
+Male,Not applicable,No,Yes,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,N/A,Yes,Moderate,Yes,None,Recovering,Recovered,Possible
+Female,3rd Trimester,Yes,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Male,Not applicable,Unknown,No,Mild,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Male,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,1st Trimester,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,1st Trimester,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Female,3rd Trimester,No,No,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,1st Trimester,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,1st Trimester,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,3rd Trimester,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Unknown,Yes,Mild,Yes,None,Unknown,Recovered,Possible
+Female,Not applicable,Unknown,Yes,Mild,No,None,Unknown,Recovered,Possible
+Female,Not applicable,Unknown,Yes,Unknown,No,None,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,1st Trimester,Unknown,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,2nd Trimester,N/A,No,Severe,Yes,Life threatening,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,2nd Trimester,N/A,Yes,Mild,Yes,Life threatening,Not recovered,Recovered,Possible
+Male,Not applicable,Yes,Yes,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Male,Not applicable,No,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,Unknown,No,Unknown,Yes,Hospitalisation,Not recovered,Recovered,Possible
+Male,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,N/A,Yes,Unknown,No,Hospitalisation,Recovering,Not recovered,Possible
+Female,3rd Trimester,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,2nd Trimester,Yes,No,Mild,Yes,Life threatening,Drug withdrawn,Recovering,Certain
+Female,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,3rd Trimester,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,2nd Trimester,Yes,Yes,Severe,Yes,Life threatening,Drug withdrawn,Recovering,Certain
+Male,2nd Trimester,N/A,Yes,Moderate,No,Life threatening,Recovering,Not recovered,Possible
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,Yes,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Male,Not applicable,Unknown,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,3rd Trimester,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,2nd Trimester,N/A,Yes,Severe,No,Life threatening,Unknown,Recovered,Possible
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,No,Severe,Yes,None,Unknown,Not recovered,Possible
+Male,1st Trimester,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,Unknown,Yes,Mild,Yes,Hospitalisation,Recovering,Not recovered,Possible
+Male,3rd Trimester,Yes,No,Severe,Yes,Life threatening,Drug withdrawn,Recovering,Certain
+Male,3rd Trimester,N/A,No,Unknown,Yes,Life threatening,Unknown,Not recovered,Possible
+Female,Not applicable,No,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,Unknown,No,Mild,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,1st Trimester,Unknown,Yes,Severe,Yes,None,Not recovered,Not recovered,Possible
+Male,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,No,Unknown,No,Hospitalisation,Not recovered,Not recovered,Possible
+Female,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,2nd Trimester,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,Yes,No,Mild,Yes,Life threatening,Dose reduced,Recovering,Certain
+Female,Not applicable,Unknown,Yes,Severe,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,1st Trimester,N/A,Yes,Severe,Yes,Hospitalisation,Recovering,Not recovered,Possible
+Female,3rd Trimester,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,1st Trimester,N/A,Yes,Severe,Yes,Life threatening,Recovering,Not recovered,Possible
+Female,Not applicable,N/A,No,Unknown,Yes,Hospitalisation,Recovering,Not recovered,Possible
+Female,1st Trimester,Unknown,Yes,Mild,Yes,None,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,Yes,Moderate,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,1st Trimester,No,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,3rd Trimester,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,1st Trimester,No,Yes,Moderate,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,Unknown,Yes,Severe,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Moderate,No,Hospitalisation,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,No,Moderate,Yes,Hospitalisation,Recovering,Recovered,Possible
+Male,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,Yes,Yes,Severe,Yes,Life threatening,Dose reduced,Recovered,Certain
+Male,2nd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,3rd Trimester,Unknown,No,Moderate,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Yes,No,Moderate,Yes,Life threatening,Dose reduced,Recovering,Certain
+Male,2nd Trimester,Unknown,No,Mild,No,Hospitalisation,Unknown,Not recovered,Possible
+Male,Not applicable,Unknown,Yes,Severe,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,2nd Trimester,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,No,Severe,No,None,Unknown,Recovered,Possible
+Male,Not applicable,No,Yes,Severe,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Male,Not applicable,Unknown,No,Moderate,Yes,None,Unknown,Recovered,Possible
+Male,2nd Trimester,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,No,Yes,Severe,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,2nd Trimester,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,3rd Trimester,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,3rd Trimester,Unknown,Yes,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,Yes,No,Severe,Yes,Life threatening,Drug withdrawn,Recovering,Certain
+Female,2nd Trimester,Unknown,No,Severe,No,Life threatening,Not recovered,Recovered,Possible
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Moderate,No,Hospitalisation,Unknown,Not recovered,Possible
+Male,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,No,No,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,1st Trimester,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,2nd Trimester,N/A,No,Mild,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Male,Not applicable,N/A,Yes,Severe,Yes,Life threatening,Not recovered,Recovered,Possible
+Male,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,1st Trimester,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,No,Moderate,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,Not applicable,Unknown,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,N/A,Yes,Mild,No,Hospitalisation,Not recovered,Not recovered,Possible
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,Yes,Mild,No,None,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,1st Trimester,N/A,No,Severe,Yes,Life threatening,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,No,Severe,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,1st Trimester,Unknown,Yes,Mild,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Female,Not applicable,Unknown,Yes,Unknown,Yes,Hospitalisation,Unknown,Recovered,Possible
+Female,Not applicable,Yes,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Female,2nd Trimester,No,Yes,Moderate,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,1st Trimester,No,Yes,Mild,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,Unknown,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,2nd Trimester,Yes,No,Severe,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,N/A,Yes,Severe,No,None,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,No,Mild,No,Life threatening,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,2nd Trimester,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,No,No,Severe,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Male,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,2nd Trimester,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,2nd Trimester,N/A,Yes,Unknown,No,Life threatening,Recovering,Not recovered,Possible
+Female,Not applicable,Unknown,Yes,Mild,Yes,Hospitalisation,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,No,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,2nd Trimester,No,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,Unknown,Yes,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,3rd Trimester,N/A,No,Mild,Yes,Hospitalisation,Not recovered,Recovered,Possible
+Female,3rd Trimester,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,3rd Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Yes,Yes,Moderate,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Male,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,No,Yes,Mild,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,2nd Trimester,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,3rd Trimester,Yes,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Unknown,Yes,Mild,No,None,Unknown,Not recovered,Possible
+Male,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,2nd Trimester,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Female,1st Trimester,N/A,No,Unknown,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Male,Not applicable,N/A,No,Moderate,Yes,None,Not recovered,Not recovered,Possible
+Male,1st Trimester,No,Yes,Mild,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,1st Trimester,N/A,Yes,Mild,No,Hospitalisation,Recovering,Recovered,Possible
+Female,1st Trimester,Unknown,Yes,Moderate,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,Yes,No,Mild,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Male,Not applicable,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Male,1st Trimester,Unknown,Yes,Moderate,Yes,Life threatening,Unknown,Not recovered,Possible
+Male,Not applicable,Unknown,No,Severe,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,1st Trimester,N/A,Yes,Severe,No,None,Not recovered,Recovered,Possible
+Male,2nd Trimester,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,Unknown,No,Moderate,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,Unknown,Yes,Severe,Yes,None,Unknown,Recovered,Possible
+Female,3rd Trimester,Unknown,Yes,Severe,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,2nd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,1st Trimester,Unknown,No,Moderate,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,No,Mild,No,Life threatening,Unknown,Recovered,Possible
+Female,Not applicable,Unknown,Yes,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,3rd Trimester,N/A,Yes,Severe,Yes,Life threatening,Recovering,Recovered,Possible
+Female,1st Trimester,Yes,Yes,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Female,2nd Trimester,No,Yes,Moderate,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,Not applicable,Yes,Yes,Moderate,Yes,Life threatening,Dose reduced,Recovering,Certain
+Male,Not applicable,Yes,No,Mild,Yes,Life threatening,Dose reduced,Recovering,Certain
+Male,2nd Trimester,N/A,Yes,Moderate,Yes,Life threatening,Unknown,Not recovered,Possible
+Female,2nd Trimester,Unknown,No,Severe,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Male,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Yes,No,Moderate,Yes,Life threatening,Dose reduced,Recovered,Certain
+Female,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,Unknown,Yes,Mild,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,3rd Trimester,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,2nd Trimester,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,1st Trimester,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,3rd Trimester,Unknown,No,Severe,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,Unknown,No,Moderate,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,Unknown,No,Severe,Yes,Life threatening,Not recovered,Not recovered,Possible
+Male,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,2nd Trimester,N/A,No,Moderate,No,Life threatening,Not recovered,Not recovered,Possible
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Unknown,Yes,None,Not recovered,Not recovered,Possible
+Male,3rd Trimester,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,Unknown,Yes,Mild,No,Hospitalisation,Unknown,Not recovered,Possible
+Female,Not applicable,No,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,N/A,Yes,Unknown,No,Hospitalisation,Recovering,Recovered,Possible
+Female,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,Yes,Mild,No,None,Unknown,Recovered,Possible
+Male,1st Trimester,Unknown,Yes,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,Unknown,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Severe,No,None,Not recovered,Recovered,Possible
+Male,Not applicable,N/A,No,Unknown,No,Hospitalisation,Recovering,Not recovered,Possible
+Female,Not applicable,Unknown,Yes,Moderate,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,2nd Trimester,No,Yes,Moderate,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,N/A,No,Mild,Yes,Life threatening,Not recovered,Recovered,Possible
+Male,Not applicable,N/A,No,Mild,No,None,Not recovered,Not recovered,Possible
+Male,Not applicable,No,Yes,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,No,No,Severe,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,No,Yes,Severe,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,Unknown,Yes,Moderate,No,None,Recovering,Recovered,Possible
+Female,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,2nd Trimester,Unknown,Yes,Mild,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,No,Severe,No,Life threatening,Not recovered,Recovered,Possible
+Female,Not applicable,Yes,Yes,Mild,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Female,Not applicable,N/A,No,Mild,No,None,Not recovered,Recovered,Possible
+Male,1st Trimester,N/A,No,Moderate,Yes,Life threatening,Recovering,Not recovered,Possible
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Yes,Yes,Moderate,Yes,Life threatening,Dose reduced,Recovering,Certain
+Female,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,3rd Trimester,N/A,No,Mild,No,Hospitalisation,Unknown,Not recovered,Possible
+Female,Not applicable,No,No,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,Unknown,Yes,Severe,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,3rd Trimester,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Yes,Yes,Severe,Yes,Life threatening,Dose reduced,Recovered,Certain
+Male,Not applicable,N/A,No,Severe,Yes,None,Unknown,Recovered,Possible
+Male,2nd Trimester,N/A,Yes,Moderate,Yes,None,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,3rd Trimester,Unknown,Yes,Unknown,Yes,Life threatening,Not recovered,Not recovered,Possible
+Male,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,1st Trimester,Unknown,Yes,Mild,Yes,Hospitalisation,Recovering,Recovered,Possible
+Male,Not applicable,N/A,No,Mild,Yes,None,Not recovered,Recovered,Possible
+Female,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Mild,No,Life threatening,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,Yes,Severe,No,Life threatening,Not recovered,Not recovered,Possible
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,Unknown,Yes,Mild,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,Not applicable,Yes,No,Moderate,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,2nd Trimester,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Severe,No,None,Unknown,Not recovered,Possible
+Female,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Yes,Yes,Severe,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Severe,Yes,Life threatening,Recovering,Recovered,Possible
+Male,Not applicable,Yes,No,Severe,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Male,3rd Trimester,N/A,Yes,Mild,No,None,Not recovered,Not recovered,Possible
+Female,1st Trimester,Unknown,No,Severe,No,Life threatening,Recovering,Not recovered,Possible
+Female,1st Trimester,Unknown,Yes,Severe,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,3rd Trimester,Unknown,No,Moderate,Yes,Hospitalisation,Not recovered,Recovered,Possible
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,Yes,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Certain
+Female,3rd Trimester,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Yes,No,Mild,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,No,Mild,Yes,Hospitalisation,Not recovered,Recovered,Possible
+Male,Not applicable,Unknown,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,Yes,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Female,Not applicable,Yes,No,Severe,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Female,3rd Trimester,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,3rd Trimester,N/A,No,Moderate,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Female,3rd Trimester,No,Yes,Mild,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Male,Not applicable,N/A,No,Severe,No,None,Unknown,Recovered,Possible
+Female,Not applicable,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Male,2nd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,Unknown,No,Unknown,Yes,None,Not recovered,Not recovered,Possible
+Male,Not applicable,Unknown,Yes,Severe,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Male,Not applicable,Unknown,No,Moderate,No,None,Recovering,Recovered,Possible
+Female,1st Trimester,N/A,Yes,Mild,Yes,None,Recovering,Recovered,Possible
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Unknown,Yes,Unknown,Yes,Life threatening,Unknown,Not recovered,Possible
+Male,1st Trimester,Yes,No,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Male,Not applicable,Unknown,Yes,Mild,Yes,Life threatening,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,Yes,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,3rd Trimester,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Unknown,No,Mild,Yes,Hospitalisation,Recovering,Not recovered,Possible
+Male,3rd Trimester,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,Not applicable,Unknown,Yes,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,2nd Trimester,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,3rd Trimester,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,3rd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,No,Yes,Mild,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,Unknown,No,Severe,No,None,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,No,Unknown,No,Life threatening,Not recovered,Recovered,Possible
+Male,2nd Trimester,No,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,1st Trimester,Unknown,No,Moderate,No,None,Not recovered,Not recovered,Possible
+Female,Not applicable,Yes,Yes,Moderate,Yes,Life threatening,Dose reduced,Recovering,Certain
+Male,Not applicable,No,No,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,Unknown,No,Unknown,No,Life threatening,Recovering,Not recovered,Possible
+Female,2nd Trimester,Unknown,No,Unknown,Yes,Life threatening,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,1st Trimester,Unknown,Yes,Moderate,Yes,None,Unknown,Not recovered,Possible
+Male,3rd Trimester,Unknown,Yes,Mild,Yes,Life threatening,Recovering,Recovered,Possible
+Male,1st Trimester,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,1st Trimester,N/A,Yes,Mild,Yes,None,Not recovered,Not recovered,Possible
+Female,3rd Trimester,N/A,No,Unknown,No,None,Not recovered,Recovered,Possible
+Male,Not applicable,Unknown,No,Severe,Yes,None,Recovering,Not recovered,Possible
+Female,Not applicable,Unknown,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Male,3rd Trimester,Yes,No,Mild,Yes,Life threatening,Dose reduced,Recovering,Certain
+Female,Not applicable,No,Yes,Moderate,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Male,Not applicable,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,2nd Trimester,Yes,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Certain
+Female,1st Trimester,Unknown,Yes,Severe,Yes,None,Unknown,Recovered,Possible
+Male,Not applicable,Yes,No,Mild,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,1st Trimester,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,3rd Trimester,Yes,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Female,Not applicable,Unknown,No,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,Unknown,Yes,Mild,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,2nd Trimester,N/A,No,Mild,Yes,Hospitalisation,Recovering,Recovered,Possible
+Female,Not applicable,Unknown,No,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Female,1st Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,3rd Trimester,Unknown,Yes,Moderate,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Female,3rd Trimester,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,2nd Trimester,Unknown,Yes,Unknown,No,Hospitalisation,Unknown,Not recovered,Possible
+Female,3rd Trimester,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,1st Trimester,Unknown,No,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Male,1st Trimester,N/A,Yes,Moderate,Yes,None,Not recovered,Not recovered,Possible
+Male,Not applicable,Yes,Yes,Moderate,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Male,3rd Trimester,Unknown,Yes,Moderate,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Male,Not applicable,Unknown,Yes,Mild,Yes,None,Unknown,Not recovered,Possible
+Female,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,1st Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,Unknown,Yes,Severe,No,Hospitalisation,Unknown,Not recovered,Possible
+Male,2nd Trimester,N/A,No,Moderate,Yes,None,Unknown,Recovered,Possible
+Male,2nd Trimester,Yes,No,Severe,Yes,Life threatening,Dose reduced,Recovered,Certain
+Male,3rd Trimester,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,No,Yes,Severe,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,3rd Trimester,Yes,No,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Certain
+Male,Not applicable,N/A,Yes,Severe,Yes,Life threatening,Unknown,Not recovered,Possible
+Female,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,Yes,Severe,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Male,1st Trimester,Yes,No,Severe,Yes,Life threatening,Dose reduced,Recovered,Certain
+Female,3rd Trimester,No,Yes,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Probable/Likely
+Female,1st Trimester,Yes,No,Moderate,Yes,Life threatening,Drug withdrawn,Recovered,Certain
+Female,2nd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,Not applicable,Yes,No,Severe,Yes,Life threatening,Drug withdrawn,Recovering,Certain
+Female,Not applicable,Unknown,No,Severe,No,None,Not recovered,Recovered,Possible
+Female,Not applicable,Unknown,Yes,Moderate,No,Life threatening,Unknown,Recovered,Possible
+Female,Not applicable,Unknown,No,Mild,Yes,Life threatening,Recovering,Recovered,Possible
+Female,3rd Trimester,Unknown,Yes,Unknown,Yes,Hospitalisation,Not recovered,Not recovered,Possible
+Female,Not applicable,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Yes,No,Mild,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Female,Not applicable,Yes,Yes,Moderate,Yes,Hospitalisation,Drug withdrawn,Recovered,Certain
+Male,2nd Trimester,N/A,Yes,Mild,No,,Unknown,Not recovered,Unlikely
+Female,Not applicable,N/A,No,Unknown,No,Life threatening,Recovering,Recovered,Possible
+Male,Not applicable,Unknown,No,Severe,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Male,2nd Trimester,Yes,No,Moderate,Yes,Life threatening,Drug withdrawn,Recovering,Certain
+Female,3rd Trimester,N/A,Yes,Severe,Yes,None,Unknown,Recovered,Possible
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,3rd Trimester,Yes,No,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Female,Not applicable,N/A,No,Mild,No,,Unknown,Not recovered,Unlikely
+Male,1st Trimester,Unknown,No,Moderate,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,3rd Trimester,Yes,No,Mild,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Female,2nd Trimester,Unknown,No,Mild,No,Hospitalisation,Unknown,Not recovered,Possible
+Female,Not applicable,N/A,Yes,Moderate,Yes,Hospitalisation,Recovering,Not recovered,Possible
+Male,Not applicable,N/A,Yes,Severe,No,Hospitalisation,Not recovered,Recovered,Possible
+Male,2nd Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,Unknown,No,Mild,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Female,1st Trimester,Unknown,No,Mild,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Female,Not applicable,No,Yes,Mild,Yes,Hospitalisation,Dose reduced,Recovering,Probable/Likely
+Male,3rd Trimester,No,No,Mild,Yes,Disability,Dose reduced,Recovered,Probable/Likely
+Female,Not applicable,N/A,Yes,Moderate,Yes,Hospitalisation,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Male,3rd Trimester,N/A,No,Severe,Yes,Life threatening,Not recovered,Not recovered,Possible
+Female,Not applicable,N/A,Yes,Moderate,Yes,Life threatening,Recovering,Recovered,Possible
+Male,Not applicable,No,No,Moderate,Yes,Disability,Dose reduced,Recovering,Probable/Likely
+Male,Not applicable,Unknown,Yes,Mild,Yes,Disability,Drug withdrawn,Recovered,Probable/Likely
+Female,3rd Trimester,N/A,No,Mild,No,,Not applicable,Not recovered,Unlikely
+Male,2nd Trimester,N/A,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,N/A,Yes,Mild,Yes,Hospitalisation,Recovering,Recovered,Possible
+Male,2nd Trimester,N/A,No,Mild,Yes,None,Not recovered,Not recovered,Possible
+Male,3rd Trimester,Unknown,No,Severe,Yes,Hospitalisation,Drug withdrawn,Recovering,Probable/Likely
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,Not applicable,Unknown,N/A,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,Not applicable,No,Yes,Moderate,Yes,Disability,Drug withdrawn,Recovering,Probable/Likely
+Female,Not applicable,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Female,2nd Trimester,N/A,Yes,Moderate,No,Life threatening,Not recovered,Recovered,Possible
+Male,Not applicable,Unknown,No,Severe,Yes,Hospitalisation,Drug withdrawn,Recovered,Probable/Likely
+Female,2nd Trimester,Unknown,Unknown,Unknown,No,,Unknown,Not recovered,Conditional/Unclassified
+Male,3rd Trimester,Yes,No,Severe,Yes,Hospitalisation,Drug withdrawn,Recovering,Certain
+Male,Not applicable,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,2nd Trimester,Yes,Yes,Severe,Yes,Hospitalisation,Dose reduced,Recovering,Certain
+Male,Not applicable,N/A,No,Unknown,No,,Not applicable,Not recovered,Unlikely
+Female,3rd Trimester,Yes,No,Mild,Yes,Hospitalisation,Dose reduced,Recovered,Certain
+Female,2nd Trimester,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,1st Trimester,Unknown,No,Moderate,No,None,Unknown,Recovered,Possible
+Female,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Male,1st Trimester,N/A,N/A,Unknown,No,,Unknown,Not recovered,Unassessable/Unclassifiable
+Female,Not applicable,Unknown,No,Mild,No,Hospitalisation,Unknown,Not recovered,Possible
+Male,Not applicable,N/A,Yes,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,Not applicable,N/A,No,Unknown,No,,Unknown,Not recovered,Unlikely
+Male,1st Trimester,N/A,Yes,Mild,No,,Not applicable,Not recovered,Unlikely
+Female,3rd Trimester,Unknown,No,Moderate,No,None,Not recovered,Not recovered,Possible
+Female,Not applicable,Unknown,Yes,Severe,Yes,Hospitalisation,Unknown,Not recovered,Possible
