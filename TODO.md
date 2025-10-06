@@ -7,8 +7,13 @@
 -   [ ] add self ping function to fastapi lifespan
 -   [ ] update all readmes
 
-
 # In Progress
+
+-   [ ] use uploaded models in server
+-   [ ] replace shadcn with nuxt ui bit by bit
+-   [ ] see if the y column encoder is there
+-   [ ] fragment the lifespan to separate files
+    - [ ] for db file, create separate clear functions
 
 # Done
 
