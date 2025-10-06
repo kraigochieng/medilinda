@@ -1,4 +1,0 @@
-mlflow
-psycopg2-binary # for Postgres, Change for different DB
-boto3
-virtualenv
