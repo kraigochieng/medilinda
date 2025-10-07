@@ -36,6 +36,7 @@ from medilinda_ml.features.build_features import (
 )
 from medilinda_ml.paths import DATA_DIR
 from medilinda_ml.settings import settings
+from medilinda_ml.utils import ShapModelWrapper
 from mlflow.models import infer_signature
 from sklearn.ensemble import (
     AdaBoostClassifier,
@@ -60,8 +61,10 @@ from sklearn.tree import DecisionTreeClassifier
 os.environ["DATABRICKS_HOST"] = settings.databricks_host
 os.environ["DATABRICKS_TOKEN"] = settings.databricks_token
 os.environ["MLFLOW_RECORD_ENV_VARS_IN_MODEL_LOGGING"] = "false"
+
 # # To allow uv to be used
 # os.environ["MLFLOW_LOCK_MODEL_DEPENDENCIES"] = "true"
+
 # Set MLFlow Tracking URI
 mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
 
@@ -75,24 +78,6 @@ if mlflow.get_experiment_by_name(settings.mlflow_experiment_path) is None:
 # Set MLFlow Experiment if not created
 mlflow.set_experiment(settings.mlflow_experiment_path)
 
-
-class ShapModelWrapper:
-    """
-    A wrapper class for the scikit-learn pipeline to make it compatible
-    with SHAP's KernelExplainer, ensuring it's pickleable.
-    """
-
-    def __init__(self, model, column_names):
-        self.model = model
-        self.column_names = column_names
-
-    def __call__(self, x):
-        """
-        The call method that SHAP will use for predictions.
-        Converts the NumPy array from SHAP back to a DataFrame before predicting.
-        """
-        x_df = pd.DataFrame(x, columns=self.column_names)
-        return self.model.predict_proba(x_df)
 
 
 def train_model(df_path: str) -> None:
