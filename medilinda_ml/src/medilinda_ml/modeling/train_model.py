@@ -1,9 +1,15 @@
+import matplotlib
+
+matplotlib.use("agg")
+
 import os
 from pprint import pprint
+
 import joblib
 import mlflow
 import numpy as np
 import pandas as pd
+import shap
 from imblearn.over_sampling import SMOTE
 from imblearn.pipeline import Pipeline
 from medilinda_ml.columns import (
@@ -68,6 +74,25 @@ if mlflow.get_experiment_by_name(settings.mlflow_experiment_path) is None:
 
 # Set MLFlow Experiment if not created
 mlflow.set_experiment(settings.mlflow_experiment_path)
+
+
+class ShapModelWrapper:
+    """
+    A wrapper class for the scikit-learn pipeline to make it compatible
+    with SHAP's KernelExplainer, ensuring it's pickleable.
+    """
+
+    def __init__(self, model, column_names):
+        self.model = model
+        self.column_names = column_names
+
+    def __call__(self, x):
+        """
+        The call method that SHAP will use for predictions.
+        Converts the NumPy array from SHAP back to a DataFrame before predicting.
+        """
+        x_df = pd.DataFrame(x, columns=self.column_names)
+        return self.model.predict_proba(x_df)
 
 
 def train_model(df_path: str) -> None:
@@ -287,6 +312,31 @@ def train_model(df_path: str) -> None:
             finally:
                 if os.path.exists(encoder_path):
                     os.remove(encoder_path)
+
+            print("📦 Creating and logging SHAP explainer...")
+
+            # Temporarily disable autologging to prevent conflicts
+            mlflow.autolog(disable=True)
+
+            explainer_path = "shap_explainer.pkl"
+
+            try:
+                # preprocessed_X_train, _ = best_estimator[:-1].fit_resample(
+                #     X_train, y_train_enc
+                # )
+                background_data = X_train.sample(100, random_state=42)
+
+                predict_fn = ShapModelWrapper(best_estimator, X_train.columns)
+
+                explainer = shap.KernelExplainer(predict_fn, background_data)
+
+                joblib.dump(explainer, explainer_path)
+                mlflow.log_artifact(explainer_path, artifact_path="explainers")
+                print("📦 SHAP explainer logged to MLflow successfully.")
+            finally:
+                if os.path.exists(explainer_path):
+                    os.remove(explainer_path)
+                    print("🧹 Cleaned up local explainer file.")
 
         print("DONE")
 

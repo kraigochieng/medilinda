@@ -75,6 +75,8 @@ class PatientAgeImputer(BaseEstimator, TransformerMixin):
         # Now fill any remaining missing ages (where dob was also missing) with median
         df["patient_age"] = df["patient_age"].fillna(df["patient_age"].median())
 
+        # Explicitly convert the age column to integer type
+        df["patient_age"] = df["patient_age"].astype(int)
         return df
 
 
@@ -167,7 +169,9 @@ class NumericalImputer(BaseEstimator, TransformerMixin):
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         df = X.copy()
 
-        df[self.numerical_columns] = df[self.numerical_columns].fillna(-1)
+        df[self.numerical_columns] = (
+            df[self.numerical_columns].fillna(-1).infer_objects(copy=False)
+        )
 
         return df
 
