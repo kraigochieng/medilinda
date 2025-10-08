@@ -1879,7 +1879,7 @@ wheels = [
 
 [[package]]
 name = "medilinda-ml"
-version = "0.1.5"
+version = "0.1.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "build" },
@@ -1897,9 +1897,9 @@ dependencies = [
     { name = "shap" },
     { name = "twine" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3f/37/a28711af0ba4ba010d9681578fd0c0c788f2df530a6eb1a0c07c829ec451/medilinda_ml-0.1.5.tar.gz", hash = "sha256:5e9b446f8b4ff389c8047380a9b6d96f6a6c1b729b81ac88f9b7eaf5f7367045", size = 10667, upload-time = "2025-10-07T21:30:15.508Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/58/9e/65596d5369ab939b7dafa2bf6f6fe64b48925127449faf8777dbd42adf35/medilinda_ml-0.1.6.tar.gz", hash = "sha256:5e9668c62045d449ec631033748461d489dc83ba65318bcb26a4a087f921cd8b", size = 10708, upload-time = "2025-10-08T13:12:18.533Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/02/81/cc59226126829a8375fe5b8739aa7bbc9601c738c8d2c491b6e094e01a47/medilinda_ml-0.1.5-py3-none-any.whl", hash = "sha256:aa6f069b6b56978256f97f20dfc99ec01289f6b1d641f6cc652f209885853c33", size = 11794, upload-time = "2025-10-07T21:30:14.589Z" },
+    { url = "https://files.pythonhosted.org/packages/2e/c8/687fbfad5745696e0f3828df0b60dda46f13a3d2e4eb2af8e5726f527f35/medilinda_ml-0.1.6-py3-none-any.whl", hash = "sha256:ff79d27c36cfc1a1ac0d288f6cb2b35a50bca9fa7319e1045a7f7d2fdf70661c", size = 11844, upload-time = "2025-10-08T13:12:17.194Z" },
 ]
 
 [[package]]
@@ -3567,7 +3567,7 @@ requires-dist = [
     { name = "joblib", specifier = ">=1.5.2" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "matplotlib", specifier = ">=3.10.6" },
-    { name = "medilinda-ml", specifier = "==0.1.5" },
+    { name = "medilinda-ml", specifier = "==0.1.6" },
     { name = "mlflow", specifier = ">=3.4.0" },
     { name = "numpy", specifier = ">=2.3.3" },
     { name = "openpyxl", specifier = ">=3.1.5" },
