@@ -172,6 +172,9 @@ class NumericalImputer(BaseEstimator, TransformerMixin):
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         df = X.copy()
 
+        for col in self.numerical_columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
         df[self.numerical_columns] = (
             df[self.numerical_columns].fillna(-1).infer_objects(copy=False)
         )
