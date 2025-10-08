@@ -11,9 +11,10 @@
 
 -   [ ] use uploaded models in server
 -   [ ] replace shadcn with nuxt ui bit by bit
--   [ ] see if the y column encoder is there
 -   [ ] fragment the lifespan to separate files
-    - [ ] for db file, create separate clear functions
+    -   [ ] for db file, create separate clear functions
+    -   [ ] use the new ml model and shap
+    -   [ ] find a way to recreate the shap values functions
 
 # Done
 
@@ -23,3 +24,4 @@
 -   [x] publish ml as package
 -   [x] migrate server to uv
 -   [x] deploy client to vercel
+-   [x] see if the y column encoder is there
