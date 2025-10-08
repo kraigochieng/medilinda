@@ -10,7 +10,7 @@ import jwt
 
 from server.basemodels.auth import Token
 from server.basemodels.user import UserDetailsBaseModel, UserSignupBaseModel
-from server.config import settings
+from server.settings import settings
 from server.dependencies import get_db
 from server.models.user import UserModel
 from server.services.auth import (

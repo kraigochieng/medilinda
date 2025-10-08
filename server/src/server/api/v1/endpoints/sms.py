@@ -15,7 +15,7 @@ from server.basemodels.sms import (
     SMSMessageTypeEnum,
 )
 from server.basemodels.user import UserDetailsBaseModel
-from server.config import settings
+from server.settings import settings
 from server.dependencies import get_db
 from server.models.adverse_drug_reaction_report import ADRModel
 from server.models.medical_institution import (
