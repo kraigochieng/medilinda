@@ -1,15 +1,19 @@
 import os
-from typing import TypedDict
 from pathlib import Path
+from typing import TypedDict
+
 import joblib
 import mlflow
+from medilinda_ml.utils import ShapModelWrapper # Imported so that the shap expliner works...
 from mlflow.pyfunc import PyFuncModel
+from shap import KernelExplainer
 from sklearn.preprocessing import OrdinalEncoder
 
 
 class MLEnsemble(TypedDict):
     model: PyFuncModel
     encoder: OrdinalEncoder
+    explainer: KernelExplainer
 
 
 def mlflow_setup(
@@ -56,7 +60,15 @@ def mlflow_setup(
 
     ordinal_encoder: OrdinalEncoder = joblib.load(local_encoder_path)
 
-    return {"model": model, "encoder": ordinal_encoder}
+    explainer_path_on_server = "explainers/shap_explainer.pkl"
+    local_explainer_path = mlflow.artifacts.download_artifacts(
+        run_id=run_id,
+        artifact_path=explainer_path_on_server,
+        dst_path=local_artifacts_path,
+    )
+    shap_explainer: KernelExplainer = joblib.load(local_explainer_path)
+
+    return {"model": model, "encoder": ordinal_encoder, "explainer": shap_explainer}
 
 
 # # --- Example Usage ---
@@ -77,3 +89,4 @@ def mlflow_setup(
 #     # Now you can use both objects
 #     print("Model:", ml_ensemble["model"])
 #     print("Encoder Categories:", ml_ensemble["encoder"])
+#     print("SHAP Explainer:", ml_ensemble["explainer"])

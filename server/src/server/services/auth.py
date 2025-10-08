@@ -10,7 +10,7 @@ from typing_extensions import Annotated
 
 from server.basemodels.auth import TokenData
 from server.basemodels.user import UserDetailsBaseModel
-from server.config import settings
+from server.settings import settings
 from server.dependencies import get_db
 from server.models.user import UserModel
 
