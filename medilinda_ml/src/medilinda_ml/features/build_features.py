@@ -72,6 +72,9 @@ class PatientAgeImputer(BaseEstimator, TransformerMixin):
             today - df.loc[missing_age_mask, "patient_date_of_birth"]
         ).dt.days // 365
 
+        # Convert age column to numeric before calculating median
+        df["patient_age"] = pd.to_numeric(df["patient_age"], errors="coerce")
+
         # Now fill any remaining missing ages (where dob was also missing) with median
         df["patient_age"] = df["patient_age"].fillna(df["patient_age"].median())
 
