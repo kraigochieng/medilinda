@@ -124,23 +124,23 @@ def train_model(df_path: str) -> None:
             LogisticRegression(random_state=42, max_iter=1000, solver="saga"),
             {"C": [0.01, 0.1, 1, 10], "penalty": ["l2"]},
         ),
-        "random_forest": (
-            RandomForestClassifier(random_state=42),
-            {
-                "n_estimators": [50, 100, 200],
-                "max_depth": [None, 10, 30, 50],
-                "max_features": ["sqrt", "log2"],
-            },
-        ),
-        "gradient_boosting": (
-            GradientBoostingClassifier(random_state=42),
-            {
-                "n_estimators": [50, 100],
-                "learning_rate": [0.01, 0.1],
-                "max_depth": [3, 5],
-                "subsample": [0.8, 1.0],
-            },
-        ),
+        # "random_forest": (
+        #     RandomForestClassifier(random_state=42),
+        #     {
+        #         "n_estimators": [50, 100, 200],
+        #         "max_depth": [None, 10, 30, 50],
+        #         "max_features": ["sqrt", "log2"],
+        #     },
+        # ),
+        # "gradient_boosting": (
+        #     GradientBoostingClassifier(random_state=42),
+        #     {
+        #         "n_estimators": [50, 100],
+        #         "learning_rate": [0.01, 0.1],
+        #         "max_depth": [3, 5],
+        #         "subsample": [0.8, 1.0],
+        #     },
+        # ),
         "svm": (
             SVC(probability=True, random_state=42),
             {
