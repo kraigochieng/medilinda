@@ -1,25 +1,17 @@
 <template>
-	<form @submit.prevent="onSubmit">
-		<Card>
-			<CardHeader>
-				<CardTitle>
-					{{ props.mode == "create" ? "Add" : "Edit" }} an Adverse
-					Drug Reaction (ADR) Report
-				</CardTitle>
-				<CardDescription>
-					Add an Adverse Drug Reaction Report so that the ML Model can
-					predict it
-				</CardDescription>
-			</CardHeader>
-			<CardContent>
+	<UForm :schema="schema" :state="state" @submit="onSubmit">
+		<UCard>
+			<template #header>
+				{{ props.mode == "create" ? "Add" : "Edit" }} an Adverse Drug
+				Reaction (ADR) Report
+			</template>
+			<template #default>
 				<div
 					class="fixed top-24 right-4 border rounded-sm bg-white p-2"
 				>
-					<Popover>
-						<PopoverTrigger>
-							<Icon name="lucide:menu" />
-						</PopoverTrigger>
-						<PopoverContent>
+					<UPopover>
+						<Icon name="lucide:menu" />
+						<template #content>
 							<div>
 								<p class="font-semibold">Form Sections</p>
 								<p>
@@ -62,8 +54,8 @@
 									</a>
 								</p>
 							</div>
-						</PopoverContent>
-					</Popover>
+						</template>
+					</UPopover>
 				</div>
 				<div class="form-section">
 					<div class="flex items-center gap-x-2">
@@ -77,101 +69,95 @@
 					</div>
 					<div class="flex items-center justify-between space-x-2">
 						<div class="flex space-x-1">
-							<Dialog
-								v-model:open="
-									isCreateMedicalInstitutionDialogOpen
-								"
-							>
-								<DialogTrigger as-child>
-									<span class="underline hover:cursor-pointer"
-										>Create</span
-									>
-								</DialogTrigger>
-								<DialogScrollContent>
-									<MedicalInstitutionForm
+							<UModal>
+								<span class="underline hover:cursor-pointer">
+									Create
+								</span>
+								<template #content>
+									<!-- <MedicalInstitutionForm
 										mode="create"
 										:is-in-dialog="true"
 										@submitted="
 											handleMedicalInstitutionFormSubmitted
 										"
-									/>
-								</DialogScrollContent>
-							</Dialog>
+									/> -->
+								</template>
+							</UModal>
 							<span>or</span>
-							<Dialog>
-								<DialogTrigger as-child>
-									<span class="underline hover:cursor-pointer"
-										>find</span
-									>
-								</DialogTrigger>
-								<DialogScrollContent>
-									<DialogHeader>
-										<DialogTitle>
-											Choose an existing Medical
-											Institution
-										</DialogTitle>
-										<DialogDescription>
-											Search for a medical institution
-										</DialogDescription>
-										<div>
-											<Input
-												type="text"
-												placeholder="Seach for a hospital, minimum 3 characters, by name, MFL Code or location"
-												v-model="
-													medicalInstitutionSearchInput
-												"
-											/>
-											<div
-												v-if="
-													medicalInstitutionList &&
-													medicalInstitutionList.length >
-														0
-												"
-											>
-												<RadioGroup
+							<UModal>
+								<span class="underline hover:cursor-pointer">
+									find
+								</span>
+								<template #content>
+									<UCard>
+										<template #header>
+											<p>
+												Choose an existing Medical
+												Institution | Search for a
+												medical institution
+											</p>
+										</template>
+										<template #default>
+											<div>
+												<UInput
+													type="text"
+													placeholder="Seach for a hospital, minimum 3 characters, by name, MFL Code or location"
 													v-model="
-														medicalInstitutionId
+														medicalInstitutionSearchInput
+													"
+												/>
+												<!-- <div
+													v-if="
+														medicalInstitutionList &&
+														medicalInstitutionList.length >
+															0
 													"
 												>
-													<div
-														v-for="medicalInstitution in medicalInstitutionList"
+													<RadioGroup
+														v-model="
+															medicalInstitutionId
+														"
 													>
-														<RadioGroupItem
-															:id="
-																medicalInstitution.id
-															"
-															:value="
-																medicalInstitution.id
-															"
-														/>
-														<Label
-															:for="
-																medicalInstitution.id
-															"
+														<div
+															v-for="medicalInstitution in medicalInstitutionList"
 														>
-															{{
-																medicalInstitution.name
-															}}
-															|
-															{{
-																medicalInstitution.mfl_code
-															}}</Label
-														>
-													</div>
-												</RadioGroup>
+															<RadioGroupItem
+																:id="
+																	medicalInstitution.id
+																"
+																:value="
+																	medicalInstitution.id
+																"
+															/>
+															<Label
+																:for="
+																	medicalInstitution.id
+																"
+															>
+																{{
+																	medicalInstitution.name
+																}}
+																|
+																{{
+																	medicalInstitution.mfl_code
+																}}</Label
+															>
+														</div>
+													</RadioGroup>
+												</div> -->
+												<div
+													v-if="
+														medicalInstitutionList?.length ==
+														0
+													"
+												>
+													No hospitals
+												</div>
 											</div>
-											<div
-												v-if="
-													medicalInstitutionList?.length ==
-													0
-												"
-											>
-												No hospitals
-											</div>
-										</div>
-									</DialogHeader>
-								</DialogScrollContent>
-							</Dialog>
+										</template>
+									</UCard>
+								</template>
+							</UModal>
 							<span>a Medical Institution</span>
 						</div>
 					</div>
@@ -181,24 +167,24 @@
 							<p>Name</p>
 							<p>{{ medicalInstitutionData.name }}</p>
 						</div>
-						<Separator class="my-2" />
+						<USeparator />
 						<div class="view-details-wrapper">
 							<p>MFL Code</p>
 							<p>{{ medicalInstitutionData.mfl_code }}</p>
 						</div>
-						<Separator class="my-2" />
+						<USeparator />
 						<div class="view-details-wrapper">
 							<p>DHIS Code</p>
 							<p>
 								{{ medicalInstitutionData.dhis_code ?? "None" }}
 							</p>
 						</div>
-						<Separator class="my-2" />
+						<USeparator />
 						<div class="view-details-wrapper">
 							<p>County</p>
 							<p>{{ medicalInstitutionData.county ?? "None" }}</p>
 						</div>
-						<Separator class="my-2" />
+						<USeparator />
 						<div class="view-details-wrapper">
 							<p>Sub County</p>
 							<p>
@@ -215,7 +201,7 @@
 						No medical institution created/chosen
 					</p>
 				</div>
-				<Separator class="my-4" />
+				<USeparator />
 				<div class="form-section">
 					<div class="flex items-center gap-x-2">
 						<!-- <Icon
@@ -226,126 +212,142 @@
 							2. Patient Details
 						</p>
 					</div>
+					<UFormField label="Patient Name" name="patientName">
+						<UInput
+							v-model="state.patientName"
+							placeholder="Patient Name"
+						/>
+					</UFormField>
 
-					<FormInput
-						type="text"
-						name="patientName"
-						label="Patient Name"
-						placeholder="Patient Name"
-						description="The name of the patient"
-					/>
 					<div class="flex items-center space-x-4">
 						<div>
-							<Label>
-								Do you know the patient's date of birth?
-							</Label>
-							<RadioGroup default-value="dob-yes" v-model="isDob">
-								<div class="flex items-center space-x-2">
-									<RadioGroupItem
-										id="dob-yes"
-										value="dob-yes"
-									/>
-									<Label for="dob-yes">Yes</Label>
-								</div>
-								<div class="flex items-center space-x-2">
-									<RadioGroupItem
-										id="dob-no"
-										value="dob-no"
-									/>
-									<Label for="dob-no">No</Label>
-								</div>
-							</RadioGroup>
-						</div>
-						<VerticalSeparator />
-						<FormSelectDatePicker
-							name="patientDateOfBirth"
-							label="Patient Date of Birth"
-							description="The patient's birth date"
-							v-model="selectedPatientDateOfBirth"
-							default-year="2003"
-							default-month="9"
-							default-day="8"
-							v-if="isDob == 'dob-yes'"
-						/>
-						<div class="w-full">
-							<FormNumberField
-								name="patientAge"
-								label="Patient Age"
-								description="Patient Age in Years"
-								:format-options="{
-									style: 'unit',
-									unit: 'year',
-								}"
-								v-model="selectedPatientAge"
-								v-if="isDob == 'dob-no'"
+							<URadioGroup
+								legend="Do you know the patient's date of birth?"
+								:items="isDobItems"
+								v-model="isDob"
 							/>
+						</div>
+						<USeparator orientation="vertical" />
+						<!-- <UCalendar
+							v-model="patientDobModel"
+							v-if="isDob == 'dob-yes'"
+						/> -->
+
+						<div class="w-full">
+							<UFormField
+								label="Patient Age"
+								name="patientAge"
+								help="Patient Age in Years"
+								v-if="isDob == 'dob-no'"
+							>
+								<UInputNumber
+									v-model="state.patientAge"
+									:min="1"
+									:format-options="{
+										style: 'unit',
+										unit: 'year',
+									}"
+								/>
+							</UFormField>
 						</div>
 					</div>
 
-					<FormNumberField
-						class="w-16 mx-auto"
-						name="patientHeightCm"
+					<UFormField
 						label="Patient Height (in cm)"
-						description="Patient Height in centimeters (cm)"
-						:format-options="{
-							style: 'unit',
-							unit: 'centimeter',
-						}"
-						:min="100"
-						v-model="selectedPatientHeightCm"
-					/>
-					<FormNumberField
-						name="patientWeightKg"
+						name="patientHeightCm"
+						help="Patient Height in centimeters (cm)"
+					>
+						<UInputNumber
+							class="w-16 mx-auto"
+							v-model="state.patientHeightCm"
+							:min="100"
+							:format-options="{
+								style: 'unit',
+								unit: 'centimeter',
+							}"
+						/>
+					</UFormField>
+
+					<UFormField
 						label="Patient Weight (in kg)"
-						description="Patient Weight in kilograms (kg)"
-						:format-options="{
-							style: 'unit',
-							unit: 'kilogram',
-						}"
-						:min="5"
-						v-model="selectedPatientWeightKg"
-					/>
-					<FormInput
-						type="text"
-						name="inpatientOrOutpatientNumber"
+						name="patientWeightKg"
+						help="Patient Weight in kilograms (kg)"
+					>
+						<UInputNumber
+							v-model="state.patientWeightKg"
+							:min="5"
+							:format-options="{
+								style: 'unit',
+								unit: 'kilogram',
+							}"
+						/>
+					</UFormField>
+					<UFormField
 						label="Inpatient/Outpatient Number"
-						placeholder="e.g IN-123456, OUT-654321"
-						description="The inpatient or outpatient number of the patient"
-					/>
-					<FormInput
-						type="text"
-						name="patientAddress"
+						help="The inpatient or outpatient number of the patient"
+						name="inpatientOrOutpatientNumber"
+					>
+						<UInput
+							type="text"
+							v-model="state.inpatientOrOutpatientNumber"
+							placeholder="e.g IN-123456, OUT-654321"
+						/>
+					</UFormField>
+
+					<UFormField
 						label="Patient Address"
-						placeholder="e.g Madaraka, Nairobi West, Nairobi"
-						description="The address of the patient"
-					/>
-					<FormInput
-						type="text"
-						name="wardOrClinic"
+						help="The address of the patient"
+						name="patientAddress"
+					>
+						<UInput
+							type="text"
+							v-model="state.patientAddress"
+							placeholder="e.g Madaraka, Nairobi West, Nairobi"
+						/>
+					</UFormField>
+					<UFormField
 						label="Ward/Clinic"
-						placeholder="e.g Main Ward"
-						description="The ward or clinic the patient was in"
-					/>
-					<FormRadio
+						help="The ward or clinic the patient was in"
+						name="wardOrClinic"
+					>
+						<UInput
+							type="text"
+							v-model="state.wardOrClinic"
+							placeholder="e.g Main Ward"
+						/>
+					</UFormField>
+					<UFormField
 						name="patientGender"
 						label="Gender"
-						:options="adrFormCategoricalValues['patientGender']"
-						description="The gender of the patient"
-					/>
-					<FormRadio
+						help="The gender of the patient"
+					>
+						<URadioGroup
+							v-model="state.patientGender"
+							:items="adrFormCategoricalValues.patientGender"
+						/>
+					</UFormField>
+					<UFormField
 						name="pregnancyStatus"
 						label="Pregnancy Status"
-						:options="adrFormCategoricalValues['pregnancyStatus']"
-						description="The pregnancy status of the patient"
-					/>
-					<FormRadio
+						help="The pregnancy status of the patient"
+					>
+						<URadioGroup
+							v-model="state.pregnancyStatus"
+							:items="adrFormCategoricalValues.pregnancyStatus"
+						/>
+					</UFormField>
+					<UFormField
 						name="knownAllergy"
 						label="Known Allergy"
-						:options="adrFormCategoricalValues['knownAllergy']"
-						description="If the patient has a known allergy or not"
-					/>
+						help="If the patient has a known allergy or not"
+					>
+						<URadioGroup
+							v-model="state.knownAllergy"
+							:items="adrFormCategoricalValues.knownAllergy"
+						/>
+					</UFormField>
 				</div>
-				<Separator class="my-4" />
+				<USeparator />
 				<div class="form-section">
 					<p
 						id="suspected-adverse-reaction"
@@ -369,349 +371,139 @@
 						description="The description of the reaction(s) that took place"
 					/>
 				</div>
-				<Separator class="my-4" />
+				<USeparator />
 				<div class="form-section">
 					<p id="medicines" class="form-section-header">
 						4. Medicines
 					</p>
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead>Suspected</TableHead>
-								<TableHead>INN/Generic Name</TableHead>
-								<TableHead>Batch Number</TableHead>
-								<TableHead>Manufacturer</TableHead>
-								<TableHead>Dose</TableHead>
-								<TableHead>Route</TableHead>
-								<TableHead>Frequency</TableHead>
-								<TableHead>Treatment Start Date</TableHead>
-								<TableHead>Treatment Stop Date</TableHead>
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							<TableRow>
-								<TableCell>
-									<FormCheckbox name="rifampicinSuspected" />
-								</TableCell>
-								<TableCell> Rifampicin </TableCell>
-								<TableCell>
-									<FormInput
-										type="text"
-										name="rifampicinBatchNumber"
-										placeholder="e.g B123456"
-									/>
-								</TableCell>
-								<TableCell>
-									<FormInput
-										type="text"
-										name="rifampicinManufacturer"
-										placeholder="e.g Pfizer"
-									/>
-								</TableCell>
-								<TableCell class="flex items-center space-x-2">
-									<FormNumberField
-										name="rifampicinDoseAmount"
-										placeholder="e.g 150"
-										:step="5"
-									/>
-									<p>mg</p>
-								</TableCell>
-								<TableCell>
-									<FormSelect
-										name="rifampicinRoute"
-										placeholder="Route"
-										:options="
-											adrFormCategoricalValues['route']
-										"
-									/>
-								</TableCell>
-								<TableCell class="flex items-center space-x-2">
-									<FormNumberField
-										name="rifampicinFrequencyNumber"
-										placeholder="e.g 1"
-									/>
-									<p>daily</p>
-								</TableCell>
-								<TableCell>
-									<FormSelectDatePicker
-										name="rifampicinStartDate"
-										v-model="selectedRifampicinStartDate"
-										default-year="2025"
-									/>
-								</TableCell>
-								<TableCell>
-									<FormSelectDatePicker
-										name="rifampicinStopDate"
-										v-model="selectedRifampicinStopDate"
-										default-year="2025"
-									/>
-								</TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell>
-									<FormCheckbox name="isoniazidSuspected" />
-								</TableCell>
-								<TableCell> Isoniazid </TableCell>
-								<TableCell>
-									<FormInput
-										type="text"
-										name="isoniazidBatchNo"
-										placeholder="e.g I123456"
-									/>
-								</TableCell>
-								<TableCell>
-									<FormInput
-										type="text"
-										name="isoniazidManufacturer"
-										placeholder="e.g Cipla"
-									/>
-								</TableCell>
-								<TableCell class="flex items-center space-x-2">
-									<FormNumberField
-										name="isoniazidDoseAmount"
-										placeholder="e.g 300"
-										:step="5"
-									/>
-									<p>mg</p>
-								</TableCell>
-								<TableCell>
-									<FormSelect
-										name="isoniazidRoute"
-										placeholder="Route"
-										:options="
-											adrFormCategoricalValues['route']
-										"
-									/>
-								</TableCell>
-								<TableCell class="flex items-center space-x-2">
-									<FormNumberField
-										name="isoniazidFrequencyNumber"
-										placeholder="e.g 1"
-									/>
-									<p>daily</p>
-								</TableCell>
-								<TableCell>
-									<FormSelectDatePicker
-										name="isoniazidStartDate"
-										v-model="selectedIsoniazidStartDate"
-										default-year="2025"
-									/>
-								</TableCell>
-								<TableCell>
-									<FormSelectDatePicker
-										name="isoniazidStopDate"
-										v-model="selectedIsoniazidStopDate"
-										default-year="2025"
-									/>
-								</TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell>
-									<FormCheckbox
-										name="pyrazinamideSuspected"
-									/>
-								</TableCell>
-								<TableCell> Pyrazinamide </TableCell>
-								<TableCell>
-									<FormInput
-										type="text"
-										name="pyrazinamideBatchNo"
-										placeholder="e.g P123456"
-									/>
-								</TableCell>
-								<TableCell>
-									<FormInput
-										type="text"
-										name="pyrazinamideManufacturer"
-										placeholder="e.g Novartis"
-									/>
-								</TableCell>
-								<TableCell class="flex items-center space-x-2">
-									<FormNumberField
-										name="pyrazinamideDoseAmount"
-										placeholder="e.g 500"
-										:step="5"
-									/>
-									<p>mg</p>
-								</TableCell>
-								<TableCell>
-									<FormSelect
-										name="pyrazinamideRoute"
-										placeholder="Route"
-										:options="
-											adrFormCategoricalValues['route']
-										"
-									/>
-								</TableCell>
-								<TableCell class="flex items-center space-x-2">
-									<FormNumberField
-										name="pyrazinamideFrequencyNumber"
-										placeholder="e.g 1"
-									/>
-									<p>daily</p>
-								</TableCell>
-								<TableCell>
-									<FormSelectDatePicker
-										name="pyrazinamideStartDate"
-										v-model="selectedPyrazinamideStartDate"
-										default-year="2025"
-									/>
-								</TableCell>
-								<TableCell>
-									<FormSelectDatePicker
-										name="pyrazinamideStopDate"
-										v-model="selectedPyrazinamideStopDate"
-										default-year="2025"
-									/>
-								</TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell>
-									<FormCheckbox name="ethambutolSuspected" />
-								</TableCell>
-								<TableCell> Ethambutol </TableCell>
-								<TableCell>
-									<FormInput
-										type="text"
-										name="ethambutolBatchNo"
-										placeholder="e.g E123456"
-									/>
-								</TableCell>
-								<TableCell>
-									<FormInput
-										type="text"
-										name="ethambutolManufacturer"
-										placeholder="e.g Sanofi"
-									/>
-								</TableCell>
-								<TableCell class="flex items-center space-x-2">
-									<FormNumberField
-										name="ethambutolDoseAmount"
-										placeholder="e.g 800"
-										:step="5"
-									/>
-									<p>mg</p>
-								</TableCell>
-								<TableCell>
-									<FormSelect
-										name="ethambutolRoute"
-										placeholder="Route"
-										:options="
-											adrFormCategoricalValues['route']
-										"
-									/>
-								</TableCell>
-								<TableCell class="flex items-center space-x-2">
-									<FormNumberField
-										name="ethambutolFrequencyNumber"
-										placeholder="e.g 1"
-									/>
-									<p>daily</p>
-								</TableCell>
-								<TableCell>
-									<FormSelectDatePicker
-										name="ethambutolStartDate"
-										v-model="selectedEthambutolStartDate"
-										default-year="2025"
-									/>
-								</TableCell>
-								<TableCell>
-									<FormSelectDatePicker
-										name="ethambutolStopDate"
-										v-model="selectedEthambutolStopDate"
-										default-year="2025"
-									/>
-								</TableCell>
-							</TableRow>
-						</TableBody>
-					</Table>
+					<UTable
+						:data="state.medicines"
+						:columns="medicineColumns"
+					/>
 				</div>
-				<Separator class="my-4" />
+				<USeparator />
 				<div class="form-section">
 					<p id="rechallenge" class="form-section-header">
 						5. Rechallenge/Dechallenge
 					</p>
-					<FormRadio
+					<UFormField
 						name="rechallenge"
 						label="Rechallenge"
-						:options="adrFormCategoricalValues['rechallenge']"
-						description="Was the drug reintroduced to after it was previously discontinued due to a suspected ADR?"
-					/>
-					<FormRadio
+						help="Was the drug reintroduced after it was previously discontinued?"
+					>
+						<URadioGroup
+							v-model="state.rechallenge"
+							:items="adrFormCategoricalValues.rechallenge"
+						/>
+					</UFormField>
+					<UFormField
 						name="dechallenge"
 						label="Dechallenge"
-						:options="adrFormCategoricalValues['dechallenge']"
-						description="Was the drug withdrawed to after it was previously discontinued due to a suspected ADR?"
-					/>
+						help="Was the drug withdrawn after a suspected ADR?"
+					>
+						<URadioGroup
+							v-model="state.dechallenge"
+							:items="adrFormCategoricalValues.dechallenge"
+						/>
+					</UFormField>
 				</div>
-				<Separator class="my-4" />
+				<USeparator />
 				<div class="form-section">
 					<p id="grading" class="form-section-header">
 						6. Grading of the Event
 					</p>
-					<FormRadio
+					<UFormField
 						name="severity"
 						label="Severity"
-						:options="adrFormCategoricalValues['severity']"
-						description="Severity of the reaction"
-					/>
-					<FormRadio
+						help="Severity of the reaction"
+					>
+						<URadioGroup
+							v-model="state.severity"
+							:items="adrFormCategoricalValues.severity"
+						/>
+					</UFormField>
+					<UFormField
 						name="isSerious"
 						label="Is Serious"
-						:options="adrFormCategoricalValues['isSerious']"
-						description="Is the reaction serious"
-					/>
-					<FormRadio
+						help="Is the reaction serious"
+					>
+						<URadioGroup
+							v-model="state.isSerious"
+							:items="adrFormCategoricalValues.isSerious"
+						/>
+					</UFormField>
+					<UFormField
 						name="criteriaForSeriousness"
 						label="Criteria for Seriousness"
-						:options="
-							adrFormCategoricalValues['criteriaForSeriousness']
-						"
-						description="Criteria for Seriousness from ADR"
-					/>
-					<FormRadio
+						help="The criteria used to classify the reaction as serious"
+					>
+						<URadioGroup
+							v-model="state.criteriaForSeriousness"
+							:items="
+								adrFormCategoricalValues.criteriaForSeriousness
+							"
+						/>
+					</UFormField>
+					<UFormField
 						name="actionTaken"
 						label="Action Taken"
-						:options="adrFormCategoricalValues['actionTaken']"
-						description="Action taken from ADR"
-					/>
-					<FormRadio
+						help="The action taken in response to the ADR"
+					>
+						<URadioGroup
+							v-model="state.actionTaken"
+							:items="adrFormCategoricalValues.actionTaken"
+						/>
+					</UFormField>
+					<UFormField
 						name="outcome"
 						label="Outcome"
-						:options="adrFormCategoricalValues['outcome']"
-						description="Outcome from ADR"
-					/>
+						help="The outcome of the ADR"
+					>
+						<URadioGroup
+							v-model="state.outcome"
+							:items="adrFormCategoricalValues.outcome"
+						/>
+					</UFormField>
 				</div>
-				<Separator class="my-4" />
-				<FormTextArea
+				<USeparator />
+				<UFormField
 					name="comments"
 					label="Comments"
-					placeholder="Comments"
-					description="The comments on the ADR overall"
-				/>
-			</CardContent>
-			<CardFooter>
-				<Button id="submit" type="submit" class="w-full mx-auto my-4">{{
-					props.mode == "create" ? "Add ADR" : "Edit ADR"
-				}}</Button>
-			</CardFooter>
-		</Card>
-	</form>
+					help="The comments on the ADR overall"
+				>
+					<UTextarea
+						v-model="state.comments"
+						placeholder="Comments"
+					/>
+				</UFormField>
+			</template>
+			<template #footer>
+				<UButton id="submit" type="submit" class="w-full mx-auto my-4 justify-center">
+					{{ props.mode == "create" ? "Add ADR" : "Edit ADR" }}
+				</UButton>
+			</template>
+		</UCard>
+	</UForm>
 </template>
 
 <script setup lang="ts">
-import humps from "humps";
+import type { MedicalInstitutionGetResponseInterface } from "@/types/medical_institution";
+import { adrFormCategoricalValues } from "@/values/adr";
+import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
+import type { FormSubmitEvent, RadioGroupItem, TableColumn } from "@nuxt/ui";
+import { z } from "zod";
 
-import type { CausalityAssessmentLevelGetResponseInterface } from "@/app/types/cal";
-import type { MedicalInstitutionGetResponseInterface } from "@/app/types/medical_institution";
-import type { PaginatedResponseInterface } from "@/app/types/pagination";
-import FormCheckbox from "./ui/custom/FormCheckbox.vue";
-import FormInput from "./ui/custom/FormInput.vue";
-import FormNumberField from "./ui/custom/FormNumberField.vue";
-import FormRadio from "./ui/custom/FormRadio.vue";
-import FormSelect from "./ui/custom/FormSelect.vue";
-import FormSelectDatePicker from "./ui/custom/FormSelectDatePicker.vue";
-import FormTextArea from "./ui/custom/FormTextArea.vue";
+type MedicineRow = {
+	name?: string;
+	suspected?: boolean;
+	batchNo?: string;
+	manufacturer?: string;
+	doseAmount?: number;
+	route?: string;
+	frequencyNumber?: number;
+	startDate?: string;
+	stopDate?: string;
+};
 
 const medicalInstitutionData =
 	ref<MedicalInstitutionGetResponseInterface | null>();
@@ -721,254 +513,402 @@ const medicalInstitutionList = ref<
 const medicalInstitutionId = ref<string | undefined>();
 const medicalInstitutionSearchInput = ref<string>("");
 const isCreateMedicalInstitutionDialogOpen = ref(false);
-const authStore = useAuthStore();
+// const authStore = useAuthStore();
 const isDob = ref<string>("dob-yes");
 
-watchEffect(async () => {
-	if (medicalInstitutionSearchInput.value.length >= 3) {
-		console.log(medicalInstitutionSearchInput.value);
+const isDobItems = ref<RadioGroupItem[]>([
+	{ label: "Yes", value: "dob-yes" },
+	{ label: "No", value: "dob-no" },
+]);
 
-		const { data, status, error } = await useFetch<
-			PaginatedResponseInterface<MedicalInstitutionGetResponseInterface>
-		>(`${useRuntimeConfig().public.serverApi}/medical_institution`, {
-			method: "GET",
-			headers: {
-				Authorization: `Bearer ${authStore.accessToken}`,
-			},
-			params: {
-				query: medicalInstitutionSearchInput.value,
-				size: 10,
-			},
-		});
-
-		if (data.value?.items) {
-			medicalInstitutionList.value = data.value?.items;
-		} else {
-			medicalInstitutionList.value = [];
-		}
-	}
+const schema = z.object({
+	medicalInstitutionId: z
+		.string()
+		.uuid("Please select a medical institution."),
+	patientName: z.string().min(3, "Name must be at least 3 characters."),
+	// patientDateOfBirth: z
+	// 	.instanceof(CalendarDate, { message: "Please select a valid date." })
+	// 	.transform((val) => val.toDate(getLocalTimeZone())),
+	patientDateOfBirth: z.date(),
+	patientAge: z.number().positive().min(0).max(120),
+	patientHeightCm: z.number().positive().optional(),
+	patientWeightKg: z.number().positive().optional(),
+	inpatientOrOutpatientNumber: z.string().optional(),
+	wardOrClinic: z.string().optional(),
+	patientAddress: z.string().optional(),
+	patientGender: z.string().optional(),
+	dateOfOnsetOfReaction: z.string().optional(),
+	descriptionOfReaction: z
+		.string()
+		.min(10, "Description is too short.")
+		.optional(),
+	medicines: z.array(
+		z.object({
+			name: z.string(), // Not for submission, just for UI
+			suspected: z.boolean().default(false),
+			batchNo: z.string().optional(),
+			manufacturer: z.string().optional(),
+			doseAmount: z.number().positive().optional(),
+			frequencyNumber: z.number().positive().optional(),
+			route: z.string().optional(),
+			startDate: z.string().optional(),
+			stopDate: z.string().optional(),
+		})
+	),
+	severity: z.string().optional(),
+	outcome: z.string().optional(),
+	pregnancyStatus: z.string().optional(),
+	knownAllergy: z.string().optional(),
+	rechallenge: z.string().optional(),
+	dechallenge: z.string().optional(),
+	isSerious: z.string().optional(),
+	criteriaForSeriousness: z.string().optional(),
+	actionTaken: z.string().optional(),
+	comments: z.string().optional(),
 });
+
+type AdrForm = z.infer<typeof schema>;
+
+const state = reactive<Partial<AdrForm>>({
+	medicalInstitutionId: undefined,
+	patientName: undefined,
+	patientDateOfBirth: undefined,
+	inpatientOrOutpatientNumber: undefined,
+	patientAddress: undefined,
+	wardOrClinic: undefined,
+	medicines: [
+		{
+			name: "Rifampicin",
+			suspected: false,
+			batchNo: "",
+			manufacturer: "",
+			doseAmount: undefined,
+			route: undefined,
+			frequencyNumber: undefined,
+			startDate: "",
+			stopDate: "",
+		},
+		{
+			name: "Isoniazid",
+			suspected: false,
+			batchNo: "",
+			manufacturer: "",
+			doseAmount: undefined,
+			route: undefined,
+			frequencyNumber: undefined,
+			startDate: "",
+			stopDate: "",
+		},
+		{
+			name: "Pyrazinamide",
+			suspected: false,
+			batchNo: "",
+			manufacturer: "",
+			doseAmount: undefined,
+			route: undefined,
+			frequencyNumber: undefined,
+			startDate: "",
+			stopDate: "",
+		},
+		{
+			name: "Ethambutol",
+			suspected: false,
+			batchNo: "",
+			manufacturer: "",
+			doseAmount: undefined,
+			route: undefined,
+			frequencyNumber: undefined,
+			startDate: "",
+			stopDate: "",
+		},
+	],
+	pregnancyStatus: undefined,
+	knownAllergy: undefined,
+	rechallenge: undefined,
+	dechallenge: undefined,
+	isSerious: undefined,
+	criteriaForSeriousness: undefined,
+	actionTaken: undefined,
+	comments: undefined,
+});
+
+const patientDobModel = ref(new CalendarDate(2022, 1, 1));
+
+watch(
+	patientDobModel,
+	(newDate) => {
+		if (newDate) {
+			state.patientDateOfBirth = newDate.toDate(getLocalTimeZone());
+		}
+	},
+	{ immediate: true }
+);
+const UFormField = resolveComponent("UFormField");
+const UCheckbox = resolveComponent("UCheckbox");
+const UInput = resolveComponent("UInput");
+const USelect = resolveComponent("USelect");
+
+const medicineColumns: TableColumn<MedicineRow>[] = [
+	{
+		accessorKey: "suspected",
+		header: "Suspected",
+		cell: ({ row }) =>
+			h(
+				UFormField,
+				{
+					// Removed `index` from here
+					name: `medicines[${row.index}].suspected`, // Use `row.index` here
+				},
+				{
+					default: () =>
+						h(UCheckbox, {
+							modelValue: row.original.suspected,
+							"onUpdate:modelValue": (value: boolean) =>
+								(row.original.suspected = value),
+						}),
+				}
+			),
+	},
+	{
+		accessorKey: "name",
+		header: "INN/Generic Name",
+	},
+	{
+		accessorKey: "batchNo",
+		header: "Batch Number",
+		cell: ({ row }) =>
+			h(
+				UFormField,
+				{
+					name: `medicines[${row.index}].batchNo`,
+				},
+				{
+					default: () =>
+						h(UInput, {
+							modelValue: row.original.batchNo,
+							"onUpdate:modelValue": (value: string) =>
+								(row.original.batchNo = value),
+							placeholder: "e.g B123456",
+						}),
+				}
+			),
+	},
+	{
+		accessorKey: "manufacturer",
+		header: "Manufacturer",
+		cell: ({ row }) =>
+			h(
+				UFormField,
+				{
+					name: `medicines[${row.index}].manufacturer`,
+				},
+				{
+					default: () =>
+						h(UInput, {
+							modelValue: row.original.manufacturer,
+							"onUpdate:modelValue": (value: string) =>
+								(row.original.manufacturer = value),
+							placeholder: "e.g Pfizer",
+						}),
+				}
+			),
+	},
+	{
+		accessorKey: "doseAmount",
+		header: "Dose (mg)",
+		cell: ({ row }) =>
+			h(
+				UFormField,
+				{
+					name: `medicines[${row.index}].doseAmount`,
+				},
+				{
+					default: () =>
+						h(UInput, {
+							modelValue: row.original.doseAmount,
+							"onUpdate:modelValue": (value: string) =>
+								(row.original.doseAmount = Number(value)),
+							type: "number",
+							placeholder: "e.g 150",
+						}),
+				}
+			),
+	},
+	{
+		accessorKey: "route",
+		header: "Route",
+		cell: ({ row }) =>
+			h(
+				UFormField,
+				{
+					name: `medicines[${row.index}].route`,
+				},
+				{
+					default: () =>
+						h(USelect, {
+							modelValue: row.original.route,
+							"onUpdate:modelValue": (value: string) =>
+								(row.original.route = value),
+							items: adrFormCategoricalValues.route,
+							placeholder: "Route",
+						}),
+				}
+			),
+	},
+	{
+		accessorKey: "frequencyNumber",
+		header: "Frequency",
+		cell: ({ row }) =>
+			h(
+				UFormField,
+				{
+					name: `medicines[${row.index}].frequencyNumber`,
+				},
+				{
+					default: () =>
+						h(UInput, {
+							modelValue: row.original.frequencyNumber,
+							"onUpdate:modelValue": (value: string) =>
+								(row.original.frequencyNumber = Number(value)),
+							type: "number",
+							placeholder: "e.g 1",
+						}),
+				}
+			),
+	},
+	{
+		accessorKey: "startDate",
+		header: "Start Date",
+		cell: ({ row }) =>
+			h(
+				UFormField,
+				{
+					name: `medicines[${row.index}].startDate`,
+				},
+				{
+					default: () =>
+						h(UInput, {
+							modelValue: row.original.startDate,
+							"onUpdate:modelValue": (value: string) =>
+								(row.original.startDate = value),
+							type: "date",
+						}),
+				}
+			),
+	},
+	{
+		accessorKey: "stopDate",
+		header: "Stop Date",
+		cell: ({ row }) =>
+			h(
+				UFormField,
+				{
+					name: `medicines[${row.index}].stopDate`,
+				},
+				{
+					default: () =>
+						h(UInput, {
+							modelValue: row.original.stopDate,
+							"onUpdate:modelValue": (value: string) =>
+								(row.original.stopDate = value),
+							type: "date",
+						}),
+				}
+			),
+	},
+];
+// watchEffect(async () => {
+// 	if (medicalInstitutionSearchInput.value.length >= 3) {
+// 		console.log(medicalInstitutionSearchInput.value);
+
+// 		const { data, status, error } = await useFetch<
+// 			PaginatedResponseInterface<MedicalInstitutionGetResponseInterface>
+// 		>(`${useRuntimeConfig().public.serverApi}/medical_institution`, {
+// 			method: "GET",
+// 			headers: {
+// 				Authorization: `Bearer ${authStore.accessToken}`,
+// 			},
+// 			params: {
+// 				query: medicalInstitutionSearchInput.value,
+// 				size: 10,
+// 			},
+// 		});
+
+// 		if (data.value?.items) {
+// 			medicalInstitutionList.value = data.value?.items;
+// 		} else {
+// 			medicalInstitutionList.value = [];
+// 		}
+// 	}
+// });
 
 function handleMedicalInstitutionFormSubmitted(
 	success: boolean,
 	medicalInstitutionIdFromForm?: string
 ) {
-	if (success) {
-		isCreateMedicalInstitutionDialogOpen.value = false; // ✅ Close the dialog only if successful
-		medicalInstitutionId.value = medicalInstitutionIdFromForm;
-		setFieldValue("medicalInstitutionId", medicalInstitutionId.value);
-	} else {
-		isCreateMedicalInstitutionDialogOpen.value = true;
-	}
+	// if (success) {
+	// 	isCreateMedicalInstitutionDialogOpen.value = false; // ✅ Close the dialog only if successful
+	// 	medicalInstitutionId.value = medicalInstitutionIdFromForm;
+	// 	setFieldValue("medicalInstitutionId", medicalInstitutionId.value);
+	// } else {
+	// 	isCreateMedicalInstitutionDialogOpen.value = true;
+	// }
 }
 
 watchEffect(async () => {
-	const runtimeConfig = useRuntimeConfig();
-	const serverApi = runtimeConfig.public.serverApi;
-	const authStore = useAuthStore();
-
-	if (medicalInstitutionId.value) {
-		setFieldValue("medicalInstitutionId", medicalInstitutionId.value);
-
-		const { data, status, error } =
-			await useFetch<MedicalInstitutionGetResponseInterface>(
-				`${serverApi}/medical_institution/${medicalInstitutionId.value}`,
-				{
-					method: "GET",
-					headers: {
-						Authorization: `Bearer ${authStore.accessToken}`,
-					},
-				}
-			);
-
-		medicalInstitutionData.value = data.value;
-	}
+	// const runtimeConfig = useRuntimeConfig();
+	// const serverApi = runtimeConfig.public.serverApi;
+	// const authStore = useAuthStore();
+	// if (medicalInstitutionId.value) {
+	// 	setFieldValue("medicalInstitutionId", medicalInstitutionId.value);
+	// 	const { data, status, error } =
+	// 		await useFetch<MedicalInstitutionGetResponseInterface>(
+	// 			`${serverApi}/medical_institution/${medicalInstitutionId.value}`,
+	// 			{
+	// 				method: "GET",
+	// 				headers: {
+	// 					Authorization: `Bearer ${authStore.accessToken}`,
+	// 				},
+	// 			}
+	// 		);
+	// 	medicalInstitutionData.value = data.value;
+	// }
 });
 
 // Lifecycle hooks
 onMounted(async () => {
-	const runtimeConfig = useRuntimeConfig();
-	const serverApi = runtimeConfig.public.serverApi;
-	const authStore = useAuthStore();
-
-	// If there is an id
-	if (props.id) {
-		// Get existing data
-		const response = await $fetch<adrFormTypeValidationSchema>(
-			`${serverApi}/adr/${props.id}`,
-			{
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${authStore.accessToken}`,
-				},
-			}
-		);
-
-		// Pre-fill form
-		const camel = humps.camelizeKeys(
-			response
-		) as adrFormTypeValidationSchema;
-
-		for (const key of Object.keys(camel) as Array<
-			keyof adrFormTypeValidationSchema
-		>) {
-			// The null check is to prevent errors
-			if (camel[key] != null) {
-				setFieldValue(key, camel[key]);
-			}
-		}
-	}
+	// const runtimeConfig = useRuntimeConfig();
+	// const serverApi = runtimeConfig.public.serverApi;
+	// const authStore = useAuthStore();
+	// // If there is an id
+	// if (props.id) {
+	// 	// Get existing data
+	// 	const response = await $fetch<adrFormTypeValidationSchema>(
+	// 		`${serverApi}/adr/${props.id}`,
+	// 		{
+	// 			method: "GET",
+	// 			headers: {
+	// 				Authorization: `Bearer ${authStore.accessToken}`,
+	// 			},
+	// 		}
+	// 	);
+	// 	// Pre-fill form
+	// 	const camel = humps.camelizeKeys(
+	// 		response
+	// 	) as adrFormTypeValidationSchema;
+	// 	for (const key of Object.keys(camel) as Array<
+	// 		keyof adrFormTypeValidationSchema
+	// 	>) {
+	// 		// The null check is to prevent errors
+	// 		if (camel[key] != null) {
+	// 			setFieldValue(key, camel[key]);
+	// 		}
+	// 	}
+	// }
 });
-
-const {
-	values,
-	errors,
-	defineField,
-	handleSubmit,
-	isSubmitting,
-	setFieldValue,
-} = useForm({
-	validationSchema: toTypedSchema(adrFormValidationSchema),
-});
-
-// Patient Details
-const [patientName, patientNameAttrs] = defineField("patientName");
-const [inpatientOrOutpatientNumber, inpatientOrOutpatientNumberAttrs] =
-	defineField("inpatientOrOutpatientNumber");
-const [patientDateOfBirth, patientDateOfBirthAttrs] =
-	defineField("patientDateOfBirth");
-const [patientAge, patientAgeAttrs] = defineField("patientAge");
-const [patientAddress, patientAddressAttrs] = defineField("patientAddress");
-const [patientWeightKg, patientWeightKgAttrs] = defineField("patientWeightKg");
-const [patientHeightCm, patientHeightCmAttrs] = defineField("patientHeightCm");
-const [wardOrClinic, wardOrClinicAttrs] = defineField("wardOrClinic");
-const [patientGender, patientGenderAttrs] = defineField("patientGender");
-const [pregnancyStatus, pregnancyStatusAttrs] = defineField("pregnancyStatus");
-const [knownAllergy, knownAllergyAttrs] = defineField("knownAllergy");
-// SuspeCted Adverse Reaction
-const [dateOfOnsetOfReaction, dateOfOnsetOfReactionAttrs] = defineField(
-	"dateOfOnsetOfReaction"
-);
-const [descriptionOfReaction, descriptionOfReactionAttrs] = defineField(
-	"descriptionOfReaction"
-);
-// Rifampicin
-const [rifampicinSuspected, rifampicinSuspectedAttrs] = defineField(
-	"rifampicinSuspected"
-);
-const [rifampicinBatchNo, rifampicinBatchNoAttrs] =
-	defineField("rifampicinBatchNo");
-const [rifampicinManufacturer, rifampicinManufacturerAttrs] = defineField(
-	"rifampicinManufacturer"
-);
-const [rifampicinDoseAmount, rifampicinDoseAmountAttrs] = defineField(
-	"rifampicinDoseAmount"
-);
-const [rifampicinRoute, rifampicinRouteAttrs] = defineField("rifampicinRoute");
-const [rifampicinFrequencyNumber, rifampicinFrequencyNumberAttrs] = defineField(
-	"rifampicinFrequencyNumber"
-);
-const [rifampicinStartDate, rifampicinStartDateAttrs] = defineField(
-	"rifampicinStartDate"
-);
-const [rifampicinStopDate, rifampicinStopDateAttrs] =
-	defineField("rifampicinStopDate");
-
-// Isoniazid
-const [isoniazidSuspected, isoniazidSuspectedAttrs] =
-	defineField("isoniazidSuspected");
-const [isoniazidBatchNo, isoniazidBatchNoAttrs] =
-	defineField("isoniazidBatchNo");
-const [isoniazidManufacturer, isoniazidManufacturerAttrs] = defineField(
-	"isoniazidManufacturer"
-);
-const [isoniazidDoseAmount, isoniazidDoseAmountAttrs] = defineField(
-	"isoniazidDoseAmount"
-);
-const [isoniazidRoute, isoniazidRouteAttrs] = defineField("isoniazidRoute");
-const [isoniazidFrequencyNumber, isoniazidFrequencyNumberAttrs] = defineField(
-	"isoniazidFrequencyNumber"
-);
-const [isoniazidStartDate, isoniazidStartDateAttrs] =
-	defineField("isoniazidStartDate");
-const [isoniazidStopDate, isoniazidStopDateAttrs] =
-	defineField("isoniazidStopDate");
-
-// Pyrazinamide
-const [pyrazinamideSuspected, pyrazinamideSuspectedAttrs] = defineField(
-	"pyrazinamideSuspected"
-);
-const [pyrazinamideBatchNo, pyrazinamideBatchNoAttrs] = defineField(
-	"pyrazinamideBatchNo"
-);
-const [pyrazinamideManufacturer, pyrazinamideManufacturerAttrs] = defineField(
-	"pyrazinamideManufacturer"
-);
-const [pyrazinamideDoseAmount, pyrazinamideDoseAmountAttrs] = defineField(
-	"pyrazinamideDoseAmount"
-);
-const [pyrazinamideRoute, pyrazinamideRouteAttrs] =
-	defineField("pyrazinamideRoute");
-const [pyrazinamideFrequencyNumber, pyrazinamideFrequencyNumberAttrs] =
-	defineField("pyrazinamideFrequencyNumber");
-const [pyrazinamideStartDate, pyrazinamideStartDateAttrs] = defineField(
-	"pyrazinamideStartDate"
-);
-const [pyrazinamideStopDate, pyrazinamideStopDateAttrs] = defineField(
-	"pyrazinamideStopDate"
-);
-
-// Ethambutol
-const [ethambutolSuspected, ethambutolSuspectedAttrs] = defineField(
-	"ethambutolSuspected"
-);
-const [ethambutolBatchNo, ethambutolBatchNoAttrs] =
-	defineField("ethambutolBatchNo");
-const [ethambutolManufacturer, ethambutolManufacturerAttrs] = defineField(
-	"ethambutolManufacturer"
-);
-const [ethambutolDoseAmount, ethambutolDoseAmountAttrs] = defineField(
-	"ethambutolDoseAmount"
-);
-const [ethambutolRoute, ethambutolRouteAttrs] = defineField("ethambutolRoute");
-const [ethambutolFrequencyNumber, ethambutolFrequencyNumberAttrs] = defineField(
-	"ethambutolFrequencyNumber"
-);
-const [ethambutolStartDate, ethambutolStartDateAttrs] = defineField(
-	"ethambutolStartDate"
-);
-const [ethambutolStopDate, ethambutolStopDateAttrs] =
-	defineField("ethambutolStopDate");
-
-// Rechallenge/Dechallenge
-const [rechallenge, rechallengeAttrs] = defineField("rechallenge");
-const [dechallenge, dechallengeAttrs] = defineField("dechallenge");
-// Grading of Event
-const [severity, severityAttrs] = defineField("severity");
-const [isSerious, isSeriousAttrs] = defineField("isSerious");
-const [criteriaForSeriousness, criteriaForSeriousnessAttrs] = defineField(
-	"criteriaForSeriousness"
-);
-const [actionTaken, actionTakenAttrs] = defineField("actionTaken");
-const [outcome, outcomeAttrs] = defineField("outcome");
-const [comments, commentsAttrs] = defineField("comments");
 
 // V-model for columns
 const selectedDateOfOnsetOfReaction = ref<string>("");
-
-const selectedRifampicinStartDate = ref<string>("");
-const selectedRifampicinStopDate = ref<string>("");
-const selectedIsoniazidStartDate = ref<string>("");
-const selectedIsoniazidStopDate = ref<string>("");
-const selectedPyrazinamideStartDate = ref<string>("");
-const selectedPyrazinamideStopDate = ref<string>("");
-const selectedEthambutolStartDate = ref<string>("");
-const selectedEthambutolStopDate = ref<string>("");
-
-const selectedPatientDateOfBirth = ref<string>("");
-const selectedPatientAge = ref<number>(18);
-const selectedPatientWeightKg = ref<number>(60);
-const selectedPatientHeightCm = ref<number>(178);
 
 const months = [
 	"January",
@@ -985,171 +925,77 @@ const months = [
 	"December",
 ];
 
-// Dates
-watchEffect(() => {
-	if (selectedPatientDateOfBirth.value) {
-		setFieldValue("patientDateOfBirth", selectedPatientDateOfBirth.value);
-	} else {
-		setFieldValue("patientDateOfBirth", undefined);
-	}
-
-	if (selectedPatientAge.value) {
-		setFieldValue("patientAge", selectedPatientAge.value);
-	} else {
-		setFieldValue("patientAge", undefined);
-	}
-
-	if (selectedPatientWeightKg.value) {
-		setFieldValue("patientWeightKg", selectedPatientWeightKg.value);
-	} else {
-		setFieldValue("patientWeightKg", undefined);
-	}
-
-	if (selectedPatientHeightCm.value) {
-		setFieldValue("patientHeightCm", selectedPatientHeightCm.value);
-	} else {
-		setFieldValue("patientHeightCm", undefined);
-	}
-
-	if (selectedDateOfOnsetOfReaction.value) {
-		setFieldValue(
-			"dateOfOnsetOfReaction",
-			selectedDateOfOnsetOfReaction.value
-		);
-	} else {
-		setFieldValue("dateOfOnsetOfReaction", undefined);
-	}
-
-	if (selectedRifampicinStartDate.value) {
-		setFieldValue("rifampicinStartDate", selectedRifampicinStartDate.value);
-	} else {
-		setFieldValue("rifampicinStartDate", undefined);
-	}
-
-	if (selectedRifampicinStopDate.value) {
-		setFieldValue("rifampicinStopDate", selectedRifampicinStopDate.value);
-	} else {
-		setFieldValue("rifampicinStopDate", undefined);
-	}
-
-	if (selectedIsoniazidStartDate.value) {
-		setFieldValue("isoniazidStartDate", selectedIsoniazidStartDate.value);
-	} else {
-		setFieldValue("isoniazidStartDate", undefined);
-	}
-
-	if (selectedIsoniazidStopDate.value) {
-		setFieldValue("isoniazidStopDate", selectedIsoniazidStopDate.value);
-	} else {
-		setFieldValue("isoniazidStopDate", undefined);
-	}
-
-	if (selectedPyrazinamideStartDate.value) {
-		setFieldValue(
-			"pyrazinamideStartDate",
-			selectedPyrazinamideStartDate.value
-		);
-	} else {
-		setFieldValue("pyrazinamideStartDate", undefined);
-	}
-
-	if (selectedPyrazinamideStopDate.value) {
-		setFieldValue(
-			"pyrazinamideStopDate",
-			selectedPyrazinamideStopDate.value
-		);
-	} else {
-		setFieldValue("pyrazinamideStopDate", undefined);
-	}
-
-	if (selectedEthambutolStartDate.value) {
-		setFieldValue("ethambutolStartDate", selectedEthambutolStartDate.value);
-	} else {
-		setFieldValue("ethambutolStartDate", undefined);
-	}
-
-	if (selectedEthambutolStopDate.value) {
-		setFieldValue("ethambutolStopDate", selectedEthambutolStopDate.value);
-	} else {
-		setFieldValue("ethambutolStopDate", undefined);
-	}
-});
-
-const onSubmit = handleSubmit(async (values) => {
-	const runtimeConfig = useRuntimeConfig();
-	const serverApi = runtimeConfig.public.serverApi;
-	const authStore = useAuthStore();
-	console.log("submitting");
-	if (props.mode == "create") {
-		const { data, status, error } = await useFetch<ADRCreateResponse>(
-			`${serverApi}/adr`,
-			{
-				method: "POST",
-				headers: {
-					Authorization: `Bearer ${authStore.accessToken}`,
-				},
-				body: humps.decamelizeKeys(values),
-			}
-		);
-
-		if (status.value == "success" && data.value) {
-			const {
-				data: calData,
-				status: calStatus,
-				error,
-			} = await useFetch<
-				PaginatedResponseInterface<CausalityAssessmentLevelGetResponseInterface>
-			>(`${serverApi}/adr/${data.value.id}/causality_assessment_level`, {
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${authStore.accessToken}`,
-				},
-				params: {
-					page: 1,
-					size: 50,
-				},
-			});
-
-			if (calStatus.value == "success" && calData.value?.items) {
-				navigateTo(`/adr/${data.value.id}/review`);
-			}
-		}
-	} else if (props.mode == "update") {
-		const { data, status, error } = await useFetch<ADRCreateResponse>(
-			`${serverApi}/adr/${props.id}`,
-			{
-				method: "PUT",
-				headers: {
-					Authorization: `Bearer ${authStore.accessToken}`,
-				},
-				body: humps.decamelizeKeys(values),
-			}
-		);
-
-		if (status.value == "success" && data.value) {
-			const {
-				data: calData,
-				status: calStatus,
-				error,
-			} = await useFetch<
-				PaginatedResponseInterface<CausalityAssessmentLevelGetResponseInterface>
-			>(`${serverApi}/adr/${data.value.id}/causality_assessment_level`, {
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${authStore.accessToken}`,
-				},
-				params: {
-					page: 1,
-					size: 50,
-				},
-			});
-
-			if (calStatus.value == "success" && calData.value?.items) {
-				navigateTo(`/adr/${props.id}/review`);
-			}
-		}
-	}
-});
+async function onSubmit(event: FormSubmitEvent<AdrForm>) {
+	// const runtimeConfig = useRuntimeConfig();
+	// const serverApi = runtimeConfig.public.serverApi;
+	// const authStore = useAuthStore();
+	// console.log("submitting");
+	// if (props.mode == "create") {
+	// 	const { data, status, error } = await useFetch<ADRCreateResponse>(
+	// 		`${serverApi}/adr`,
+	// 		{
+	// 			method: "POST",
+	// 			headers: {
+	// 				Authorization: `Bearer ${authStore.accessToken}`,
+	// 			},
+	// 			body: humps.decamelizeKeys(values),
+	// 		}
+	// 	);
+	// 	if (status.value == "success" && data.value) {
+	// 		const {
+	// 			data: calData,
+	// 			status: calStatus,
+	// 			error,
+	// 		} = await useFetch<
+	// 			PaginatedResponseInterface<CausalityAssessmentLevelGetResponseInterface>
+	// 		>(`${serverApi}/adr/${data.value.id}/causality_assessment_level`, {
+	// 			method: "GET",
+	// 			headers: {
+	// 				Authorization: `Bearer ${authStore.accessToken}`,
+	// 			},
+	// 			params: {
+	// 				page: 1,
+	// 				size: 50,
+	// 			},
+	// 		});
+	// 		if (calStatus.value == "success" && calData.value?.items) {
+	// 			navigateTo(`/adr/${data.value.id}/review`);
+	// 		}
+	// 	}
+	// } else if (props.mode == "update") {
+	// 	const { data, status, error } = await useFetch<ADRCreateResponse>(
+	// 		`${serverApi}/adr/${props.id}`,
+	// 		{
+	// 			method: "PUT",
+	// 			headers: {
+	// 				Authorization: `Bearer ${authStore.accessToken}`,
+	// 			},
+	// 			body: humps.decamelizeKeys(values),
+	// 		}
+	// 	);
+	// 	if (status.value == "success" && data.value) {
+	// 		const {
+	// 			data: calData,
+	// 			status: calStatus,
+	// 			error,
+	// 		} = await useFetch<
+	// 			PaginatedResponseInterface<CausalityAssessmentLevelGetResponseInterface>
+	// 		>(`${serverApi}/adr/${data.value.id}/causality_assessment_level`, {
+	// 			method: "GET",
+	// 			headers: {
+	// 				Authorization: `Bearer ${authStore.accessToken}`,
+	// 			},
+	// 			params: {
+	// 				page: 1,
+	// 				size: 50,
+	// 			},
+	// 		});
+	// 		if (calStatus.value == "success" && calData.value?.items) {
+	// 			navigateTo(`/adr/${props.id}/review`);
+	// 		}
+	// 	}
+	// }
+}
 
 const props = defineProps<{
 	id?: string;
