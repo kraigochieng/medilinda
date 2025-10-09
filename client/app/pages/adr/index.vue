@@ -2,7 +2,7 @@
 	<div class="page-wrapper">
 		<p class="page-title">ADR Management</p>
 		<NuxtLink to="/adr/add" class="text-white">
-			<UButton class="w-full my-4 text-center"> Add Adr </UButton>
+			<UButton class="w-full my-4 justify-center"> Add Adr </UButton>
 		</NuxtLink>
 
 		<UTable
