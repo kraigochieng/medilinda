@@ -14,7 +14,8 @@
 <script setup lang="ts"></script>
 
 <style lang="css" scoped>
-@reference "assets/css/main.css"
+@reference "assets/css/main.css";
+
 * {
 	font-family: "Lexend";
 }
