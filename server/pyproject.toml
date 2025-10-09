@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "africastalking>=2.0.1",
-    "bcrypt>=5.0.0",
+    "bcrypt==4.3.0",
     "faker>=37.8.0",
     "fastapi-pagination>=0.14.2",
     "fastapi[standard]>=0.118.0",

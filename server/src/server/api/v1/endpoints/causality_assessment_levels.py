@@ -159,7 +159,10 @@ async def get_reviews_for_causality_assessment_level(
         .order_by(desc(ReviewModel.created_at))
     )
 
-    return paginate(content)
+    results = content.all()
+
+    # return paginate(content)
+    return paginate(results)
 
 
 @router.post(

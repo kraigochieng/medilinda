@@ -4,9 +4,9 @@ from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import add_pagination
 
-# from server.api.v1.endpoints import (
-#     adverse_drug_reaction_reports as adverse_drug_reaction_report_v1,
-# )
+from server.api.v1.endpoints import (
+    adverse_drug_reaction_reports as adverse_drug_reaction_report_v1,
+)
 from server.api.v1.endpoints import (
     adverse_drug_reaction_reports_details as adverse_drug_reaction_report_details_v1,
 )
@@ -39,7 +39,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.nuxt_public_api_base],
+    allow_origins=[settings.client_url],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -48,7 +48,7 @@ app.add_middleware(
 add_pagination(app)
 
 app.include_router(auth_v1.router)
-# app.include_router(adverse_drug_reaction_report_v1.router)
+app.include_router(adverse_drug_reaction_report_v1.router)
 app.include_router(adverse_drug_reaction_report_details_v1.router)
 app.include_router(causality_assessment_level_v1.router)
 app.include_router(causality_assessment_levels_actions_v1.router)
