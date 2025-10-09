@@ -1,19 +1,13 @@
+import tailwindcss from "@tailwindcss/vite";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	compatibilityDate: "2024-11-01",
 	devtools: { enabled: false },
-	imports: {
-		dirs: [
-			"./api/**",
-			"./composables/**",
-			"./forms/**",
-			"./stores/**",
-			"./types/**",
-		],
-	},
+	css: ["~/assets/css/main.css"],
 	runtimeConfig: {
 		public: {
-			serverApi: "http://localhost:8000/api/v1",
+			serverApi: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:8000",
 		},
 	},
 	app: {
@@ -25,45 +19,29 @@ export default defineNuxtConfig({
 	},
 	// plugins: ["~/plugins/apexcharts.client.ts"],
 	modules: [
-		"@vee-validate/nuxt",
 		"@nuxtjs/google-fonts",
-		"@nuxtjs/tailwindcss",
 		"@nuxtjs/color-mode",
 		"@nuxt/icon",
-		"shadcn-nuxt",
 		"nuxt-security",
-		"@hebilicious/vue-query-nuxt",
 		"@pinia/nuxt",
 		"@vueuse/nuxt",
+		"@nuxt/ui",
 	],
 	/**
 	 * Module Configs
 	 */
-	veeValidate: {
-		autoImports: true,
-	},
 	googleFonts: {
 		families: {
 			Lexend: [100, 200, 300, 400, 500, 600, 700, 800, 900],
 			Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900],
 		},
 	},
-	shadcn: {
-		prefix: "",
-		/**
-		 * Directory that the component lives in.
-		 * @default "./components/ui"
-		 */
-
-		componentDir: "./components/ui",
-	},
 	security: {
 		headers: {
 			crossOriginResourcePolicy: "cross-origin",
 		},
 	},
-	tailwindcss: {
-		exposeConfig: true,
-		// viewer: true
+	vite: {
+		plugins: [tailwindcss()],
 	},
 });
