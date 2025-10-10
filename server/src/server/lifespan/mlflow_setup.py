@@ -4,7 +4,9 @@ from typing import TypedDict
 
 import joblib
 import mlflow
-from medilinda_ml.utils import ShapModelWrapper # Imported so that the shap expliner works...
+from medilinda_ml.utils import (
+    ShapModelWrapper,
+)  # Imported so that the shap expliner works...
 from mlflow.pyfunc import PyFuncModel
 from shap import KernelExplainer
 from sklearn.preprocessing import OrdinalEncoder
@@ -24,7 +26,7 @@ def mlflow_setup(
     mlflow_experiment_path: str,
     mlflow_model_name: str,
     mlflow_model_version: str,
-    local_artifacts_path: str | Path = "./server/artifacts",
+    local_artifacts_path: Path = Path(__file__).parent.parent / "artifacts",
 ) -> MLEnsemble:
     os.environ["DATABRICKS_HOST"] = databricks_host
     os.environ["DATABRICKS_TOKEN"] = databricks_token
