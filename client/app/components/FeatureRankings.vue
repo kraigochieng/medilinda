@@ -194,7 +194,7 @@
 </template>
 
 <script setup lang="ts">
-// import { capitalize } from "lodash";
+// import { capitalize } from "lodash-es";
 // import type { ClassRanking } from "@/types/class_ranking";
 // const props = defineProps<{
 // 	baseValues?: number[];

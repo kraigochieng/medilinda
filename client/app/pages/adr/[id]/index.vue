@@ -100,14 +100,13 @@ import { fetchReviewByUserAndCausalityLevel } from "@/api/review";
 import type { ADRGetResponseInterface } from "@/types/adr";
 import type { TableColumn, TabsItem } from "@nuxt/ui";
 import { useQuery } from "@tanstack/vue-query";
-import { capitalize } from "lodash";
+import { capitalize } from "lodash-es";
 import type { ReviewWithUserGetResponse } from "~/types/review";
 
 // Get ADR id
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id as string;
-
 
 const tabs: TabsItem[] = [
 	{

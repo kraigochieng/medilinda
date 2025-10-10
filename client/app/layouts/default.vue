@@ -21,7 +21,7 @@ import type { NavigationMenuItem } from "@nuxt/ui";
 import { useQuery } from "@tanstack/vue-query";
 
 import { fetchCurrentUser } from "@/api/user";
-import { capitalize } from "lodash";
+import { capitalize } from "lodash-es";
 
 const items = ref<NavigationMenuItem[]>([
 	{

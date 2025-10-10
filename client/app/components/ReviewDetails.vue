@@ -98,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { capitalize } from "lodash";
+import { capitalize } from "lodash-es";
 
 import type { CausalityAssessmentLevelEnum } from "@/types/adr";
 import type { ReviewGetResponse } from "@/types/review";
@@ -128,8 +128,6 @@ const proposedCalColor = computed(() => {
 			return "";
 	}
 });
-
-
 
 async function handleDelete() {
 	// const runtimeConfig = useRuntimeConfig();

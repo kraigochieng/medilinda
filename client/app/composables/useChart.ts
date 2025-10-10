@@ -1,5 +1,5 @@
 import type { ApexOptions } from "apexcharts";
-import { startCase, toLower } from "lodash";
+import { startCase, toLower } from "lodash-es";
 
 export function usePieChart(title: string, labels: string[], data: number[]) {
 	const formattedLabels = labels.map((c) => startCase(toLower(c)));

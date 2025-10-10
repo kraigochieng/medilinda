@@ -29,7 +29,7 @@ import type { PaginatedResponseInterface } from "@/types/pagination";
 import type { TableColumn } from "@nuxt/ui";
 import { useQuery } from "@tanstack/vue-query";
 import type { Row } from "@tanstack/vue-table";
-import { capitalize } from "lodash";
+import { capitalize } from "lodash-es";
 
 // const filterInputRef = ref<HTMLInputElement | null>(null);
 const UBadge = resolveComponent("UBadge");
