@@ -1,0 +1,22 @@
+# Git
+
+.git
+.gitignore
+
+# Docker
+
+Dockerfile
+.dockerignore
+
+# Notebooks and data (not needed for production)
+
+notebooks/
+_.csv
+_.xlsx
+
+# Python caches and virtual environments
+
+**pycache**/
+\*.pyc
+.venv/
+venv/
