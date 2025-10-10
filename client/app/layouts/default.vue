@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="flex items-center justify-between sticky top-0 z-50 bg-background page-responsive-width py-4"
+		class="flex items-center justify-between sticky top-0 z-50 bg-background page-responsive-width py-4 glass-bg"
 	>
 		<NuxtLink href="/"><Logo /></NuxtLink>
 
@@ -20,10 +20,14 @@
 import type { NavigationMenuItem } from "@nuxt/ui";
 import { useQuery } from "@tanstack/vue-query";
 
+import { fetchCurrentUser } from "@/api/user";
 import { capitalize } from "lodash";
-import { fetchCurrentUser } from "~/api/user";
 
 const items = ref<NavigationMenuItem[]>([
+	{
+		label: "Home",
+		to: "/",
+	},
 	{
 		label: "ADR",
 		children: [
@@ -34,19 +38,19 @@ const items = ref<NavigationMenuItem[]>([
 	{
 		label: "Communication",
 		children: [
-			// {
-			// 	label:"Individual Alerts",
-			// 	to: "/communication/individual-alerts"
-			// },
-			// {
-			// 	label: "Additional Info",
-			// 	to: "/communication/additional-information-requests"
-			// }
+			{
+				label: "Individual Alerts",
+				to: "/communication/individual-alerts",
+			},
+			{
+				label: "Additional Info Requests",
+				to: "/communication/additional-information-requests",
+			},
 		],
 	},
 	{
 		label: "Dashboard",
-		// to: "/dashboard"
+		to: "/dashboard",
 	},
 ]);
 
@@ -59,13 +63,13 @@ const { data: userData } = useQuery({
 <style scoped>
 @reference "assets/css/main.css";
 
-/* .glass-bg {
-	@apply backdrop-filter backdrop-blur-md bg-opacity-50;
+.glass-bg {
+	@apply backdrop-filter backdrop-blur-xs;
 }
 
 @media print {
 	.noprint {
 		visibility: hidden;
 	}
-} */
+}
 </style>

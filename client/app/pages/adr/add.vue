@@ -5,7 +5,7 @@
 		>
 			Note: The prefilled ADR Data is for the class of Likely
 		</p>
-		<ADRForm mode="create" />
+		<FormADR mode="create" />
 	</div>
 </template>
 

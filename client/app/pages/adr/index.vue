@@ -6,7 +6,6 @@
 		</NuxtLink>
 
 		<UTable
-			ref="table"
 			:data="rows"
 			:columns="columns"
 			class="flex-1"
@@ -38,7 +37,6 @@ const UIcon = resolveComponent("UIcon");
 const UDropdownMenu = resolveComponent("UDropdownMenu");
 const UButton = resolveComponent("UButton");
 
-const table = useTemplateRef("table");
 const currentPage = ref(1);
 const pageSize = ref(20);
 const tableFilter = ref<string>("");

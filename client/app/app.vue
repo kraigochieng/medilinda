@@ -39,15 +39,13 @@ useHead({
 		filter: invert(0%) brightness(100%);
 	}
 }
-html {
-	scroll-behavior: smooth;
-}
+
 .page-responsive-width {
-	@apply px-8;
+	@apply px-8 lg:px-32;
 }
 
 .page-wrapper {
-	@apply px-8 py-8;
+	@apply px-8 lg:px-32 py-8;
 }
 
 .page-title {
@@ -58,7 +56,7 @@ html {
 }
 
 .form-section-header {
-	@apply font-semibold text-lg scroll-mt-24 my-4;
+	@apply font-semibold text-lg scroll-mt-20 my-4;
 }
 
 .form-field-wrapper {
@@ -71,6 +69,10 @@ html {
 
 .view-details-header {
 }
+
+/* .view-details-content {
+	@apply bg-accent rounded-sm px-2;
+} */
 
 .view-details-content {
 	@apply rounded-sm px-2;

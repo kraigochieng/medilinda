@@ -1,2 +1,60 @@
 @import "tailwindcss";
-@import "@nuxt/ui"
+@import "@nuxt/ui";
+
+:root {
+  /* Define your theme variables */
+  --custom-primary: oklch(0.72 0.192 149.58);
+  --custom-secondary: oklch(0.63 0.1963 157.86);
+  --custom-tooltip-label: rgba(255, 255, 255, 0.5);
+  --custom-tooltip-value: rgba(255, 255, 255, 1);
+  --custom-axis-grid: rgba(255, 255, 255, 0.1);
+  --custom-tooltip-bg: #121212;
+  --custom-tooltip-border: none;
+  --custom-tooltip-padding: 0;
+  --custom-tooltip-text: rgba(255, 255, 255, 0.5);
+  --custom-axis-tick-label: rgba(255, 255, 255, 0.5);
+  --custom-legend-label: rgba(255, 255, 255, 0.75);
+  --custom-axis-label: rgba(255, 255, 255, 0.5);
+  --custom-donut-bg: transparent;
+  --custom-grid-line-width: 1px;
+  --custom-line-dash-array: '2px, 5px;';
+  --custom-domain-line-dasharray: 'none'
+  --custom-tick-label-weight: 500;
+
+  --tooltip-label-color: var(--custom-tooltip-label) !important;
+  --tooltip-value-color: var(--custom-tooltip-value) !important;
+
+  --vis-tooltip-background-color: var(--custom-tooltip-bg) !important;
+  --vis-tooltip-border-color: var(--custom-tooltip-border) !important;
+  --vis-tooltip-border-radius: 6px !important;
+  --vis-tooltip-padding: var(--custom-tooltip-padding) !important;
+  --vis-tooltip-text-color: var(--custom-tooltip-text) !important;
+
+  --vis-axis-grid-color: var(--custom-axis-grid) !important;
+  --vis-axis-tick-label-color: var(--custom-axis-tick-label) !important;
+  --vis-axis-label-color: var(--custom-axis-label) !important;
+  --vis-legend-label-color: var(--custom-legend-label) !important;
+  --vis-donut-background-color: var(--custom-donut-bg) !important;
+
+  /* From v0.2.4 */
+  --vis-axis-grid-line-width: var(--custom-grid-line-width) !important;
+  --vis-axis-grid-line-dasharray: var(--custom-line-dash-array) !important;
+  --vis-axis-domain-line-dasharray: var(--custom-domain-line-dasharray, var(--vis-axis-grid-line-dasharray)) !important;
+  --vis-axis-tick-label-weight: var(--custom-tick-label-weight) !important;
+  --vis-axis-tick-label-text-decoration:  var(--custom-tick-label-text-decoration) !important;
+
+  --steps-bg: #f3f4f6 !important;
+  --steps-bg-complete: #22c55e !important;
+  --steps-border: #e5e7eb !important;
+  --progress-bg: #e5e7eb !important;
+
+  /* Map Unovis (vis-) variables to your theme variables */
+  --vis-color0: var(--custom-primary) !important;
+  --vis-color1: var(--custom-secondary) !important; 
+}
+
+/* Dark mode example: override theme variables */
+.dark {
+  --custom-primary: oklch(0.72 0.192 149.58);
+  --custom-secondary: oklch(0.63 0.1963 157.86);
+}

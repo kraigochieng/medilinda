@@ -1,5 +1,5 @@
 <template>
-	<div class="rounded-md border">
+	<!-- <div class="rounded-md border">
 		<Table>
 			<TableHeader>
 				<TableRow
@@ -105,127 +105,127 @@
 				</SelectItem>
 			</SelectGroup>
 		</SelectContent>
-	</Select>
+	</Select> -->
 </template>
 
 <script setup lang="ts">
-// Imports
-import {
-	FlexRender,
-	getCoreRowModel,
-	useVueTable,
-	type ColumnDef,
-} from "@tanstack/vue-table";
-import { computed, ref } from "vue";
+// // Imports
+// import {
+// 	FlexRender,
+// 	getCoreRowModel,
+// 	useVueTable,
+// 	type ColumnDef,
+// } from "@tanstack/vue-table";
+// import { computed, ref } from "vue";
 
-import TableActionsCausalityAssessmentLevel from "@/components/table/actions/CausalityAssessmentLevel.vue";
+// import TableActionsCausalityAssessmentLevel from "@/components/table/actions/CausalityAssessmentLevel.vue";
 
-import Checkbox from "./ui/checkbox/Checkbox.vue";
+// import Checkbox from "./ui/checkbox/Checkbox.vue";
 
-// Types
-interface ADRCausality {
-	id: string;
-	adr_id: string;
-	ml_model_id: string;
-	causality_assessment_level_value: CausalityAssessmentLevelEnum;
-	created_at: string;
-	updated_at: string;
-}
-// Props
-const props = defineProps<{
-	data?: ADRCausality[];
-	isLoading: boolean;
-	currentPage: number;
-	pageSize: number;
-	totalCount: number;
-}>();
+// // Types
+// interface ADRCausality {
+// 	id: string;
+// 	adr_id: string;
+// 	ml_model_id: string;
+// 	causality_assessment_level_value: CausalityAssessmentLevelEnum;
+// 	created_at: string;
+// 	updated_at: string;
+// }
+// // Props
+// const props = defineProps<{
+// 	data?: ADRCausality[];
+// 	isLoading: boolean;
+// 	currentPage: number;
+// 	pageSize: number;
+// 	totalCount: number;
+// }>();
 
-console.log(props.data);
-// Table creation
-const tableData = computed(() => props.data ?? []);
-const numOfPagesOptions = ["10", "20", "50"];
+// console.log(props.data);
+// // Table creation
+// const tableData = computed(() => props.data ?? []);
+// const numOfPagesOptions = ["10", "20", "50"];
 
-const columns: ColumnDef<ADRCausality>[] = [
-	{
-		id: "select",
-		header: ({ table }) =>
-			h(Checkbox, {
-				modelValue:
-					table.getIsAllPageRowsSelected() ||
-					(table.getIsSomePageRowsSelected() && "indeterminate"),
-				"onUpdate:modelValue": (value) =>
-					table.toggleAllPageRowsSelected(!!value),
-				ariaLabel: "Select all",
-			}),
-		cell: ({ row }) =>
-			h(Checkbox, {
-				modelValue: row.getIsSelected(),
-				"onUpdate:modelValue": (value) => row.toggleSelected(!!value),
-				ariaLabel: "Select row",
-			}),
-		enableSorting: false,
-		enableHiding: false,
-	},
-	{
-		id: "ml_model_id",
-		accessorKey: "ml_model_id",
-		header: "ML Model ID",
-		cell: ({ row }) => h("div", {}, row.getValue("ml_model_id")),
-		enableSorting: false,
-	},
-	{
-		id: "causality_assessment_level_value",
-		accessorKey: "causality_assessment_level_value",
-		header: "Causality Assessment Level",
-		cell: ({ row }) =>
-			h("div", {}, row.getValue("causality_assessment_level_value")),
-	},
-	// {
-	// 	accessorKey:
-	// 		"causality_assessment_levels.causality_assessment_level_value",
-	// 	header: "Causality Assessment Level",
-	// 	cell: ({ row }) =>
-	// 		h(
-	// 			"div",
-	// 			{},
-	// 			row.getValue(
-	// 				"causality_assessment_levels"
-	// 			)
-	// 		),
-	// },
-	{
-		id: "actions",
-		enableHiding: false,
-		cell: ({ row }) => {
-			return h(TableActionsCausalityAssessmentLevel, {
-				row: row.original,
-				onExpand: row.toggleExpanded,
-			});
-		},
-	},
-];
+// const columns: ColumnDef<ADRCausality>[] = [
+// 	{
+// 		id: "select",
+// 		header: ({ table }) =>
+// 			h(Checkbox, {
+// 				modelValue:
+// 					table.getIsAllPageRowsSelected() ||
+// 					(table.getIsSomePageRowsSelected() && "indeterminate"),
+// 				"onUpdate:modelValue": (value) =>
+// 					table.toggleAllPageRowsSelected(!!value),
+// 				ariaLabel: "Select all",
+// 			}),
+// 		cell: ({ row }) =>
+// 			h(Checkbox, {
+// 				modelValue: row.getIsSelected(),
+// 				"onUpdate:modelValue": (value) => row.toggleSelected(!!value),
+// 				ariaLabel: "Select row",
+// 			}),
+// 		enableSorting: false,
+// 		enableHiding: false,
+// 	},
+// 	{
+// 		id: "ml_model_id",
+// 		accessorKey: "ml_model_id",
+// 		header: "ML Model ID",
+// 		cell: ({ row }) => h("div", {}, row.getValue("ml_model_id")),
+// 		enableSorting: false,
+// 	},
+// 	{
+// 		id: "causality_assessment_level_value",
+// 		accessorKey: "causality_assessment_level_value",
+// 		header: "Causality Assessment Level",
+// 		cell: ({ row }) =>
+// 			h("div", {}, row.getValue("causality_assessment_level_value")),
+// 	},
+// 	// {
+// 	// 	accessorKey:
+// 	// 		"causality_assessment_levels.causality_assessment_level_value",
+// 	// 	header: "Causality Assessment Level",
+// 	// 	cell: ({ row }) =>
+// 	// 		h(
+// 	// 			"div",
+// 	// 			{},
+// 	// 			row.getValue(
+// 	// 				"causality_assessment_levels"
+// 	// 			)
+// 	// 		),
+// 	// },
+// 	{
+// 		id: "actions",
+// 		enableHiding: false,
+// 		cell: ({ row }) => {
+// 			return h(TableActionsCausalityAssessmentLevel, {
+// 				row: row.original,
+// 				onExpand: row.toggleExpanded,
+// 			});
+// 		},
+// 	},
+// ];
 
-const table = useVueTable({
-	get data() {
-		return tableData.value;
-	},
-	columns: columns,
-	getCoreRowModel: getCoreRowModel(),
-});
+// const table = useVueTable({
+// 	get data() {
+// 		return tableData.value;
+// 	},
+// 	columns: columns,
+// 	getCoreRowModel: getCoreRowModel(),
+// });
 
-// Emits
-const emit = defineEmits<{
-	pageChange: [page: number];
-	pageSizeChange: [size: number];
-}>();
+// // Emits
+// const emit = defineEmits<{
+// 	pageChange: [page: number];
+// 	pageSizeChange: [size: number];
+// }>();
 
-function handlePageChange(page: number) {
-	emit("pageChange", page);
-}
+// function handlePageChange(page: number) {
+// 	emit("pageChange", page);
+// }
 
-const selectedPageSize = ref("20"); // Default value
+// const selectedPageSize = ref("20"); // Default value
 
-watch(selectedPageSize, (newSize) => {
-	emit("pageSizeChange", Number(newSize)); // Emit the new value when it changes
-});
+// watch(selectedPageSize, (newSize) => {
+// 	emit("pageSizeChange", Number(newSize)); // Emit the new value when it changes
+// });
 </script>

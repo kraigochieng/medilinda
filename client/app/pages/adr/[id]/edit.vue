@@ -1,8 +1,7 @@
 <template>
 	<div class="page-wrapper">
-		<ADRForm mode="update" :id="id" />
+		<FormADR mode="update" :id="id" />
 	</div>
-	
 </template>
 
 <script setup lang="ts">
