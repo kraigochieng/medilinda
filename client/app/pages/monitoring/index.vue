@@ -284,7 +284,7 @@ useHead({ title: "Monitoring | MediLinda" });
 </script>
 
 <style scoped>
-.chart-wrapper {
+/* .chart-wrapper {
 	@apply w-full max-w-[600px] border rounded-md;
-}
+} */
 </style>
