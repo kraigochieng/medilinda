@@ -38,8 +38,8 @@ jobs:
                       ${{ secrets.DOCKERHUB_USERNAME }}/medilinda-server:latest
                       ${{ secrets.DOCKERHUB_USERNAME }}/medilinda-server:${{ steps.vars.outputs.ts }}
 
-            # - name: Deploy Server Render Web Service
-            #   env:
-            #       deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-            #   run: |
-            #       curl "$deploy_url"
+            - name: Deploy Server Render Web Service
+              env:
+                  deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+              run: |
+                  curl "$deploy_url"
