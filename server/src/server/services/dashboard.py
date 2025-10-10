@@ -3,9 +3,10 @@ from collections import defaultdict
 
 from sqlalchemy import text
 from sqlalchemy.orm import Session
+from server.basemodels.dashboard import MetricValue
 
 
-def get_sms_monthly_by_type(db: Session, sms_type: str):
+def get_sms_monthly_by_type(db: Session, sms_type: str) -> list[MetricValue]:
     sql = text("""
         SELECT
             strftime('%Y', created_at) AS year,
@@ -18,13 +19,10 @@ def get_sms_monthly_by_type(db: Session, sms_type: str):
     """)
     result = db.execute(sql, {"sms_type": sms_type}).fetchall()
 
-    data_by_year = defaultdict(lambda: {"series": [], "data": []})
-
-    for row in result:
-        year, month, count = row
-        month_int = int(month)
-        month_label = calendar.month_abbr[month_int]
-        data_by_year[year]["data"].append(month_label)
-        data_by_year[year]["series"].append(count)
-
-    return data_by_year
+    return [
+        {
+            "metric": f"{calendar.month_abbr[int(row.month)]} {row.year}",
+            "value": row.count,
+        }
+        for row in result
+    ]

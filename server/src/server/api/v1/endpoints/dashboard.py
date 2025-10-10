@@ -6,9 +6,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from sqlalchemy import func, text
+from sqlalchemy import case, func, select, text
 from sqlalchemy.orm import Session
 
+from server.basemodels.dashboard import MetricValue, SeriesData
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
 from server.models.adverse_drug_reaction_report import ADRModel
@@ -17,6 +18,7 @@ from server.models.causality_assessment_level import (
     CausalityAssessmentLevelModel,
 )
 from server.models.medical_institution import MedicalInstitutionModel
+from server.models.review import ReviewModel
 from server.models.sms import SMSMessageModel
 from server.services.auth import get_current_active_user
 from server.services.dashboard import get_sms_monthly_by_type
@@ -141,43 +143,74 @@ def dashboard_summary(db: Session = Depends(get_db)):
 
 
 #  Reviewed vs Unreviewed
-@router.get("/reviewed-unreviewed")
+@router.get("/reviewed-unreviewed", response_model=list[MetricValue])
 def reviewed_vs_unreviewed(db: Session = Depends(get_db)):
-    total = db.query(ADRModel.id).count()
-    reviewed = (
-        db.query(func.count(func.distinct(CausalityAssessmentLevelModel.id)))
-        .join(CausalityAssessmentLevelModel.reviews)
-        .scalar()
+    stmt = (
+        select(
+            func.count(func.distinct(ADRModel.id)).label("total_adrs"),
+            func.count(
+                func.distinct(case((ReviewModel.id.is_not(None), ADRModel.id)))
+            ).label("reviewed_adrs"),
+        )
+        .select_from(ADRModel)
+        .join(
+            CausalityAssessmentLevelModel,
+            CausalityAssessmentLevelModel.adr_id == ADRModel.id,
+            isouter=True,  # LEFT JOIN
+        )
+        .join(
+            ReviewModel,
+            ReviewModel.causality_assessment_level_id
+            == CausalityAssessmentLevelModel.id,
+            isouter=True,  # LEFT JOIN
+        )
     )
-    return {"series": [reviewed, total - reviewed], "data": ["Reviewed", "Unreviewed"]}
+
+    result = db.execute(stmt).one()
+
+    total_adrs = result.total_adrs
+    reviewed_adrs = result.reviewed_adrs
+
+    unreviewed_adrs = total_adrs - reviewed_adrs
+
+    return [
+        {
+            "metric": "Reviewed",
+            "value": reviewed_adrs,
+        },
+        {
+            "metric": "Unreviewed",
+            "value": unreviewed_adrs,
+        },
+    ]
 
 
 #  Causality Distribution
-@router.get("/causality-distribution")
+@router.get("/causality-distribution", response_model=list[MetricValue])
 def causality_distribution(db: Session = Depends(get_db)):
-    rows = (
-        db.query(
-            CausalityAssessmentLevelModel.causality_assessment_level_value, func.count()
-        )
-        .group_by(CausalityAssessmentLevelModel.causality_assessment_level_value)
-        .all()
-    )
-    # return {"series": [r[1] for r in rows], "data": [str(r[0]) for r in rows]}
+    stmt = select(
+        CausalityAssessmentLevelModel.causality_assessment_level_value,
+        func.count().label("count"),
+    ).group_by(CausalityAssessmentLevelModel.causality_assessment_level_value)
+
+    rows = db.execute(stmt).all()
     counts = {str(r[0]): r[1] for r in rows}
 
-    # Ensure all enum values are included
-    all_values = [str(val) for val in CausalityAssessmentLevelEnum]
-    series = []
-    data = []
-    for val in all_values:
-        data.append(val)
-        series.append(counts.get(val, 0))
+    all_values = [val for val in CausalityAssessmentLevelEnum]
 
-    return {"series": series, "data": data}
+    def clean_label(enum_val):
+        return enum_val.name.replace("_", " ").capitalize()
+
+    results = [
+        {"metric": clean_label(val), "value": counts.get(str(val), 0)}
+        for val in all_values
+    ]
+
+    return results
 
 
 #  Approval Status
-@router.get("/approval-status")
+@router.get("/approval-status", response_model=list[MetricValue])
 def approval_status(db: Session = Depends(get_db)):
     sql = text("""
         SELECT status, COUNT(*) as count FROM (
@@ -198,35 +231,48 @@ def approval_status(db: Session = Depends(get_db)):
         GROUP BY status
     """)
     result = db.execute(sql).fetchall()
-    return {"series": [r[1] for r in result], "data": [r[0] for r in result]}
+
+    return [{"metric": row.status, "value": row.count} for row in result]
 
 
 #  Categorical Field Distribution
-@router.get("/categorical-field/{field_name}")
+@router.get("/categorical-field/{field_name}", response_model=list[MetricValue])
 def categorical_distribution(field_name: str, db: Session = Depends(get_db)):
+    """Dynamically group ADRs by a given field name."""
     field = getattr(ADRModel, field_name, None)
-    if not field:
-        return {"error": "Invalid field name"}
-    rows = db.query(field, func.count()).group_by(field).all()
-    return {"series": [r[1] for r in rows], "data": [str(r[0]) for r in rows]}
+
+    if field is None:
+        return {"error": f"Invalid field name: {field_name}"}
+
+    stmt = select(field, func.count().label("count")).group_by(field)
+    rows = db.execute(stmt).all()
+
+    return [{"metric": str(row[0]), "value": row[1]} for row in rows]
 
 
 #  Top Institutions
-@router.get("/top-institutions")
+@router.get("/top-institutions", response_model=list[MetricValue])
 def top_reporting_institutions(db: Session = Depends(get_db)):
-    rows = (
-        db.query(MedicalInstitutionModel.name, func.count(ADRModel.id))
+    stmt = (
+        select(
+            MedicalInstitutionModel.name.label("institution_name"),
+            func.count(ADRModel.id).label("adr_count"),
+        )
         .join(ADRModel, MedicalInstitutionModel.id == ADRModel.medical_institution_id)
         .group_by(MedicalInstitutionModel.name)
         .order_by(func.count(ADRModel.id).desc())
         .limit(5)
-        .all()
     )
-    return {"series": [r[1] for r in rows], "data": [r[0] for r in rows]}
+
+    rows = db.execute(stmt).all()
+
+    results = [{"metric": row.institution_name, "value": row.adr_count} for row in rows]
+
+    return results
 
 
 #  ADRs Weekly (Raw SQL with structured output)
-@router.get("/adrs-weekly")
+@router.get("/adrs-weekly", response_model=list[MetricValue])
 def adrs_weekly(db: Session = Depends(get_db)):
     sql = text("""
         SELECT strftime('%Y-W%W', created_at) AS week_label, COUNT(*) AS count
@@ -235,11 +281,12 @@ def adrs_weekly(db: Session = Depends(get_db)):
         ORDER BY week_label
     """)
     result = db.execute(sql).fetchall()
-    return {"series": [r[1] for r in result], "data": [r[0] for r in result]}
+
+    return [{"metric": row.week_label, "value": row.count} for row in result]
 
 
 #  ADRs Monthly (Raw SQL with structured output)
-@router.get("/adrs-monthly")
+@router.get("/adrs-monthly", response_model=list[MetricValue])
 def adrs_monthly(db: Session = Depends(get_db)):
     sql = text("""
         SELECT
@@ -252,17 +299,13 @@ def adrs_monthly(db: Session = Depends(get_db)):
     """)
     result = db.execute(sql).fetchall()
 
-    data_by_year = defaultdict(lambda: {"series": [], "data": []})
-
-    for row in result:
-        year, month, count = row
-        # Convert month number to short month name
-        month_int = int(month)
-        month_label = f"{calendar.month_abbr[month_int]}"
-        data_by_year[year]["data"].append(month_label)
-        data_by_year[year]["series"].append(count)
-
-    return data_by_year
+    return [
+        {
+            "metric": f"{calendar.month_abbr[int(row.month)]} {row.year}",
+            "value": row.count,
+        }
+        for row in result
+    ]
 
 
 #  SMS Summary
@@ -284,29 +327,29 @@ def sms_summary(db: Session = Depends(get_db)):
 
 
 #  SMS Status Distribution
-@router.get("/sms-status")
+@router.get("/sms-status", response_model=list[MetricValue])
 def sms_status_distribution(db: Session = Depends(get_db)):
-    rows = (
-        db.query(SMSMessageModel.status, func.count())
-        .group_by(SMSMessageModel.status)
-        .all()
+    stmt = select(SMSMessageModel.status, func.count().label("count")).group_by(
+        SMSMessageModel.status
     )
-    return [{"series": r[0], "data": r[1]} for r in rows]
+    rows = db.execute(stmt).all()
+
+    return [{"metric": row.status, "value": row.count} for row in rows]
 
 
 #  SMS Type Distribution
-@router.get("/sms-type")
+@router.get("/sms-type", response_model=list[MetricValue])
 def sms_type_distribution(db: Session = Depends(get_db)):
-    rows = (
-        db.query(SMSMessageModel.sms_type, func.count())
-        .group_by(SMSMessageModel.sms_type)
-        .all()
+    stmt = select(SMSMessageModel.sms_type, func.count().label("count")).group_by(
+        SMSMessageModel.sms_type
     )
-    return [{"type": r[0], "count": r[1]} for r in rows]
+    rows = db.execute(stmt).all()
+
+    return [{"metric": row.sms_type, "value": row.count} for row in rows]
 
 
 #  SMS Count Over Time
-@router.get("/sms-weekly")
+@router.get("/sms-weekly", response_model=list[MetricValue])
 def sms_weekly(db: Session = Depends(get_db)):
     sql = text("""
         SELECT strftime('%Y-W%W', created_at) AS week_label, COUNT(*) AS count
@@ -315,23 +358,34 @@ def sms_weekly(db: Session = Depends(get_db)):
         ORDER BY week_label
     """)
     result = db.execute(sql).fetchall()
-    return {"series": [r[1] for r in result], "data": [r[0] for r in result]}
+
+    return [{"metric": row.week_label, "value": row.count} for row in result]
 
 
 #  SMS Monthly (Raw SQL with structured output)
-@router.get("/sms-monthly")
+@router.get("/sms-monthly", response_model=list[MetricValue])
 def sms_monthly(db: Session = Depends(get_db)):
     sql = text("""
-        SELECT strftime('%Y-%m', created_at) AS month_label, COUNT(*) AS count
+        SELECT
+            strftime('%Y', created_at) AS year,
+            strftime('%m', created_at) AS month,
+            COUNT(*) AS count
         FROM sms_message
-        GROUP BY month_label
-        ORDER BY month_label
+        GROUP BY year, month
+        ORDER BY year, month
     """)
     result = db.execute(sql).fetchall()
-    return {"series": [r[1] for r in result], "data": [r[0] for r in result]}
+
+    return [
+        {
+            "metric": f"{calendar.month_abbr[int(row.month)]} {row.year}",
+            "value": row.count,
+        }
+        for row in result
+    ]
 
 
-@router.get("/sms-monthly/individual-alert")
+@router.get("/sms-monthly/individual-alert", response_model=list[MetricValue])
 def sms_monthly_individual_alert(db: Session = Depends(get_db)):
     return get_sms_monthly_by_type(db, "individual alert")
 
@@ -342,6 +396,6 @@ def sms_monthly_individual_alert(db: Session = Depends(get_db)):
 #     return get_sms_monthly_by_type(db, "bulk alert")
 
 
-@router.get("/sms-monthly/additional-info")
+@router.get("/sms-monthly/additional-info", response_model=list[MetricValue])
 def sms_monthly_additional_info(db: Session = Depends(get_db)):
     return get_sms_monthly_by_type(db, "additional info")
