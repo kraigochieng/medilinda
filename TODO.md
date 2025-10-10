@@ -1,18 +1,15 @@
 # To Do
 
--   [ ] deploy server
-
-    -   [ ] docker file creation[for server
-
 -   [ ] add self ping function to fastapi lifespan
 -   [ ] update all readmes
 -   [ ] add tests
     -   to be done after deploying the application
+-   [ ] add a tooltip to suggest the user for one to use
 
 # In Progress
 
--   [ ] use uploaded models in server
 -   [ ] replace shadcn with nuxt ui bit by bit
+    -   specify steps
 
 # Done
 
@@ -29,3 +26,6 @@
     -   [x] find a way to recreate the shap values functions
 -   [x] remove db inserting logicfrom lifespan
     -   make it simple functions
+-   [x] use uploaded models in server
+-   [x] deploy server
+    -   [x] docker file creation for server
