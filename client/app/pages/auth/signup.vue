@@ -76,14 +76,14 @@ import type { UserDetails } from "@/types/user";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { z } from "zod";
 
-export const signupValidationSchema = z.object({
+const signupValidationSchema = z.object({
 	username: z.string(),
 	firstName: z.string(),
 	lastName: z.string(),
 	password: z.string(),
 });
 
-export type signupTypeValidationSchema = z.infer<typeof signupValidationSchema>;
+type signupTypeValidationSchema = z.infer<typeof signupValidationSchema>;
 
 const signupFormState = reactive<Partial<signupTypeValidationSchema>>({
 	username: undefined,
