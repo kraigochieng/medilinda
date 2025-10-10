@@ -24,8 +24,7 @@ FROM base AS runtime
 # Copy the installed libraries from the previous stage.
 COPY --from=dependencies /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 
-# ❌ REMOVED THIS LINE - IT CAUSED THE ERROR
-# COPY --from=dependencies /root/.local/bin /root/.local/bin
+COPY --from=dependencies /usr/local/bin /usr/local/bin
 
 # Copy your application's source code.
 COPY ./src ./src
