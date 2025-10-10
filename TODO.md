@@ -1,7 +1,7 @@
 # To Do
 
 -   [ ] add self ping function to fastapi lifespan
--   [ ] update all readmes
+
 -   [ ] add tests
     -   to be done after deploying the application
 -   [ ] add a tooltip to suggest the user for one to use
@@ -29,3 +29,4 @@
 -   [x] use uploaded models in server
 -   [x] deploy server
     -   [x] docker file creation for server
+-   [x] update all readmes
