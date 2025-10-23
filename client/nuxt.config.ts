@@ -7,7 +7,8 @@ export default defineNuxtConfig({
 	css: ["~/assets/css/main.css"],
 	runtimeConfig: {
 		public: {
-			serverApi: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:8000",
+			serverApi:
+				process.env.NUXT_PUBLIC_API_BASE || "http://localhost:8000",
 		},
 	},
 	app: {
@@ -17,6 +18,7 @@ export default defineNuxtConfig({
 			],
 		},
 	},
+
 	// plugins: ["~/plugins/apexcharts.client.ts"],
 	modules: [
 		"@nuxtjs/google-fonts",
@@ -26,7 +28,7 @@ export default defineNuxtConfig({
 		"@pinia/nuxt",
 		"@vueuse/nuxt",
 		"@nuxt/ui",
-		"nuxt-charts"
+		"nuxt-charts",
 	],
 	/**
 	 * Module Configs
@@ -40,6 +42,9 @@ export default defineNuxtConfig({
 	security: {
 		headers: {
 			crossOriginResourcePolicy: "cross-origin",
+			contentSecurityPolicy: {
+				"frame-ancestors": ["*"],
+			},
 		},
 	},
 	vite: {
