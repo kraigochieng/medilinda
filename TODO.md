@@ -3,13 +3,17 @@
 -   [ ] add self ping function to fastapi lifespan
 
 -   [ ] add tests
+    -   watch arjan or someone else to start off
     -   to be done after deploying the application
+    -   use pytest for api and db tests
+    -   use cursor or copilot
 -   [ ] add a tooltip to suggest the user for one to use
 
 # In Progress
 
 -   [ ] replace shadcn with nuxt ui bit by bit
     -   specify steps
+-   [ ] play with shap in a notebook
 
 # Done
 
