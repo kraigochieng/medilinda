@@ -1,10 +1,7 @@
-from typing import Annotated
-
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from fastapi_pagination import Page, paginate
-from sqlalchemy import desc
+from fastapi_pagination import Page
 from sqlalchemy.orm import Session
 
 from server.basemodels.medical_institution import (
@@ -14,141 +11,79 @@ from server.basemodels.medical_institution import (
 )
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
-from server.models.medical_institution import (
-    MedicalInstitutionModel,
-    MedicalInstitutionTelephoneModel,
-)
 from server.services.auth import get_current_active_user
+from server.services.medical_institution import MedicalInstitutionService
+
+
+def get_medical_institution_service(db: Session = Depends(get_db)):
+    return MedicalInstitutionService(db)
+
 
 router = APIRouter(
     prefix="/api/v1/medical-institutions", tags=["medical-institutions", "v1"]
 )
 
 
-@router.get(
-    "/",
-    response_model=Page[MedicalInstitutionGetResponse],
-)
-async def get_medical_institution(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
+@router.get("/", response_model=Page[MedicalInstitutionGetResponse])
+async def get_medical_institutions(
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     query: str = Query("", description="Search query(optional)"),
-    db: Session = Depends(get_db),
+    service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    if query:
-        content = (
-            db.query(MedicalInstitutionModel)
-            .filter(
-                MedicalInstitutionModel.name.ilike(f"%{query}%")
-                | MedicalInstitutionModel.county.ilike(f"%{query}%")
-                | MedicalInstitutionModel.sub_county.ilike(f"%{query}%")
-            )
-            .order_by(desc(MedicalInstitutionModel.created_at))
-        )
-    else:
-        content = db.query(MedicalInstitutionModel).order_by(
-            desc(MedicalInstitutionModel.created_at)
-        )
-
-    return paginate(content)
+    return service.get_medical_institutions(query)
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def post_medical_institution(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    institution: MedicalInstitutionPostRequest,
-    db: Session = Depends(get_db),
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    institution: MedicalInstitutionPostRequest = None,
+    service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    new_institution = MedicalInstitutionModel(**institution.model_dump())
-
-    db.add(new_institution)
-    db.commit()
-    db.refresh(new_institution)
-
+    new_institution = service.create_medical_institution(institution)
     return JSONResponse(
-        content=jsonable_encoder(new_institution),
-        status_code=status.HTTP_201_CREATED,
+        content=jsonable_encoder(new_institution), status_code=status.HTTP_201_CREATED
     )
 
 
 @router.get("/{institution_id}", status_code=status.HTTP_200_OK)
 async def get_medical_institution_by_id(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    institution_id: str = Path(..., description="ID of Medical Institution to delete"),
-    query: str = Query("", description="Search query(optional)"),
-    db: Session = Depends(get_db),
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    institution_id: str = Path(..., description="ID of Medical Institution"),
+    service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    db_institution = (
-        db.query(MedicalInstitutionModel)
-        .filter(MedicalInstitutionModel.id == institution_id)
-        .first()
-    )
-
-    if not db_institution:
+    institution = service.get_medical_institution_by_id(institution_id)
+    if not institution:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Medical Institution not found",
         )
-
     return JSONResponse(
-        content=jsonable_encoder(db_institution), status_code=status.HTTP_200_OK
+        content=jsonable_encoder(institution), status_code=status.HTTP_200_OK
     )
 
 
 @router.put("/{institution_id}", status_code=status.HTTP_200_OK)
 async def update_medical_institution(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    institution: MedicalInstitutionGetResponse,
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    institution: MedicalInstitutionPostRequest = None,
     institution_id: str = Path(..., description="ID of Medical Institution to update"),
-    db: Session = Depends(get_db),
+    service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    db_institution = (
-        db.query(MedicalInstitutionModel)
-        .filter(MedicalInstitutionModel.id == institution_id)
-        .first()
+    updated_institution = service.update_medical_institution(
+        institution, institution_id
     )
-
-    if not db_institution:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Medical Institution not found",
-        )
-
-    for key, value in institution.model_dump().items():
-        setattr(db_institution, key, value)
-
-    db.commit()
-    db.refresh(db_institution)
-
     return JSONResponse(
-        content=jsonable_encoder(db_institution),
-        status_code=status.HTTP_200_OK,
+        content=jsonable_encoder(updated_institution), status_code=status.HTTP_200_OK
     )
 
 
-@router.delete(
-    "/{institution_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-)
+@router.delete("/{institution_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_medical_institution(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     institution_id: str = Path(..., description="ID of Medical Institution to delete"),
-    db: Session = Depends(get_db),
+    service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    db_institution = (
-        db.query(MedicalInstitutionModel)
-        .filter(MedicalInstitutionModel.id == institution_id)
-        .first()
-    )
-
-    if not db_institution:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Medical Institution not found",
-        )
-
-    db.delete(db_institution)
-    db.commit()
-
+    service.delete_medical_institution(institution_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
@@ -157,26 +92,8 @@ async def delete_medical_institution(
     response_model=Page[MedicalInstitutionTelephoneGetResponse],
 )
 async def get_telephones_for_medical_institution(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     institution_id: str = Path(..., description="ID of the Medical Institution"),
-    db: Session = Depends(get_db),
+    service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    # Check if the medical institution exists first (optional but good)
-    institution = (
-        db.query(MedicalInstitutionModel)
-        .filter(MedicalInstitutionModel.id == institution_id)
-        .first()
-    )
-
-    if not institution:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Medical Institution not found",
-        )
-
-    # Query all telephone numbers for the given institution
-    telephones = db.query(MedicalInstitutionTelephoneModel).filter(
-        MedicalInstitutionTelephoneModel.medical_institution_id == institution_id
-    )
-
-    return paginate(telephones)
+    return service.get_telephones_for_medical_institution(institution_id)
