@@ -1,128 +1,94 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Path, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from fastapi_pagination import Page
-from fastapi_pagination.ext.sqlalchemy import paginate
-from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
 from server.basemodels.medical_institution import (
-    MedicalInstitutionGetResponse,
-    MedicalInstitutionPostRequest,
     MedicalInstitutionTelephoneGetResponse,
     MedicalInstitutionTelephonePostRequest,
     MultipleMedicalInstitutionTelephonePostRequest,
 )
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
-from server.models.medical_institution import (
-    MedicalInstitutionModel,
-    MedicalInstitutionTelephoneModel,
-)
 from server.services.auth import get_current_active_user
+from server.services.telephone import TelephoneService
 
-router = APIRouter(prefix="/api/v1/telephones", tags=["medical-institutions-telephones", "v1"])
+router = APIRouter(prefix="/api/v1/telephones", tags=["telephones", "v1"])
+
+
+def get_telephone_service(db: Session = Depends(get_db)):
+    return TelephoneService(db)
 
 
 @router.get(
     "/",
     response_model=Page[MedicalInstitutionTelephoneGetResponse],
+    status_code=status.HTTP_200_OK,
 )
-async def get_medical_institution_telephones(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    db: Session = Depends(get_db),
+async def get_telephones(
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    service: TelephoneService = Depends(get_telephone_service),
 ):
-    content = db.query(MedicalInstitutionTelephoneModel).order_by(
-        desc(MedicalInstitutionTelephoneModel.created_at)
-    )
-    return paginate(content)
+    return service.get_telephones()
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-async def create_medical_institution_telephone(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    data: MultipleMedicalInstitutionTelephonePostRequest,
-    db: Session = Depends(get_db),
+async def create_telephone(
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    data: MultipleMedicalInstitutionTelephonePostRequest = None,
+    service: TelephoneService = Depends(get_telephone_service),
 ):
-    # Create a list of MedicalInstitutionTelephoneModel instances
-    new_telephones = [
-        MedicalInstitutionTelephoneModel(
-            medical_institution_id=telephone.medical_institution_id,
-            telephone=telephone.telephone,
-        )
-        for telephone in data.telephones
-    ]
-
-    db.add_all(new_telephones)  # Add all telephones to the session
-    db.commit()  # Commit the changes
-
-    for telephone in new_telephones:
-        db.refresh(telephone)
-
+    created = [service.create_telephone(t) for t in data.telephones]
     return JSONResponse(
-        content=jsonable_encoder(new_telephones),
-        status_code=status.HTTP_201_CREATED,
+        content=jsonable_encoder(created), status_code=status.HTTP_201_CREATED
     )
 
 
-@router.put(
+@router.get(
     "/{telephone_id}",
+    response_model=MedicalInstitutionTelephoneGetResponse,
     status_code=status.HTTP_200_OK,
 )
-async def update_medical_institution_telephone(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    telephone_update: MedicalInstitutionTelephonePostRequest,
+async def get_telephone_by_id(
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    telephone_id: str = Path(..., description="ID of Telephone record to get"),
+    service: TelephoneService = Depends(get_telephone_service),
+):
+    telephone = service.get_telephone_by_id(telephone_id)
+    if not telephone:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Telephone record not found"
+        )
+    return telephone
+
+
+@router.put("/{telephone_id}", status_code=status.HTTP_200_OK)
+async def update_telephone(
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    telephone_update: MedicalInstitutionTelephonePostRequest = None,
     telephone_id: str = Path(..., description="ID of Telephone record to update"),
-    db: Session = Depends(get_db),
+    service: TelephoneService = Depends(get_telephone_service),
 ):
-    db_telephone = (
-        db.query(MedicalInstitutionTelephoneModel)
-        .filter(MedicalInstitutionTelephoneModel.id == telephone_id)
-        .first()
-    )
-
-    if not db_telephone:
+    updated = service.update_telephone(telephone_id, telephone_update)
+    if not updated:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Telephone record not found",
+            status_code=status.HTTP_404_NOT_FOUND, detail="Telephone record not found"
         )
-
-    for key, value in telephone_update.model_dump().items():
-        setattr(db_telephone, key, value)
-
-    db.commit()
-    db.refresh(db_telephone)
-
     return JSONResponse(
-        content=jsonable_encoder(db_telephone),
-        status_code=status.HTTP_200_OK,
+        content=jsonable_encoder(updated), status_code=status.HTTP_200_OK
     )
 
 
-@router.delete(
-    "/{telephone_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-)
-async def delete_medical_institution_telephone(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
+@router.delete("/{telephone_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_telephone(
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     telephone_id: str = Path(..., description="ID of Telephone record to delete"),
-    db: Session = Depends(get_db),
+    service: TelephoneService = Depends(get_telephone_service),
 ):
-    db_telephone = (
-        db.query(MedicalInstitutionTelephoneModel)
-        .filter(MedicalInstitutionTelephoneModel.id == telephone_id)
-        .first()
-    )
-
-    if not db_telephone:
+    deleted = service.delete_telephone(telephone_id)
+    if not deleted:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Telephone record not found",
+            status_code=status.HTTP_404_NOT_FOUND, detail="Telephone record not found"
         )
-
-    db.delete(db_telephone)
-    db.commit()
-
     return Response(status_code=status.HTTP_204_NO_CONTENT)
