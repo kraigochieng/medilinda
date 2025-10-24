@@ -1,107 +1,72 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Path, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from fastapi_pagination import Page
-from fastapi_pagination.ext.sqlalchemy import paginate
-from sqlalchemy import desc
 from sqlalchemy.orm import Session
-
-from server.basemodels.review import ADRReviewCreateRequest, ReviewGetResponse
+from server.basemodels.review import ADRReviewCreateRequest, ADRReviewGetResponse, ReviewGetResponse
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
-from server.models.review import ReviewModel
-from server.models.user import UserModel
 from server.services.auth import get_current_active_user
+from server.services.review import ReviewService
+from fastapi_pagination import Page
 
 router = APIRouter(prefix="/api/v1/reviews", tags=["reviews", "v1"])
 
 
+def get_review_service(db: Session = Depends(get_db)):
+    return ReviewService(db)
+
+
 @router.get(
-    "/",
-    response_model=Page[ReviewGetResponse],
-    status_code=status.HTTP_200_OK,
+    "/", response_model=Page[ReviewGetResponse], status_code=status.HTTP_200_OK
 )
 async def get_reviews(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    query: str = Query("", description="Search query(optional)"),
-    db: Session = Depends(get_db),
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    service: ReviewService = Depends(get_review_service),
 ):
-    if query:
-        content = db.query(ReviewModel).order_by(desc(ReviewModel.created_at))
-    else:
-        content = db.query(ReviewModel).order_by(desc(ReviewModel.created_at))
-
-    return paginate(content)
+    return service.get_reviews()
 
 
-@router.get(
-    "/{review_id}",
-    response_model=Page[ReviewGetResponse],
-    status_code=status.HTTP_200_OK,
-)
-async def get_reviews_by_id(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
+@router.get("/{review_id}", status_code=status.HTTP_200_OK)
+async def get_review_by_id(
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     review_id: str = Path(..., description="Review ID"),
-    db: Session = Depends(get_db),
+    service: ReviewService = Depends(get_review_service),
 ):
-    review = db.query(ReviewModel).filter(ReviewModel.id == review_id).first()
-
+    review = service.get_review_by_id(review_id)
     if not review:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Review not found"
         )
-    content = jsonable_encoder(review)
-
-    return JSONResponse(content=content, status_code=status.HTTP_200_OK)
+    return JSONResponse(
+        content=jsonable_encoder(review), status_code=status.HTTP_200_OK
+    )
 
 
 @router.put("/{review_id}", status_code=status.HTTP_200_OK)
 async def update_review_by_id(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    review_update: ADRReviewCreateRequest,
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    review_update: ADRReviewCreateRequest = None,
     review_id: str = Path(..., description="ID of review to update"),
-    db: Session = Depends(get_db),
+    service: ReviewService = Depends(get_review_service),
 ):
-    # Step 1: Get the existing review
-    review = db.query(ReviewModel).filter(ReviewModel.id == review_id).first()
-
-    if not review:
+    updated_review = service.update_review(review_id, review_update)
+    if not updated_review:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Review not found",
+            status_code=status.HTTP_404_NOT_FOUND, detail="Review not found"
         )
-
-    # Step 2: Update the fields
-    for key, value in review_update.model_dump().items():
-        setattr(review, key, value)
-
-    db.commit()
-    db.refresh(review)
-
     return JSONResponse(
-        content=jsonable_encoder(review),
-        status_code=status.HTTP_200_OK,
+        content=jsonable_encoder(updated_review), status_code=status.HTTP_200_OK
     )
 
 
-@router.delete(
-    "/{review_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-)
-def delete_review_by_id(
+@router.delete("/{review_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_review_by_id(
     review_id: str = Path(..., description="ID of review to delete"),
-    db: Session = Depends(get_db),
+    service: ReviewService = Depends(get_review_service),
 ):
-    review = db.query(ReviewModel).filter(ReviewModel.id == review_id).first()
-
-    if not review:
+    deleted = service.delete_review(review_id)
+    if not deleted:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Review record not found"
         )
-
-    db.delete(review)
-    db.commit()
-
     return Response(status_code=status.HTTP_204_NO_CONTENT)
