@@ -43,7 +43,7 @@ from server.models.causality_assessment_level import (
     CausalityAssessmentLevelModel,
 )
 from server.models.user import UserModel
-from server.services.auth import get_current_active_user
+from server.utils.auth import get_current_active_user
 
 router = APIRouter(prefix="/api/v1/adrs", tags=["adrs", "v1"])
 

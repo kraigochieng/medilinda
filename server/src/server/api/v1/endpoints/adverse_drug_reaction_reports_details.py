@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
-from server.services.auth import get_current_active_user
+from server.utils.auth import get_current_active_user
 
 router = APIRouter(prefix="/api/v1/adrs-details", tags=["adr-details", "v1"])
 

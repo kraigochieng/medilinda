@@ -24,7 +24,7 @@ from server.models.medical_institution import (
     MedicalInstitutionTelephoneModel,
 )
 from server.models.sms import SMSMessageModel
-from server.services.auth import get_current_active_user
+from server.utils.auth import get_current_active_user
 
 router = APIRouter(prefix="/api/v1/sms-messages", tags=["sms-messages", "v1"])
 

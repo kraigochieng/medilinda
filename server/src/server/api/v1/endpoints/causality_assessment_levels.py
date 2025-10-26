@@ -13,7 +13,7 @@ from server.basemodels.causality_asssessment_level import (
 )
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
-from server.services.auth import get_current_active_user
+from server.utils.auth import get_current_active_user
 from server.services.causality_assessment_level import CausalityAssessmentLevelService
 
 router = APIRouter(

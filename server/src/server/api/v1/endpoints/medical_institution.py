@@ -11,7 +11,7 @@ from server.basemodels.medical_institution import (
 )
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
-from server.services.auth import get_current_active_user
+from server.utils.auth import get_current_active_user
 from server.services.medical_institution import MedicalInstitutionService
 
 

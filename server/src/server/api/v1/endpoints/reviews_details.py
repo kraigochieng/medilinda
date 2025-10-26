@@ -7,7 +7,7 @@ from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
 from server.models.review import ReviewModel
 from server.models.user import UserModel
-from server.services.auth import get_current_active_user
+from server.utils.auth import get_current_active_user
 
 router = APIRouter(prefix="/api/v1/reviews-details", tags=["reviews-details", "v1"])
 

@@ -13,7 +13,7 @@ from server.dependencies import get_db
 from server.models.causality_assessment_level import CausalityAssessmentLevelModel
 from server.models.review import ReviewModel
 from server.models.user import UserModel
-from server.services.auth import get_current_active_user
+from server.utils.auth import get_current_active_user
 
 router = APIRouter(
     prefix="/api/v1/causality-assessment-levels-details",
@@ -49,6 +49,3 @@ async def get_review_for_specific_user_and_causality_assessment_level(
         raise HTTPException(status_code=404, detail="Review not found")
 
     return review
-
-
-
