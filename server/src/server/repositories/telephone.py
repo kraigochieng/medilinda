@@ -1,4 +1,4 @@
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
 from server.basemodels.medical_institution import MedicalInstitutionTelephonePostRequest
 from server.models.medical_institution import MedicalInstitutionTelephoneModel
@@ -12,7 +12,7 @@ class TelephoneRepository:
 
     def get_all(self) -> Page[MedicalInstitutionTelephoneModel]:
         stmt = select(MedicalInstitutionTelephoneModel)
-        return paginate(self.db, stmt)
+        return paginate(self.db, stmt, params=Params(page=1, size=50))
 
     def get_by_id(self, telephone_id: str) -> MedicalInstitutionTelephoneModel | None:
         stmt = select(MedicalInstitutionTelephoneModel).where(

@@ -1,5 +1,5 @@
 from fastapi import HTTPException, status
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
 from server.basemodels.medical_institution import (
     MedicalInstitutionPostRequest,
@@ -34,7 +34,7 @@ class MedicalInstitutionRepository:
                 desc(MedicalInstitutionModel.created_at)
             )
 
-        return paginate(self.db, stmt)
+        return paginate(self.db, stmt, params=Params(page=1, size=50))
 
     def create(
         self, institution_data: MedicalInstitutionPostRequest
@@ -96,4 +96,4 @@ class MedicalInstitutionRepository:
             MedicalInstitutionTelephoneModel.medical_institution_id == institution_id
         )
 
-        return paginate(self.db, stmt)
+        return paginate(self.db, stmt, params=Params(page=1, size=50))
