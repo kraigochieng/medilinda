@@ -6,6 +6,8 @@ from fastapi_pagination import add_pagination
 from server.db.base import Base
 from server.dependencies import get_db
 from server.main import app
+from server.models.user import UserModel
+from server.repositories.review import ReviewRepository
 from server.services.auth import get_current_active_user
 
 from tests.db import TestSessionLocal, test_engine
@@ -36,17 +38,34 @@ def client(db):
         finally:
             db.close()
 
-    # Override dependencies
     app.dependency_overrides[get_db] = override_get_db
     app.dependency_overrides[get_current_active_user] = override_get_current_active_user
 
-    # Clear lifespan
     app.router.lifespan_context = no_lifespan
-
-    # Add pagination
     add_pagination(app)
 
     with TestClient(app) as c:
         yield c
 
     app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def review_repository(db):
+    return ReviewRepository(db)
+
+
+@pytest.fixture
+def test_user(db):
+    user = UserModel(
+        id="user-1",
+        username="testuser",
+        password="testuser",
+        first_name="Test",
+        last_name="User",
+        disabled=False,
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
