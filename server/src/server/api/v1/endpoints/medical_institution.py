@@ -7,12 +7,11 @@ from sqlalchemy.orm import Session
 from server.basemodels.medical_institution import (
     MedicalInstitutionGetResponse,
     MedicalInstitutionPostRequest,
-    MedicalInstitutionTelephoneGetResponse,
 )
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
-from server.utils.auth import get_current_active_user
 from server.services.medical_institution import MedicalInstitutionService
+from server.utils.auth import get_current_active_user
 
 
 def get_medical_institution_service(db: Session = Depends(get_db)):
@@ -45,13 +44,13 @@ async def post_medical_institution(
     )
 
 
-@router.get("/{institution_id}", status_code=status.HTTP_200_OK)
+@router.get("/{id}", status_code=status.HTTP_200_OK)
 async def get_medical_institution_by_id(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
-    institution_id: str = Path(..., description="ID of Medical Institution"),
+    id: str = Path(..., description="ID of Medical Institution"),
     service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    institution = service.get_medical_institution_by_id(institution_id)
+    institution = service.get_medical_institution_by_id(id)
     if not institution:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -62,38 +61,26 @@ async def get_medical_institution_by_id(
     )
 
 
-@router.put("/{institution_id}", status_code=status.HTTP_200_OK)
+@router.put("/{id}", status_code=status.HTTP_200_OK)
 async def update_medical_institution(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     institution: MedicalInstitutionPostRequest = None,
-    institution_id: str = Path(..., description="ID of Medical Institution to update"),
+    id: str = Path(..., description="ID of Medical Institution to update"),
     service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
     updated_institution = service.update_medical_institution(
-        institution, institution_id
+        institution, id
     )
     return JSONResponse(
         content=jsonable_encoder(updated_institution), status_code=status.HTTP_200_OK
     )
 
 
-@router.delete("/{institution_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_medical_institution(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
-    institution_id: str = Path(..., description="ID of Medical Institution to delete"),
+    id: str = Path(..., description="ID of Medical Institution to delete"),
     service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    service.delete_medical_institution(institution_id)
+    service.delete_medical_institution(id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-
-@router.get(
-    "/{institution_id}/telephone",
-    response_model=Page[MedicalInstitutionTelephoneGetResponse],
-)
-async def get_telephones_for_medical_institution(
-    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
-    institution_id: str = Path(..., description="ID of the Medical Institution"),
-    service: MedicalInstitutionService = Depends(get_medical_institution_service),
-):
-    return service.get_telephones_for_medical_institution(institution_id)

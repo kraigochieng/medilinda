@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Path, status
+from fastapi import APIRouter, Depends, HTTPException, Path, status, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from fastapi_pagination import Page
@@ -28,9 +28,12 @@ def get_telephone_service(db: Session = Depends(get_db)):
 )
 async def get_telephones(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    medical_institution_id: str | None = Query(
+        None, dsecriprion="medical institution id"
+    ),
     service: TelephoneService = Depends(get_telephone_service),
 ):
-    return service.get_telephones()
+    return service.get_telephones(medical_institution_id=medical_institution_id)
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
@@ -50,16 +53,16 @@ async def create_telephone(
 
 
 @router.get(
-    "/{telephone_id}",
+    "/{id}",
     response_model=MedicalInstitutionTelephoneGetResponse,
     status_code=status.HTTP_200_OK,
 )
 async def get_telephone_by_id(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
-    telephone_id: str = Path(..., description="ID of Telephone record to get"),
+    id: str = Path(..., description="ID of Telephone record to get"),
     service: TelephoneService = Depends(get_telephone_service),
 ):
-    telephone = service.get_telephone_by_id(telephone_id)
+    telephone = service.get_telephone_by_id(id)
     if not telephone:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Telephone record not found"
@@ -67,14 +70,14 @@ async def get_telephone_by_id(
     return telephone
 
 
-@router.put("/{telephone_id}", status_code=status.HTTP_200_OK)
+@router.put("/{id}", status_code=status.HTTP_200_OK)
 async def update_telephone(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     telephone_update: MedicalInstitutionTelephonePostRequest = None,
-    telephone_id: str = Path(..., description="ID of Telephone record to update"),
+    id: str = Path(..., description="ID of Telephone record to update"),
     service: TelephoneService = Depends(get_telephone_service),
 ):
-    updated = service.update_telephone(telephone_id, telephone_update)
+    updated = service.update_telephone(id, telephone_update)
     if not updated:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Telephone record not found"
@@ -84,13 +87,13 @@ async def update_telephone(
     )
 
 
-@router.delete("/{telephone_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_telephone(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
-    telephone_id: str = Path(..., description="ID of Telephone record to delete"),
+    id: str = Path(..., description="ID of Telephone record to delete"),
     service: TelephoneService = Depends(get_telephone_service),
 ):
-    deleted = service.delete_telephone(telephone_id)
+    deleted = service.delete_telephone(id)
     if not deleted:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Telephone record not found"

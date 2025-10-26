@@ -43,31 +43,29 @@ from server.models.causality_assessment_level import (
     CausalityAssessmentLevelModel,
 )
 from server.models.user import UserModel
+from server.services.adverse_drug_reaction_report import (
+    AdverseDrugReactionReportService,
+)
 from server.utils.auth import get_current_active_user
 
 router = APIRouter(prefix="/api/v1/adrs", tags=["adrs", "v1"])
+
+
+def get_adverse_drug_reaction_report_service(db: Session = Depends(get_db)):
+    return AdverseDrugReactionReportService(db)
 
 
 @router.get("/", response_model=Page[ADRGetResponse], status_code=status.HTTP_200_OK)
 def get_adrs(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     query: str = Query("", description="Search query(optional)"),
-    db: Session = Depends(get_db),
+    service: AdverseDrugReactionReportService = Depends(
+        get_adverse_drug_reaction_report_service
+    ),
 ):
-    if query:
-        content = db.query(ADRModel).filter(
-            ADRModel.patient_name.ilike(f"%{query}%")
-            | ADRModel.patient_address.ilike(f"%{query}%")
-            | ADRModel.inpatient_or_outpatient_number.ilike(f"%{query}%")
-            | ADRModel.ward_or_clinic.ilike(f"%{query}%")
-        )
+    content = service.get(query=query)
 
-    else:
-        content = db.query(ADRModel)
-
-    content = content.order_by(desc(ADRModel.created_at))
-
-    return paginate(content)
+    return JSONResponse(jsonable_encoder(content), status_code=status.HTTP_200_OK)
 
 
 # @router.post("/", status_code=status.HTTP_201_CREATED)
@@ -193,18 +191,21 @@ def get_adrs(
 #     )
 
 
-@router.get("/{adr_id}", status_code=status.HTTP_200_OK)
+@router.get("/{id}", status_code=status.HTTP_200_OK)
 def get_adr_by_id(
-    adr_id: str = Path(..., description="ID of ADR to read"),
-    db: Session = Depends(get_db),
+    id: str = Path(..., description="ID of ADR to read"),
+    service: AdverseDrugReactionReportService = Depends(
+        get_adverse_drug_reaction_report_service
+    ),
 ):
-    adr = db.query(ADRModel).filter(ADRModel.id == adr_id).first()
+    content = service.get_by_id(id)
 
-    if not adr:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="ADR record not found"
-        )
-    return JSONResponse(content=jsonable_encoder(adr), status_code=status.HTTP_200_OK)
+    if not content:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
+    )
 
 
 # @router.put("/{adr_id}", status_code=status.HTTP_200_OK)
@@ -344,81 +345,16 @@ def get_adr_by_id(
 #     )
 
 
-@router.delete("/{adr_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_adr_by_id(
-    adr_id: str = Path(..., description="ID of ADR to delete"),
-    db: Session = Depends(get_db),
+    id: str = Path(..., description="ID of ADR to delete"),
+    service: AdverseDrugReactionReportService = Depends(
+        get_adverse_drug_reaction_report_service
+    ),
 ):
-    adr = db.query(ADRModel).filter(ADRModel.id == adr_id).first()
+    deleted = service.delete_by_id(id)
 
-    if not adr:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="ADR record not found"
-        )
-
-    db.delete(adr)
-    db.commit()
+    if deleted:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-
-@router.get(
-    "/{adr_id}/causality-assessment-levels",
-    response_model=Page[CausalityAssessmentLevelGetResponse],
-    status_code=status.HTTP_200_OK,
-)
-def get_causality_assessment_levels_for_adr(
-    adr_id: str = Path(..., description="ID of ADR to read"),
-    db: Session = Depends(get_db),
-):
-    adr = db.query(ADRModel).filter(ADRModel.id == adr_id).first()
-
-    if not adr:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="ADR record not found"
-        )
-
-    content = (
-        db.query(CausalityAssessmentLevelModel)
-        .filter(CausalityAssessmentLevelModel.adr_id == adr_id)
-        .order_by(desc(CausalityAssessmentLevelModel.created_at))
-    )
-
-    return paginate(content)
-
-
-@router.get(
-    "/{adr_id}/causality-assessment-level",
-    status_code=status.HTTP_200_OK,
-)
-async def get_latest_causality_assessment_level_by_adr_id(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    adr_id: str = Path(..., description="ID of Causality Assessment to read"),
-    db: Session = Depends(get_db),
-):
-    causality_assessment_level = (
-        db.query(CausalityAssessmentLevelModel)
-        .filter(CausalityAssessmentLevelModel.adr_id == adr_id)
-        .first()
-    )
-
-    if not causality_assessment_level:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Causality Assessment Level record not found",
-        )
-
-    approved_count = sum(1 for r in causality_assessment_level.reviews if r.approved)
-    not_approved_count = sum(
-        1 for r in causality_assessment_level.reviews if not r.approved
-    )
-
-    content = {
-        **jsonable_encoder(causality_assessment_level),
-        "approved_count": approved_count,
-        "not_approved_count": not_approved_count,
-    }
-    return JSONResponse(
-        content=content,
-        status_code=status.HTTP_200_OK,
-    )

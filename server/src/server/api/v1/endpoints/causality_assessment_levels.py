@@ -3,18 +3,17 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
+from fastapi_pagination import Page
 from sqlalchemy.orm import Session
 
 from server.basemodels.causality_asssessment_level import (
-    CausalityAssessmentLevelEnum,
     CausalityAssessmentLevelGetResponse,
     CausalityAssessmentLevelPostRequest,
-    UnclassifiablePostRequest,
 )
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
-from server.utils.auth import get_current_active_user
 from server.services.causality_assessment_level import CausalityAssessmentLevelService
+from server.utils.auth import get_current_active_user
 
 router = APIRouter(
     prefix="/api/v1/causality-assessment-levels",
@@ -24,6 +23,26 @@ router = APIRouter(
 
 def get_causality_assessment_level_service(db: Session = Depends(get_db)):
     return CausalityAssessmentLevelService(db)
+
+
+@router.get(
+    "/",
+    status_code=status.HTTP_200_OK,
+    response_model=Page[CausalityAssessmentLevelGetResponse],
+)
+async def get_causality_assessment_levels(
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
+    adr_id: str | None = Query(None, description="ID of Causality Assessment to read"),
+    service: CausalityAssessmentLevelService = Depends(
+        get_causality_assessment_level_service
+    ),
+):
+    content = service.get_causality_assessment_levels(adr_id=adr_id)
+
+    return JSONResponse(
+        content=jsonable_encoder(content),
+        status_code=status.HTTP_200_OK,
+    )
 
 
 @router.get(
