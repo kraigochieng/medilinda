@@ -11,6 +11,12 @@
 
 # In Progress
 
+-   [ ] how to write tests for api, service, repository layers
+-   [ ] when to use fixtures and pytest-mock
+-   [ ] add payloads to the conftest
+-   [ ] assert json as a whole, not properties individually
+-   [ ] write appropriate tests for my controller repo and service layer first for my existing ones
+-   [ ] migrate all endpoints to repo and service pattern
 -   [ ] replace shadcn with nuxt ui bit by bit
     -   specify steps
 -   [ ] play with shap in a notebook
