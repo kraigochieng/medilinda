@@ -7,31 +7,21 @@ from sqlalchemy.orm import Session
 
 
 class SMSMessageRepository:
-    """Handles all direct DB operations related to SMS messages."""
-
     def __init__(self, db: Session):
         self.db = db
 
-    def get_all(self) -> Page[SMSMessageModel]:
-        stmt = select(SMSMessageModel).order_by(desc(SMSMessageModel.created_at))
+    def get_all(
+        self, sms_type: SMSMessageTypeEnum | None = None, adr_id: str | None = None
+    ) -> Page[SMSMessageModel]:
+        stmt = select(SMSMessageModel)
 
-        return paginate(self.db, stmt, params=Params(page=1, size=50))
+        if sms_type:
+            stmt = stmt.filter(SMSMessageModel.sms_type == sms_type)
 
-    def get_by_type(self, sms_type: SMSMessageTypeEnum) -> Page[SMSMessageModel]:
-        stmt = (
-            select(SMSMessageModel)
-            .where(SMSMessageModel.sms_type == sms_type)
-            .order_by(desc(SMSMessageModel.created_at))
-        )
+        if adr_id:
+            stmt = stmt.filter(SMSMessageModel.adr_id == adr_id)
 
-        return paginate(self.db, stmt, params=Params(page=1, size=50))
-
-    def get_by_adr_id(self, adr_id: str) -> Page[SMSMessageModel]:
-        stmt = (
-            select(SMSMessageModel)
-            .where(SMSMessageModel.adr_id == adr_id)
-            .order_by(desc(SMSMessageModel.created_at))
-        )
+        stmt = stmt.order_by(desc(SMSMessageModel.created_at))
 
         return paginate(self.db, stmt, params=Params(page=1, size=50))
 
