@@ -13,10 +13,10 @@ class ReviewService:
         self.repository = ReviewRepository(db)
 
     def get_reviews(
-        self, causality_assessment_level_id: str | None
+        self, causality_assessment_level_id: str | None, user_id: str | None
     ) -> Page[ReviewGetResponse]:
         return self.repository.get_all(
-            causality_assessment_level_id=causality_assessment_level_id
+            causality_assessment_level_id=causality_assessment_level_id, user_id=user_id
         )
 
     def get_review_by_id(self, review_id: str) -> ReviewGetResponse:

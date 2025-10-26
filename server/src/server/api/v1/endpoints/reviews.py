@@ -26,10 +26,11 @@ async def get_reviews(
     causality_assessment_level_id: str | None = Query(
         None, description="Causality Assessment Level Id"
     ),
+    user_id: str | None = Query(None, description="User Id"),
     service: ReviewService = Depends(get_review_service),
 ):
     return service.get_reviews(
-        causality_assessment_level_id=causality_assessment_level_id
+        causality_assessment_level_id=causality_assessment_level_id, user_id=user_id
     )
 
 
