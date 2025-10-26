@@ -2,7 +2,7 @@ from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
 from server.basemodels.medical_institution import MedicalInstitutionTelephonePostRequest
 from server.models.medical_institution import MedicalInstitutionTelephoneModel
-from sqlalchemy import select
+from sqlalchemy import select, desc
 from sqlalchemy.orm import Session
 
 
@@ -10,8 +10,19 @@ class TelephoneRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_all(self) -> Page[MedicalInstitutionTelephoneModel]:
+    def get_all(
+        self, medical_institution_id: str | None
+    ) -> Page[MedicalInstitutionTelephoneModel]:
         stmt = select(MedicalInstitutionTelephoneModel)
+
+        if medical_institution_id:
+            stmt = stmt.where(
+                MedicalInstitutionTelephoneModel.medical_institution_id
+                == medical_institution_id
+            )
+
+        stmt = stmt.order_by(desc(MedicalInstitutionTelephoneModel.created_at))
+
         return paginate(self.db, stmt, params=Params(page=1, size=50))
 
     def get_by_id(self, telephone_id: str) -> MedicalInstitutionTelephoneModel | None:

@@ -6,7 +6,7 @@ from server.basemodels.causality_asssessment_level import (
 )
 from server.basemodels.review import ReviewPostRequest
 from server.models.causality_assessment_level import CausalityAssessmentLevelModel
-from sqlalchemy import select
+from sqlalchemy import select, desc
 from sqlalchemy.orm import Session
 
 
@@ -20,8 +20,14 @@ class CausalityAssessmentLevelRepository:
         )
         return self.db.scalar(stmt)
 
-    def get_all(self) -> Page[CausalityAssessmentLevelModel]:
+    def get_all(self, adr_id: str | None) -> Page[CausalityAssessmentLevelModel]:
         stmt = select(CausalityAssessmentLevelModel)
+
+        if adr_id:
+            stmt = stmt.where(CausalityAssessmentLevelModel.adr_id == adr_id)
+
+        stmt = stmt.order_by(desc(CausalityAssessmentLevelModel.created_at))
+
         return paginate(self.db, stmt, params=Params(page=1, size=50))
 
     def update(

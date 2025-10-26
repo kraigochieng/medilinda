@@ -17,22 +17,20 @@ class MedicalInstitutionRepository:
         self.db = db
 
     def get_all(self, query: str = "") -> Page[MedicalInstitutionModel]:
+        stmt = select(MedicalInstitutionModel).order_by(
+            desc(MedicalInstitutionModel.created_at)
+        )
+
         if query:
-            stmt = (
-                select(MedicalInstitutionModel)
-                .where(
-                    or_(
-                        MedicalInstitutionModel.name.ilike(f"%{query}%"),
-                        MedicalInstitutionModel.county.ilike(f"%{query}%"),
-                        MedicalInstitutionModel.sub_county.ilike(f"%{query}%"),
-                    )
+            stmt = stmt.where(
+                or_(
+                    MedicalInstitutionModel.name.ilike(f"%{query}%"),
+                    MedicalInstitutionModel.county.ilike(f"%{query}%"),
+                    MedicalInstitutionModel.sub_county.ilike(f"%{query}%"),
                 )
-                .order_by(desc(MedicalInstitutionModel.created_at))
             )
-        else:
-            stmt = select(MedicalInstitutionModel).order_by(
-                desc(MedicalInstitutionModel.created_at)
-            )
+
+        stmt = stmt.order_by(desc(MedicalInstitutionModel.created_at))
 
         return paginate(self.db, stmt, params=Params(page=1, size=50))
 
@@ -88,12 +86,3 @@ class MedicalInstitutionRepository:
 
         self.db.delete(institution)
         self.db.commit()
-
-    def get_telephones(
-        self, institution_id: str
-    ) -> Page[MedicalInstitutionTelephoneModel]:
-        stmt = select(MedicalInstitutionTelephoneModel).where(
-            MedicalInstitutionTelephoneModel.medical_institution_id == institution_id
-        )
-
-        return paginate(self.db, stmt, params=Params(page=1, size=50))
