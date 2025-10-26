@@ -41,7 +41,7 @@ from server.models.medical_institution import (
 from server.models.review import ReviewModel
 from server.models.sms import SMSMessageModel, SMSMessageTypeEnum
 from server.models.user import UserModel
-from server.utils import (
+from server.utils.ml import (
     bool_cols,
     format_dataframe_for_model,
     get_shap_values,
