@@ -8,7 +8,7 @@ from server.dependencies import get_db
 from server.main import app
 from server.models.user import UserModel
 from server.repositories.review import ReviewRepository
-from server.services.auth import get_current_active_user
+from server.utils.auth import get_current_active_user
 
 from tests.db import TestSessionLocal, test_engine
 from tests.dependencies import override_get_current_active_user
