@@ -3,23 +3,18 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from fastapi_pagination import Page
-from fastapi_pagination.ext.sqlalchemy import paginate
-from sqlalchemy import desc
-from sqlalchemy.orm import Session, joinedload, load_only
+from sqlalchemy.orm import Session
 
 from server.basemodels.causality_asssessment_level import (
     CausalityAssessmentLevelEnum,
+    CausalityAssessmentLevelGetResponse,
+    CausalityAssessmentLevelPostRequest,
     UnclassifiablePostRequest,
 )
-from server.basemodels.review import ADRReviewCreateRequest, ReviewGetResponse
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
-from server.models.adverse_drug_reaction_report import ADRModel
-from server.models.causality_assessment_level import CausalityAssessmentLevelModel
-from server.models.review import ReviewModel
-from server.models.user import UserModel
 from server.services.auth import get_current_active_user
+from server.services.causality_assessment_level import CausalityAssessmentLevelService
 
 router = APIRouter(
     prefix="/api/v1/causality-assessment-levels",
@@ -27,34 +22,31 @@ router = APIRouter(
 )
 
 
+def get_causality_assessment_level_service(db: Session = Depends(get_db)):
+    return CausalityAssessmentLevelService(db)
+
+
 @router.get(
-    "/{causality_assessment_level_id}",
+    "/{id}",
     status_code=status.HTTP_200_OK,
 )
 async def get_causality_assessment_level_by_id(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    causality_assessment_level_id: str = Path(
-        ..., description="ID of Causality Assessment to read"
+    id: str = Path(..., description="ID of Causality Assessment to read"),
+    service: CausalityAssessmentLevelService = Depends(
+        get_causality_assessment_level_service
     ),
-    db: Session = Depends(get_db),
 ):
-    causality_assessment_level = (
-        db.query(CausalityAssessmentLevelModel)
-        .filter(CausalityAssessmentLevelModel.id == causality_assessment_level_id)
-        .first()
-    )
-
+    causality_assessment_level = service.get_causality_assessment_level_by_id(id)
     if not causality_assessment_level:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Causality Assessment Level record not found",
         )
-
     approved_count = sum(1 for r in causality_assessment_level.reviews if r.approved)
     not_approved_count = sum(
         1 for r in causality_assessment_level.reviews if not r.approved
     )
-
     content = {
         **jsonable_encoder(causality_assessment_level),
         "approved_count": approved_count,
@@ -67,143 +59,43 @@ async def get_causality_assessment_level_by_id(
 
 
 @router.put(
-    "/{causality_assessment_level_id}",
+    "/{id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
 def update_causality_assessment_level_by_id(
-    causality_assessment_level_id: str = Path(..., description="ID of CAL to update"),
-    db: Session = Depends(get_db),
+    data: CausalityAssessmentLevelPostRequest,
+    id: str = Path(..., description="ID of CAL to update"),
+    service: CausalityAssessmentLevelService = Depends(
+        get_causality_assessment_level_service
+    ),
 ):
-    cal_model = (
-        db.query(ADRModel)
-        .filter(CausalityAssessmentLevelModel.id == causality_assessment_level_id)
-        .first()
+    updated = service.update_causality_assessment_level_by_id(id, data)
+
+    if not updated:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="CAL not found"
+        )
+
+    return JSONResponse(
+        content=jsonable_encoder(updated), status_code=status.HTTP_200_OK
     )
-
-    if not cal_model:
-        raise HTTPException(status_code=404, detail="CAL record not found")
-
-    # Update ADR fields
-    for key, value in cal_model.model_dump().items():
-        setattr(cal_model, key, value)
-
-    db.commit()
-    db.refresh()
-
-    content = jsonable_encoder(cal_model)
-
-    return JSONResponse(content=content, status_code=status.HTTP_200_OK)
 
 
 @router.delete(
-    "/{causality_assessment_level_id}",
+    "/{id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
 def delete_causality_assessment_level_by_id(
-    causality_assessment_level_id: str = Path(..., description="ID of CAL to delete"),
-    db: Session = Depends(get_db),
+    id: str = Path(..., description="ID of CAL to delete"),
+    service: CausalityAssessmentLevelService = Depends(
+        get_causality_assessment_level_service
+    ),
 ):
-    cal = (
-        db.query(CausalityAssessmentLevelModel)
-        .filter(CausalityAssessmentLevelModel.id == causality_assessment_level_id)
-        .first()
-    )
+    deleted = service.delete_causality_assessment_level_by_id(id)
 
-    if not cal:
+    if not deleted:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="CAL record not found"
         )
 
-    db.delete(cal)
-    db.commit()
-
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-
-@router.get(
-    "/{causality_assessment_level_id}/review",
-    response_model=Page[ReviewGetResponse],
-    status_code=status.HTTP_200_OK,
-)
-async def get_reviews_for_causality_assessment_level(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    causality_assessment_level_id: str = Path(
-        ..., description="ID of Causality Assessment to read"
-    ),
-    db: Session = Depends(get_db),
-):
-    causality_assessment_level = (
-        db.query(CausalityAssessmentLevelModel)
-        .filter(CausalityAssessmentLevelModel.id == causality_assessment_level_id)
-        .first()
-    )
-
-    if not causality_assessment_level:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Causality Assessment Level record not found",
-        )
-
-    content = (
-        db.query(ReviewModel)
-        .options(
-            joinedload(ReviewModel.user).load_only(
-                UserModel.id,
-                UserModel.username,
-                UserModel.first_name,
-                UserModel.last_name,
-            )
-        )
-        .filter(
-            ReviewModel.causality_assessment_level_id == causality_assessment_level_id
-        )
-        .order_by(desc(ReviewModel.created_at))
-    )
-
-    results = content.all()
-
-    # return paginate(content)
-    return paginate(results)
-
-
-@router.post(
-    "/{causality_assessment_level_id}/review",
-    status_code=status.HTTP_201_CREATED,
-)
-async def post_review(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-    review: ADRReviewCreateRequest,
-    causality_assessment_level_id: str = Path(
-        ..., description="ID of Causality Assessment to read"
-    ),
-    db: Session = Depends(get_db),
-):
-    causality_assessment_level = (
-        db.query(CausalityAssessmentLevelModel)
-        .filter(CausalityAssessmentLevelModel.id == causality_assessment_level_id)
-        .first()
-    )
-
-    if not causality_assessment_level:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Causality Level not found"
-        )
-
-    db_user = (
-        db.query(UserModel).filter(UserModel.username == current_user.username).first()
-    )
-
-    review_model = ReviewModel(
-        **review.model_dump(),
-        user_id=db_user.id,
-        causality_assessment_level_id=causality_assessment_level_id,
-    )
-
-    db.add(review_model)
-    db.commit()
-    db.refresh(review_model)
-    # content = ADRCreateResponse.model_validate(adr_model)
-    return JSONResponse(
-        content=jsonable_encoder(review_model),
-        status_code=status.HTTP_201_CREATED,
-    )

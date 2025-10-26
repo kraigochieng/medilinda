@@ -39,7 +39,11 @@ async def create_telephone(
     data: MultipleMedicalInstitutionTelephonePostRequest = None,
     service: TelephoneService = Depends(get_telephone_service),
 ):
-    created = [service.create_telephone(t) for t in data.telephones]
+    created = [
+        service.create_telephone(t)
+        for t in data.telephones
+        if service.create_telephone(t) is not None
+    ]
     return JSONResponse(
         content=jsonable_encoder(created), status_code=status.HTTP_201_CREATED
     )
