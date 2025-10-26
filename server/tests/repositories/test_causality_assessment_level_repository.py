@@ -61,7 +61,8 @@ def test_create_and_get_by_id(cal_repository, db, sample_cal_request):
     assert fetched.adr_id == "adr-123"
     assert fetched.ml_model_id == "model-123"
     assert (
-        fetched.causality_assessment_level_value == CausalityAssessmentLevelEnum.possible
+        fetched.causality_assessment_level_value
+        == CausalityAssessmentLevelEnum.possible
     )
 
 
@@ -82,7 +83,7 @@ def test_get_all(cal_repository, db, sample_cal_request):
         db.add(model)
     db.commit()
 
-    page = cal_repository.get_all()
+    page = cal_repository.get_all(adr_id=None)
 
     assert page is not None
     assert len(page.items) == 3

@@ -70,7 +70,7 @@ def test_get_all_pagination(telephone_repository, sample_telephone_request):
             )
         )
 
-    page = telephone_repository.get_all()
+    page = telephone_repository.get_all(medical_institution_id=None)
     assert page is not None
     assert len(page.items) == 3
     assert page.total == 3

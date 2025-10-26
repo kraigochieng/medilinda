@@ -126,28 +126,3 @@ def test_get_all_and_filter(institution_repository, sample_institution_request):
     filtered = institution_repository.get_all(query="Nairobi")
     assert len(filtered.items) == 1
     assert filtered.items[0].name == "Nairobi Hospital"
-
-
-def test_get_telephones(institution_repository, db, sample_institution_request):
-    # Create an institution
-    created_institution = institution_repository.create(sample_institution_request)
-
-    # Add telephones manually
-    telephone_1 = MedicalInstitutionTelephoneModel(
-        medical_institution_id=created_institution.id,
-        telephone="+254700000001",
-    )
-    telephone_2 = MedicalInstitutionTelephoneModel(
-        medical_institution_id=created_institution.id,
-        telephone="+254700000002",
-    )
-    db.add_all([telephone_1, telephone_2])
-    db.commit()
-
-    # Fetch telephones via repository
-    telephones_page = institution_repository.get_telephones(created_institution.id)
-
-    assert len(telephones_page.items) == 2
-    numbers = [t.telephone for t in telephones_page.items]
-    assert "+254700000001" in numbers
-    assert "+254700000002" in numbers
