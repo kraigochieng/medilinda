@@ -1,16 +1,10 @@
 from datetime import datetime
 from typing import List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
-from .causality_asssessment_level import CausalityAssessmentLevelEnum
-from .user import UserGetResponse
-
-
-class ADRReviewCreateRequest(BaseModel):
-    approved: bool
-    proposed_causality_level: CausalityAssessmentLevelEnum | None = None
-    reason: str | None = None
+from server.basemodels.causality_asssessment_level import CausalityAssessmentLevelEnum
+from server.basemodels.user import UserGetResponse
 
 
 class ADRReviewSchema(BaseModel):
@@ -45,8 +39,16 @@ class ReviewGetResponse(BaseModel):
     id: str
     causality_assessment_level_id: str
     user_id: str
-    user: UserGetResponse
+    user: UserGetResponse | None = None
     approved: bool
     proposed_causality_level: CausalityAssessmentLevelEnum | None = None
     reason: str | None
     created_at: datetime
+
+
+class ReviewPostRequest(BaseModel):
+    causality_assessment_level_id: str
+    user_id: str
+    approved: bool
+    proposed_causality_level: CausalityAssessmentLevelEnum | None = None
+    reason: str | None = None
