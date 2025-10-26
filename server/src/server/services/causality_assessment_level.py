@@ -25,8 +25,9 @@ class CausalityAssessmentLevelService:
 
     def get_causality_assessment_levels(
         self,
+        adr_id: str | None
     ) -> Page[CausalityAssessmentLevelGetResponse]:
-        return self.repo.get_all()
+        return self.repo.get_all(adr_id=adr_id)
 
     def update_causality_assessment_level_by_id(
         self, id: str, data: CausalityAssessmentLevelPostRequest

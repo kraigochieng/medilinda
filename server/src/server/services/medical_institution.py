@@ -35,8 +35,3 @@ class MedicalInstitutionService:
 
     def delete_medical_institution(self, institution_id: str) -> None:
         self.repository.delete(institution_id)
-
-    def get_telephones_for_medical_institution(
-        self, institution_id: str
-    ) -> Page[MedicalInstitutionTelephoneGetResponse]:
-        return self.repository.get_telephones(institution_id)

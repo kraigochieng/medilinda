@@ -11,8 +11,10 @@ class TelephoneService:
     def __init__(self, db):
         self.repository = TelephoneRepository(db)
 
-    def get_telephones(self) -> Page[MedicalInstitutionGetResponse]:
-        return self.repository.get_all()
+    def get_telephones(
+        self, medical_institution_id: str | None
+    ) -> Page[MedicalInstitutionGetResponse]:
+        return self.repository.get_all(medical_institution_id=medical_institution_id)
 
     def get_telephone_by_id(self, telephone_id: str) -> MedicalInstitutionGetResponse:
         return self.repository.get_by_id(telephone_id)
