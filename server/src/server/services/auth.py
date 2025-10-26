@@ -1,103 +1,79 @@
-import datetime
+from datetime import timedelta
 
-import jwt
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from jwt.exceptions import InvalidTokenError
-from passlib.context import CryptContext
-from sqlalchemy.orm import Session
-from typing_extensions import Annotated
+from fastapi import HTTPException, status
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 
-from server.basemodels.auth import TokenData
-from server.basemodels.user import UserDetailsBaseModel
+from server.basemodels.user import UserDetailsBaseModel, UserSignupBaseModel
+from server.repositories.auth import AuthRepository
 from server.settings import settings
-from server.dependencies import get_db
-from server.models.user import UserModel
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token")
-
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from server.utils.auth import (
+    create_access_token,
+    get_password_hash,
+    verify_password,
+)
 
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+class AuthService:
+    def __init__(self, repository: AuthRepository):
+        self.repository = repository
 
+    def login(self, username: str, password: str):
+        user = self.repository.get_user_by_username(username)
 
-def get_password_hash(plain_password):
-    return pwd_context.hash(plain_password)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
 
+        if not verify_password(password, user.password):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
 
-async def get_current_user(
-    token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)
-):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(
-            token,
-            settings.server_access_secret_key,
-            algorithms=[settings.server_access_algorithm],
+        access_token_expires = timedelta(
+            minutes=settings.server_access_token_expire_minutes
         )
-        username = payload.get("sub")
 
-        if username is None:
-            raise credentials_exception
-
-        token_data = TokenData(username=username)
-    except InvalidTokenError:
-        raise credentials_exception
-
-    user = db.query(UserModel).filter(UserModel.username == token_data.username).first()
-
-    if user is None:
-        raise credentials_exception
-
-    return UserDetailsBaseModel(
-        username=user.username, first_name=user.first_name, last_name=user.last_name
-    )
-
-
-async def get_current_active_user(
-    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_user)],
-):
-    if current_user.disabled:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
-
-
-def create_access_token(data: dict, expires_delta: datetime.timedelta | None = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.datetime.now(datetime.timezone.utc) + expires_delta
-    else:
-        expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
-            minutes=15
+        access_token = create_access_token(
+            data={"sub": user.username},
+            expires_delta=access_token_expires,
         )
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(
-        to_encode,
-        settings.server_access_secret_key,
-        algorithm=settings.server_access_algorithm,
-    )
-    return encoded_jwt
 
+        return JSONResponse(
+            content=jsonable_encoder(
+                {
+                    "access_token": access_token,
+                    "token_type": "bearer",
+                }
+            ),
+            status_code=status.HTTP_200_OK,
+        )
 
-# def create_refresh_token(data: dict, expires_delta: datetime.timedelta | None = None):
-#     to_encode = data.copy()
-#     if expires_delta:
-#         expire = datetime.datetime.now(datetime.timezone.utc) + expires_delta
-#     else:
-#         expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
-#             days=7
-#         )
-#     to_encode.update({"exp": expire})
-#     encoded_jwt = jwt.encode(
-#         to_encode,
-#         settings.server_refresh_secret_key,
-#         algorithm=settings.server_refresh_algorithm,
-#     )
-#     return encoded_jwt
+    def signup(self, user: UserSignupBaseModel):
+        existing_user = self.repository.get_user_by_username(user.username)
+
+        if existing_user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Username already exists",
+            )
+
+        hashed_password = get_password_hash(user.password)
+        new_user = self.repository.create_user(user, hashed_password)
+
+        user_basemodel = UserDetailsBaseModel(
+            id=new_user.id,
+            username=new_user.username,
+            first_name=new_user.first_name,
+            last_name=new_user.last_name,
+        )
+
+        return JSONResponse(
+            content=jsonable_encoder(user_basemodel),
+            status_code=status.HTTP_200_OK,
+        )
