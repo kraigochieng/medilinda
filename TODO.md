@@ -1,13 +1,12 @@
 # To Do
 
--   [ ] add self ping function to fastapi lifespan
-
 -   [ ] add tests
-    -   watch arjan or someone else to start off
+
     -   to be done after deploying the application
-    -   use pytest for api and db tests
-    -   use cursor or copilot
+
 -   [ ] add a tooltip to suggest the user for one to use
+-   [ ] licensing
+-   [ ] how to properly acknowledge intellisoft and pharmacy and poisons board
 
 # In Progress
 
