@@ -20,10 +20,14 @@ from server.models.causality_assessment_level import (
 from server.models.medical_institution import MedicalInstitutionModel
 from server.models.review import ReviewModel
 from server.models.sms import SMSMessageModel
+from server.services.dashboard import DashboardService, get_sms_monthly_by_type
 from server.utils.auth import get_current_active_user
-from server.services.dashboard import get_sms_monthly_by_type
 
 router = APIRouter(prefix="/api/v1/dashboard", tags=["dashboard", "v1"])
+
+
+def get_dashboard_service(db: Session = Depends(get_db)):
+    return DashboardService(db)
 
 
 @router.get("/adr_monitoring", status_code=status.HTTP_200_OK)
@@ -31,12 +35,13 @@ def get_adr_monitoring(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     start: str = Query(...),
     end: str = Query(...),
-    db: Session = Depends(get_db),
+    service: DashboardService = Depends(get_dashboard_service),
 ):
     # Parse date strings
     start_date = datetime.datetime.strptime(start, "%Y-%m-%d").replace(
         tzinfo=datetime.timezone.utc
     )
+
     # Include the full day by setting end time to 23:59:59.999999
     end_date = (
         datetime.datetime.strptime(end, "%Y-%m-%d").replace(
@@ -46,70 +51,53 @@ def get_adr_monitoring(
         - datetime.timedelta(microseconds=1)
     )
 
-    def query_proportion_data(db: Session, column):
-        return (
-            db.query(column, func.count(ADRModel.id))
-            .filter(ADRModel.created_at >= start_date)
-            .filter(ADRModel.created_at <= end_date)
-            .group_by(column)
-            .all()
-        )
-
-    def format_proportion_data(raw_data):
-        return {
-            "series": [label.value for label, _ in raw_data],
-            "data": [count for _, count in raw_data],
-        }
-
     # Gender Proportion
-    gender_proportions_data = query_proportion_data(db, ADRModel.patient_gender)
-    gender_proportions_content = format_proportion_data(gender_proportions_data)
+    gender_proportions_content = service.get_column_proportion(
+        column=ADRModel.patient_gender, start_date=start_date, end_date=end_date
+    )
 
     # Pregnancy Status Proportion
-    pregnancy_status_proportions_data = query_proportion_data(
-        db, ADRModel.pregnancy_status
-    )
-    pregnancy_status_proportions_content = format_proportion_data(
-        pregnancy_status_proportions_data
+
+    pregnancy_status_proportions_content = service.get_column_proportion(
+        column=ADRModel.pregnancy_status, start_date=start_date, end_date=end_date
     )
 
     # Known Allergy Proportion
-    known_allergy_proportions_data = query_proportion_data(db, ADRModel.known_allergy)
-    known_allergy_proportions_content = format_proportion_data(
-        known_allergy_proportions_data
+    known_allergy_proportions_content = service.get_column_proportion(
+        column=ADRModel.known_allergy, start_date=start_date, end_date=end_date
     )
 
     # Rechallenge Proportion
-    rechallenge_proportions_data = query_proportion_data(db, ADRModel.rechallenge)
-    rechallenge_proportions_content = format_proportion_data(
-        rechallenge_proportions_data
+    rechallenge_proportions_content = service.get_column_proportion(
+        column=ADRModel.rechallenge, start_date=start_date, end_date=end_date
     )
 
     # Dechallenge Proportion (fixed column name)
-    dechallenge_proportions_data = query_proportion_data(db, ADRModel.dechallenge)
-    dechallenge_proportions_content = format_proportion_data(
-        dechallenge_proportions_data
+    dechallenge_proportions_content = service.get_column_proportion(
+        column=ADRModel.dechallenge, start_date=start_date, end_date=end_date
     )
 
     # Severity Proportion
-    severity_proportions_data = query_proportion_data(db, ADRModel.severity)
-    severity_proportions_content = format_proportion_data(severity_proportions_data)
+    severity_proportions_content = service.get_column_proportion(
+        column=ADRModel.severity, start_date=start_date, end_date=end_date
+    )
 
     # Criteria For Seriousness Proportion
-    criteria_for_seriousness_proportions_data = query_proportion_data(
-        db, ADRModel.criteria_for_seriousness
-    )
-    criteria_for_seriousness_proportions_content = format_proportion_data(
-        criteria_for_seriousness_proportions_data
+    criteria_for_seriousness_proportions_content = service.get_column_proportion(
+        column=ADRModel.criteria_for_seriousness,
+        start_date=start_date,
+        end_date=end_date,
     )
 
     # Is Serious Proportion
-    is_serious_proportions_data = query_proportion_data(db, ADRModel.is_serious)
-    is_serious_proportions_content = format_proportion_data(is_serious_proportions_data)
+    is_serious_proportions_content = service.get_column_proportion(
+        column=ADRModel.is_serious, start_date=start_date, end_date=end_date
+    )
 
     # Outcome Proportion
-    outcome_proportions_data = query_proportion_data(db, ADRModel.outcome)
-    outcome_proportions_content = format_proportion_data(outcome_proportions_data)
+    outcome_proportions_content = service.get_column_proportion(
+        column=ADRModel.outcome, start_date=start_date, end_date=end_date
+    )
 
     content = {
         "gender_proportions": gender_proportions_content,
@@ -133,261 +121,152 @@ def get_adr_monitoring(
 
 #  Summary Cards
 @router.get("/summary")
-def dashboard_summary(db: Session = Depends(get_db)):
-    return {
-        "total_adrs": db.query(func.count(ADRModel.id)).scalar(),
-        "total_institutions": db.query(
-            func.count(func.distinct(ADRModel.medical_institution_id))
-        ).scalar(),
-    }
+def dashboard_summary(service: DashboardService = Depends(get_dashboard_service)):
+    content = service.get_summary()
+
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
+    )
 
 
 #  Reviewed vs Unreviewed
 @router.get("/reviewed-unreviewed", response_model=list[MetricValue])
-def reviewed_vs_unreviewed(db: Session = Depends(get_db)):
-    stmt = (
-        select(
-            func.count(func.distinct(ADRModel.id)).label("total_adrs"),
-            func.count(
-                func.distinct(case((ReviewModel.id.is_not(None), ADRModel.id)))
-            ).label("reviewed_adrs"),
-        )
-        .select_from(ADRModel)
-        .join(
-            CausalityAssessmentLevelModel,
-            CausalityAssessmentLevelModel.adr_id == ADRModel.id,
-            isouter=True,  # LEFT JOIN
-        )
-        .join(
-            ReviewModel,
-            ReviewModel.causality_assessment_level_id
-            == CausalityAssessmentLevelModel.id,
-            isouter=True,  # LEFT JOIN
-        )
+def reviewed_vs_unreviewed(service: DashboardService = Depends(get_dashboard_service)):
+    content = service.reviewed_vs_unreviewed()
+
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
     )
-
-    result = db.execute(stmt).one()
-
-    total_adrs = result.total_adrs
-    reviewed_adrs = result.reviewed_adrs
-
-    unreviewed_adrs = total_adrs - reviewed_adrs
-
-    return [
-        {
-            "metric": "Reviewed",
-            "value": reviewed_adrs,
-        },
-        {
-            "metric": "Unreviewed",
-            "value": unreviewed_adrs,
-        },
-    ]
 
 
 #  Causality Distribution
 @router.get("/causality-distribution", response_model=list[MetricValue])
-def causality_distribution(db: Session = Depends(get_db)):
-    stmt = select(
-        CausalityAssessmentLevelModel.causality_assessment_level_value,
-        func.count().label("count"),
-    ).group_by(CausalityAssessmentLevelModel.causality_assessment_level_value)
+def causality_distribution(service: DashboardService = Depends(get_dashboard_service)):
+    content = service.causality_distribution()
 
-    rows = db.execute(stmt).all()
-    counts = {str(r[0]): r[1] for r in rows}
-
-    all_values = [val for val in CausalityAssessmentLevelEnum]
-
-    def clean_label(enum_val):
-        return enum_val.name.replace("_", " ").capitalize()
-
-    results = [
-        {"metric": clean_label(val), "value": counts.get(str(val), 0)}
-        for val in all_values
-    ]
-
-    return results
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
+    )
 
 
 #  Approval Status
 @router.get("/approval-status", response_model=list[MetricValue])
-def approval_status(db: Session = Depends(get_db)):
-    sql = text("""
-        SELECT status, COUNT(*) as count FROM (
-            SELECT
-                cal.id AS cal_id,
-                SUM(CASE WHEN r.approved = 1 THEN 1 ELSE 0 END) AS approved_count,
-                SUM(CASE WHEN r.approved = 0 THEN 1 ELSE 0 END) AS unapproved_count,
-                CASE
-                    WHEN SUM(CASE WHEN r.approved = 1 THEN 1 ELSE 0 END) >
-                         SUM(CASE WHEN r.approved = 0 THEN 1 ELSE 0 END)
-                    THEN 'Approved'
-                    ELSE 'Unapproved'
-                END AS status
-            FROM causality_assessment_level cal
-            JOIN review r ON cal.id = r.causality_assessment_level_id
-            GROUP BY cal.id
-        ) AS sub
-        GROUP BY status
-    """)
-    result = db.execute(sql).fetchall()
+def approval_status(service: DashboardService = Depends(get_dashboard_service)):
+    content = service.approval_status()
 
-    return [{"metric": row.status, "value": row.count} for row in result]
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
+    )
 
 
 #  Categorical Field Distribution
 @router.get("/categorical-field/{field_name}", response_model=list[MetricValue])
-def categorical_distribution(field_name: str, db: Session = Depends(get_db)):
+def categorical_distribution(
+    field_name: str, service: DashboardService = Depends(get_dashboard_service)
+):
     """Dynamically group ADRs by a given field name."""
     field = getattr(ADRModel, field_name, None)
 
     if field is None:
-        return {"error": f"Invalid field name: {field_name}"}
+        return JSONResponse(
+            content=f"Invalid field name: {field_name}",
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
 
-    stmt = select(field, func.count().label("count")).group_by(field)
-    rows = db.execute(stmt).all()
+    content = service.categorical_distribution(field=field)
 
-    return [{"metric": str(row[0]), "value": row[1]} for row in rows]
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
+    )
 
 
 #  Top Institutions
 @router.get("/top-institutions", response_model=list[MetricValue])
-def top_reporting_institutions(db: Session = Depends(get_db)):
-    stmt = (
-        select(
-            MedicalInstitutionModel.name.label("institution_name"),
-            func.count(ADRModel.id).label("adr_count"),
-        )
-        .join(ADRModel, MedicalInstitutionModel.id == ADRModel.medical_institution_id)
-        .group_by(MedicalInstitutionModel.name)
-        .order_by(func.count(ADRModel.id).desc())
-        .limit(5)
+def top_reporting_institutions(
+    service: DashboardService = Depends(get_dashboard_service),
+):
+    content = service.top_institutions()
+
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
     )
-
-    rows = db.execute(stmt).all()
-
-    results = [{"metric": row.institution_name, "value": row.adr_count} for row in rows]
-
-    return results
 
 
 #  ADRs Weekly (Raw SQL with structured output)
 @router.get("/adrs-weekly", response_model=list[MetricValue])
-def adrs_weekly(db: Session = Depends(get_db)):
-    sql = text("""
-        SELECT strftime('%Y-W%W', created_at) AS week_label, COUNT(*) AS count
-        FROM adr
-        GROUP BY week_label
-        ORDER BY week_label
-    """)
-    result = db.execute(sql).fetchall()
+def adrs_weekly(service: DashboardService = Depends(get_dashboard_service)):
+    content = service.get_adrs_weekly()
 
-    return [{"metric": row.week_label, "value": row.count} for row in result]
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
+    )
 
 
 #  ADRs Monthly (Raw SQL with structured output)
 @router.get("/adrs-monthly", response_model=list[MetricValue])
-def adrs_monthly(db: Session = Depends(get_db)):
-    sql = text("""
-        SELECT
-            strftime('%Y', created_at) AS year,
-            strftime('%m', created_at) AS month,
-            COUNT(*) AS count
-        FROM adr
-        GROUP BY year, month
-        ORDER BY year, month
-    """)
-    result = db.execute(sql).fetchall()
+def adrs_monthly(service: DashboardService = Depends(get_dashboard_service)):
+    content = service.get_adrs_monthly()
 
-    return [
-        {
-            "metric": f"{calendar.month_abbr[int(row.month)]} {row.year}",
-            "value": row.count,
-        }
-        for row in result
-    ]
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
+    )
 
 
 #  SMS Summary
 @router.get("/sms-summary")
-def sms_summary(db: Session = Depends(get_db)):
-    total_sms = db.query(func.count(SMSMessageModel.id)).scalar()
-    total_cost = db.query(func.sum(SMSMessageModel.cost)).scalar()
-    success_rate = (
-        db.query(func.count()).filter(SMSMessageModel.status == "Delivered").scalar()
+def sms_summary(service: DashboardService = Depends(get_dashboard_service)):
+    content = service.sms_summary()
+
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
     )
-    return {
-        "total_sms": total_sms,
-        "total_cost": total_cost,
-        "delivered": success_rate,
-        "average_cost": round(float(total_cost or 0) / total_sms, 4)
-        if total_sms
-        else 0,
-    }
 
 
 #  SMS Status Distribution
 @router.get("/sms-status", response_model=list[MetricValue])
-def sms_status_distribution(db: Session = Depends(get_db)):
-    stmt = select(SMSMessageModel.status, func.count().label("count")).group_by(
-        SMSMessageModel.status
-    )
-    rows = db.execute(stmt).all()
+def sms_status_distribution(service: DashboardService = Depends(get_dashboard_service)):
+    content = service.sms_status_distribution()
 
-    return [{"metric": row.status, "value": row.count} for row in rows]
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
+    )
 
 
 #  SMS Type Distribution
 @router.get("/sms-type", response_model=list[MetricValue])
-def sms_type_distribution(db: Session = Depends(get_db)):
-    stmt = select(SMSMessageModel.sms_type, func.count().label("count")).group_by(
-        SMSMessageModel.sms_type
-    )
-    rows = db.execute(stmt).all()
+def sms_type_distribution(service: DashboardService = Depends(get_dashboard_service)):
+    content = service.sms_type_distribution()
 
-    return [{"metric": row.sms_type, "value": row.count} for row in rows]
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
+    )
 
 
 #  SMS Count Over Time
 @router.get("/sms-weekly", response_model=list[MetricValue])
-def sms_weekly(db: Session = Depends(get_db)):
-    sql = text("""
-        SELECT strftime('%Y-W%W', created_at) AS week_label, COUNT(*) AS count
-        FROM sms_message
-        GROUP BY week_label
-        ORDER BY week_label
-    """)
-    result = db.execute(sql).fetchall()
+def sms_weekly(service: DashboardService = Depends(get_dashboard_service)):
+    content = service.get_sms_weekly()
 
-    return [{"metric": row.week_label, "value": row.count} for row in result]
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
+    )
 
 
 #  SMS Monthly (Raw SQL with structured output)
 @router.get("/sms-monthly", response_model=list[MetricValue])
-def sms_monthly(db: Session = Depends(get_db)):
-    sql = text("""
-        SELECT
-            strftime('%Y', created_at) AS year,
-            strftime('%m', created_at) AS month,
-            COUNT(*) AS count
-        FROM sms_message
-        GROUP BY year, month
-        ORDER BY year, month
-    """)
-    result = db.execute(sql).fetchall()
+def sms_monthly(service: DashboardService = Depends(get_dashboard_service)):
+    content = service.get_sms_monthly()
 
-    return [
-        {
-            "metric": f"{calendar.month_abbr[int(row.month)]} {row.year}",
-            "value": row.count,
-        }
-        for row in result
-    ]
+    return JSONResponse(
+        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
+    )
 
 
 @router.get("/sms-monthly/individual-alert", response_model=list[MetricValue])
-def sms_monthly_individual_alert(db: Session = Depends(get_db)):
-    return get_sms_monthly_by_type(db, "individual alert")
+def sms_monthly_individual_alert(
+    service: DashboardService = Depends(get_dashboard_service),
+):
+    return service.get_sms_monthly_by_type(sms_type="individual alert")
 
 
 # Uncomment and add more routes if you add more message types in the future
@@ -397,5 +276,7 @@ def sms_monthly_individual_alert(db: Session = Depends(get_db)):
 
 
 @router.get("/sms-monthly/additional-info", response_model=list[MetricValue])
-def sms_monthly_additional_info(db: Session = Depends(get_db)):
-    return get_sms_monthly_by_type(db, "additional info")
+def sms_monthly_additional_info(
+    service: DashboardService = Depends(get_dashboard_service),
+):
+    return service.get_sms_monthly_by_type(sms_type="additional info")
