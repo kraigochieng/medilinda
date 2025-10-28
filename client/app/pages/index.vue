@@ -7,6 +7,16 @@
 			Understand drug safety insights using AI-powered causality
 			assessments and transparent, explainable results.
 		</p>
+		<p>
+			Thanks to
+			<NuxtLink to="https://www.intellisoftkenya.com" target="_blank">
+				IntelliSOFT Consulting Ltd
+			</NuxtLink>
+			and
+			<NuxtLink to="https://web.pharmacyboardkenya.org/" target="_blank">
+				Pharmacy and Poisons Board
+			</NuxtLink>
+		</p>
 	</div>
 
 	<div class="flex space-x-8 p-8">
