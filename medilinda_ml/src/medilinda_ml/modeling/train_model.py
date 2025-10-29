@@ -34,8 +34,10 @@ from medilinda_ml.features.build_features import (
     PatientAgeImputer,
     PatientBMITransformer,
 )
+from medilinda_ml.logging_config import setup_logging
 from medilinda_ml.paths import DATA_DIR
 from medilinda_ml.settings import settings
+from medilinda_ml.signature import signature
 from medilinda_ml.utils import ShapModelWrapper
 from mlflow.models import infer_signature
 from sklearn.ensemble import (
@@ -62,6 +64,7 @@ os.environ["DATABRICKS_HOST"] = settings.databricks_host
 os.environ["DATABRICKS_TOKEN"] = settings.databricks_token
 os.environ["MLFLOW_RECORD_ENV_VARS_IN_MODEL_LOGGING"] = "false"
 
+setup_logging()
 # # To allow uv to be used
 # os.environ["MLFLOW_LOCK_MODEL_DEPENDENCIES"] = "true"
 
@@ -77,7 +80,6 @@ if mlflow.get_experiment_by_name(settings.mlflow_experiment_path) is None:
 
 # Set MLFlow Experiment if not created
 mlflow.set_experiment(settings.mlflow_experiment_path)
-
 
 
 def train_model(df_path: str) -> None:
@@ -116,14 +118,14 @@ def train_model(df_path: str) -> None:
             DecisionTreeClassifier(random_state=42),
             {"max_depth": [25, 50, 100]},
         ),
-        "ada_boost": (
-            AdaBoostClassifier(random_state=42),
-            {"n_estimators": [10, 50], "learning_rate": [0.1, 1.0]},
-        ),
-        "logistic_regression": (
-            LogisticRegression(random_state=42, max_iter=1000, solver="saga"),
-            {"C": [0.01, 0.1, 1, 10], "penalty": ["l2"]},
-        ),
+        # "ada_boost": (
+        #     AdaBoostClassifier(random_state=42),
+        #     {"n_estimators": [10, 50], "learning_rate": [0.1, 1.0]},
+        # ),
+        # "logistic_regression": (
+        #     LogisticRegression(random_state=42, max_iter=1000, solver="saga"),
+        #     {"C": [0.01, 0.1, 1, 10], "penalty": ["l2"]},
+        # ),
         # "random_forest": (
         #     RandomForestClassifier(random_state=42),
         #     {
@@ -141,19 +143,19 @@ def train_model(df_path: str) -> None:
         #         "subsample": [0.8, 1.0],
         #     },
         # ),
-        "svm": (
-            SVC(probability=True, random_state=42),
-            {
-                "kernel": ["rbf"],
-                "C": [0.1, 1, 3],
-                "gamma": ["scale", "auto"],
-            },
-        ),
-        "knn": (
-            KNeighborsClassifier(),
-            {"n_neighbors": [3, 5, 7], "weights": ["uniform", "distance"], "p": [1, 2]},
-        ),
-        "naive_bayes": (GaussianNB(), {}),
+        # "svm": (
+        #     SVC(probability=True, random_state=42),
+        #     {
+        #         "kernel": ["rbf"],
+        #         "C": [0.1, 1, 3],
+        #         "gamma": ["scale", "auto"],
+        #     },
+        # ),
+        # "knn": (
+        #     KNeighborsClassifier(),
+        #     {"n_neighbors": [3, 5, 7], "weights": ["uniform", "distance"], "p": [1, 2]},
+        # ),
+        # "naive_bayes": (GaussianNB(), {}),
     }
     # --- Cross-validation setup ---
     cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=3, random_state=42)
@@ -271,18 +273,18 @@ def train_model(df_path: str) -> None:
             print("═" * 80)
 
             # --- Log model ---
-            signature = infer_signature(X_test, y_pred)
+            # signature = infer_signature(X_test, y_pred)
 
-            input_example = X_test.iloc[:1]
+            # input_example = X_test.iloc[:1]
 
-            model_name = f"rf_smote_pipeline_{name}"
+            model_name = f"medilinda_rf_smote_pipeline_{name}"
 
             registered_model_name = f"workspace.default.{model_name}"
 
             mlflow.sklearn.log_model(
                 sk_model=best_estimator,
                 name=model_name,
-                input_example=input_example,
+                # input_example=input_example,
                 registered_model_name=registered_model_name,
                 signature=signature,
             )
