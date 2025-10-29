@@ -1,24 +1,14 @@
 # To Do
 
--   [ ] add tests
-
-    -   to be done after deploying the application
-
 -   [ ] add a tooltip to suggest the user for one to use
 -   [ ] licensing
--   [ ] how to properly acknowledge intellisoft and pharmacy and poisons board
 
 # In Progress
 
--   [ ] how to write tests for api, service, repository layers
--   [ ] when to use fixtures and pytest-mock
--   [ ] add payloads to the conftest
 -   [ ] assert json as a whole, not properties individually
--   [ ] write appropriate tests for my controller repo and service layer first for my existing ones
--   [ ] migrate all endpoints to repo and service pattern
 -   [ ] replace shadcn with nuxt ui bit by bit
     -   specify steps
--   [ ] play with shap in a notebook
+-   [ ] play with shap in a notebook, and see how the waterfall method can be sent to the 
 
 # Done
 
@@ -39,3 +29,12 @@
 -   [x] deploy server
     -   [x] docker file creation for server
 -   [x] update all readmes
+-   [x] when to use fixtures and pytest-mock
+-   [x] add payloads to the conftest
+-   [x] migrate all endpoints to repo and service pattern
+-   [x] add some tests for learning
+    -   to be done after deploying the application
+-   [x] how to write tests for api, service, repository layers
+-   [x] write appropriate tests for my controller repo and service layer first for my existing ones
+-   [x] add logging to transformers on the columns and the structure of the dataframe
+-   [x] how to properly acknowledge intellisoft and pharmacy and poisons board
