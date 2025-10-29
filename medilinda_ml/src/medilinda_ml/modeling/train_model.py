@@ -2,6 +2,7 @@ import matplotlib
 
 matplotlib.use("agg")
 
+import logging
 import os
 from pprint import pprint
 
@@ -280,6 +281,24 @@ def train_model(df_path: str) -> None:
             model_name = f"medilinda_rf_smote_pipeline_{name}"
 
             registered_model_name = f"workspace.default.{model_name}"
+
+            # Disable verbose params
+            print("📦 Disabling verbose logging for production artifact...")
+
+            verbose_params_to_disable = {
+                key: False
+                for key in best_estimator.get_params().keys()
+                if key.endswith("__verbose")
+            }
+
+            if verbose_params_to_disable:
+                best_estimator.set_params(**verbose_params_to_disable)
+
+                logging.info(
+                    f"Disabled {len(verbose_params_to_disable)} verbose flags."
+                )
+            else:
+                logging.info("No verbose flags found.")
 
             mlflow.sklearn.log_model(
                 sk_model=best_estimator,

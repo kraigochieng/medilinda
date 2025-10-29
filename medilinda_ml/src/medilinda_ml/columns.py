@@ -68,7 +68,7 @@ COLUMNS_TO_DROP = [
     "ethambutol_batch_no",
     "ethambutol_manufacturer",
     "ethambutol_dose_amount",
-    # "created_at",
+    "created_at",
 ]
 
 

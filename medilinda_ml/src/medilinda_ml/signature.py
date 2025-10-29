@@ -71,11 +71,9 @@ from mlflow.types.schema import ColSpec, Schema
 #     ]
 # )
 
-
+# Order columns to match training dataset in order for SHAP to work
 input_schema = Schema(
     [
-        # Institution Details
-        ColSpec(DataType.string, "medical_institution_id"),
         # Personal Details
         ColSpec(DataType.string, "patient_name"),
         ColSpec(DataType.string, "inpatient_or_outpatient_number", required=False),
@@ -129,16 +127,16 @@ input_schema = Schema(
         ColSpec(DataType.string, "ethambutol_batch_no", required=False),
         ColSpec(DataType.string, "ethambutol_manufacturer", required=False),
         # Rechallenge/Dechallenge
-        ColSpec(DataType.string, "rechallenge"),
         ColSpec(DataType.string, "dechallenge"),
+        ColSpec(DataType.string, "rechallenge"),
         # Grading of Reaction/Event
         ColSpec(DataType.string, "severity"),
         ColSpec(DataType.string, "is_serious"),
         ColSpec(DataType.string, "criteria_for_seriousness"),
         ColSpec(DataType.string, "action_taken"),
         ColSpec(DataType.string, "outcome"),
-        ColSpec(DataType.string, "comments", required=False),
-        # ColSpec(DataType.string, "created_at", required=False),
+        # ColSpec(DataType.string, "comments", required=False),
+        ColSpec(DataType.string, "created_at", required=False),
     ]
 )
 
