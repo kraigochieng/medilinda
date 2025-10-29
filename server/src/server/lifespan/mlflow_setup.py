@@ -26,7 +26,7 @@ def mlflow_setup(
     mlflow_experiment_path: str,
     mlflow_model_name: str,
     mlflow_model_version: str,
-    local_artifacts_path: Path = Path(__file__).parent.parent.parent / "artifacts",
+    local_artifacts_path: Path = Path(__file__).parent.parent.parent.parent / "artifacts",
 ) -> MLEnsemble:
     os.environ["DATABRICKS_HOST"] = databricks_host
     os.environ["DATABRICKS_TOKEN"] = databricks_token
