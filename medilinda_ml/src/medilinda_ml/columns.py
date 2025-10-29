@@ -25,7 +25,7 @@ DATE_COLUMNS = [
     "pyrazinamide_stop_date",
     "ethambutol_start_date",
     "ethambutol_stop_date",
-    "created_at",
+    # "created_at",
 ]
 
 DRUG_NAMES = [
@@ -68,6 +68,7 @@ COLUMNS_TO_DROP = [
     "ethambutol_batch_no",
     "ethambutol_manufacturer",
     "ethambutol_dose_amount",
+    # "created_at",
 ]
 
 
