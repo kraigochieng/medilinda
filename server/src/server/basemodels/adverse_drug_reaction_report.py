@@ -1,7 +1,7 @@
 import enum
 from datetime import date
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from .causality_asssessment_level import CausalityAssessmentLevelEnum
 
@@ -79,13 +79,15 @@ class OutcomeEnum(str, enum.Enum):
 
 # ADR
 class ADRPostRequest(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     # Institution Details
-    medical_institution_id: str | None = None
+    medical_institution_id: str | None = None  # Not in ML model
 
     # Personal Details
     patient_name: str
     inpatient_or_outpatient_number: str | None = None
-    patient_age: int | None = None
+    patient_age: float | None = None
     patient_date_of_birth: date | None = None
     patient_address: str | None = None
     patient_weight_kg: float | None = None
@@ -103,8 +105,8 @@ class ADRPostRequest(BaseModel):
     rifampicin_suspected: bool | None = None
     rifampicin_start_date: date | None = None
     rifampicin_stop_date: date | None = None
-    rifampicin_dose_amount: int | None = None
-    rifampicin_frequency_number: int | None = None
+    rifampicin_dose_amount: float | None = None
+    rifampicin_frequency_number: float | None = None
     rifampicin_route: str | None = None
     rifampicin_batch_no: str | None = None
     rifampicin_manufacturer: str | None = None
@@ -113,8 +115,8 @@ class ADRPostRequest(BaseModel):
     isoniazid_suspected: bool | None = None
     isoniazid_start_date: date | None = None
     isoniazid_stop_date: date | None = None
-    isoniazid_dose_amount: int | None = None
-    isoniazid_frequency_number: int | None = None
+    isoniazid_dose_amount: float | None = None
+    isoniazid_frequency_number: float | None = None
     isoniazid_route: str | None = None
     isoniazid_batch_no: str | None = None
     isoniazid_manufacturer: str | None = None
@@ -123,8 +125,8 @@ class ADRPostRequest(BaseModel):
     pyrazinamide_suspected: bool | None = None
     pyrazinamide_start_date: date | None = None
     pyrazinamide_stop_date: date | None = None
-    pyrazinamide_dose_amount: int | None = None
-    pyrazinamide_frequency_number: int | None = None
+    pyrazinamide_dose_amount: float | None = None
+    pyrazinamide_frequency_number: float | None = None
     pyrazinamide_route: str | None = None
     pyrazinamide_batch_no: str | None = None
     pyrazinamide_manufacturer: str | None = None
@@ -133,8 +135,8 @@ class ADRPostRequest(BaseModel):
     ethambutol_suspected: bool | None = None
     ethambutol_start_date: date | None = None
     ethambutol_stop_date: date | None = None
-    ethambutol_dose_amount: int | None = None
-    ethambutol_frequency_number: int | None = None
+    ethambutol_dose_amount: float | None = None
+    ethambutol_frequency_number: float | None = None
     ethambutol_route: str | None = None
     ethambutol_batch_no: str | None = None
     ethambutol_manufacturer: str | None = None
@@ -151,7 +153,85 @@ class ADRPostRequest(BaseModel):
     outcome: OutcomeEnum = OutcomeEnum.unknown
 
     # Additional
-    comments: str | None = None
+    comments: str | None = None  # Not in ML model
+
+    # created_at: date | None = None
+
+
+class MLModelInput(BaseModel):
+    # Order columns to match the model input schema and training dataset in order for SHAP to work
+    model_config = ConfigDict(from_attributes=True)
+
+    # Personal Details
+    patient_name: str
+    inpatient_or_outpatient_number: str | None = None
+    patient_date_of_birth: date | None = None
+    patient_age: float | None = None
+    patient_address: str | None = None
+    ward_or_clinic: str | None = None
+    patient_gender: GenderEnum
+    known_allergy: KnownAllergyEnum
+    pregnancy_status: PregnancyStatusEnum
+    patient_weight_kg: float | None = None
+    patient_height_cm: float | None = None
+
+    # Suspected Adverse Reaction
+    date_of_onset_of_reaction: date | None = None
+    description_of_reaction: str | None = None
+
+    # Medicine fields - Rifampicin
+    rifampicin_suspected: bool | None = None
+    rifampicin_start_date: date | None = None
+    rifampicin_stop_date: date | None = None
+    rifampicin_dose_amount: float | None = None
+    rifampicin_frequency_number: float | None = None
+    rifampicin_route: str | None = None
+    rifampicin_batch_no: str | None = None
+    rifampicin_manufacturer: str | None = None
+
+    # Isoniazid
+    isoniazid_suspected: bool | None = None
+    isoniazid_start_date: date | None = None
+    isoniazid_stop_date: date | None = None
+    isoniazid_dose_amount: float | None = None
+    isoniazid_frequency_number: float | None = None
+    isoniazid_route: str | None = None
+    isoniazid_batch_no: str | None = None
+    isoniazid_manufacturer: str | None = None
+
+    # Pyrazinamide
+    pyrazinamide_suspected: bool | None = None
+    pyrazinamide_start_date: date | None = None
+    pyrazinamide_stop_date: date | None = None
+    pyrazinamide_dose_amount: float | None = None
+    pyrazinamide_frequency_number: float | None = None
+    pyrazinamide_route: str | None = None
+    pyrazinamide_batch_no: str | None = None
+    pyrazinamide_manufacturer: str | None = None
+
+    # Ethambutol
+    ethambutol_suspected: bool | None = None
+    ethambutol_start_date: date | None = None
+    ethambutol_stop_date: date | None = None
+    ethambutol_dose_amount: float | None = None
+    ethambutol_frequency_number: float | None = None
+    ethambutol_route: str | None = None
+    ethambutol_batch_no: str | None = None
+    ethambutol_manufacturer: str | None = None
+
+    # Rechallenge/Dechallenge
+    dechallenge: DechallengeEnum = DechallengeEnum.unknown
+    rechallenge: RechallengeEnum = RechallengeEnum.unknown
+
+    # Grading of Reaction/Event
+    severity: SeverityEnum = SeverityEnum.unknown
+    is_serious: IsSeriousEnum
+    criteria_for_seriousness: CriteriaForSeriousnessEnum
+    action_taken: ActionTakenEnum = ActionTakenEnum.unknown
+    outcome: OutcomeEnum = OutcomeEnum.unknown
+
+    # Metadata
+    created_at: date | None = None
 
 
 class ADRGetResponse(BaseModel):
