@@ -20,7 +20,7 @@ from server.models.causality_assessment_level import (
 from server.models.medical_institution import MedicalInstitutionModel
 from server.models.review import ReviewModel
 from server.models.sms import SMSMessageModel
-from server.services.dashboard import DashboardService, get_sms_monthly_by_type
+from server.services.dashboard import DashboardService
 from server.utils.auth import get_current_active_user
 
 router = APIRouter(prefix="/api/v1/dashboard", tags=["dashboard", "v1"])

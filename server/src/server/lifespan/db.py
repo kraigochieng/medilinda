@@ -6,12 +6,14 @@ from uuid import uuid4
 
 import pandas as pd
 from mlflow.pyfunc import PyFuncModel
+from pydantic import ValidationError
 from shap import KernelExplainer
 from sklearn.preprocessing import OrdinalEncoder
 from sqlalchemy.orm import Session
 
 from server.basemodels.adverse_drug_reaction_report import (
     ActionTakenEnum,
+    ADRPostRequest,
     CriteriaForSeriousnessEnum,
     DechallengeEnum,
     GenderEnum,
@@ -21,6 +23,7 @@ from server.basemodels.adverse_drug_reaction_report import (
     PregnancyStatusEnum,
     RechallengeEnum,
     SeverityEnum,
+    MLModelInput,
 )
 from server.config import (
     ADR_CSV_PATH,
@@ -274,26 +277,37 @@ def insert_causality_assessment_levels(
 
     # for adr_entry, record in zip(adr_entries, new_data_df.to_dict(orient="records")):
     for adr_entry in adr_entries:
-        # Load and preprocess new data
-        record_dict = {
-            c.name: getattr(adr_entry, c.name) for c in adr_entry.__table__.columns
-        }
-        adr_data_df = pd.DataFrame([record_dict])
+        try:
+            validated_data = MLModelInput.model_validate(adr_entry)
 
-        formatted_df = format_dataframe_for_model(
-            adr_data_df,
-            model_cols=model_cols,
-            numeric_cols=numeric_cols,
-            bool_cols=bool_cols,
-            string_cols=string_cols,
-        )
+        except ValidationError as e:
+            logging.error(f"Pydantic validation failed for ADR {adr_entry.id}: {e}")
+            continue
+
+        # # Load and preprocess new data
+        # record_dict = {
+        #     c.name: getattr(adr_entry, c.name) for c in adr_entry.__table__.columns
+        # }
+        # adr_data_df = pd.DataFrame([record_dict])
+
+        input_dict = validated_data.model_dump()
+        adr_data_df = pd.DataFrame([input_dict])
+
+        print(adr_data_df.info())
+        # formatted_df = format_dataframe_for_model(
+        #     adr_data_df,
+        #     model_cols=model_cols,
+        #     numeric_cols=numeric_cols,
+        #     bool_cols=bool_cols,
+        #     string_cols=string_cols,
+        # )
         # Predict using the ML model
-        prediction = ml_model.predict(formatted_df)
+        prediction = ml_model.predict(adr_data_df)
 
         decoded_prediction = encoder.inverse_transform(prediction.reshape(-1, 1))[0][0]
 
         logging.info("Generation SHAP value...")
-        shap_values = explainer(formatted_df)
+        shap_values = explainer(adr_data_df)
 
         broken_down_shap_values = get_shap_values(shap_values)
 

@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Date, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, Date, ForeignKey, Integer, String, Float
 from sqlalchemy import Enum as SQLAlchemyEnum
 from sqlalchemy.orm import relationship
 
@@ -36,8 +36,8 @@ class ADRModel(Base, IDMixin, TimestampMixin):
     patient_gender = Column(SQLAlchemyEnum(GenderEnum), nullable=False)
     known_allergy = Column(SQLAlchemyEnum(KnownAllergyEnum), nullable=False)
     pregnancy_status = Column(SQLAlchemyEnum(PregnancyStatusEnum), nullable=False)
-    patient_weight_kg = Column(Integer, nullable=True)
-    patient_height_cm = Column(Integer, nullable=True)
+    patient_weight_kg = Column(Float, nullable=True)
+    patient_height_cm = Column(Float, nullable=True)
 
     # Suspected Adverse Reaction
     date_of_onset_of_reaction = Column(Date, nullable=True)
