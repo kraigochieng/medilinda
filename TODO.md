@@ -2,13 +2,16 @@
 
 -   [ ] add a tooltip to suggest the user for one to use
 -   [ ] licensing
+-   [ ] make endpoints to use response model and status_code
 
 # In Progress
 
+-   [ ] create the post and update routes and services for this
+    -   the service for adr to use the cal and adr service
 -   [ ] assert json as a whole, not properties individually
 -   [ ] replace shadcn with nuxt ui bit by bit
     -   specify steps
--   [ ] play with shap in a notebook, and see how the waterfall method can be sent to the 
+-   [ ] play with shap in a notebook, and see how the waterfall method can be sent to the
 
 # Done
 
