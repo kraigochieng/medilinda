@@ -6,7 +6,7 @@ from server.basemodels.causality_asssessment_level import (
 )
 from server.basemodels.review import ReviewPostRequest
 from server.models.causality_assessment_level import CausalityAssessmentLevelModel
-from sqlalchemy import select, desc
+from sqlalchemy import desc, select
 from sqlalchemy.orm import Session
 
 
@@ -29,6 +29,17 @@ class CausalityAssessmentLevelRepository:
         stmt = stmt.order_by(desc(CausalityAssessmentLevelModel.created_at))
 
         return paginate(self.db, stmt, params=Params(page=1, size=50))
+
+    def create(
+        self, data: CausalityAssessmentLevelPostRequest
+    ) -> CausalityAssessmentLevelModel:
+        model = CausalityAssessmentLevelModel(**data.model_dump())
+
+        self.db.add(model)
+        self.db.commit()
+        self.db.refresh(model)
+
+        return model
 
     def update(
         self,
