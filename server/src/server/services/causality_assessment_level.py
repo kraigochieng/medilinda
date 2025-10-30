@@ -4,7 +4,7 @@ from server.basemodels.causality_asssessment_level import (
     CausalityAssessmentLevelGetResponse,
     CausalityAssessmentLevelPostRequest,
 )
-from server.basemodels.review import ReviewPostRequest, ReviewGetResponse
+from server.basemodels.review import ReviewGetResponse, ReviewPostRequest
 from server.repositories.causality_assessment_level import (
     CausalityAssessmentLevelRepository,
 )
@@ -24,10 +24,14 @@ class CausalityAssessmentLevelService:
         return self.repo.get_by_id(cal_id)
 
     def get_causality_assessment_levels(
-        self,
-        adr_id: str | None
+        self, adr_id: str | None
     ) -> Page[CausalityAssessmentLevelGetResponse]:
         return self.repo.get_all(adr_id=adr_id)
+
+    def create_causality_assessment_level(
+        self, data: CausalityAssessmentLevelPostRequest
+    ) -> CausalityAssessmentLevelGetResponse:
+        return self.repo.create(data=data)
 
     def update_causality_assessment_level_by_id(
         self, id: str, data: CausalityAssessmentLevelPostRequest

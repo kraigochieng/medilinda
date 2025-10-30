@@ -1,9 +1,9 @@
 from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
+from server.basemodels.adverse_drug_reaction_report import ADRPostRequest
 from server.models.adverse_drug_reaction_report import ADRModel
 from sqlalchemy import desc, select
 from sqlalchemy.orm import Session
-from server.basemodels.adverse_drug_reaction_report import ADRPostRequest
 
 
 class AdverseDrugReactionReportRepository:
@@ -30,8 +30,17 @@ class AdverseDrugReactionReportRepository:
 
         return self.db.scalar(stmt)
 
+    def create(self, data: ADRPostRequest) -> ADRModel:
+        model = ADRModel(**data.model_dump())
+
+        self.db.add(model)
+        self.db.commit()
+        self.db.refresh(model)
+
+        return model
+
     def update(self, id: str, data: ADRPostRequest) -> ADRModel | None:
-        model = self.get(id)
+        model = self.get_by_id(id)
 
         if not model:
             return None

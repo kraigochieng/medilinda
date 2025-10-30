@@ -8,8 +8,10 @@ from fastapi.requests import Request
 from fastapi.responses import JSONResponse, Response
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
+from mlflow.pyfunc import PyFuncModel
 from shap import KernelExplainer
 from sklearn.base import BaseEstimator
+from sklearn.preprocessing import OrdinalEncoder
 from sqlalchemy import desc, text
 from sqlalchemy.orm import Session
 
@@ -48,11 +50,20 @@ from server.services.adverse_drug_reaction_report import (
 )
 from server.utils.auth import get_current_active_user
 
+
+def get_adverse_drug_reaction_report_service(
+    request: Request, db: Session = Depends(get_db)
+):
+    ml_model: PyFuncModel = request.app.state.ml_model
+    encoder: OrdinalEncoder = request.app.state.encoder
+    explainer: KernelExplainer = request.app.state.explainer
+
+    return AdverseDrugReactionReportService(
+        db=db, ml_model=ml_model, encoder=encoder, explainer=explainer
+    )
+
+
 router = APIRouter(prefix="/api/v1/adrs", tags=["adrs", "v1"])
-
-
-def get_adverse_drug_reaction_report_service(db: Session = Depends(get_db)):
-    return AdverseDrugReactionReportService(db)
 
 
 @router.get("/", response_model=Page[ADRGetResponse], status_code=status.HTTP_200_OK)
@@ -68,130 +79,41 @@ def get_adrs(
     return JSONResponse(jsonable_encoder(content), status_code=status.HTTP_200_OK)
 
 
-# @router.post("/", status_code=status.HTTP_201_CREATED)
-# async def post_adr(
-#     request: Request,
-#     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-#     adr: ADRPostRequest,
-#     db: Session = Depends(get_db),
-# ):
-#     # Get user id
-#     db_user = (
-#         db.query(UserModel).filter(UserModel.username == current_user.username).first()
-#     )
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=ADRGetResponse)
+async def post_adr(
+    request: Request,  # To be used by service
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
+    data: ADRPostRequest,
+    service: AdverseDrugReactionReportService = Depends(
+        get_adverse_drug_reaction_report_service
+    ),
+):
+    content = service.create_and_predict(data=data)
 
-#     adr_model = ADRModel(
-#         **adr.model_dump(),
-#         user_id=db_user.id,
-#     )
-
-#     db.add(adr_model)
-#     db.commit()
-#     db.refresh(adr_model)
-
-#     # Check if ADR has the appropriate fields present.
-#     # If not, set the causality level to unclassified and just return immediately
-#     if (
-#         adr.rifampicin_suspected is None
-#         and adr.isoniazid_suspected is None
-#         and adr.pyrazinamide_suspected is None
-#         and adr.ethambutol_suspected is None
-#     ) or (
-#         adr.rechallenge is RechallengeEnum.unknown
-#         and adr.dechallenge is DechallengeEnum.unknown
-#     ):
-#         casuality_assessment_level_model = CausalityAssessmentLevelModel(
-#             adr_id=adr_model.id,
-#             causality_assessment_level_value=CausalityAssessmentLevelEnum.unclassified,
-#             base_values=None,
-#             shap_values_matrix=None,
-#             shap_values_sum_per_class=None,
-#             shap_values_and_base_values_sum_per_class=None,
-#             feature_names=None,
-#             feature_values=None,
-#         )
-
-#         db.add(casuality_assessment_level_model)
-#         db.commit()
-#         db.refresh(casuality_assessment_level_model)
-
-#         # To load the causality assessment levels
-#         content = db.query(ADRModel).filter(ADRModel.id == adr_model.id).first()
-
-#         return JSONResponse(
-#             content=jsonable_encoder(content),
-#             status_code=status.HTTP_201_CREATED,
-#         )
-
-#     ml_model: BaseEstimator = request.app.state.ml_model
-#     explainer: KernelExplainer = request.app.state.explainer
-
-#     # Get encoders
-#     _, ordinal_encoder = get_encoders(ENCODERS_PATH)
-
-#     # Save data as temp df
-#     temp_df = pd.DataFrame([adr.model_dump()])
-
-#     column_metadata = get_column_metadata(METADATA_PATH)
-#     # Extract prediction input
-#     prediction_input = input_to_prediction_format(
-#         input_df=temp_df,
-#         column_metadata=column_metadata,
-#         scalers_path=SCALERS_PATH,
-#         encoders_path=ENCODERS_PATH,
-#     )
-
-#     # Predict using the ML model
-#     prediction = ml_model.predict(prediction_input)
-
-#     decoded_prediction = ordinal_encoder.inverse_transform(prediction.reshape(-1, 1))[
-#         0
-#     ][0]
-
-#     shap_values = explainer(prediction_input)
-
-#     broken_down_shap_values = get_shap_values(shap_values)
-
-#     base_values = broken_down_shap_values["base_values"]
-#     shap_values_matrix = broken_down_shap_values["shap_values_matrix"]
-#     shap_values_sum_per_class = broken_down_shap_values["shap_values_sum_per_class"]
-#     shap_values_and_base_values_sum_per_class = broken_down_shap_values[
-#         "shap_values_and_base_values_sum_per_class"
-#     ]
-
-#     feature_names = prediction_input.columns.tolist()
-#     feature_values = prediction_input.iloc[0].tolist()
-
-#     # Add causality assessment level
-#     casuality_assessment_level_model = CausalityAssessmentLevelModel(
-#         adr_id=adr_model.id,
-#         causality_assessment_level_value=CausalityAssessmentLevelEnum(
-#             decoded_prediction
-#         ),
-#         base_values=base_values,
-#         shap_values_matrix=shap_values_matrix,
-#         shap_values_sum_per_class=shap_values_sum_per_class,
-#         shap_values_and_base_values_sum_per_class=shap_values_and_base_values_sum_per_class,
-#         feature_names=feature_names,
-#         feature_values=format_feature_values(
-#             feature_values=feature_values, scalers_path=SCALERS_PATH
-#         ),
-#     )
-
-#     db.add(casuality_assessment_level_model)
-#     db.commit()
-#     db.refresh(casuality_assessment_level_model)
-
-#     # To load the causality assessment levels
-#     content = db.query(ADRModel).filter(ADRModel.id == adr_model.id).first()
-
-#     return JSONResponse(
-#         content=jsonable_encoder(content),
-#         status_code=status.HTTP_201_CREATED,
-#     )
+    return content
 
 
-@router.get("/{id}", status_code=status.HTTP_200_OK)
+@router.put("/{id}", status_code=status.HTTP_200_OK, response_model=ADRGetResponse)
+async def update_adr(
+    request: Request,  # To be used by service
+    current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
+    data: ADRPostRequest,
+    id: str = Path(..., description="ID of ADR to read"),
+    service: AdverseDrugReactionReportService = Depends(
+        get_adverse_drug_reaction_report_service
+    ),
+):
+    content = service.update_and_predict(id=id, data=data)
+
+    if not content:
+        return HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="adr not found"
+        )
+
+    return content
+
+
+@router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ADRGetResponse)
 def get_adr_by_id(
     id: str = Path(..., description="ID of ADR to read"),
     service: AdverseDrugReactionReportService = Depends(
@@ -203,146 +125,7 @@ def get_adr_by_id(
     if not content:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    return JSONResponse(
-        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
-    )
-
-
-# @router.put("/{adr_id}", status_code=status.HTTP_200_OK)
-# async def update_adr(
-#     request: Request,
-#     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
-#     updated_adr: ADRPostRequest,
-#     adr_id: str = Path(..., description="ID of the ADR record to update"),
-#     db: Session = Depends(get_db),
-# ):
-#     # Get existing ADR record
-#     adr_model = db.query(ADRModel).filter(ADRModel.id == adr_id).first()
-#     if not adr_model:
-#         raise HTTPException(status_code=404, detail="ADR record not found")
-
-#     # Update ADR fields
-#     for key, value in updated_adr.model_dump().items():
-#         setattr(adr_model, key, value)
-
-#     db.commit()
-#     db.refresh(adr_model)
-
-#     if (
-#         adr_model.rifampicin_suspected is None
-#         and adr_model.isoniazid_suspected is None
-#         and adr_model.pyrazinamide_suspected is None
-#         and adr_model.ethambutol_suspected is None
-#     ) or (
-#         adr_model.rechallenge is RechallengeEnum.unknown
-#         and adr_model.dechallenge is DechallengeEnum.unknown
-#     ):
-#         casuality_assessment_level_model = CausalityAssessmentLevelModel(
-#             adr_id=adr_model.id,
-#             causality_assessment_level_value=CausalityAssessmentLevelEnum.unclassified,
-#             base_values=None,
-#             shap_values_matrix=None,
-#             shap_values_sum_per_class=None,
-#             shap_values_and_base_values_sum_per_class=None,
-#             feature_names=None,
-#             feature_values=None,
-#         )
-
-#         db.add(casuality_assessment_level_model)
-#         db.commit()
-#         db.refresh(casuality_assessment_level_model)
-
-#         # To load the causality assessment levels
-#         content = db.query(ADRModel).filter(ADRModel.id == adr_model.id).first()
-
-#         return JSONResponse(
-#             content=jsonable_encoder(content),
-#             status_code=status.HTTP_201_CREATED,
-#         )
-
-#     # Step 3: Load ML model and encoders
-#     ml_model: BaseEstimator = request.app.state.ml_model
-#     explainer: KernelExplainer = request.app.state.explainer
-
-#     _, ordinal_encoder = get_encoders(ENCODERS_PATH)
-
-#     temp_df = pd.DataFrame([updated_adr.model_dump()])
-
-#     column_metadata = get_column_metadata(METADATA_PATH)
-
-#     prediction_input = input_to_prediction_format(
-#         input_df=temp_df,
-#         column_metadata=column_metadata,
-#         scalers_path=SCALERS_PATH,
-#         encoders_path=ENCODERS_PATH,
-#     )
-
-#     # Predict and decode
-#     prediction = ml_model.predict(prediction_input)
-#     decoded_prediction = ordinal_encoder.inverse_transform(prediction.reshape(-1, 1))[
-#         0
-#     ][0]
-
-#     shap_values = explainer(prediction_input)
-
-#     broken_down_shap_values = get_shap_values(shap_values)
-
-#     base_values = broken_down_shap_values["base_values"]
-#     shap_values_matrix = broken_down_shap_values["shap_values_matrix"]
-#     shap_values_sum_per_class = broken_down_shap_values["shap_values_sum_per_class"]
-#     shap_values_and_base_values_sum_per_class = broken_down_shap_values[
-#         "shap_values_and_base_values_sum_per_class"
-#     ]
-
-#     feature_names = prediction_input.columns.tolist()
-#     feature_values = prediction_input.iloc[0].tolist()
-
-#     # Update causality assessment model
-#     causality_record = (
-#         db.query(CausalityAssessmentLevelModel)
-#         .filter(CausalityAssessmentLevelModel.adr_id == adr_model.id)
-#         .first()
-#     )
-
-#     if causality_record:
-#         causality_record.causality_assessment_level_value = (
-#             CausalityAssessmentLevelEnum(decoded_prediction)
-#         )
-#         causality_record.base_values = base_values
-#         causality_record.shap_values_matrix = shap_values_matrix
-#         causality_record.shap_values_sum_per_class = shap_values_sum_per_class
-#         causality_record.shap_values_and_base_values_sum_per_class = (
-#             shap_values_and_base_values_sum_per_class
-#         )
-#         causality_record.feature_names = feature_names
-#         causality_record.feature_values = format_feature_values(feature_values)
-
-#         db.commit()
-#         db.refresh(causality_record)
-#     else:
-#         new_causality = CausalityAssessmentLevelModel(
-#             adr_id=adr_model.id,
-#             causality_assessment_level_value=CausalityAssessmentLevelEnum(
-#                 decoded_prediction
-#             ),
-#             base_values=base_values,
-#             shap_values_matrix=shap_values_matrix,
-#             shap_values_sum_per_class=shap_values_sum_per_class,
-#             shap_values_and_base_values_sum_per_class=shap_values_and_base_values_sum_per_class,
-#             feature_names=feature_names,
-#             feature_values=format_feature_values(feature_values),
-#         )
-#         db.add(new_causality)
-#         db.commit()
-#         db.refresh(new_causality)
-
-#     # Step 8: Return updated record with causality details
-#     content = db.query(ADRModel).filter(ADRModel.id == adr_model.id).first()
-
-#     return JSONResponse(
-#         content=jsonable_encoder(content),
-#         status_code=status.HTTP_200_OK,
-#     )
+    return content
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)

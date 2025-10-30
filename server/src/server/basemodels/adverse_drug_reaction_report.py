@@ -82,7 +82,12 @@ class ADRPostRequest(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     # Institution Details
-    medical_institution_id: str | None = None  # Not in ML model
+    medical_institution_id: str | None = (
+        "8ade772c-0808-4681-a22c-34f99cb742e5"  # Not in ML model
+    )
+
+    # User Submitted Details
+    user_id: str = "804911e1-c1df-4e45-ae3c-de62104903f7"
 
     # Personal Details
     patient_name: str
@@ -235,6 +240,8 @@ class MLModelInput(BaseModel):
 
 
 class ADRGetResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     # User
     user_id: str
