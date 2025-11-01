@@ -1,9 +1,9 @@
 import enum
-from datetime import date
+from datetime import date, datetime
 
 from pydantic import BaseModel, ConfigDict
 
-from .causality_asssessment_level import CausalityAssessmentLevelEnum
+from server.basemodels.causality_asssessment_level import CausalityAssessmentLevelEnum
 
 
 class GenderEnum(str, enum.Enum):
@@ -274,3 +274,17 @@ class ADRGetResponse(BaseModel):
     comments: str | None = None
 
     # causality_assessment_levels: List[CausalityAssessmentLevelGetResponse] = []
+
+
+class ADRWithReviewsResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    adr_id: str
+    patient_name: str
+    created_by: str
+    created_at: datetime
+
+    causality_assessment_level_value: CausalityAssessmentLevelEnum | None = None
+
+    approved_reviews: int
+    unapproved_reviews: int
