@@ -30,7 +30,7 @@ def get_dashboard_service(db: Session = Depends(get_db)):
     return DashboardService(db)
 
 
-@router.get("/adr_monitoring", status_code=status.HTTP_200_OK)
+@router.get("/adr-monitoring", status_code=status.HTTP_200_OK)
 def get_adr_monitoring(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     start: str = Query(...),
