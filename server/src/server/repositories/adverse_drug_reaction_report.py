@@ -2,7 +2,10 @@ from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
 from server.basemodels.adverse_drug_reaction_report import ADRPostRequest
 from server.models.adverse_drug_reaction_report import ADRModel
-from sqlalchemy import desc, select
+from server.models.causality_assessment_level import CausalityAssessmentLevelModel
+from server.models.review import ReviewModel
+from server.models.user import UserModel
+from sqlalchemy import and_, case, desc, false, func, select, true
 from sqlalchemy.orm import Session
 
 
@@ -30,6 +33,73 @@ class AdverseDrugReactionReportRepository:
 
         return self.db.scalar(stmt)
 
+    def get_paginated_adrs_with_reviews(
+        self, params: Params, query: str | None
+    ) -> Page:
+        """
+        Gets a paginated list of ADRs with their first causality level
+        and review counts.
+        """
+        search_term = f"%{query}%" if query else None
+
+        # Main query using ROW_NUMBER and CTE for SQLite compatibility
+        ranked_causality_cte = select(
+            CausalityAssessmentLevelModel,
+            func.row_number()
+            .over(
+                partition_by=CausalityAssessmentLevelModel.adr_id,
+                order_by=CausalityAssessmentLevelModel.created_at.asc(),
+            )
+            .label("rn"),
+        ).cte("ranked_causality")
+
+        main_stmt = (
+            select(
+                ADRModel.id.label("adr_id"),
+                ADRModel.patient_name,
+                (UserModel.first_name + " " + UserModel.last_name).label("created_by"),
+                ADRModel.created_at,
+                ranked_causality_cte.c.causality_assessment_level_value,
+                func.count(case((ReviewModel.approved == true(), 1))).label(
+                    "approved_reviews"
+                ),
+                func.count(case((ReviewModel.approved == false(), 1))).label(
+                    "unapproved_reviews"
+                ),
+            )
+            .select_from(ADRModel)
+            .join(UserModel, ADRModel.user_id == UserModel.id)
+            .join(
+                ranked_causality_cte,
+                and_(
+                    ranked_causality_cte.c.adr_id == ADRModel.id,
+                    ranked_causality_cte.c.rn == 1,
+                ),
+                isouter=True,
+            )
+            .join(
+                ReviewModel,
+                ReviewModel.causality_assessment_level_id == ranked_causality_cte.c.id,
+                isouter=True,
+            )
+            .group_by(
+                ADRModel.id,
+                ADRModel.patient_name,
+                UserModel.first_name,
+                UserModel.last_name,
+                ranked_causality_cte.c.causality_assessment_level_value,
+            )
+            .order_by(ADRModel.created_at.desc())
+        )
+
+        if search_term:
+            main_stmt = main_stmt.where(
+                func.lower(ADRModel.patient_name).like(func.lower(search_term))
+            )
+
+        # Note: The paginate function handles the .limit() and .offset()
+        return paginate(self.db, main_stmt, params=params)
+
     def create(self, data: ADRPostRequest) -> ADRModel:
         model = ADRModel(**data.model_dump())
 
@@ -54,7 +124,7 @@ class AdverseDrugReactionReportRepository:
         return model
 
     def delete(self, id: str) -> bool:
-        model = self.get(id)
+        model = self.get_by_id(id)
 
         if not model:
             return False

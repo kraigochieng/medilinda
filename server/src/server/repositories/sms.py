@@ -1,8 +1,10 @@
 from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
-from server.basemodels.sms import SMSMessageTypeEnum
+from server.basemodels.sms import SMSCountResponse, SMSMessageTypeEnum
+from server.models.adverse_drug_reaction_report import ADRModel
+from server.models.medical_institution import MedicalInstitutionModel
 from server.models.sms import SMSMessageModel
-from sqlalchemy import desc, select
+from sqlalchemy import desc, func, select
 from sqlalchemy.orm import Session
 
 
@@ -30,6 +32,48 @@ class SMSMessageRepository:
 
         return self.db.scalar(stmt)
 
+    def get_sms_counts_by_adr(
+        self, params: Params, sms_type: SMSMessageTypeEnum | None
+    ) -> Page[SMSCountResponse]:
+        """
+        Gets a paginated, grouped count of SMS messages by ADR,
+        including medical institution details.
+        """
+
+        main_stmt = (
+            select(
+                SMSMessageModel.adr_id,
+                SMSMessageModel.sms_type,
+                MedicalInstitutionModel.mfl_code.label("medical_institution_mfl_code"),
+                MedicalInstitutionModel.name.label("medical_institution_name"),
+                ADRModel.patient_name.label("patient_name"),
+                func.count(SMSMessageModel.id).label("sms_count"),
+            )
+            .join(
+                ADRModel,
+                ADRModel.id == SMSMessageModel.adr_id,
+            )
+            .join(
+                MedicalInstitutionModel,
+                MedicalInstitutionModel.id == ADRModel.medical_institution_id,
+            )
+            .group_by(
+                SMSMessageModel.adr_id,
+                SMSMessageModel.sms_type,
+                MedicalInstitutionModel.name,
+                MedicalInstitutionModel.mfl_code,
+                ADRModel.patient_name,
+            )
+            .order_by(desc(ADRModel.patient_name))
+        )
+
+        # Apply filter if provided
+        if sms_type:
+            main_stmt = main_stmt.filter(SMSMessageModel.sms_type == sms_type)
+
+        # Let paginate handle the total count, limit, and offset
+        return paginate(self.db, main_stmt, params)
+
     def create(self, data: dict) -> SMSMessageModel:
         sms = SMSMessageModel(**data)
 
@@ -38,6 +82,19 @@ class SMSMessageRepository:
         self.db.refresh(sms)
 
         return sms
+
+    def create_batch(
+        self, sms_messages: list[SMSMessageModel]
+    ) -> list[SMSMessageModel]:
+        """
+        Adds a list of SMSMessageModel instances to the session,
+        commits, and refreshes them.
+        """
+        self.db.add_all(sms_messages)
+        self.db.commit()
+        for msg in sms_messages:
+            self.db.refresh(msg)
+        return sms_messages
 
     def delete(self, id: str) -> bool:
         sms = self.get_by_id(id)

@@ -10,6 +10,7 @@ from server.api.v1.endpoints import (
 from server.api.v1.endpoints import (
     adverse_drug_reaction_reports_details as adverse_drug_reaction_report_details_v1,
 )
+from server.api.v1.endpoints import alerts as alerts_v1
 from server.api.v1.endpoints import auth as auth_v1
 from server.api.v1.endpoints import (
     causality_assessment_levels as causality_assessment_level_v1,
@@ -23,10 +24,11 @@ from server.api.v1.endpoints import sms_details as sms_details_v1
 from server.api.v1.endpoints import telephones as telephones_v1
 from server.api.v1.endpoints import users as users_v1
 from server.lifespan.lifespan import lifespan
+from server.logging_config import setup_logging
 from server.settings import settings
 
-logging.basicConfig(level=logging.INFO)
-logging.getLogger("shap").setLevel(logging.WARNING)
+setup_logging()
+
 
 app = FastAPI(lifespan=lifespan)
 
@@ -40,6 +42,7 @@ app.add_middleware(
 
 add_pagination(app)
 
+app.include_router(alerts_v1.router)
 app.include_router(auth_v1.router)
 app.include_router(adverse_drug_reaction_report_v1.router)
 app.include_router(adverse_drug_reaction_report_details_v1.router)

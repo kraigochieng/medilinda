@@ -1,7 +1,7 @@
 import enum
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class SMSMessageTypeEnum(str, enum.Enum):
@@ -31,3 +31,17 @@ class IndividualAlertPostRequest(BaseModel):
 
 class AdditionalInfoPostRequest(BaseModel):
     adr_id: str
+
+
+class SMSCountResponse(BaseModel):
+    """
+    Response model for aggregated SMS counts by ADR.
+    """
+    model_config = ConfigDict(from_attributes=True)
+
+    adr_id: str
+    sms_type: SMSMessageTypeEnum
+    medical_institution_mfl_code: str
+    medical_institution_name: str
+    patient_name: str
+    sms_count: int
