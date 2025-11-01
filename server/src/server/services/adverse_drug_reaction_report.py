@@ -1,7 +1,7 @@
 import logging
 
 import pandas as pd
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from mlflow.pyfunc import PyFuncModel
 from pydantic import ValidationError
 from shap import Explanation, KernelExplainer
@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from server.basemodels.adverse_drug_reaction_report import (
     ADRGetResponse,
     ADRPostRequest,
+    ADRWithReviewsResponse,
     DechallengeEnum,
     MLModelInput,
     RechallengeEnum,
@@ -50,6 +51,16 @@ class AdverseDrugReactionReportService:
 
     def get_by_id(self, id: str) -> ADRGetResponse | None:
         return self.repository.get_by_id(id)
+
+    def get_adrs_with_causality_and_review_count(
+        self, params: Params, query: str | None
+    ) -> Page[ADRWithReviewsResponse]:
+        """
+        Pass-through method to get paginated ADRs with review counts.
+        """
+        return self.repository.get_paginated_adrs_with_reviews(
+            params=params, query=query
+        )
 
     def create(self, data: ADRPostRequest) -> ADRGetResponse:
         return self.repository.create(data=data)
