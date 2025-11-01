@@ -6,8 +6,8 @@
 
 # In Progress
 
--   [ ] create the post and update routes and services for this
-    -   the service for adr to use the cal and adr service
+-   [ ] add pagination params as depends to all get functions and cascade that through, but docus on the alerts section first
+-   [ ] make repositories return select statements and then paginate on service layer
 -   [ ] assert json as a whole, not properties individually
 -   [ ] replace shadcn with nuxt ui bit by bit
     -   specify steps
@@ -41,3 +41,5 @@
 -   [x] write appropriate tests for my controller repo and service layer first for my existing ones
 -   [x] add logging to transformers on the columns and the structure of the dataframe
 -   [x] how to properly acknowledge intellisoft and pharmacy and poisons board
+-   [x] create the post and update routes and services for this
+    -   the service for adr to use the cal and adr service

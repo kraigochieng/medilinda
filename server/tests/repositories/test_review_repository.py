@@ -6,7 +6,7 @@ from server.repositories.review import ReviewRepository
 
 @pytest.fixture
 def review_repository(db):
-    return ReviewRepository(db)
+    return ReviewRepository(db=db)
 
 
 @pytest.fixture
@@ -49,7 +49,7 @@ def test_update_review(
 ):
     created = review_repository.create(sample_review_request)
     updated = review_repository.update(created.id, sample_review_request_updated)
-    
+
     assert updated.reason == "another reason"
 
 
@@ -73,7 +73,7 @@ def test_get_all_and_pagination(review_repository, sample_review_request):
             )
         )
 
-    page = review_repository.get_all(causality_assessment_level_id=None)
+    page = review_repository.get_all(causality_assessment_level_id=None, user_id=None)
 
     assert len(page.items) == 3
     assert page.total == 3
