@@ -21,7 +21,7 @@ export interface CausalityAssessmentLevelGetResponseInterface {
 	feature_names?: string[];
 	feature_values?: string[];
 	created_at: string;
-	updated_at: string;
+	// updated_at: string;
 }
 
 export interface CausalityAssessmentLevelWithReviewCountGetResponseInterface {
@@ -38,5 +38,5 @@ export interface CausalityAssessmentLevelWithReviewCountGetResponseInterface {
 	approved_count: number;
 	not_approved_count: number;
 	created_at: string;
-	updated_at: string;
+	// updated_at: string;
 }
