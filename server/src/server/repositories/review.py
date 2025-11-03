@@ -2,7 +2,7 @@ from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
 from server.basemodels.review import ReviewPostRequest
 from server.models.review import ReviewModel
-from sqlalchemy import desc, select
+from sqlalchemy import Row, case, desc, false, func, select, true
 from sqlalchemy.orm import Session, selectinload
 
 
@@ -43,6 +43,37 @@ class ReviewRepository:
         )
 
         return paginate(self.db, stmt)
+
+    def get_review_counts_by_causality_level(
+        self, causality_assessment_level_id: str
+    ) -> Row:
+        """
+        Gets the count of approved and unapproved reviews for a specific
+        causality_assessment_level_id.
+        """
+        stmt = (
+            select(
+                # Use func.count(case(...)) to conditionally count
+                func.count(case((ReviewModel.approved == true(), 1))).label(
+                    "approved_reviews"
+                ),
+                func.count(case((ReviewModel.approved == false(), 1))).label(
+                    "unapproved_reviews"
+                ),
+            )
+            .select_from(ReviewModel)
+            .where(
+                ReviewModel.causality_assessment_level_id
+                == causality_assessment_level_id
+            )
+        )
+
+        # .first() is correct here because a count query always returns one row
+        result = self.db.execute(stmt).first()
+
+        # This will return a single Row object, e.g., (approved_reviews=5, unapproved_reviews=2)
+        # If no reviews match, it will correctly return (approved_reviews=0, unapproved_reviews=0)
+        return result
 
     def create(
         self,

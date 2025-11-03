@@ -52,3 +52,15 @@ class ReviewPostRequest(BaseModel):
     approved: bool
     proposed_causality_level: CausalityAssessmentLevelEnum | None = None
     reason: str | None = None
+
+
+class ReviewStatsResponse(BaseModel):
+    """
+    Response model for review statistics, showing approved
+    and unapproved counts.
+    """
+
+    model_config = ConfigDict(from_attributes=True)
+
+    approved_reviews: int
+    unapproved_reviews: int
