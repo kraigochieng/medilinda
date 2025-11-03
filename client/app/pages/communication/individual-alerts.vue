@@ -83,6 +83,8 @@ const toBeSentQuery = useQuery({
 			page: toBeSentCurrentPage.value,
 			size: toBeSentPageSize.value,
 			query: debouncedFilter.value,
+			causality_level: "certain",
+			has_been_sent: false,
 		}),
 });
 
@@ -99,6 +101,8 @@ const alreadySentQuery = useQuery({
 			page: alreadySentCurrentPage.value,
 			size: alreadySentPageSize.value,
 			query: debouncedFilter.value,
+			causality_level: "certain",
+			has_been_sent: true,
 		}),
 });
 
