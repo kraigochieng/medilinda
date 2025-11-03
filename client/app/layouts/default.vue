@@ -14,7 +14,9 @@
 		/>
 	</div>
 
-	<slot></slot>
+	<div class="page-wrapper">
+		<slot></slot>
+	</div>
 </template>
 <script setup lang="ts">
 import type { NavigationMenuItem } from "@nuxt/ui";
