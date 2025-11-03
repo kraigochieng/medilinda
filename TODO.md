@@ -3,6 +3,8 @@
 -   [ ] add a tooltip to suggest the user for one to use
 -   [ ] licensing
 -   [ ] make endpoints to use response model and status_code
+-   [ ] use toasts after any actions
+    -   form actions
 
 # In Progress
 
