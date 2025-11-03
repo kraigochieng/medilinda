@@ -31,63 +31,64 @@
 
 		<template #footer>
 			<div class="flex justify-end">
-				<UModal v-model="showDialog">
-					<template #trigger>
-						<UButton
-							variant="ghost"
-							color="neutral"
-							class="flex items-center gap-2"
-						>
-							<UIcon name="i-lucide-circle-help" />
-							<span>Causality Assessment Level Descriptions</span>
-						</UButton>
-					</template>
+				<UModal>
+					<UButton
+						label="Causality Assessment Level Descriptions"
+						icon="i-lucide-circle-question-mark"
+						color="neutral"
+						variant="ghost"
+					/>
+					<template #content>
+						<div class="p-4">
+							<h3 class="text-lg font-semibold">
+								Causality Assessment Level Descriptions
+							</h3>
+							<p class="text-sm text-gray-500">
+								Get a short description of each causality
+								assessment level
+							</p>
 
-					<template #header>
-						<h3 class="text-lg font-semibold">
-							Causality Assessment Level Descriptions
-						</h3>
-						<p class="text-sm text-gray-500">
-							Get a short description of each causality assessment
-							level
-						</p>
+							<ul
+								class="py-4 text-sm text-gray-700 dark:text-gray-400 space-y-2"
+							>
+								<li>
+									<strong>Certain:</strong> Clear link to drug
+									intake with no alternative explanation and
+									strong evidence, including positive
+									withdrawal and rechallenge if needed.
+								</li>
+								<li>
+									<strong>Probable/Likely:</strong> Reasonable
+									link to drug, unlikely due to other causes,
+									with improvement on withdrawal—rechallenge
+									not needed.
+								</li>
+								<li>
+									<strong>Possible:</strong> Reasonable
+									timing, but the event could also be due to
+									other factors, and withdrawal data may be
+									unclear.
+								</li>
+								<li>
+									<strong>Unlikely:</strong> Timing and
+									context make a drug link improbable, with
+									other causes being more plausible.
+								</li>
+								<li>
+									<strong>Conditional/Unclassified:</strong>
+									Event noted, but more data or analysis is
+									needed before making a conclusion.
+								</li>
+								<li>
+									<strong
+										>Unassessable/Unclassifiable:</strong
+									>
+									Insufficient or contradictory information
+									prevents any judgment.
+								</li>
+							</ul>
+						</div>
 					</template>
-
-					<ul
-						class="py-4 text-sm text-gray-700 dark:text-gray-400 space-y-2"
-					>
-						<li>
-							<strong>Certain:</strong> Clear link to drug intake
-							with no alternative explanation and strong evidence,
-							including positive withdrawal and rechallenge if
-							needed.
-						</li>
-						<li>
-							<strong>Probable/Likely:</strong> Reasonable link to
-							drug, unlikely due to other causes, with improvement
-							on withdrawal—rechallenge not needed.
-						</li>
-						<li>
-							<strong>Possible:</strong> Reasonable timing, but
-							the event could also be due to other factors, and
-							withdrawal data may be unclear.
-						</li>
-						<li>
-							<strong>Unlikely:</strong> Timing and context make a
-							drug link improbable, with other causes being more
-							plausible.
-						</li>
-						<li>
-							<strong>Conditional/Unclassified:</strong> Event
-							noted, but more data or analysis is needed before
-							making a conclusion.
-						</li>
-						<li>
-							<strong>Unassessable/Unclassifiable:</strong>
-							Insufficient or contradictory information prevents
-							any judgment.
-						</li>
-					</ul>
 				</UModal>
 			</div>
 		</template>
@@ -100,8 +101,6 @@ import type { CausalityAssessmentLevelEnum } from "@/types/adr";
 const props = defineProps<{
 	value?: CausalityAssessmentLevelEnum;
 }>();
-
-const showDialog = ref(false);
 
 const levels = [
 	{ label: "Unclassifiable", color: "bg-slate-300" },

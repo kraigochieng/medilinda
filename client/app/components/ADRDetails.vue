@@ -404,54 +404,43 @@
 	</UCard>
 
 	<div class="flex space-x-2 justify-end">
-		<UButton @click="router.push(`/adr/${props.data?.id}/edit`)"
-			>Edit ADR</UButton
+		<UButton @click="router.push(`/adr/${props.data?.id}/edit`)">
+			Edit ADR
+		</UButton>
+		<UModal
+			v-model:open="isDeleteModalOpen"
+			title="Are you sure you want to delete it?"
+			description="This action cannot be undone. This will permanently delete this record."
 		>
-		<UButton color="error" @click="isDeleteModalOpen = true"
-			>Delete ADR</UButton
-		>
+			<UButton color="error">Delete ADR</UButton>
+			<template #body>
+				<UButton color="error" @mouseup="handleDelete">
+					Delete ADR
+				</UButton>
+			</template>
+		</UModal>
 	</div>
-
-	<UModal v-model="isDeleteModalOpen">
-		<UCard>
-			<template #header>
-				<h3 class="text-base font-semibold">Are you sure?</h3>
-			</template>
-
-			<p>
-				This action cannot be undone. This will permanently delete this
-				record.
-			</p>
-
-			<template #footer>
-				<div class="flex justify-end space-x-2">
-					<UButton color="neutral" @click="isDeleteModalOpen = false"
-						>Cancel</UButton
-					>
-					<UButton color="error" @click="handleDelete"
-						>Continue</UButton
-					>
-				</div>
-			</template>
-		</UCard>
-	</UModal>
 </template>
 
 <script setup lang="ts">
 import type { ADRGetResponseInterface } from "@/types/adr";
 import { adrFormCategoricalValues } from "@/values/adr";
-const props = defineProps<{ data?: ADRGetResponseInterface }>();
-const router = useRouter();
-// const authStore = useAuthStore();
+
 import { useQuery } from "@tanstack/vue-query";
 
-const isDeleteModalOpen = ref(false);
-
+import { deleteAdrById } from "@/api/adr";
 import { fetchMedicalInstitutionById } from "@/api/medical_institution";
 import type { TableColumn } from "@nuxt/ui";
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
 
+const toast = useToast();
+const queryClient = useQueryClient();
+const router = useRouter();
+
+const isDeleteModalOpen = ref(false);
 const UBadge = resolveComponent("UBadge");
 const UCheckbox = resolveComponent("UCheckbox");
+const props = defineProps<{ data?: ADRGetResponseInterface }>();
 
 const {
 	data: medicalInstitutionData,
@@ -529,7 +518,6 @@ const medicines = computed(() => {
 		},
 	] as MedicineInterface[];
 });
-
 
 const medicineTableColumns: TableColumn<MedicineInterface>[] = [
 	{
@@ -646,29 +634,45 @@ const medicineTableColumns: TableColumn<MedicineInterface>[] = [
 		},
 	},
 ];
-async function handleDelete() {
-	// try {
-	// 	const runtimeConfig = useRuntimeConfig();
-	// 	const serverApi = runtimeConfig.public.serverApi;
-	// 	await $fetch(`${serverApi}/api/v1/adr/${props.data?.id}`, {
-	// 		method: "DELETE",
-	// 		headers: {
-	// 			Authorization: `Bearer ${authStore.accessToken}`,
-	// 		},
-	// 	});
-	// 	toast.add({
-	// 		title: "Success",
-	// 		description: "ADR record deleted successfully.",
-	// 	});
-	// 	isDeleteModalOpen.value = false;
-	// 	router.push("/adr");
-	// } catch (error) {
-	// 	toast.add({
-	// 		title: "Error",
-	// 		description: "Failed to delete ADR record.",
-	// 		color: "error",
-	// 	});
-	// }
+const { mutate: deleteAdr, isPending: isDeleting } = useMutation<
+	void, // Return type from deleteAdrById
+	Error, // Error type
+	string // Variable type (the id)
+>({
+	mutationFn: (idToDelete) => deleteAdrById(idToDelete),
+
+	onSuccess: () => {
+		isDeleteModalOpen.value = false;
+
+		// Show success toast
+		toast.add({
+			title: "ADR Deleted",
+			description: "The ADR report has been successfully deleted.",
+			color: "success",
+			icon: "i-heroicons-check-circle",
+		});
+
+		// Invalidate the main ADR list query so it refetches on the next page
+		queryClient.invalidateQueries({ queryKey: ["adrs"] });
+
+		// Navigate back to the /adr list page
+		router.push("/adr");
+	},
+
+	onError: (error) => {
+		isDeleteModalOpen.value = false;
+		// Show error toast
+		toast.add({
+			title: "Error Deleting ADR",
+			description: error.message,
+			color: "error",
+			icon: "i-heroicons-exclamation-circle",
+		});
+	},
+});
+
+function handleDelete() {
+	deleteAdr(props.data?.id as string);
 }
 </script>
 
