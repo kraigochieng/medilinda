@@ -1,10 +1,12 @@
 import type {
 	ADRGetResponseInterface,
+	ADRPostRequestInterface,
 	ADRWithCausalityLevelAndReviewCountInterface,
 } from "@/types/adr";
-import type { CausalityAssessmentLevelWithReviewCountGetResponseInterface } from "@/types/cal";
+
 import type { PaginatedResponseInterface } from "@/types/pagination";
 import humps from "humps";
+
 const path = "adrs";
 
 export async function fetchAdrs(
@@ -28,20 +30,22 @@ export async function fetchAdrById(
 	});
 }
 
-export async function deleteAdrById(
-	id: string
-): Promise<ADRGetResponseInterface> {
+export async function deleteAdrById(id: string): Promise<void> {
 	const { $serverFetch } = useNuxtApp();
-	return await $serverFetch<ADRGetResponseInterface>(`/${path}/${id}`, {
+	
+	return await $serverFetch<void>(`/${path}/${id}`, {
 		method: "DELETE",
 	});
 }
 
-export async function postAdr(body: any) {
+export async function postAdr(
+	data: ADRPostRequestInterface
+): Promise<ADRGetResponseInterface> {
 	const { $serverFetch } = useNuxtApp();
-	return await $serverFetch(`/${path}`, {
+
+	return await $serverFetch(`/${path}/`, {
 		method: "POST",
-		body: humps.decamelizeKeys(body),
+		body: data,
 	});
 }
 
@@ -64,16 +68,4 @@ export async function fetchAdrsWithCausalityAndReviewCount(params: {
 	} catch (error) {
 		throw new Error(`${error}`);
 	}
-}
-
-export async function fetchCausalityAssessmentByAdrId(
-	id: string
-): Promise<CausalityAssessmentLevelWithReviewCountGetResponseInterface> {
-	const { $serverFetch } = useNuxtApp();
-	return await $serverFetch<CausalityAssessmentLevelWithReviewCountGetResponseInterface>(
-		`/${path}/${id}/causality-assessment-level`,
-		{
-			method: "GET",
-		}
-	);
 }

@@ -1,21 +1,20 @@
-const path = "causality-assessment-levels";
-import type { ReviewWithUserGetResponse } from "~/types/review";
+import type { CausalityAssessmentLevelGetResponseInterface } from "@/types/cal";
 import type { PaginatedResponseInterface } from "~/types/pagination";
 
-export async function fetchReviewsByCausalityAssessmentLevelId(
-	causalityAssessmentLevelId: string,
-	page = 1,
-	size = 50
-): Promise<PaginatedResponseInterface<ReviewWithUserGetResponse>> {
-	const { $serverFetch } = useNuxtApp();
+const path = "causality-assessment-levels";
 
+export async function fetchCausalityAssessmentLevels(params: {
+	page?: number;
+	size?: number;
+	adr_id?: string;
+}): Promise<
+	PaginatedResponseInterface<CausalityAssessmentLevelGetResponseInterface>
+> {
+	const { $serverFetch } = useNuxtApp();
 	return await $serverFetch<
-		PaginatedResponseInterface<ReviewWithUserGetResponse>
-	>(`/${path}/${causalityAssessmentLevelId}/review`, {
+		PaginatedResponseInterface<CausalityAssessmentLevelGetResponseInterface>
+	>(`/${path}/`, {
 		method: "GET",
-		query: {
-			page,
-			size,
-		},
+		query: params,
 	});
 }

@@ -3,32 +3,36 @@ import type {
 	SMSMessageCountGetResponse,
 	SMSMessageGetResponse,
 } from "@/types/sms_message";
+import type { CausalityAssessmentLevelEnum } from "~/types/adr";
 
+const path = "alerts";
 type AlertParams = {
 	page: number;
 	size: number;
 	query?: string;
+	causality_level?: CausalityAssessmentLevelEnum;
+	has_been_sent?: boolean;
 };
 
 export async function fetchToBeSentIndividualAlerts(params: AlertParams) {
 	const { $serverFetch } = useNuxtApp();
 	return await $serverFetch<
 		PaginatedResponseInterface<SMSMessageCountGetResponse>
-	>("/adrs-details/to-be-sent-individual-alerts", { params });
+	>(`/${path}/`, { method: "GET", query: params });
 }
 
 export async function fetchAlreadySentIndividualAlerts(params: AlertParams) {
 	const { $serverFetch } = useNuxtApp();
 	return await $serverFetch<
 		PaginatedResponseInterface<SMSMessageCountGetResponse>
-	>("/adrs-details/individual-alerts", { params });
+	>(`/${path}/`, { method: "GET", query: params });
 }
 
 export async function fetchToBeSentAdditionalInfoAlerts(params: AlertParams) {
 	const { $serverFetch } = useNuxtApp();
 	return await $serverFetch<
 		PaginatedResponseInterface<SMSMessageCountGetResponse>
-	>("/adrs-details/to-be-sent-additional-info-requests", { params });
+	>(`/${path}/`, { method: "GET", query: params });
 }
 
 export async function fetchAlreadySentAdditionalInfoAlerts(
@@ -37,7 +41,7 @@ export async function fetchAlreadySentAdditionalInfoAlerts(
 	const { $serverFetch } = useNuxtApp();
 	return await $serverFetch<
 		PaginatedResponseInterface<SMSMessageCountGetResponse>
-	>("/adrs-details/additional-info-requests", { params });
+	>(`/${path}/`, { method: "GET", query: params });
 }
 
 export async function sendIndividualAlert(adrId: string) {
