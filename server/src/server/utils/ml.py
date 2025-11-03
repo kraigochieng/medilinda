@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from typing import TypedDict
 
 import numpy as np
@@ -79,6 +80,43 @@ def format_dataframe_for_model(
             formatted_df[col] = formatted_df[col].astype(str).replace("NaT", "None")
 
     return formatted_df
+
+
+def make_json_serializable(item):
+    """
+    Recursively converts an item to be JSON serializable.
+    Handles lists, dicts, numpy types, and date/datetime objects.
+    """
+    if isinstance(item, (list, tuple, np.ndarray)):
+        # If it's a list, recurse on its items
+        return [make_json_serializable(i) for i in item]
+
+    if isinstance(item, dict):
+        # If it's a dict, recurse on its values
+        return {k: make_json_serializable(v) for k, v in item.items()}
+
+    if isinstance(item, (np.floating, np.float64)):
+        # Convert numpy floats to native Python floats
+        return float(item)
+
+    if isinstance(item, (np.integer, np.int64, np.int32)):
+        # Convert numpy integers to native Python ints
+        return int(item)
+
+    if isinstance(item, (np.bool_)):
+        # Convert numpy bools to native Python bools
+        return bool(item)
+
+    if isinstance(item, (date, datetime)):
+        # Convert date/datetime objects to ISO strings
+        return item.isoformat()
+
+    if pd.isna(item):
+        # Convert Pandas NaT/NaN to None (which is JSON-null)
+        return None
+
+    # Otherwise, assume it's already serializable (str, int, float, bool, None)
+    return item
 
 
 # Columns that MUST be numbers (double)

@@ -2,12 +2,14 @@ import datetime
 import logging
 import os
 import random
+from datetime import date
 from uuid import uuid4
 
+import numpy as np
 import pandas as pd
 from mlflow.pyfunc import PyFuncModel
 from pydantic import ValidationError
-from shap import KernelExplainer
+from shap import Explanation, KernelExplainer
 from sklearn.preprocessing import OrdinalEncoder
 from sqlalchemy.orm import Session
 
@@ -19,11 +21,11 @@ from server.basemodels.adverse_drug_reaction_report import (
     GenderEnum,
     IsSeriousEnum,
     KnownAllergyEnum,
+    MLModelInput,
     OutcomeEnum,
     PregnancyStatusEnum,
     RechallengeEnum,
     SeverityEnum,
-    MLModelInput,
 )
 from server.config import (
     ADR_CSV_PATH,
@@ -48,6 +50,7 @@ from server.utils.ml import (
     bool_cols,
     format_dataframe_for_model,
     get_shap_values,
+    make_json_serializable,
     model_cols,
     numeric_cols,
     safe_date_parse,
@@ -288,26 +291,38 @@ def insert_causality_assessment_levels(
         # record_dict = {
         #     c.name: getattr(adr_entry, c.name) for c in adr_entry.__table__.columns
         # }
-        # adr_data_df = pd.DataFrame([record_dict])
+        # ml_model_input_df = pd.DataFrame([record_dict])
 
         input_dict = validated_data.model_dump()
-        adr_data_df = pd.DataFrame([input_dict])
+        ml_model_input_df = pd.DataFrame([input_dict])
 
-        print(adr_data_df.info())
+        if "created_at" in ml_model_input_df.columns:
+            ml_model_input_df["created_at"] = ml_model_input_df["created_at"].astype(
+                str
+            )
+
+        print(ml_model_input_df.info())
         # formatted_df = format_dataframe_for_model(
-        #     adr_data_df,
+        #     ml_model_input_df,
         #     model_cols=model_cols,
         #     numeric_cols=numeric_cols,
         #     bool_cols=bool_cols,
         #     string_cols=string_cols,
         # )
         # Predict using the ML model
-        prediction = ml_model.predict(adr_data_df)
+        prediction = ml_model.predict(ml_model_input_df)
 
         decoded_prediction = encoder.inverse_transform(prediction.reshape(-1, 1))[0][0]
 
         logging.info("Generation SHAP value...")
-        shap_values = explainer(adr_data_df)
+
+        shap_values: Explanation = explainer(ml_model_input_df)
+
+        final_feature_names = shap_values.feature_names
+
+        raw_feature_values = shap_values.data[0].tolist()
+
+        final_feature_values = make_json_serializable(raw_feature_values)
 
         broken_down_shap_values = get_shap_values(shap_values)
 
@@ -328,8 +343,8 @@ def insert_causality_assessment_levels(
             shap_values_matrix=shap_values_matrix,
             shap_values_sum_per_class=shap_values_sum_per_class,
             shap_values_and_base_values_sum_per_class=shap_values_and_base_values_sum_per_class,
-            feature_names=None,
-            feature_values=None,
+            feature_names=final_feature_names,
+            feature_values=final_feature_values,
         )
 
         causality_entries.append(causality_entry)
