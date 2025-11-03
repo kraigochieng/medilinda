@@ -48,8 +48,9 @@
 <script setup lang="ts">
 import {
 	fetchAlreadySentAdditionalInfoAlerts,
-	fetchToBeSentAdditionalInfoAlerts
+	fetchToBeSentAdditionalInfoAlerts,
 } from "@/api/sms";
+import type { CausalityAssessmentLevelEnum } from "~/types/adr";
 import type { SMSMessageCountGetResponse } from "@/types/sms_message";
 import type { TableColumn, TabsItem } from "@nuxt/ui";
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
@@ -83,6 +84,8 @@ const toBeSentQuery = useQuery({
 			page: toBeSentCurrentPage.value,
 			size: toBeSentPageSize.value,
 			query: debouncedFilter.value,
+			causality_level: "unclassified",
+			has_been_sent: false,
 		}),
 });
 
@@ -99,6 +102,8 @@ const alreadySentQuery = useQuery({
 			page: alreadySentCurrentPage.value,
 			size: alreadySentPageSize.value,
 			query: debouncedFilter.value,
+			causality_level: "unclassified",
+			has_been_sent: true,
 		}),
 });
 
