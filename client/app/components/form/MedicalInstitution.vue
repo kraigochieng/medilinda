@@ -1,7 +1,7 @@
 <template>
-	<UForm>
+	<UForm @submit="onSubmit" :schema="schema" :state="state">
 		<UCard>
-			<template #header>
+			<template v-if="!isInDialog" #header>
 				<h1>Add Medical Institution</h1>
 				<h2>
 					Add an Medical Institution so that it can be part of an ADR
@@ -113,7 +113,12 @@
 				</div>
 			</template>
 			<template #footer>
-				<UButton id="submit" type="submit" class="w-full mx-auto my-4">
+				<UButton
+					id="submit"
+					type="submit"
+					class="w-full mx-auto my-4"
+					:loading="isSubmitting"
+				>
 					{{
 						props.mode == "create"
 							? "Add Medical Institution"
@@ -126,8 +131,16 @@
 </template>
 
 <script setup lang="ts">
+import { postMedicalInstitution } from "@/api/medical_institution";
+import { postTelephones } from "@/api/telephone";
+import type {
+	MedicalInstitutionGetResponseInterface,
+	MedicalInstitutionPostRequestInterface,
+} from "@/types/medical_institution";
 import type { FormSubmitEvent } from "@nuxt/ui";
+import { useMutation } from "@tanstack/vue-query";
 import { z } from "zod";
+import type { TelephonePostRequest } from "~/types/telephone";
 
 const props = withDefaults(
 	defineProps<{
@@ -172,29 +185,12 @@ const emit = defineEmits<{
 
 // Lifecycle hooks
 onMounted(async () => {
-	// // If there is an id
-	// if (props.id) {
-	// 	// Get existing data
-	// 	const response =
-	// 		await $fetch<Schema>(
-	// 			`${serverApi}/medical_institution/${props.id}`,
-	// 			{
-	// 				method: "GET",
-	// 				headers: {
-	// 					Authorization: `Bearer ${authStore.accessToken}`,
-	// 				},
-	// 			}
-	// 		);
-	// 	// Pre-fill form
-	// 	const camel = humps.camelizeKeys(
-	// 		response
-	// 	) as Schema;
-	// 	for (const key of Object.keys(camel) as Array<
-	// 		keyof Schema
-	// 	>) {
-	// 		setFieldValue(key, camel[key]);
-	// 	}
-	// }
+	if (props.mode === "update" && props.id) {
+		// Your logic to fetch and pre-fill data for update mode goes here
+		// e.g., const data = await fetchMedicalInstitutionById(props.id);
+		// Object.assign(state, data);
+		console.log("Update mode: Fetching data for ID:", props.id);
+	}
 });
 
 // Add new telephone number
@@ -209,94 +205,138 @@ function removeTelephoneNumber(index: number) {
 	}
 }
 
+const { mutate: createTelephones, isPending: isTelephonesPending } =
+	useMutation<TelephonePostRequest[], Error, TelephonePostRequest[]>({
+		mutationFn: (telephones) => postTelephones(telephones),
+	});
+
+const { mutate: createMedicalInstitution, isPending: isInstitutionPending } =
+	useMutation<
+		MedicalInstitutionGetResponseInterface,
+		Error,
+		{
+			institutionData: MedicalInstitutionPostRequestInterface;
+			phoneNumbers: string[];
+		}
+	>({
+		mutationFn: (vars) => postMedicalInstitution(vars.institutionData),
+
+		onSuccess: (createdInstitution, variables) => {
+			console.log("Institution created:", createdInstitution);
+
+			const telephonePayload: TelephonePostRequest[] =
+				variables.phoneNumbers.map((phone) => ({
+					medical_institution_id: createdInstitution.id,
+					telephone: phone,
+				}));
+
+			// Trigger the telephone mutation
+			createTelephones(telephonePayload, {
+				onSuccess: () => {
+					console.log("Telephones added successfully!");
+					emit(
+						"submitted",
+						true,
+						createdInstitution.id,
+						"Institution and telephones created."
+					);
+				},
+				onError: (error) => {
+					console.error("Failed to add telephones:", error);
+
+					emit(
+						"submitted",
+						true,
+						createdInstitution.id,
+						`Institution created, but failed to add telephones: ${error.message}`
+					);
+				},
+			});
+		},
+		onError: (error) => {
+			console.error("Failed to create medical institution:", error);
+			emit(
+				"submitted",
+				false,
+				undefined,
+				`Failed to create institution: ${error.message}`
+			);
+		},
+	});
+
+const { mutate: updateMedicalInstitution, isPending: isUpdatePending } =
+	useMutation<
+		MedicalInstitutionGetResponseInterface,
+		Error,
+		{ data: Schema; id: string }
+	>({
+		mutationFn: async (vars) => {
+			// 1. Call your `putMedicalInstitution(vars.id, vars.data)`
+			// 2. Call your logic to update telephones (e.g., `putTelephones(...)`)
+			console.warn(
+				"Update mutation logic is not fully implemented.",
+				vars
+			);
+			// This is a placeholder. Replace with your actual update API call.
+			// await putMedicalInstitution(vars.id, vars.data);
+			// await updateTelephones(vars.id, vars.data.telephone_numbers);
+
+			// Simulating a successful response for now
+			return { id: vars.id, ...vars.data };
+		},
+		onSuccess: (updatedInstitution) => {
+			console.log("Institution updated:", updatedInstitution);
+			emit(
+				"submitted",
+				true,
+				updatedInstitution.id,
+				"Institution updated successfully."
+			);
+		},
+		onError: (error) => {
+			console.error("Failed to update institution:", error);
+			emit(
+				"submitted",
+				false,
+				undefined,
+				`Failed to update: ${error.message}`
+			);
+		},
+	});
+
+// Combined loading state for the submit button
+const isSubmitting = computed(
+	() =>
+		isInstitutionPending.value ||
+		isTelephonesPending.value ||
+		isUpdatePending.value
+);
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-	// const runtimeConfig = useRuntimeConfig();
-	// const serverApi = runtimeConfig.public.serverApi;
-	// const authStore = useAuthStore();
-	// if (props.mode == "create") {
-	// 	const { data, status, error } =
-	// 		await useFetch<MedicalInstitutionPostResponseInterface>(
-	// 			`${serverApi}/medical_institution`,
-	// 			{
-	// 				method: "POST",
-	// 				headers: {
-	// 					Authorization: `Bearer ${authStore.accessToken}`,
-	// 				},
-	// 				body: {
-	// 					name: values["name"],
-	// 					mfl_code: values["mfl_code"],
-	// 					dhis_code: values["dhis_code"],
-	// 					county: values["county"],
-	// 					subcounty: values["sub_county"],
-	// 				},
-	// 			}
-	// 		);
-	// 	if (status.value === "success" && data.value) {
-	// 		const medicalInstitutionId = data.value.id; // or whatever field contains the ID
-	// 		const telephonePayload = values.telephone_numbers.map((phone) => ({
-	// 			medical_institution_id: medicalInstitutionId,
-	// 			telephone: phone,
-	// 		}));
-	// 		console.log("telephonePayload", telephonePayload);
-	// 		const {
-	// 			data: telData,
-	// 			status: telStatus,
-	// 			error: telError,
-	// 		} = await useFetch(
-	// 			`${serverApi}/medical_institution_telephone`, // or your correct endpoint
-	// 			{
-	// 				method: "POST",
-	// 				headers: {
-	// 					Authorization: `Bearer ${authStore.accessToken}`,
-	// 				},
-	// 				body: {
-	// 					telephones: telephonePayload,
-	// 				},
-	// 			}
-	// 		);
-	// 		if (telStatus.value === "success") {
-	// 			console.log("Telephones added successfully!");
-	// 			emit("submitted", true, data.value.id);
-	// 		} else {
-	// 			console.error("Failed to add telephones:", telError.value);
-	// 			emit("submitted", false);
-	// 		}
-	// 	}
-	// } else if (props.mode == "update") {
-	// 	const { data, status, error } =
-	// 		await useFetch<MedicalInstitutionPostResponseInterface>(
-	// 			`${serverApi}/medical_institution/${props.id}`,
-	// 			{
-	// 				method: "PUT",
-	// 				headers: {
-	// 					Authorization: `Bearer ${authStore.accessToken}`,
-	// 				},
-	// 				body: humps.decamelizeKeys(values),
-	// 			}
-	// 		);
-	// if (status.value == "success" && data.value) {
-	// 	const {
-	// 		data: calData,
-	// 		status: calStatus,
-	// 		error,
-	// 	} = await useFetch<PaginatedCausalityAssessmentLevel>(
-	// 		`${serverApi}/adr/${data.value.id}/causality_assessment_level`,
-	// 		{
-	// 			method: "GET",
-	// 			headers: {
-	// 				Authorization: `Bearer ${authStore.accessToken}`,
-	// 			},
-	// 			params: {
-	// 				page: 1,
-	// 				size: 50,
-	// 			},
-	// 		}
-	// 	);
-	// 	if (calStatus.value == "success" && calData.value?.items) {
-	// 		navigateTo(
-	// 			`/causality-assessment-level/${calData.value.items[0].id}/review`
-	// 		);
-	// 	}
-	// }
+	const { data } = event;
+
+	if (props.mode === "create") {
+		const institutionPayload: MedicalInstitutionPostRequestInterface = {
+			name: data.name,
+			mfl_code: data.mfl_code,
+			dhis_code: data.dhis_code,
+			county: data.county,
+			sub_county: data.sub_county,
+		};
+
+		createMedicalInstitution({
+			institutionData: institutionPayload,
+			phoneNumbers: data.telephone_numbers,
+		});
+	} else if (props.mode === "update" && props.id) {
+		updateMedicalInstitution({
+			data: data,
+			id: props.id,
+		});
+	} else {
+		console.error(
+			"Submission error: Invalid mode or missing ID for update."
+		);
+		emit("submitted", false, undefined, "Invalid form state.");
+	}
 }
 </script>
