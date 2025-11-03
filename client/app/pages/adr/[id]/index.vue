@@ -1,56 +1,69 @@
 <template>
-	<h1>Adverse Drug Reaction Details</h1>
+	<h1 class="page-title">Adverse Drug Reaction Details</h1>
 
 	<CausalityAssessmentLevelComparison
-		v-if="causalityAssessmentLevelData"
-		:value="causalityAssessmentLevelData.causality_assessment_level_value"
+		:value="firstCausalityAssessmentLevel?.causality_assessment_level_value"
 	/>
 
-	<UTabs :items="tabs">
+	<UTabs :items="tabs" color="neutral">
 		<template #adr>
 			<ADRDetails v-if="adrData" :data="adrData" />
 		</template>
 		<template
 			#causality-assessment
 			v-if="
-				causalityAssessmentLevelData &&
 				!['unclassified', 'unclassifiable'].includes(
-					causalityAssessmentLevelData.causality_assessment_level_value ??
+					firstCausalityAssessmentLevel?.causality_assessment_level_value ??
 						''
 				)
 			"
 		>
 			<ClassRankings
 				v-if="
-					causalityAssessmentLevelData &&
 					!['unclassified', 'unclassifiable'].includes(
-						causalityAssessmentLevelData.causality_assessment_level_value ??
+						firstCausalityAssessmentLevel?.causality_assessment_level_value ??
 							''
 					)
 				"
-				:base-values="causalityAssessmentLevelData.base_values"
+				:base-values="firstCausalityAssessmentLevel?.base_values"
 				:shap-values="
-					causalityAssessmentLevelData.shap_values_sum_per_class
+					firstCausalityAssessmentLevel?.shap_values_sum_per_class
 				"
 				:base-shap-values="
-					causalityAssessmentLevelData.shap_values_and_base_values_sum_per_class
+					firstCausalityAssessmentLevel?.shap_values_and_base_values_sum_per_class
 				"
+			/>
+			<FeatureRankings
+				v-if="
+					firstCausalityAssessmentLevel &&
+					!['unclassified', 'unclassifiable'].includes(
+						firstCausalityAssessmentLevel.causality_assessment_level_value ??
+							''
+					)
+				"
+				:default-class="firstCausalityAssessmentLevel.causality_assessment_level_value"
+				:base-values="firstCausalityAssessmentLevel.base_values"
+				:shap-values="
+					firstCausalityAssessmentLevel.shap_values_sum_per_class
+				"
+				:base-shap-values="
+					firstCausalityAssessmentLevel.shap_values_and_base_values_sum_per_class
+				"
+				:shap-matrix="firstCausalityAssessmentLevel.shap_values_matrix"
+				:feature-names="firstCausalityAssessmentLevel.feature_names"
+				:feature-values="firstCausalityAssessmentLevel.feature_values"
 			/>
 		</template>
 		<template #review>
 			<ReviewCount
-				:approved-count="
-					causalityAssessmentLevelData?.approved_count || 0
-				"
-				:not-approved-count="
-					causalityAssessmentLevelData?.not_approved_count || 0
-				"
+				:approved-count="reviewStats?.approved_reviews || 0"
+				:not-approved-count="reviewStats?.unapproved_reviews || 0"
 			/>
 			<ReviewDetails
-				v-if="currentReviewDetails"
-				:data="currentReviewDetails"
+				:v-if="firstCurrentReview"
+				:data="firstCurrentReview"
 				:causality_assessment_level_id="
-					currentReviewDetails.causality_assessment_level_id
+					firstCurrentReview?.causality_assessment_level_id
 				"
 			/>
 			<div v-if="!currentReviewDetails">
@@ -64,44 +77,17 @@
 			<UTable :data="reviewRows" :columns="reviewColumns" />
 		</template>
 	</UTabs>
-	<!-- 
-					<FeatureRankings
-						v-if="
-							causalityAssessmentLevelData &&
-							!['unclassified', 'unclassifiable'].includes(
-								causalityAssessmentLevelData.causality_assessment_level_value ??
-									''
-							)
-						"
-						:base-values="causalityAssessmentLevelData.base_values"
-						:shap-values="
-							causalityAssessmentLevelData.shap_values_sum_per_class
-						"
-						:base-shap-values="
-							causalityAssessmentLevelData.shap_values_and_base_values_sum_per_class
-						"
-						:shap-matrix="
-							causalityAssessmentLevelData.shap_values_matrix
-						"
-						:feature-names="
-							causalityAssessmentLevelData.feature_names
-						"
-						:feature-values="
-							causalityAssessmentLevelData.feature_values
-						"
-					/>
- -->
 </template>
 
 <script setup lang="ts">
-import { fetchAdrById, fetchCausalityAssessmentByAdrId } from "@/api/adr";
-import { fetchReviewsByCausalityAssessmentLevelId } from "@/api/cal";
-import { fetchReviewByUserAndCausalityLevel } from "@/api/review";
+import { fetchAdrById, deleteAdrById } from "@/api/adr";
+import { fetchCausalityAssessmentLevels } from "@/api/cal";
+import { fetchReviews, fetchReviewStats } from "@/api/review";
 import type { ADRGetResponseInterface } from "@/types/adr";
 import type { TableColumn, TabsItem } from "@nuxt/ui";
-import { useQuery } from "@tanstack/vue-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 import { capitalize } from "lodash-es";
-import type { ReviewWithUserGetResponse } from "~/types/review";
+import type { ReviewGetResponse } from "~/types/review";
 
 // Get ADR id
 const route = useRoute();
@@ -142,9 +128,13 @@ const {
 	status: causalityAssessmentStatus,
 } = useQuery({
 	queryKey: ["causality-assessment", id],
-	queryFn: () => fetchCausalityAssessmentByAdrId(id),
+	queryFn: () => fetchCausalityAssessmentLevels({ adr_id: id }),
 	enabled: computed(() => !!id), // only runs when adrId exists
 });
+
+const firstCausalityAssessmentLevel = computed(
+	() => causalityAssessmentLevelData.value?.items?.[0]
+);
 
 const {
 	data: currentReviewDetails,
@@ -153,13 +143,18 @@ const {
 	error: reviewDetailsError,
 	status: reviewDetailsStatus,
 } = useQuery({
-	queryKey: ["review-details", causalityAssessmentLevelData.value?.id],
+	queryKey: ["review-details", firstCausalityAssessmentLevel.value?.id],
 	queryFn: () =>
-		fetchReviewByUserAndCausalityLevel(
-			causalityAssessmentLevelData.value?.id as string
-		),
-	enabled: computed(() => !!causalityAssessmentLevelData.value?.id),
+		fetchReviews({
+			causality_assessment_level_id: firstCausalityAssessmentLevel.value
+				?.id as string,
+		}),
+	enabled: computed(() => !!firstCausalityAssessmentLevel.value?.id),
 });
+
+const firstCurrentReview = computed(
+	() => currentReviewDetails.value?.items?.[0]
+);
 
 const {
 	data: reviewData,
@@ -168,17 +163,31 @@ const {
 } = useQuery({
 	queryKey: [
 		"reviews-by-causality-level",
-		causalityAssessmentLevelData.value?.id,
+		firstCausalityAssessmentLevel.value?.id,
 	],
 	queryFn: () =>
-		fetchReviewsByCausalityAssessmentLevelId(
-			causalityAssessmentLevelData.value?.id as string
-		),
-	enabled: computed(() => !!causalityAssessmentLevelData.value?.id),
+		fetchReviews({
+			causality_assessment_level_id:
+				firstCausalityAssessmentLevel.value?.id,
+		}),
+	enabled: computed(() => !!firstCausalityAssessmentLevel.value?.id),
+});
+
+const {
+	data: reviewStats,
+	isPending: isStatsPending,
+	isError: isStatsError,
+	error: statsError,
+	refetch: refetchStats,
+} = useQuery({
+	queryKey: ["reviews-stats", firstCausalityAssessmentLevel.value?.id],
+	queryFn: () =>
+		fetchReviewStats(firstCausalityAssessmentLevel.value?.id as string),
+	enabled: computed(() => !!firstCausalityAssessmentLevel.value?.id),
 });
 
 const reviewRows = computed(
-	() => (reviewData.value?.items as ReviewWithUserGetResponse[]) ?? []
+	() => (reviewData.value?.items as ReviewGetResponse[]) ?? []
 );
 
 function formatTime(isoString: string): string {
@@ -190,7 +199,7 @@ function formatTime(isoString: string): string {
 	}).format(date);
 }
 
-const reviewColumns: TableColumn<ReviewWithUserGetResponse>[] = [
+const reviewColumns: TableColumn<ReviewGetResponse>[] = [
 	{
 		id: "user.first_name",
 		accessorKey: "user.first_name",
