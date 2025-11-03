@@ -67,9 +67,88 @@ export type ADRBaseModel = {
 	predictionReason?: string;
 };
 
+export interface ADRPostRequestInterface {
+    // Institution & User
+    medical_institution_id: string;
+    user_id: string;
+
+    // Personal Details
+    patient_name: string;
+    inpatient_or_outpatient_number?: string;
+    patient_age?: number;
+    patient_date_of_birth?: string; // YYYY-MM-DD
+    patient_address?: string;
+    patient_weight_kg?: number;
+    patient_height_cm?: number;
+    ward_or_clinic?: string;
+    patient_gender?: string;
+    pregnancy_status?: string;
+    known_allergy?: string;
+
+    // Suspected Adverse Reaction
+    date_of_onset_of_reaction?: string; // YYYY-MM-DD
+    description_of_reaction?: string;
+
+    // --- Flattened Medicine fields ---
+    // Rifampicin
+    rifampicin_suspected?: boolean;
+    rifampicin_start_date?: string; // YYYY-MM-DD
+    rifampicin_stop_date?: string; // YYYY-MM-DD
+    rifampicin_dose_amount?: number;
+    rifampicin_frequency_number?: number;
+    rifampicin_route?: string;
+    rifampicin_batch_no?: string;
+    rifampicin_manufacturer?: string;
+
+    // Isoniazid
+    isoniazid_suspected?: boolean;
+    isoniazid_start_date?: string; // YYYY-MM-DD
+    isoniazid_stop_date?: string; // YYYY-MM-DD
+    isoniazid_dose_amount?: number;
+    isoniazid_frequency_number?: number;
+    isoniazid_route?: string;
+    isoniazid_batch_no?: string;
+    isoniazid_manufacturer?: string;
+
+    // Pyrazinamide
+    pyrazinamide_suspected?: boolean;
+    pyrazinamide_start_date?: string; // YYYY-MM-DD
+    pyrazinamide_stop_date?: string; // YYYY-MM-DD
+    pyrazinamide_dose_amount?: number;
+    pyrazinamide_frequency_number?: number;
+    pyrazinamide_route?: string;
+    pyrazinamide_batch_no?: string;
+    pyrazinamide_manufacturer?: string;
+
+    // Ethambutol
+    ethambutol_suspected?: boolean;
+    ethambutol_start_date?: string; // YYYY-MM-DD
+    ethambutol_stop_date?: string; // YYYY-MM-DD
+    ethambutol_dose_amount?: number;
+    ethambutol_frequency_number?: number;
+    ethambutol_route?: string;
+    ethambutol_batch_no?: string;
+    ethambutol_manufacturer?: string;
+
+    // Rechallenge/Dechallenge
+    rechallenge?: string;
+    dechallenge?: string;
+
+    // Grading
+    severity?: string;
+    is_serious?: string;
+    criteria_for_seriousness?: string;
+    action_taken?: string;
+    outcome?: string;
+
+    // Additional
+    comments?: string;
+}
+
 export interface ADRGetResponseInterface {
 	id: string;
 	medical_institution_id: string;
+	user_id: string;
 	// Personal Details
 	patient_name: string;
 	inpatient_or_outpatient_number?: string;
@@ -80,8 +159,8 @@ export interface ADRGetResponseInterface {
 	patient_address?: string;
 	ward_or_clinic?: string;
 	patient_gender: GenderEnum;
-	pregnancy_status: PregnancyStatusEnum;
-	known_allergy: KnownAllergyEnum;
+	pregnancy_status?: PregnancyStatusEnum;
+	known_allergy?: KnownAllergyEnum;
 	// Suspected Adverse Reaction
 	date_of_onset_of_reaction?: string;
 	description_of_reaction?: string;
@@ -126,14 +205,14 @@ export interface ADRGetResponseInterface {
 	ethambutol_manufacturer?: string;
 
 	// Rechallenge/Dechallenge
-	rechallenge: RechallengeEnum;
-	dechallenge: DechallengeEnum;
+	rechallenge?: RechallengeEnum;
+	dechallenge?: DechallengeEnum;
 	// Grading of Reaction/Event
-	severity: SeverityEnum;
-	is_serious: IsSeriousEnum;
-	criteria_for_seriousness: CriteriaForSeriousnessEnum;
-	action_taken: ActionTakenEnum;
-	outcome: OutcomeEnum;
+	severity?: SeverityEnum;
+	is_serious?: IsSeriousEnum;
+	criteria_for_seriousness?: CriteriaForSeriousnessEnum;
+	action_taken?: ActionTakenEnum;
+	outcome?: OutcomeEnum;
 	comments?: string;
 }
 

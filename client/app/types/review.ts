@@ -1,14 +1,15 @@
 import type { UserDetails } from "@/types/user";
 import type { CausalityAssessmentLevelEnum } from "@/types/adr";
+
 export interface ReviewGetResponse {
 	id: string;
 	user_id: string;
+	user: UserDetails;
 	causality_assessment_level_id: string;
 	approved: boolean;
 	proposed_causality_level?: CausalityAssessmentLevelEnum;
 	reason?: string;
 	created_at: string;
-	updated_at: string;
 }
 
 export interface ReviewPostResponse {
@@ -32,4 +33,9 @@ export interface ReviewWithUserGetResponse {
 	reason?: string;
 	created_at: string;
 	updated_at: string;
+}
+
+export interface ReviewStatsGetResponse {
+	approved_reviews: number;
+	unapproved_reviews: number;
 }
