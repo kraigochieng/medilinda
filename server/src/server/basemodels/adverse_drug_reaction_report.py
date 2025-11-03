@@ -236,7 +236,7 @@ class MLModelInput(BaseModel):
     outcome: OutcomeEnum = OutcomeEnum.unknown
 
     # Metadata
-    created_at: date | None = None
+    created_at: datetime | None = None
 
 
 class ADRGetResponse(BaseModel):

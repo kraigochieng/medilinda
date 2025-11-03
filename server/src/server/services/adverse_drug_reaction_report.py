@@ -19,6 +19,7 @@ from server.basemodels.adverse_drug_reaction_report import (
 from server.basemodels.causality_asssessment_level import (
     CausalityAssessmentLevelPostRequest,
 )
+from server.models.adverse_drug_reaction_report import ADRModel
 from server.models.causality_assessment_level import (
     CausalityAssessmentLevelEnum,
     CausalityAssessmentLevelModel,
@@ -63,14 +64,15 @@ class AdverseDrugReactionReportService:
         )
 
     def create(self, data: ADRPostRequest) -> ADRGetResponse:
-        return self.repository.create(data=data)
+        model = self.repository.create(data=data)
+        return ADRGetResponse.model_validate(model)
 
     def create_and_predict(self, data: ADRPostRequest) -> ADRGetResponse:
         adr_model = self.repository.create(data=data)
 
         print("adr")
         print(adr_model)
-        self.predict(data=data)
+        self.predict(data=data, adr_model=adr_model)
 
         return ADRGetResponse.model_validate(adr_model)
 
@@ -92,9 +94,7 @@ class AdverseDrugReactionReportService:
     def delete_by_id(self, id: str) -> bool:
         return self.repository.delete(id)
 
-    def predict(self, data: ADRPostRequest):
-        adr_model = self.repository.create(data=data)
-
+    def predict(self, data: ADRPostRequest, adr_model: ADRModel):
         if (
             data.rifampicin_suspected is None
             and data.isoniazid_suspected is None
@@ -128,6 +128,14 @@ class AdverseDrugReactionReportService:
 
         ml_model_input_df = pd.DataFrame([ml_model_input.model_dump()])
 
+        # The MLflow model's schema expects 'created_at' to be a string,
+        # but the DataFrame has it as a datetime object (datetime64[ns]).
+        # We must explicitly convert the column to a string to match the schema.
+        if "created_at" in ml_model_input_df.columns:
+            ml_model_input_df["created_at"] = ml_model_input_df["created_at"].astype(
+                str
+            )
+
         prediction = self.ml_model.predict(ml_model_input_df)
 
         decoded_prediction = self.encoder.inverse_transform(prediction.reshape(-1, 1))[
@@ -135,7 +143,11 @@ class AdverseDrugReactionReportService:
         ][0]
 
         logging.info("Generation SHAP value...")
-        shap_values = self.explainer(ml_model_input_df)
+        shap_values: Explanation = self.explainer(ml_model_input_df)
+
+        final_feature_names = shap_values.feature_names
+
+        final_feature_values = shap_values.data[0].tolist()
 
         broken_down_shap_values = get_shap_values(shap_values)
 
@@ -155,8 +167,12 @@ class AdverseDrugReactionReportService:
             shap_values_matrix=shap_values_matrix,
             shap_values_sum_per_class=shap_values_sum_per_class,
             shap_values_and_base_values_sum_per_class=shap_values_and_base_values_sum_per_class,
-            feature_names=None,
-            feature_values=None,
+            feature_names=final_feature_names, # hardcoded but will be changed
+            feature_values=final_feature_values,
         )
 
-        self.cal_repository.create(data=cal_data)
+        logging.info("Creating causality after prediction...")
+
+        cal_model = self.cal_repository.create(data=cal_data)
+
+        logging.info(cal_model)
