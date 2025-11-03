@@ -1,25 +1,23 @@
 <template>
-	<div class="page-wrapper">
-		<p class="page-title">ADR Management</p>
-		<NuxtLink to="/adr/add" class="text-white">
-			<UButton class="w-full my-4 justify-center"> Add Adr </UButton>
-		</NuxtLink>
+	<p class="page-title">ADR Management</p>
+	<NuxtLink to="/adr/add" class="text-white">
+		<UButton color="neutral" class="w-full my-4 justify-center"> Add Adr </UButton>
+	</NuxtLink>
 
-		<UTable
-			:data="rows"
-			:columns="columns"
-			class="flex-1"
-			:loading="isPending"
-		/>
-		<UPagination
-			:total="totalCount"
-			:items-per-page="pageSize"
-			:default-page="currentPage"
-			show-edges
-			color="neutral"
-			@update:page="(p) => (currentPage = p)"
-		/>
-	</div>
+	<UTable
+		:data="rows"
+		:columns="columns"
+		class="flex-1"
+		:loading="isPending"
+	/>
+	<UPagination
+		:total="totalCount"
+		:items-per-page="pageSize"
+		:default-page="currentPage"
+		show-edges
+		color="neutral"
+		@update:page="(p) => (currentPage = p)"
+	/>
 </template>
 
 <script setup lang="ts">
