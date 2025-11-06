@@ -13,12 +13,14 @@ from server.models.medical_institution import (
     MedicalInstitutionModel,
 )
 from server.models.sms import SMSMessageModel
+from server.repositories.sms import SMSMessageRepository
 
 
 class SMSMessageService:
     def __init__(self, db: Session, sms_client: AfricasTalkingClient):
         self.db = db
         self.client = sms_client
+        self.repo = SMSMessageRepository(db=db)
 
     def _get_adr_data_for_sms(self, adr_id: str) -> tuple[ADRModel, str]:
         """
@@ -123,12 +125,15 @@ class SMSMessageService:
         pagination_params: Params,
         sms_type: SMSMessageTypeEnum | None = None,
         adr_id: str | None = None,
-        
     ) -> Page[SMSMessageGetResponse]:
-        return self.repo.get_all(sms_type=sms_type, adr_id=adr_id, pagination_params=pagination_params)
+        return self.repo.get_all(
+            sms_type=sms_type, adr_id=adr_id, pagination_params=pagination_params
+        )
 
-    def get_message_by_id(self, id: str) -> SMSMessageGetResponse | None:
-        return self.repo.get_by_id(id)
+    def get_message_by_id(self, id: str) -> SMSMessageGetResponse:
+        model = self.repo.get_by_id(id=id)
+
+        return SMSMessageGetResponse.model_validate(model)
 
     def get_paginated_sms_counts(
         self, pagination_params: Params, sms_type: SMSMessageTypeEnum | None
@@ -136,10 +141,14 @@ class SMSMessageService:
         """
         Gets paginated, grouped SMS counts.
         """
-        return self.repo.get_sms_counts_by_adr(pagination_params=pagination_params, sms_type=sms_type)
+        return self.repo.get_sms_counts_by_adr(
+            pagination_params=pagination_params, sms_type=sms_type
+        )
 
-    def create_message(self, sms_data: dict) -> SMSMessageGetResponse:
-        return self.repo.create(sms_data)
+    def create_message(self, data: dict) -> SMSMessageGetResponse:
+        model = self.repo.create(data=data)
 
-    def delete_message(self, id: str) -> bool:
-        return self.repo.delete(id)
+        return SMSMessageGetResponse.model_validate(model)
+
+    def delete_message(self, id: str) -> None:
+        self.repo.delete(id=id)

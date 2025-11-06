@@ -2,6 +2,7 @@ from fastapi_pagination import Page, Params
 
 from server.basemodels.medical_institution import (
     MedicalInstitutionGetResponse,
+    MedicalInstitutionTelephoneGetResponse,
     MedicalInstitutionTelephonePostRequest,
 )
 from server.repositories.telephone import TelephoneRepository
@@ -19,18 +20,24 @@ class TelephoneService:
             pagination_params=pagination_params,
         )
 
-    def get_telephone_by_id(self, telephone_id: str) -> MedicalInstitutionGetResponse:
-        return self.repository.get_by_id(telephone_id)
+    def get_telephone_by_id(self, id: str) -> MedicalInstitutionGetResponse:
+        model = self.repository.get_by_id(id=id)
+
+        return MedicalInstitutionGetResponse.model_validate(model)
 
     def create_telephone(
-        self, telephone: MedicalInstitutionTelephonePostRequest
+        self, data: MedicalInstitutionTelephonePostRequest
     ) -> MedicalInstitutionGetResponse:
-        return self.repository.create(telephone)
+        model = self.repository.create(data=data)
+
+        return MedicalInstitutionTelephoneGetResponse.model_validate(model)
 
     def update_telephone(
-        self, telephone_id: str, telephone: MedicalInstitutionTelephonePostRequest
+        self, id: str, data: MedicalInstitutionTelephonePostRequest
     ) -> MedicalInstitutionGetResponse:
-        return self.repository.update(telephone_id, telephone)
+        model = self.repository.update(id=id, data=data)
 
-    def delete_telephone(self, telephone_id: str) -> bool:
-        return self.repository.delete(telephone_id)
+        return MedicalInstitutionTelephoneGetResponse.model_validate(model)
+
+    def delete_telephone(self, id: str) -> None:
+        self.repository.delete(id=id)

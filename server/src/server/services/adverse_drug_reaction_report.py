@@ -50,8 +50,10 @@ class AdverseDrugReactionReportService:
     def get(self, query: str | None, pagination_params: Params) -> Page[ADRGetResponse]:
         return self.repository.get(query=query, pagination_params=pagination_params)
 
-    def get_by_id(self, id: str) -> ADRGetResponse | None:
-        return self.repository.get_by_id(id)
+    def get_by_id(self, id: str) -> ADRGetResponse:
+        model = self.repository.get_by_id(id=id)
+
+        return ADRGetResponse.model_validate(model)
 
     def get_adrs_with_causality_and_review_count(
         self, pagination_params: Params, query: str | None
@@ -65,13 +67,14 @@ class AdverseDrugReactionReportService:
 
     def create(self, data: ADRPostRequest) -> ADRGetResponse:
         model = self.repository.create(data=data)
+
         return ADRGetResponse.model_validate(model)
 
     def create_and_predict(self, data: ADRPostRequest) -> ADRGetResponse:
         adr_model = self.repository.create(data=data)
 
-        print("adr")
-        print(adr_model)
+        # print("adr")
+        # print(adr_model)
         self.predict(data=data, adr_model=adr_model)
 
         return ADRGetResponse.model_validate(adr_model)
@@ -84,15 +87,13 @@ class AdverseDrugReactionReportService:
     ) -> ADRGetResponse | None:
         adr_model = self.repository.update(id=id, data=data)
 
-        if not adr_model:
-            return None
-
+        # TODO: There is an error here, we need to update the CAL and not create it again
         self.predict(data=data)
 
         return ADRGetResponse.model_validate(adr_model)
 
-    def delete_by_id(self, id: str) -> bool:
-        return self.repository.delete(id)
+    def delete_by_id(self, id: str) -> None:
+        self.repository.delete(id=id)
 
     def predict(self, data: ADRPostRequest, adr_model: ADRModel):
         if (
@@ -167,7 +168,7 @@ class AdverseDrugReactionReportService:
             shap_values_matrix=shap_values_matrix,
             shap_values_sum_per_class=shap_values_sum_per_class,
             shap_values_and_base_values_sum_per_class=shap_values_and_base_values_sum_per_class,
-            feature_names=final_feature_names, # hardcoded but will be changed
+            feature_names=final_feature_names,  # hardcoded but will be changed
             feature_values=final_feature_values,
         )
 
