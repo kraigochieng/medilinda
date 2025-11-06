@@ -1,4 +1,4 @@
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 
 from server.basemodels.causality_asssessment_level import (
     CausalityAssessmentLevelGetResponse,
@@ -24,9 +24,9 @@ class CausalityAssessmentLevelService:
         return self.repo.get_by_id(cal_id)
 
     def get_causality_assessment_levels(
-        self, adr_id: str | None
+        self, adr_id: str | None, pagination_params: Params
     ) -> Page[CausalityAssessmentLevelGetResponse]:
-        return self.repo.get_all(adr_id=adr_id)
+        return self.repo.get_all(adr_id=adr_id, pagination_params=pagination_params)
 
     def create_causality_assessment_level(
         self, data: CausalityAssessmentLevelPostRequest

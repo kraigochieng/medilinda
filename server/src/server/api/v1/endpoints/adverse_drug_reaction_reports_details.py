@@ -44,5 +44,5 @@ def get_adrs_with_causality_and_review_count(
     ),
 ):
     return service.get_adrs_with_causality_and_review_count(
-        params=pagination_params, query=query
+        pagination_params=pagination_params, query=query
     )

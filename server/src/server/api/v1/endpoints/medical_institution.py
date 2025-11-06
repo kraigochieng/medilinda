@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from sqlalchemy.orm import Session
 
 from server.basemodels.medical_institution import (
@@ -26,10 +26,11 @@ router = APIRouter(
 @router.get("/", response_model=Page[MedicalInstitutionGetResponse])
 async def get_medical_institutions(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    pagination_params: Params = Depends(),
     query: str = Query("", description="Search query(optional)"),
     service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    return service.get_medical_institutions(query)
+    return service.get_medical_institutions(query=query, pagination_params=pagination_params)
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
@@ -68,9 +69,7 @@ async def update_medical_institution(
     id: str = Path(..., description="ID of Medical Institution to update"),
     service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    updated_institution = service.update_medical_institution(
-        institution, id
-    )
+    updated_institution = service.update_medical_institution(institution, id)
     return JSONResponse(
         content=jsonable_encoder(updated_institution), status_code=status.HTTP_200_OK
     )

@@ -16,7 +16,9 @@ class MedicalInstitutionRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_all(self, query: str = "") -> Page[MedicalInstitutionModel]:
+    def get_all(
+        self, pagination_params: Params, query: str = ""
+    ) -> Page[MedicalInstitutionModel]:
         stmt = select(MedicalInstitutionModel).order_by(
             desc(MedicalInstitutionModel.created_at)
         )
@@ -32,7 +34,7 @@ class MedicalInstitutionRepository:
 
         stmt = stmt.order_by(desc(MedicalInstitutionModel.created_at))
 
-        return paginate(self.db, stmt, params=Params(page=1, size=50))
+        return paginate(self.db, stmt, params=pagination_params)
 
     def create(
         self, institution_data: MedicalInstitutionPostRequest

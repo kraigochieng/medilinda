@@ -120,21 +120,23 @@ class SMSMessageService:
 
     def list_messages(
         self,
+        pagination_params: Params,
         sms_type: SMSMessageTypeEnum | None = None,
         adr_id: str | None = None,
+        
     ) -> Page[SMSMessageGetResponse]:
-        return self.repo.get_all(sms_type=sms_type, adr_id=adr_id)
+        return self.repo.get_all(sms_type=sms_type, adr_id=adr_id, pagination_params=pagination_params)
 
     def get_message_by_id(self, id: str) -> SMSMessageGetResponse | None:
         return self.repo.get_by_id(id)
 
     def get_paginated_sms_counts(
-        self, params: Params, sms_type: SMSMessageTypeEnum | None
+        self, pagination_params: Params, sms_type: SMSMessageTypeEnum | None
     ) -> Page[SMSCountResponse]:
         """
         Gets paginated, grouped SMS counts.
         """
-        return self.repo.get_sms_counts_by_adr(params=params, sms_type=sms_type)
+        return self.repo.get_sms_counts_by_adr(pagination_params=pagination_params, sms_type=sms_type)
 
     def create_message(self, sms_data: dict) -> SMSMessageGetResponse:
         return self.repo.create(sms_data)
