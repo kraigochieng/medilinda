@@ -15,6 +15,7 @@ from server.basemodels.adverse_drug_reaction_report import (
     DechallengeEnum,
     MLModelInput,
     RechallengeEnum,
+    MLModelOutput,
 )
 from server.basemodels.causality_asssessment_level import (
     CausalityAssessmentLevelPostRequest,
@@ -73,9 +74,10 @@ class AdverseDrugReactionReportService:
     def create_and_predict(self, data: ADRPostRequest) -> ADRGetResponse:
         adr_model = self.repository.create(data=data)
 
-        # print("adr")
-        # print(adr_model)
-        self.predict(data=data, adr_model=adr_model)
+        cal_data = self._generate_causality_assessment_data(adr_model=adr_model)
+
+        logging.info("Creating causality after prediction...")
+        self.cal_repository.create(data=cal_data)
 
         return ADRGetResponse.model_validate(adr_model)
 
@@ -87,39 +89,18 @@ class AdverseDrugReactionReportService:
     ) -> ADRGetResponse | None:
         adr_model = self.repository.update(id=id, data=data)
 
-        # TODO: There is an error here, we need to update the CAL and not create it again
-        self.predict(data=data)
+        cal_data = self._generate_causality_assessment_data(adr_model=adr_model)
+
+        self.cal_repository.update(
+            id=adr_model.causality_assessment_levels[0].id, data=cal_data
+        )
 
         return ADRGetResponse.model_validate(adr_model)
 
     def delete_by_id(self, id: str) -> None:
         self.repository.delete(id=id)
 
-    def predict(self, data: ADRPostRequest, adr_model: ADRModel):
-        if (
-            data.rifampicin_suspected is None
-            and data.isoniazid_suspected is None
-            and data.pyrazinamide_suspected is None
-            and data.ethambutol_suspected is None
-        ) or (
-            data.rechallenge is RechallengeEnum.unknown
-            and data.dechallenge is DechallengeEnum.unknown
-        ):
-            cal_data = CausalityAssessmentLevelPostRequest(
-                adr_id=adr_model.id,
-                causality_assessment_level_value=CausalityAssessmentLevelEnum.unclassified,
-                base_values=None,
-                shap_values_matrix=None,
-                shap_values_sum_per_class=None,
-                shap_values_and_base_values_sum_per_class=None,
-                feature_names=None,
-                feature_values=None,
-            )
-
-            self.cal_repository.create(data=cal_data)
-
-            return  # Exit the function since no prediction will be done here
-
+    def _predict(self, data: ADRPostRequest, adr_model: ADRModel) -> MLModelOutput:
         try:
             ml_model_input = MLModelInput.model_validate(adr_model)
 
@@ -144,13 +125,50 @@ class AdverseDrugReactionReportService:
         ][0]
 
         logging.info("Generation SHAP value...")
+
         shap_values: Explanation = self.explainer(ml_model_input_df)
 
-        final_feature_names = shap_values.feature_names
+        return MLModelOutput(
+            prediction=CausalityAssessmentLevelEnum(decoded_prediction),
+            shap_values=shap_values,
+        )
 
-        final_feature_values = shap_values.data[0].tolist()
+    def _generate_causality_assessment_data(
+        self, adr_model: ADRModel
+    ) -> CausalityAssessmentLevelPostRequest:
+        """
+        Generates causality assessment data based on the ADR model.
+        Runs prediction if data is sufficient, otherwise marks as unclassified.
+        """
+        # If data is missing do not predict anything
+        if (
+            adr_model.rifampicin_suspected is None
+            and adr_model.isoniazid_suspected is None
+            and adr_model.pyrazinamide_suspected is None
+            and adr_model.ethambutol_suspected is None
+        ) or (
+            adr_model.rechallenge is RechallengeEnum.unknown
+            and adr_model.dechallenge is DechallengeEnum.unknown
+        ):
+            # Case 1: Unclassified
+            return CausalityAssessmentLevelPostRequest(
+                adr_id=adr_model.id,
+                causality_assessment_level_value=CausalityAssessmentLevelEnum.unclassified,
+                base_values=None,
+                shap_values_matrix=None,
+                shap_values_sum_per_class=None,
+                shap_values_and_base_values_sum_per_class=None,
+                feature_names=None,
+                feature_values=None,
+            )
 
-        broken_down_shap_values = get_shap_values(shap_values)
+        # Case 2: Data exists, run prediction
+        ml_model_output = self._predict(adr_model=adr_model)  # Note: no 'data' param
+
+        final_feature_names = ml_model_output.shap_values.feature_names
+        final_feature_values = ml_model_output.shap_values.data[0].tolist()
+
+        broken_down_shap_values = get_shap_values(ml_model_output.shap_values)
 
         base_values = broken_down_shap_values["base_values"]
         shap_values_matrix = broken_down_shap_values["shap_values_matrix"]
@@ -159,21 +177,13 @@ class AdverseDrugReactionReportService:
             "shap_values_and_base_values_sum_per_class"
         ]
 
-        cal_data = CausalityAssessmentLevelPostRequest(
+        return CausalityAssessmentLevelPostRequest(
             adr_id=adr_model.id,
-            causality_assessment_level_value=CausalityAssessmentLevelEnum(
-                decoded_prediction
-            ),
+            causality_assessment_level_value=ml_model_output.prediction,
             base_values=base_values,
             shap_values_matrix=shap_values_matrix,
             shap_values_sum_per_class=shap_values_sum_per_class,
             shap_values_and_base_values_sum_per_class=shap_values_and_base_values_sum_per_class,
-            feature_names=final_feature_names,  # hardcoded but will be changed
+            feature_names=final_feature_names,
             feature_values=final_feature_values,
         )
-
-        logging.info("Creating causality after prediction...")
-
-        cal_model = self.cal_repository.create(data=cal_data)
-
-        logging.info(cal_model)

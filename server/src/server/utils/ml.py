@@ -3,7 +3,7 @@ from typing import TypedDict
 
 import numpy as np
 import pandas as pd
-from shap import Explainer
+from shap import Explanation
 
 
 class ShapValues(TypedDict):
@@ -13,7 +13,7 @@ class ShapValues(TypedDict):
     shap_values_and_base_values_sum_per_class: list
 
 
-def get_shap_values(shap_values: Explainer) -> ShapValues:
+def get_shap_values(shap_values: Explanation) -> ShapValues:
     base_values: list = list(shap_values.base_values[0])
     shap_values_matrix = shap_values.values[0].tolist()
     shap_values_sum_per_class = np.sum(shap_values.values[0], axis=0).tolist()
