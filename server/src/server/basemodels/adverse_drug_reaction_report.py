@@ -1,6 +1,6 @@
 import enum
 from datetime import date, datetime
-
+from shap import Explanation
 from pydantic import BaseModel, ConfigDict
 
 from server.basemodels.causality_asssessment_level import CausalityAssessmentLevelEnum
@@ -288,3 +288,8 @@ class ADRWithReviewsResponse(BaseModel):
 
     approved_reviews: int
     unapproved_reviews: int
+
+
+class MLModelOutput(BaseModel):
+    prediction: CausalityAssessmentLevelEnum
+    shap_values: Explanation
