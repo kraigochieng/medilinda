@@ -37,5 +37,4 @@ def test_get_user_by_username(auth_repository, sample_user_data):
 
     fetched_user = auth_repository.get_user_by_username(sample_user_data["username"])
 
-    assert fetched_user is not None
     assert fetched_user.username == sample_user_data["username"]

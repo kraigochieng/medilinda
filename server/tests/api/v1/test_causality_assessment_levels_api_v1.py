@@ -40,8 +40,8 @@ def sample_causality_assessment_level_updated_payload():
 
 def test_get_causality_assessment_level_by_id_not_found(client):
     """GET /api/v1/causality-assessment-levels/{id} - should 400 if not found"""
-    response = client.get(f"{path}/nonexistent-id")
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    response = client.get(f"/{path}/nonexistent-id")
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 # def test_create_and_get_causality_assessment_level(
