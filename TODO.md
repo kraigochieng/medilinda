@@ -2,14 +2,11 @@
 
 -   [ ] add a tooltip to suggest the user for one to use
 -   [ ] licensing
--   [ ] make endpoints to use response model and status_code
 -   [ ] use toasts after any actions
     -   form actions
 
 # In Progress
 
--   [ ] add pagination params as depends to all get functions and cascade that through, but docus on the alerts section first
--   [ ] make repositories return select statements and then paginate on service layer
 -   [ ] assert json as a whole, not properties individually
 -   [ ] replace shadcn with nuxt ui bit by bit
     -   specify steps
@@ -45,3 +42,5 @@
 -   [x] how to properly acknowledge intellisoft and pharmacy and poisons board
 -   [x] create the post and update routes and services for this
     -   the service for adr to use the cal and adr service
+-   [x] add pagination params as depends to all get functions and cascade that through, but docus on the alerts section first
+-   [x] make endpoints to use response model and status_code
