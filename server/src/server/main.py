@@ -2,6 +2,7 @@ import logging
 
 from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from fastapi_pagination import add_pagination
 
 from server.api.v1.endpoints import (
@@ -24,15 +25,18 @@ from server.api.v1.endpoints import sms_actions as sms_actions_v1
 from server.api.v1.endpoints import sms_details as sms_details_v1
 from server.api.v1.endpoints import telephones as telephones_v1
 from server.api.v1.endpoints import users as users_v1
+from server.exceptions import MedilindaError
 from server.lifespan.lifespan import lifespan
 from server.logging_config import setup_logging
 from server.settings import settings
 
+# Logging
 setup_logging()
-
+logger = logging.getLogger(__name__)
 
 app = FastAPI(lifespan=lifespan)
 
+# Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.client_url],
@@ -41,8 +45,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Pagination
 add_pagination(app)
 
+# Routers
 app.include_router(alerts_v1.router)
 app.include_router(auth_v1.router)
 app.include_router(adverse_drug_reaction_report_v1.router)
@@ -57,6 +63,13 @@ app.include_router(sms_actions_v1.router)
 app.include_router(sms_details_v1.router)
 app.include_router(telephones_v1.router)
 app.include_router(users_v1.router)
+
+
+# Global exception handler
+@app.exception_handler(MedilindaError)
+async def app_exception_handler(request, exc):
+    logger.error("Application error: %s", exc.message)
+    return JSONResponse(status_code=exc.status_code, content={"error": exc.message})
 
 
 @app.get("/", status_code=status.HTTP_200_OK)
