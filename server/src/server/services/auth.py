@@ -4,7 +4,9 @@ from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
+from server.basemodels.auth import Token
 from server.basemodels.user import UserDetailsBaseModel, UserSignupBaseModel
+from server.exceptions import UserAlreadyExistsError
 from server.repositories.auth import AuthRepository
 from server.settings import settings
 from server.utils.auth import (
@@ -18,7 +20,7 @@ class AuthService:
     def __init__(self, repository: AuthRepository):
         self.repository = repository
 
-    def login(self, username: str, password: str):
+    def login(self, username: str, password: str) -> Token:
         user = self.repository.get_user_by_username(username)
 
         if not user:
@@ -44,23 +46,14 @@ class AuthService:
             expires_delta=access_token_expires,
         )
 
-        return JSONResponse(
-            content=jsonable_encoder(
-                {
-                    "access_token": access_token,
-                    "token_type": "bearer",
-                }
-            ),
-            status_code=status.HTTP_200_OK,
-        )
+        return Token(access_token=access_token, token_type="bearer")
 
-    def signup(self, user: UserSignupBaseModel):
+    def signup(self, user: UserSignupBaseModel) -> UserDetailsBaseModel:
         existing_user = self.repository.get_user_by_username(user.username)
 
         if existing_user:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Username already exists",
+            raise UserAlreadyExistsError(
+                f"User with username {user.username} already exists"
             )
 
         hashed_password = get_password_hash(user.password)
@@ -73,7 +66,4 @@ class AuthService:
             last_name=new_user.last_name,
         )
 
-        return JSONResponse(
-            content=jsonable_encoder(user_basemodel),
-            status_code=status.HTTP_200_OK,
-        )
+        return user_basemodel

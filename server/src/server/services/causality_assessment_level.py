@@ -19,9 +19,11 @@ class CausalityAssessmentLevelService:
         self.user_repo = UserRepository(db)
 
     def get_causality_assessment_level_by_id(
-        self, cal_id: str
-    ) -> CausalityAssessmentLevelGetResponse | None:
-        return self.repo.get_by_id(cal_id)
+        self, id: str
+    ) -> CausalityAssessmentLevelGetResponse:
+        model = self.repo.get_by_id(id=id)
+
+        return CausalityAssessmentLevelGetResponse.model_validate(model)
 
     def get_causality_assessment_levels(
         self, adr_id: str | None, pagination_params: Params
@@ -31,33 +33,35 @@ class CausalityAssessmentLevelService:
     def create_causality_assessment_level(
         self, data: CausalityAssessmentLevelPostRequest
     ) -> CausalityAssessmentLevelGetResponse:
-        return self.repo.create(data=data)
+        model = self.repo.create(data=data)
+
+        return CausalityAssessmentLevelGetResponse.model_validate(model)
 
     def update_causality_assessment_level_by_id(
         self, id: str, data: CausalityAssessmentLevelPostRequest
-    ) -> CausalityAssessmentLevelGetResponse | None:
-        return self.repo.update(id, data)
+    ) -> CausalityAssessmentLevelGetResponse:
+        model = self.repo.update(id=id, data=data)
 
-    def delete_causality_assessment_level_by_id(
-        self, id: str
-    ) -> CausalityAssessmentLevelGetResponse | None:
-        return self.repo.delete(id)
+        return CausalityAssessmentLevelGetResponse.model_validate(model)
 
-    def create_review(
-        self, id: str, username: str, data: ReviewPostRequest
-    ) -> ReviewGetResponse | None:
-        cal_model = self.repo.get_by_id(id)
+    def delete_causality_assessment_level_by_id(self, id: str) -> None:
+        self.repo.delete(id=id)
 
-        if not cal_model:
-            return None
+    # def create_review(
+    #     self, id: str, username: str, data: ReviewPostRequest
+    # ) -> ReviewGetResponse | None:
+    #     cal_model = self.repo.get_by_id(id)
 
-        user = self.user_repo.get_by_username(username=username)
+    #     if not cal_model:
+    #         return None
 
-        if not user:
-            return None
+    #     user = self.user_repo.get_by_username(username=username)
 
-        review_model = self.review_repo.create(
-            data=data, causality_assessment_level_id=id, user_id=user.id
-        )
+    #     if not user:
+    #         return None
 
-        return review_model
+    #     review_model = self.review_repo.create(
+    #         data=data, causality_assessment_level_id=id, user_id=user.id
+    #     )
+
+    #     return review_model

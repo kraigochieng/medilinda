@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from server.basemodels.medical_institution import (
     MedicalInstitutionGetResponse,
     MedicalInstitutionPostRequest,
-    MedicalInstitutionTelephoneGetResponse,
 )
 from server.repositories.medical_institution import MedicalInstitutionRepository
 
@@ -19,19 +18,23 @@ class MedicalInstitutionService:
         return self.repository.get_all(query=query, pagination_params=pagination_params)
 
     def create_medical_institution(
-        self, institution: MedicalInstitutionPostRequest
+        self, data: MedicalInstitutionPostRequest
     ) -> MedicalInstitutionGetResponse:
-        return self.repository.create(institution)
+        model = self.repository.create(data=data)
 
-    def get_medical_institution_by_id(
-        self, institution_id: str
-    ) -> MedicalInstitutionGetResponse:
-        return self.repository.get(institution_id)
+        return MedicalInstitutionGetResponse.model_validate(model)
+
+    def get_medical_institution_by_id(self, id: str) -> MedicalInstitutionGetResponse:
+        model = self.repository.get(id=id)
+
+        return MedicalInstitutionGetResponse.model_validate(model)
 
     def update_medical_institution(
-        self, institution: MedicalInstitutionPostRequest, institution_id: str
+        self, data: MedicalInstitutionPostRequest, id: str
     ) -> MedicalInstitutionGetResponse:
-        return self.repository.update(institution, institution_id)
+        model = self.repository.update(data=data, id=id)
 
-    def delete_medical_institution(self, institution_id: str) -> None:
-        self.repository.delete(institution_id)
+        return MedicalInstitutionGetResponse.model_validate(model)
+
+    def delete_medical_institution(self, id: str) -> None:
+        self.repository.delete(id=id)

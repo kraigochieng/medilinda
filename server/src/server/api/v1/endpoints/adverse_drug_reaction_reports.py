@@ -78,7 +78,7 @@ def get_adrs(
     return service.get(query=query, pagination_params=pagination_params)
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=ADRGetResponse)
+@router.post("/", response_model=ADRGetResponse, status_code=status.HTTP_201_CREATED)
 async def post_adr(
     request: Request,  # To be used by service
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
@@ -87,12 +87,10 @@ async def post_adr(
         get_adverse_drug_reaction_report_service
     ),
 ):
-    content = service.create_and_predict(data=data)
-
-    return content
+    return service.create_and_predict(data=data)
 
 
-@router.put("/{id}", status_code=status.HTTP_200_OK, response_model=ADRGetResponse)
+@router.put("/{id}", response_model=ADRGetResponse, status_code=status.HTTP_200_OK)
 async def update_adr(
     request: Request,  # To be used by service
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
@@ -102,29 +100,17 @@ async def update_adr(
         get_adverse_drug_reaction_report_service
     ),
 ):
-    content = service.update_and_predict(id=id, data=data)
-
-    if not content:
-        return HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="adr not found"
-        )
-
-    return content
+    return service.update_and_predict(id=id, data=data)
 
 
-@router.get("/{id}", status_code=status.HTTP_200_OK, response_model=ADRGetResponse)
+@router.get("/{id}", response_model=ADRGetResponse, status_code=status.HTTP_200_OK)
 def get_adr_by_id(
     id: str = Path(..., description="ID of ADR to read"),
     service: AdverseDrugReactionReportService = Depends(
         get_adverse_drug_reaction_report_service
     ),
 ):
-    content = service.get_by_id(id)
-
-    if not content:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-
-    return content
+    return service.get_by_id(id)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -134,9 +120,6 @@ def delete_adr_by_id(
         get_adverse_drug_reaction_report_service
     ),
 ):
-    deleted = service.delete_by_id(id)
-
-    if not deleted:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    service.delete_by_id(id)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)

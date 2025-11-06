@@ -65,7 +65,9 @@ def test_user(db):
         last_name="User",
         disabled=False,
     )
+
     db.add(user)
     db.commit()
     db.refresh(user)
+    
     return user

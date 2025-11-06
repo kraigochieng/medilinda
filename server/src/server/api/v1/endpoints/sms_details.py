@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, status
 from fastapi_pagination import Page, Params
 from sqlalchemy.orm import Session
 
@@ -20,10 +20,14 @@ def get_sms_service(
     return SMSMessageService(db=db, sms_client=sms_client)
 
 
-@router.get("/count", response_model=Page[SMSCountResponse])
+@router.get(
+    "/count", response_model=Page[SMSCountResponse], status_code=status.HTTP_200_OK
+)
 async def get_sms_message_with_adr_and_counts(
     pagination_params: Params = Depends(),
     sms_type: SMSMessageTypeEnum | None = Query(None, description="Filter by SMS type"),
     service: SMSMessageService = Depends(get_sms_service),
 ):
-    return service.get_paginated_sms_counts(pagination_params=pagination_params, sms_type=sms_type)
+    return service.get_paginated_sms_counts(
+        pagination_params=pagination_params, sms_type=sms_type
+    )

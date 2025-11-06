@@ -25,8 +25,10 @@ class ReviewService:
             pagination_params=pagination_params,
         )
 
-    def get_review_by_id(self, review_id: str) -> ReviewGetResponse:
-        return self.repository.get(review_id)
+    def get_review_by_id(self, id: str) -> ReviewGetResponse:
+        model = self.repository.get(id=id)
+    
+        return ReviewGetResponse.model_validate(model)
 
     def get_review_stats(
         self, causality_assessment_level_id: str
@@ -52,10 +54,14 @@ class ReviewService:
         self,
         data: ReviewPostRequest,
     ) -> ReviewGetResponse:
-        return self.repository.create(data=data)
+        model = self.repository.create(data=data)
+
+        return ReviewGetResponse.model_validate(model)
 
     def update_review(self, id: str, data: ReviewPostRequest) -> ReviewGetResponse:
-        return self.repository.update(id, data)
+        model = self.repository.update(id=id, data=data)
 
-    def delete_review(self, id: str) -> bool:
-        return self.repository.delete(id)
+        return ReviewGetResponse.model_validate(model)
+
+    def delete_review(self, id: str) -> None:
+        self.repository.delete(id=id)

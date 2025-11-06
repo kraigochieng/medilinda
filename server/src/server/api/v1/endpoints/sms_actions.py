@@ -42,9 +42,7 @@ def send_individual_alert(
     data: IndividualAlertPostRequest,
     service: SMSMessageService = Depends(get_sms_service),
 ):
-    sms_messages = service.send_individual_alert(adr_id=data.adr_id)
-
-    return sms_messages
+    return service.send_individual_alert(adr_id=data.adr_id)
 
 
 @router.post(
@@ -54,6 +52,4 @@ def send_additional_info_request(
     data: AdditionalInfoPostRequest,
     service: SMSMessageService = Depends(get_sms_service),
 ):
-    sms_messages = service.send_additional_info_request(adr_id=data.adr_id)
-
-    return sms_messages
+    return service.send_additional_info_request(adr_id=data.adr_id)

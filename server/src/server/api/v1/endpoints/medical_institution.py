@@ -23,56 +23,60 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=Page[MedicalInstitutionGetResponse])
+@router.get(
+    "/",
+    response_model=Page[MedicalInstitutionGetResponse],
+    status_code=status.HTTP_200_OK,
+)
 async def get_medical_institutions(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     pagination_params: Params = Depends(),
     query: str = Query("", description="Search query(optional)"),
     service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    return service.get_medical_institutions(query=query, pagination_params=pagination_params)
-
-
-@router.post("/", status_code=status.HTTP_201_CREATED)
-async def post_medical_institution(
-    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
-    institution: MedicalInstitutionPostRequest = None,
-    service: MedicalInstitutionService = Depends(get_medical_institution_service),
-):
-    new_institution = service.create_medical_institution(institution)
-    return JSONResponse(
-        content=jsonable_encoder(new_institution), status_code=status.HTTP_201_CREATED
+    return service.get_medical_institutions(
+        query=query, pagination_params=pagination_params
     )
 
 
-@router.get("/{id}", status_code=status.HTTP_200_OK)
+@router.post(
+    "/",
+    response_model=MedicalInstitutionGetResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def post_medical_institution(
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    data: MedicalInstitutionPostRequest = None,
+    service: MedicalInstitutionService = Depends(get_medical_institution_service),
+):
+    return service.create_medical_institution(data=data)
+
+
+@router.get(
+    "/{id}",
+    response_model=MedicalInstitutionGetResponse,
+    status_code=status.HTTP_200_OK,
+)
 async def get_medical_institution_by_id(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     id: str = Path(..., description="ID of Medical Institution"),
     service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    institution = service.get_medical_institution_by_id(id)
-    if not institution:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Medical Institution not found",
-        )
-    return JSONResponse(
-        content=jsonable_encoder(institution), status_code=status.HTTP_200_OK
-    )
+    return service.get_medical_institution_by_id(id=id)
 
 
-@router.put("/{id}", status_code=status.HTTP_200_OK)
+@router.put(
+    "/{id}",
+    response_model=MedicalInstitutionGetResponse,
+    status_code=status.HTTP_200_OK,
+)
 async def update_medical_institution(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
-    institution: MedicalInstitutionPostRequest = None,
+    data: MedicalInstitutionPostRequest = None,
     id: str = Path(..., description="ID of Medical Institution to update"),
     service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
-    updated_institution = service.update_medical_institution(institution, id)
-    return JSONResponse(
-        content=jsonable_encoder(updated_institution), status_code=status.HTTP_200_OK
-    )
+    return service.update_medical_institution(data=data, id=id)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -82,4 +86,5 @@ async def delete_medical_institution(
     service: MedicalInstitutionService = Depends(get_medical_institution_service),
 ):
     service.delete_medical_institution(id)
+
     return Response(status_code=status.HTTP_204_NO_CONTENT)

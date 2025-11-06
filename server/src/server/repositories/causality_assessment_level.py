@@ -5,6 +5,7 @@ from server.basemodels.causality_asssessment_level import (
     CausalityAssessmentLevelPostRequest,
 )
 from server.basemodels.review import ReviewPostRequest
+from server.exceptions import ResourceNotFoundError
 from server.models.causality_assessment_level import CausalityAssessmentLevelModel
 from sqlalchemy import desc, select
 from sqlalchemy.orm import Session
@@ -14,11 +15,19 @@ class CausalityAssessmentLevelRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_by_id(self, cal_id: str) -> CausalityAssessmentLevelModel | None:
+    def get_by_id(self, id: str) -> CausalityAssessmentLevelModel:
         stmt = select(CausalityAssessmentLevelModel).where(
-            CausalityAssessmentLevelModel.id == cal_id
+            CausalityAssessmentLevelModel.id == id
         )
-        return self.db.scalar(stmt)
+
+        model = self.db.scalar(stmt)
+
+        if not model:
+            raise ResourceNotFoundError(
+                f"Causality assessment level with id {id} not found"
+            )
+
+        return model
 
     def get_all(
         self, adr_id: str | None, pagination_params: Params
@@ -45,29 +54,21 @@ class CausalityAssessmentLevelRepository:
 
     def update(
         self,
-        causality_assessment_level_id: str,
-        causality_assessment_level: CausalityAssessmentLevelPostRequest,
-    ) -> CausalityAssessmentLevelModel | None:
-        cal_model = self.get_by_id(causality_assessment_level_id)
+        id: str,
+        data: CausalityAssessmentLevelPostRequest,
+    ) -> CausalityAssessmentLevelModel:
+        model = self.get_by_id(id=id)
 
-        if not cal_model:
-            return None
-
-        for key, value in causality_assessment_level.model_dump().items():
-            setattr(cal_model, key, value)
+        for key, value in data.model_dump().items():
+            setattr(model, key, value)
 
         self.db.commit()
-        self.db.refresh(cal_model)
+        self.db.refresh(model)
 
-        return cal_model
+        return model
 
-    def delete(self, id: str) -> bool:
+    def delete(self, id: str) -> None:
         model = self.get_by_id(id)
-
-        if not model:
-            return False
 
         self.db.delete(model)
         self.db.commit()
-
-        return True

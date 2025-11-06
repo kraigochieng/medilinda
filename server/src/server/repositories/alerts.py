@@ -1,3 +1,5 @@
+from fastapi_pagination import Page, Params
+from fastapi_pagination.ext.sqlalchemy import paginate
 from server.models.adverse_drug_reaction_report import ADRModel
 from server.models.causality_assessment_level import (
     CausalityAssessmentLevelEnum,
@@ -9,7 +11,8 @@ from server.models.medical_institution import (
 )
 from server.models.review import ReviewModel
 from server.models.sms import SMSMessageModel
-from sqlalchemy import Select, and_, case,  distinct, false, func, select, true
+from server.utils.alerts import transform_alert_rows
+from sqlalchemy import Select, and_, case, distinct, false, func, select, true
 from sqlalchemy.orm import Session
 
 
@@ -19,10 +22,11 @@ class AlertRepository:
 
     def get_alerts_query(
         self,
+        pagination_params: Params,
         search_term: str | None = None,
         causality_level: CausalityAssessmentLevelEnum | None = None,
         has_been_sent: bool | None = None,
-    ) -> Select:
+    ) -> Page:
         """
         Builds the core SQLAlchemy query for fetching ADR alerts
         based on the provided filters.
@@ -104,4 +108,9 @@ class AlertRepository:
         if having_conditions:
             main_stmt = main_stmt.having(and_(*having_conditions))
 
-        return main_stmt
+        return paginate(
+            self.db,
+            main_stmt,
+            params=pagination_params,
+            transformer=transform_alert_rows,
+        )

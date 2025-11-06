@@ -11,7 +11,7 @@ from server.utils.auth import get_current_active_user
 router = APIRouter(prefix="/api/v1/users", tags=["users", "v1"])
 
 
-@router.get("/me", status_code=status.HTTP_200_OK)
+@router.get("/me", response_model=UserDetailsBaseModel, status_code=status.HTTP_200_OK)
 async def read_users_me(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     db: Session = Depends(get_db),

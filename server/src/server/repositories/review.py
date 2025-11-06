@@ -1,6 +1,7 @@
 from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
 from server.basemodels.review import ReviewPostRequest
+from server.exceptions import ResourceNotFoundError
 from server.models.review import ReviewModel
 from sqlalchemy import Row, case, desc, false, func, select, true
 from sqlalchemy.orm import Session, selectinload
@@ -29,23 +30,15 @@ class ReviewRepository:
 
         return paginate(self.db, stmt, params=pagination_params)
 
-    def get(self, review_id: str) -> ReviewModel:
-        stmt = select(ReviewModel).where(ReviewModel.id == review_id)
-        return self.db.scalar(stmt)
+    def get(self, id: str) -> ReviewModel:
+        stmt = select(ReviewModel).where(ReviewModel.id == id)
 
-    def get_by_causality_assessment_level_id(
-        self, causality_assessment_level_id: str
-    ) -> Page[ReviewModel]:
-        stmt = (
-            select(ReviewModel)
-            .where(
-                ReviewModel.causality_assessment_level_id
-                == causality_assessment_level_id
-            )
-            .order_by(desc(ReviewModel.created_at))
-        )
+        model = self.db.scalar(stmt)
 
-        return paginate(self.db, stmt)
+        if not model:
+            raise ResourceNotFoundError(f"Review with id {id} not dound")
+
+        return model
 
     def get_review_counts_by_causality_level(
         self, causality_assessment_level_id: str
@@ -71,11 +64,8 @@ class ReviewRepository:
             )
         )
 
-        # .first() is correct here because a count query always returns one row
         result = self.db.execute(stmt).first()
 
-        # This will return a single Row object, e.g., (approved_reviews=5, unapproved_reviews=2)
-        # If no reviews match, it will correctly return (approved_reviews=0, unapproved_reviews=0)
         return result
 
     def create(
@@ -90,13 +80,10 @@ class ReviewRepository:
 
         return model
 
-    def update(self, review_id: str, review_update: ReviewPostRequest) -> ReviewModel:
-        review = self.get(review_id)
+    def update(self, id: str, data: ReviewPostRequest) -> ReviewModel:
+        review = self.get(id=id)
 
-        if not review:
-            return None
-
-        for key, value in review_update.model_dump().items():
+        for key, value in data.model_dump().items():
             setattr(review, key, value)
 
         self.db.commit()
@@ -104,10 +91,8 @@ class ReviewRepository:
 
         return review
 
-    def delete(self, review_id: str) -> bool:
-        review = self.get(review_id)
-        if not review:
-            return False
+    def delete(self, id: str) -> None:
+        review = self.get(id=id)
+
         self.db.delete(review)
         self.db.commit()
-        return True

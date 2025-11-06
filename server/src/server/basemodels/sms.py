@@ -12,6 +12,8 @@ class SMSMessageTypeEnum(str, enum.Enum):
 
 # SMS Message
 class SMSMessageGetResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     adr_id: str
     content: str
@@ -26,10 +28,14 @@ class SMSMessageGetResponse(BaseModel):
 
 
 class IndividualAlertPostRequest(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     adr_id: str
 
 
 class AdditionalInfoPostRequest(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     adr_id: str
 
 
