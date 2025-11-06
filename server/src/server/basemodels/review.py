@@ -8,6 +8,8 @@ from server.basemodels.user import UserGetResponse
 
 
 class ADRReviewSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     review_id: str
     user_id: str
     approved: bool
@@ -17,6 +19,8 @@ class ADRReviewSchema(BaseModel):
 
 
 class ADRReviewGetResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     adr_id: str
     patient_id: str
     user_id: str
@@ -36,6 +40,8 @@ class ADRReviewGetResponse(BaseModel):
 
 # Review
 class ReviewGetResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     causality_assessment_level_id: str
     user_id: str
@@ -47,6 +53,8 @@ class ReviewGetResponse(BaseModel):
 
 
 class ReviewPostRequest(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     causality_assessment_level_id: str
     user_id: str
     approved: bool

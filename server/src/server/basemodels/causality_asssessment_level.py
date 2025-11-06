@@ -1,7 +1,7 @@
 import enum
 from typing import Any, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class CausalityAssessmentLevelEnum(str, enum.Enum):
@@ -14,6 +14,8 @@ class CausalityAssessmentLevelEnum(str, enum.Enum):
 
 
 class CausalityAssessmentLevelGetResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     adr_id: str
     ml_model_id: str = "final_ml_model@champion"
@@ -28,6 +30,8 @@ class CausalityAssessmentLevelGetResponse(BaseModel):
 
 
 class CausalityAssessmentLevelPostRequest(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     adr_id: str | None
     ml_model_id: str = "final_ml_model@champion"
     causality_assessment_level_value: CausalityAssessmentLevelEnum | None
@@ -41,4 +45,6 @@ class CausalityAssessmentLevelPostRequest(BaseModel):
 
 
 class UnclassifiablePostRequest(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     adr_ids: List[str]
