@@ -27,8 +27,8 @@ def get_causality_assessment_level_service(db: Session = Depends(get_db)):
 
 @router.get(
     "/",
-    status_code=status.HTTP_200_OK,
     response_model=Page[CausalityAssessmentLevelGetResponse],
+    status_code=status.HTTP_200_OK
 )
 async def get_causality_assessment_levels(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],

@@ -24,8 +24,7 @@ def get_sms_service(db: Session = Depends(get_db)):
 
 
 @router.get(
-    "/",
-    response_model=Page[SMSMessageGetResponse],
+    "/", response_model=Page[SMSMessageGetResponse], status_code=status.HTTP_200_OK
 )
 async def get_sms_messages(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
@@ -39,20 +38,12 @@ async def get_sms_messages(
     )
 
 
-@router.get("/{id}", status_code=status.HTTP_200_OK)
+@router.get(
+    "/{id}", response_model=SMSMessageGetResponse, status_code=status.HTTP_200_OK
+)
 async def get_sms_message_by_id(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     id: str = Path(..., description="ID of Medical Institution to delete"),
     service: SMSMessageService = Depends(get_sms_service),
 ):
-    content = service.get_message_by_id(id)
-
-    if not content:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="SMS Message not found",
-        )
-
-    return JSONResponse(
-        content=jsonable_encoder(content), status_code=status.HTTP_200_OK
-    )
+    return service.get_message_by_id(id)

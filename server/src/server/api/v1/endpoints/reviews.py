@@ -37,54 +37,32 @@ async def get_reviews(
     )
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=ReviewGetResponse, status_code=status.HTTP_201_CREATED)
 async def post_review(
     data: ReviewPostRequest,
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     service: ReviewService = Depends(get_review_service),
 ):
-    response = service.create_review(data)
-
-    return JSONResponse(
-        content=jsonable_encoder(response), status_code=status.HTTP_201_CREATED
-    )
+    return service.create_review(data=data)
 
 
-@router.get("/{id}", status_code=status.HTTP_200_OK)
+@router.get("/{id}", response_model=ReviewGetResponse, status_code=status.HTTP_200_OK)
 async def get_review_by_id(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     id: str = Path(..., description="Review ID"),
     service: ReviewService = Depends(get_review_service),
 ):
-    review = service.get_review_by_id(id)
-
-    if not review:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Review not found"
-        )
-
-    return JSONResponse(
-        content=jsonable_encoder(review), status_code=status.HTTP_200_OK
-    )
+    return service.get_review_by_id(id=id)
 
 
-@router.put("/{id}", status_code=status.HTTP_200_OK)
+@router.put("/{id}", response_model=ReviewGetResponse, status_code=status.HTTP_200_OK)
 async def update_review_by_id(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     data: ReviewPostRequest = None,
     id: str = Path(..., description="ID of review to update"),
     service: ReviewService = Depends(get_review_service),
 ):
-    updated_review = service.update_review(id, data)
-
-    if not updated_review:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Review not found"
-        )
-
-    return JSONResponse(
-        content=jsonable_encoder(updated_review), status_code=status.HTTP_200_OK
-    )
+    return service.update_review(id=id, data=data)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -92,11 +70,6 @@ async def delete_review_by_id(
     id: str = Path(..., description="ID of review to delete"),
     service: ReviewService = Depends(get_review_service),
 ):
-    deleted = service.delete_review(id)
-
-    if not deleted:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Review record not found"
-        )
+    service.delete_review(id=id)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)

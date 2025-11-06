@@ -40,16 +40,20 @@ async def get_telephones(
     )
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/",
+    response_model=list[MedicalInstitutionTelephoneGetResponse],
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_telephone(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     data: MultipleMedicalInstitutionTelephonePostRequest = None,
     service: TelephoneService = Depends(get_telephone_service),
 ):
     created = [
-        service.create_telephone(t)
+        service.create_telephone(data=t)
         for t in data.telephones
-        if service.create_telephone(t) is not None
+        # if service.create_telephone(data=t) is not None
     ]
     return JSONResponse(
         content=jsonable_encoder(created), status_code=status.HTTP_201_CREATED
@@ -66,29 +70,21 @@ async def get_telephone_by_id(
     id: str = Path(..., description="ID of Telephone record to get"),
     service: TelephoneService = Depends(get_telephone_service),
 ):
-    telephone = service.get_telephone_by_id(id)
-    if not telephone:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Telephone record not found"
-        )
-    return telephone
+    return service.get_telephone_by_id(id=id)
 
 
-@router.put("/{id}", status_code=status.HTTP_200_OK)
+@router.put(
+    "/{id}",
+    response_model=MedicalInstitutionTelephoneGetResponse,
+    status_code=status.HTTP_200_OK,
+)
 async def update_telephone(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
-    telephone_update: MedicalInstitutionTelephonePostRequest = None,
+    data: MedicalInstitutionTelephonePostRequest = None,
     id: str = Path(..., description="ID of Telephone record to update"),
     service: TelephoneService = Depends(get_telephone_service),
 ):
-    updated = service.update_telephone(id, telephone_update)
-    if not updated:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Telephone record not found"
-        )
-    return JSONResponse(
-        content=jsonable_encoder(updated), status_code=status.HTTP_200_OK
-    )
+    return service.update_telephone(id=id, data=data)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -97,9 +93,6 @@ async def delete_telephone(
     id: str = Path(..., description="ID of Telephone record to delete"),
     service: TelephoneService = Depends(get_telephone_service),
 ):
-    deleted = service.delete_telephone(id)
-    if not deleted:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Telephone record not found"
-        )
+    service.delete_telephone(id)
+
     return Response(status_code=status.HTTP_204_NO_CONTENT)
