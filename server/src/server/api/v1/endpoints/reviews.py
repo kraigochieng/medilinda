@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from sqlalchemy.orm import Session
 
 from server.basemodels.review import (
@@ -10,8 +10,8 @@ from server.basemodels.review import (
 )
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
-from server.utils.auth import get_current_active_user
 from server.services.review import ReviewService
+from server.utils.auth import get_current_active_user
 
 router = APIRouter(prefix="/api/v1/reviews", tags=["reviews", "v1"])
 
@@ -23,6 +23,7 @@ def get_review_service(db: Session = Depends(get_db)):
 @router.get("/", response_model=Page[ReviewGetResponse], status_code=status.HTTP_200_OK)
 async def get_reviews(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    pagination_params: Params = Depends(),
     causality_assessment_level_id: str | None = Query(
         None, description="Causality Assessment Level Id"
     ),
@@ -30,7 +31,9 @@ async def get_reviews(
     service: ReviewService = Depends(get_review_service),
 ):
     return service.get_reviews(
-        causality_assessment_level_id=causality_assessment_level_id, user_id=user_id
+        causality_assessment_level_id=causality_assessment_level_id,
+        user_id=user_id,
+        pagination_params=pagination_params,
     )
 
 

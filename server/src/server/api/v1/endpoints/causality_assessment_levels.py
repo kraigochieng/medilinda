@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from sqlalchemy.orm import Session
 
 from server.basemodels.causality_asssessment_level import (
@@ -32,16 +32,14 @@ def get_causality_assessment_level_service(db: Session = Depends(get_db)):
 )
 async def get_causality_assessment_levels(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
+    pagination_params: Params = Depends(),
     adr_id: str | None = Query(None, description="ID of Causality Assessment to read"),
     service: CausalityAssessmentLevelService = Depends(
         get_causality_assessment_level_service
     ),
 ):
-    content = service.get_causality_assessment_levels(adr_id=adr_id)
-
-    return JSONResponse(
-        content=jsonable_encoder(content),
-        status_code=status.HTTP_200_OK,
+    return service.get_causality_assessment_levels(
+        adr_id=adr_id, pagination_params=pagination_params
     )
 
 

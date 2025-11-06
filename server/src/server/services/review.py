@@ -1,4 +1,4 @@
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from sqlalchemy.orm import Session
 
 from server.basemodels.review import (
@@ -14,10 +14,15 @@ class ReviewService:
         self.repository = ReviewRepository(db)
 
     def get_reviews(
-        self, causality_assessment_level_id: str | None, user_id: str | None
+        self,
+        causality_assessment_level_id: str | None,
+        user_id: str | None,
+        pagination_params: Params,
     ) -> Page[ReviewGetResponse]:
         return self.repository.get_all(
-            causality_assessment_level_id=causality_assessment_level_id, user_id=user_id
+            causality_assessment_level_id=causality_assessment_level_id,
+            user_id=user_id,
+            pagination_params=pagination_params,
         )
 
     def get_review_by_id(self, review_id: str) -> ReviewGetResponse:

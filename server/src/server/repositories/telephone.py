@@ -11,7 +11,7 @@ class TelephoneRepository:
         self.db = db
 
     def get_all(
-        self, medical_institution_id: str | None
+        self, medical_institution_id: str | None, pagination_params: Params
     ) -> Page[MedicalInstitutionTelephoneModel]:
         stmt = select(MedicalInstitutionTelephoneModel)
 
@@ -23,7 +23,7 @@ class TelephoneRepository:
 
         stmt = stmt.order_by(desc(MedicalInstitutionTelephoneModel.created_at))
 
-        return paginate(self.db, stmt, params=Params(page=1, size=50))
+        return paginate(self.db, stmt, params=pagination_params)
 
     def get_by_id(self, telephone_id: str) -> MedicalInstitutionTelephoneModel | None:
         stmt = select(MedicalInstitutionTelephoneModel).where(

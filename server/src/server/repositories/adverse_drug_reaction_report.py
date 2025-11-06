@@ -13,7 +13,7 @@ class AdverseDrugReactionReportRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def get(self, query: str | None) -> Page[ADRModel]:
+    def get(self, query: str | None, pagination_params: Params) -> Page[ADRModel]:
         stmt = select(ADRModel)
 
         if query:
@@ -26,7 +26,7 @@ class AdverseDrugReactionReportRepository:
 
         stmt.order_by(desc(ADRModel.created_at))
 
-        return paginate(self.db, stmt, params=Params(page=1, size=50))
+        return paginate(self.db, stmt, params=pagination_params)
 
     def get_by_id(self, id: str) -> ADRModel | None:
         stmt = select(ADRModel).where(ADRModel.id == id)
@@ -34,8 +34,8 @@ class AdverseDrugReactionReportRepository:
         return self.db.scalar(stmt)
 
     def get_paginated_adrs_with_reviews(
-        self, params: Params, query: str | None
-    ) -> Page:
+        self, pagination_params: Params, query: str | None
+    ) -> Page[ADRModel]:
         """
         Gets a paginated list of ADRs with their first causality level
         and review counts.
@@ -97,8 +97,7 @@ class AdverseDrugReactionReportRepository:
                 func.lower(ADRModel.patient_name).like(func.lower(search_term))
             )
 
-        # Note: The paginate function handles the .limit() and .offset()
-        return paginate(self.db, main_stmt, params=params)
+        return paginate(self.db, main_stmt, params=pagination_params)
 
     def create(self, data: ADRPostRequest) -> ADRModel:
         model = ADRModel(**data.model_dump())

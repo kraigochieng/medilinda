@@ -13,7 +13,10 @@ class SMSMessageRepository:
         self.db = db
 
     def get_all(
-        self, sms_type: SMSMessageTypeEnum | None = None, adr_id: str | None = None
+        self,
+        pagination_params: Params,
+        sms_type: SMSMessageTypeEnum | None = None,
+        adr_id: str | None = None,
     ) -> Page[SMSMessageModel]:
         stmt = select(SMSMessageModel)
 
@@ -25,7 +28,7 @@ class SMSMessageRepository:
 
         stmt = stmt.order_by(desc(SMSMessageModel.created_at))
 
-        return paginate(self.db, stmt, params=Params(page=1, size=50))
+        return paginate(self.db, stmt, params=pagination_params)
 
     def get_by_id(self, id: str) -> SMSMessageModel | None:
         stmt = select(SMSMessageModel).where(SMSMessageModel.id == id)
@@ -33,7 +36,7 @@ class SMSMessageRepository:
         return self.db.scalar(stmt)
 
     def get_sms_counts_by_adr(
-        self, params: Params, sms_type: SMSMessageTypeEnum | None
+        self, pagination_params: Params, sms_type: SMSMessageTypeEnum | None
     ) -> Page[SMSCountResponse]:
         """
         Gets a paginated, grouped count of SMS messages by ADR,
@@ -71,8 +74,7 @@ class SMSMessageRepository:
         if sms_type:
             main_stmt = main_stmt.filter(SMSMessageModel.sms_type == sms_type)
 
-        # Let paginate handle the total count, limit, and offset
-        return paginate(self.db, main_stmt, params)
+        return paginate(self.db, main_stmt, params=pagination_params)
 
     def create(self, data: dict) -> SMSMessageModel:
         sms = SMSMessageModel(**data)

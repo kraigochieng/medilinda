@@ -20,7 +20,9 @@ class CausalityAssessmentLevelRepository:
         )
         return self.db.scalar(stmt)
 
-    def get_all(self, adr_id: str | None) -> Page[CausalityAssessmentLevelModel]:
+    def get_all(
+        self, adr_id: str | None, pagination_params: Params
+    ) -> Page[CausalityAssessmentLevelModel]:
         stmt = select(CausalityAssessmentLevelModel)
 
         if adr_id:
@@ -28,7 +30,7 @@ class CausalityAssessmentLevelRepository:
 
         stmt = stmt.order_by(desc(CausalityAssessmentLevelModel.created_at))
 
-        return paginate(self.db, stmt, params=Params(page=1, size=50))
+        return paginate(self.db, stmt, params=pagination_params)
 
     def create(
         self, data: CausalityAssessmentLevelPostRequest

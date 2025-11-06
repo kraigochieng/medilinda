@@ -4,7 +4,7 @@ import africastalking
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from sqlalchemy.orm import Session
 
 from server.basemodels.sms import (
@@ -29,11 +29,14 @@ def get_sms_service(db: Session = Depends(get_db)):
 )
 async def get_sms_messages(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
+    pagination_params: Params,
     sms_type: SMSMessageTypeEnum | None = Query(None, description="Filter by SMS type"),
     adr_id: str | None = Query(None, description="Filter by ADR ID"),
     service: SMSMessageService = Depends(get_sms_service),
 ):
-    return service.list_messages(adr_id=adr_id, sms_type=sms_type)
+    return service.list_messages(
+        adr_id=adr_id, sms_type=sms_type, pagination_params=pagination_params
+    )
 
 
 @router.get("/{id}", status_code=status.HTTP_200_OK)

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Path, status, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from sqlalchemy.orm import Session
 
 from server.basemodels.medical_institution import (
@@ -28,12 +28,16 @@ def get_telephone_service(db: Session = Depends(get_db)):
 )
 async def get_telephones(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
+    pagination_params: Params = Depends(),
     medical_institution_id: str | None = Query(
         None, dsecriprion="medical institution id"
     ),
     service: TelephoneService = Depends(get_telephone_service),
 ):
-    return service.get_telephones(medical_institution_id=medical_institution_id)
+    return service.get_telephones(
+        medical_institution_id=medical_institution_id,
+        pagination_params=pagination_params,
+    )
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)

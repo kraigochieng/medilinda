@@ -1,4 +1,4 @@
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from sqlalchemy.orm import Session
 
 from server.basemodels.medical_institution import (
@@ -14,9 +14,9 @@ class MedicalInstitutionService:
         self.repository = MedicalInstitutionRepository(db)
 
     def get_medical_institutions(
-        self, query: str = ""
+        self, pagination_params: Params, query: str = ""
     ) -> Page[MedicalInstitutionGetResponse]:
-        return self.repository.get_all(query)
+        return self.repository.get_all(query=query, pagination_params=pagination_params)
 
     def create_medical_institution(
         self, institution: MedicalInstitutionPostRequest

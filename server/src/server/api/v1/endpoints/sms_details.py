@@ -26,4 +26,4 @@ async def get_sms_message_with_adr_and_counts(
     sms_type: SMSMessageTypeEnum | None = Query(None, description="Filter by SMS type"),
     service: SMSMessageService = Depends(get_sms_service),
 ):
-    return service.get_paginated_sms_counts(params=pagination_params, sms_type=sms_type)
+    return service.get_paginated_sms_counts(pagination_params=pagination_params, sms_type=sms_type)

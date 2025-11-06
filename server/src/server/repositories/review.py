@@ -11,7 +11,10 @@ class ReviewRepository:
         self.db = db
 
     def get_all(
-        self, causality_assessment_level_id: str | None, user_id: str | None
+        self,
+        causality_assessment_level_id: str | None,
+        user_id: str | None,
+        pagination_params: Params,
     ) -> Page[ReviewModel]:
         stmt = select(ReviewModel).options(selectinload(ReviewModel.user))
 
@@ -24,7 +27,7 @@ class ReviewRepository:
         if user_id:
             stmt = stmt.filter(ReviewModel.user_id == user_id)
 
-        return paginate(self.db, stmt, params=Params(page=1, size=50))
+        return paginate(self.db, stmt, params=pagination_params)
 
     def get(self, review_id: str) -> ReviewModel:
         stmt = select(ReviewModel).where(ReviewModel.id == review_id)

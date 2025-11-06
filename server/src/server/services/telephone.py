@@ -1,4 +1,4 @@
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 
 from server.basemodels.medical_institution import (
     MedicalInstitutionGetResponse,
@@ -12,9 +12,12 @@ class TelephoneService:
         self.repository = TelephoneRepository(db)
 
     def get_telephones(
-        self, medical_institution_id: str | None
+        self, medical_institution_id: str | None, pagination_params: Params
     ) -> Page[MedicalInstitutionGetResponse]:
-        return self.repository.get_all(medical_institution_id=medical_institution_id)
+        return self.repository.get_all(
+            medical_institution_id=medical_institution_id,
+            pagination_params=pagination_params,
+        )
 
     def get_telephone_by_id(self, telephone_id: str) -> MedicalInstitutionGetResponse:
         return self.repository.get_by_id(telephone_id)

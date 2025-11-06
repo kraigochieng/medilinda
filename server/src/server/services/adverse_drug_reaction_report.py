@@ -47,20 +47,20 @@ class AdverseDrugReactionReportService:
         self.encoder = encoder
         self.explainer = explainer
 
-    def get(self, query: str | None) -> Page[ADRGetResponse]:
-        return self.repository.get(query=query)
+    def get(self, query: str | None, pagination_params: Params) -> Page[ADRGetResponse]:
+        return self.repository.get(query=query, pagination_params=pagination_params)
 
     def get_by_id(self, id: str) -> ADRGetResponse | None:
         return self.repository.get_by_id(id)
 
     def get_adrs_with_causality_and_review_count(
-        self, params: Params, query: str | None
+        self, pagination_params: Params, query: str | None
     ) -> Page[ADRWithReviewsResponse]:
         """
         Pass-through method to get paginated ADRs with review counts.
         """
         return self.repository.get_paginated_adrs_with_reviews(
-            params=params, query=query
+            pagination_params=pagination_params, query=query
         )
 
     def create(self, data: ADRPostRequest) -> ADRGetResponse:

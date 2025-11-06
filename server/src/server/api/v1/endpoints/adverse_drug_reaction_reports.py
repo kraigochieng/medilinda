@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse, Response
-from fastapi_pagination import Page
+from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
 from mlflow.pyfunc import PyFuncModel
 from shap import KernelExplainer
@@ -69,14 +69,13 @@ router = APIRouter(prefix="/api/v1/adrs", tags=["adrs", "v1"])
 @router.get("/", response_model=Page[ADRGetResponse], status_code=status.HTTP_200_OK)
 def get_adrs(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
+    pagination_params: Params = Depends(),
     query: str = Query("", description="Search query(optional)"),
     service: AdverseDrugReactionReportService = Depends(
         get_adverse_drug_reaction_report_service
     ),
 ):
-    content = service.get(query=query)
-
-    return JSONResponse(jsonable_encoder(content), status_code=status.HTTP_200_OK)
+    return service.get(query=query, pagination_params=pagination_params)
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ADRGetResponse)
