@@ -4,6 +4,7 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from server.basemodels.medical_institution import (
     MedicalInstitutionPostRequest,
 )
+from server.exceptions import ResourceNotFoundError
 from server.models.medical_institution import (
     MedicalInstitutionModel,
     MedicalInstitutionTelephoneModel,
@@ -36,55 +37,39 @@ class MedicalInstitutionRepository:
 
         return paginate(self.db, stmt, params=pagination_params)
 
-    def create(
-        self, institution_data: MedicalInstitutionPostRequest
-    ) -> MedicalInstitutionModel:
-        new_institution = MedicalInstitutionModel(**institution_data.model_dump())
-        self.db.add(new_institution)
-        self.db.commit()
-        self.db.refresh(new_institution)
-        return new_institution
+    def create(self, data: MedicalInstitutionPostRequest) -> MedicalInstitutionModel:
+        model = MedicalInstitutionModel(**data.model_dump())
 
-    def get(self, institution_id: str) -> MedicalInstitutionModel:
-        stmt = select(MedicalInstitutionModel).where(
-            MedicalInstitutionModel.id == institution_id
-        )
-        return self.db.scalar(stmt)
+        self.db.add(model)
+        self.db.commit()
+        self.db.refresh(model)
+
+        return model
+
+    def get(self, id: str) -> MedicalInstitutionModel:
+        stmt = select(MedicalInstitutionModel).where(MedicalInstitutionModel.id == id)
+        model = self.db.scalar(stmt)
+
+        if not model:
+            raise ResourceNotFoundError(f"Medical Institution with id {id} not found")
+
+        return model
 
     def update(
-        self, institution: MedicalInstitutionPostRequest, institution_id: str
+        self, data: MedicalInstitutionPostRequest, id: str
     ) -> MedicalInstitutionModel:
-        stmt = select(MedicalInstitutionModel).where(
-            MedicalInstitutionModel.id == institution_id
-        )
-        db_institution = self.db.scalar(stmt)
+        model = self.get(id=id)
 
-        if not db_institution:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Medical Institution not found",
-            )
-
-        for key, value in institution.model_dump().items():
-            setattr(db_institution, key, value)
+        for key, value in data.model_dump().items():
+            setattr(model, key, value)
 
         self.db.commit()
-        self.db.refresh(db_institution)
+        self.db.refresh(model)
 
-        return db_institution
+        return model
 
-    def delete(self, institution_id: str) -> None:
-        stmt = select(MedicalInstitutionModel).where(
-            MedicalInstitutionModel.id == institution_id
-        )
-
-        institution = self.db.scalar(stmt)
-
-        if not institution:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Medical Institution not found",
-            )
+    def delete(self, id: str) -> None:
+        institution = self.get(id=id)
 
         self.db.delete(institution)
         self.db.commit()

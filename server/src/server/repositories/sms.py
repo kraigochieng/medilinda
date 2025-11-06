@@ -6,6 +6,7 @@ from server.models.medical_institution import MedicalInstitutionModel
 from server.models.sms import SMSMessageModel
 from sqlalchemy import desc, func, select
 from sqlalchemy.orm import Session
+from server.exceptions import ResourceNotFoundError
 
 
 class SMSMessageRepository:
@@ -30,10 +31,15 @@ class SMSMessageRepository:
 
         return paginate(self.db, stmt, params=pagination_params)
 
-    def get_by_id(self, id: str) -> SMSMessageModel | None:
+    def get_by_id(self, id: str) -> SMSMessageModel:
         stmt = select(SMSMessageModel).where(SMSMessageModel.id == id)
 
-        return self.db.scalar(stmt)
+        model = self.db.scalar(stmt)
+
+        if not model:
+            raise ResourceNotFoundError(f"SMS with id {id} not found")
+
+        return model
 
     def get_sms_counts_by_adr(
         self, pagination_params: Params, sms_type: SMSMessageTypeEnum | None
@@ -77,13 +83,13 @@ class SMSMessageRepository:
         return paginate(self.db, main_stmt, params=pagination_params)
 
     def create(self, data: dict) -> SMSMessageModel:
-        sms = SMSMessageModel(**data)
+        model = SMSMessageModel(**data)
 
-        self.db.add(sms)
+        self.db.add(model)
         self.db.commit()
-        self.db.refresh(sms)
+        self.db.refresh(model)
 
-        return sms
+        return model
 
     def create_batch(
         self, sms_messages: list[SMSMessageModel]
@@ -94,17 +100,14 @@ class SMSMessageRepository:
         """
         self.db.add_all(sms_messages)
         self.db.commit()
+
         for msg in sms_messages:
             self.db.refresh(msg)
+        
         return sms_messages
 
-    def delete(self, id: str) -> bool:
-        sms = self.get_by_id(id)
+    def delete(self, id: str) -> None:
+        model = self.get_by_id(id)
 
-        if not sms:
-            return False
-
-        self.db.delete(sms)
+        self.db.delete(model)
         self.db.commit()
-
-        return True

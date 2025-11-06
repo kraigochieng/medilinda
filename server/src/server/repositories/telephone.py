@@ -4,6 +4,7 @@ from server.basemodels.medical_institution import MedicalInstitutionTelephonePos
 from server.models.medical_institution import MedicalInstitutionTelephoneModel
 from sqlalchemy import select, desc
 from sqlalchemy.orm import Session
+from server.exceptions import ResourceNotFoundError
 
 
 class TelephoneRepository:
@@ -25,42 +26,44 @@ class TelephoneRepository:
 
         return paginate(self.db, stmt, params=pagination_params)
 
-    def get_by_id(self, telephone_id: str) -> MedicalInstitutionTelephoneModel | None:
+    def get_by_id(self, id: str) -> MedicalInstitutionTelephoneModel:
         stmt = select(MedicalInstitutionTelephoneModel).where(
-            MedicalInstitutionTelephoneModel.id == telephone_id
+            MedicalInstitutionTelephoneModel.id == id
         )
-        return self.db.scalar(stmt)
+
+        model = self.db.scalar(stmt)
+
+        if not model:
+            raise ResourceNotFoundError(f"Telephone with id {id} not found")
+
+        return model
 
     def create(
-        self, telephone: MedicalInstitutionTelephonePostRequest
+        self, data: MedicalInstitutionTelephonePostRequest
     ) -> MedicalInstitutionTelephoneModel:
-        obj = MedicalInstitutionTelephoneModel(**telephone.model_dump())
-        self.db.add(obj)
+        model = MedicalInstitutionTelephoneModel(**data.model_dump())
+
+        self.db.add(model)
         self.db.commit()
-        self.db.refresh(obj)
-        return obj
+        self.db.refresh(model)
+
+        return model
 
     def update(
-        self, telephone_id: str, telephone: MedicalInstitutionTelephonePostRequest
-    ) -> MedicalInstitutionTelephoneModel | None:
-        obj = self.get_by_id(telephone_id)
+        self, id: str, data: MedicalInstitutionTelephonePostRequest
+    ) -> MedicalInstitutionTelephoneModel:
+        model = self.get_by_id(id=id)
 
-        if not obj:
-            return None
-
-        for key, value in telephone.model_dump().items():
-            setattr(obj, key, value)
+        for key, value in data.model_dump().items():
+            setattr(model, key, value)
 
         self.db.commit()
-        self.db.refresh(obj)
-        return obj
+        self.db.refresh(model)
 
-    def delete(self, telephone_id: str) -> bool:
-        obj = self.get_by_id(telephone_id)
+        return model
 
-        if not obj:
-            return False
+    def delete(self, id: str) -> None:
+        model = self.get_by_id(id=id)
 
-        self.db.delete(obj)
+        self.db.delete(model)
         self.db.commit()
-        return True

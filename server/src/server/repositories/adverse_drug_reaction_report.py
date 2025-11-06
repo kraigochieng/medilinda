@@ -1,6 +1,7 @@
 from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
 from server.basemodels.adverse_drug_reaction_report import ADRPostRequest
+from server.exceptions import ResourceNotFoundError
 from server.models.adverse_drug_reaction_report import ADRModel
 from server.models.causality_assessment_level import CausalityAssessmentLevelModel
 from server.models.review import ReviewModel
@@ -28,10 +29,15 @@ class AdverseDrugReactionReportRepository:
 
         return paginate(self.db, stmt, params=pagination_params)
 
-    def get_by_id(self, id: str) -> ADRModel | None:
+    def get_by_id(self, id: str) -> ADRModel:
         stmt = select(ADRModel).where(ADRModel.id == id)
 
-        return self.db.scalar(stmt)
+        model = self.db.scalar(stmt)
+
+        if not model:
+            raise ResourceNotFoundError(f"User with id {id} not found")
+
+        return model
 
     def get_paginated_adrs_with_reviews(
         self, pagination_params: Params, query: str | None
@@ -108,11 +114,8 @@ class AdverseDrugReactionReportRepository:
 
         return model
 
-    def update(self, id: str, data: ADRPostRequest) -> ADRModel | None:
+    def update(self, id: str, data: ADRPostRequest) -> ADRModel:
         model = self.get_by_id(id)
-
-        if not model:
-            return None
 
         for key, value in data.model_dump().items():
             setattr(model, key, value)
@@ -122,13 +125,8 @@ class AdverseDrugReactionReportRepository:
 
         return model
 
-    def delete(self, id: str) -> bool:
+    def delete(self, id: str) -> None:
         model = self.get_by_id(id)
-
-        if not model:
-            return False
 
         self.db.delete(model)
         self.db.commit()
-
-        return True
