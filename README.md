@@ -6,6 +6,38 @@ It directly addresses a **critical patient safety gap** in tuberculosis (TB) tre
 
 > **First-line anti-TB drugs (Pyrazinamide, Ethambutol, Isoniazid, Rifampin)** are among the **most frequently reported for serious ADRs** in Kenya’s national pharmacovigilance database — yet manual causality assessment is **slow, subjective, and resource-constrained**.
 
+## Demo screenshots
+
+### Predicted Causality Assessment level
+
+![Predicted Causality Assessment level](docs/images/predicted_causality_assessment_level.png)
+
+-   As per WHO-UMC Causality Assessment Levels
+
+### Class Rankings using SHAP
+
+![Class Rankings using SHAP](docs/images/class_rankings.png)
+
+| Term                  | Meaning                                                                        |
+| --------------------- | ------------------------------------------------------------------------------ |
+| **Base Value**        | Starting probability _before_ seeing patient data (from training set averages) |
+| **SHAP Value**        | **How much this case's features _pushed_ each class up or down**               |
+| **Final Probability** | Final confidence after applying evidence                                       |
+
+### Feature Rankings per Causality Assessment Level using SHAP
+
+![Feature Rankings using SHAP](docs/images/feature_rankings.png)
+
+**Top 5 reasons it said "possible":**
+
+1. **No rechallenge** → **+26%**
+2. **Symptoms improved after stopping** → **+21%**
+3. **Reaction soon after Pyrazinamide** → **+13%**
+4. **Low patient weight** → **+13%**
+5. **Rifampicin started during reaction** → **+12%**
+
+-   Other fields not shown to keep screenshot small
+
 ## The Business Problem We're Solving
 
 ### The Pain Point
