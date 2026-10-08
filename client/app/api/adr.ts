@@ -32,9 +32,18 @@ export async function fetchAdrById(
 
 export async function deleteAdrById(id: string): Promise<void> {
 	const { $serverFetch } = useNuxtApp();
-	
+
 	return await $serverFetch<void>(`/${path}/${id}`, {
 		method: "DELETE",
+	});
+}
+
+// Undoes a delete: brings back the ADR with its assessments and reviews.
+export async function restoreAdrById(id: string): Promise<ADRGetResponseInterface> {
+	const { $serverFetch } = useNuxtApp();
+
+	return await $serverFetch<ADRGetResponseInterface>(`/${path}/${id}/restore`, {
+		method: "POST",
 	});
 }
 
@@ -53,6 +62,8 @@ export async function fetchAdrsWithCausalityAndReviewCount(params: {
 	page?: number;
 	size?: number;
 	query?: string;
+	causality_level?: string;
+	review_status?: string;
 }): Promise<
 	PaginatedResponseInterface<ADRWithCausalityLevelAndReviewCountInterface>
 > {
