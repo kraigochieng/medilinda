@@ -42,7 +42,9 @@ export const auth = betterAuth({
 		},
 	},
 	plugins: [
-		username(),
+		// Legacy users have one-letter usernames (A-Z). The signup form still
+		// asks new users for at least 3 characters.
+		username({ minUsernameLength: 1 }),
 		jwt({
 			jwt: {
 				issuer: baseURL,
