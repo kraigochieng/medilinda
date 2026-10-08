@@ -211,6 +211,17 @@ Every change to an ADR, its causality assessments, reviews, SMS messages, medica
 -   Rows that existed before auditing was added get a baseline version 1 the first time they change.
 -   Bulk updates and raw SQL on audited tables bypass the hooks, so use the ORM for writes.
 
+## Deploying
+
+Nothing deploys by itself, so the free plans are not used up. Deploy when you want a release live.
+
+-   **Server (Render).** Pushing to `main` builds the Docker image and publishes `:latest` to Docker Hub. Pull requests only build it to check that it builds. To put the latest image live:
+    ```sh
+    render deploys create <service-id> --confirm
+    ```
+    or use **Manual Deploy** in the Render dashboard. `render deploys list <service-id>` shows the history. Deploy the server before the client when a change needs both.
+-   **Client (Vercel).** `vercel deploy --prod` from the repository root. Vercel does not deploy on Git pushes (`client/vercel.json`).
+
 ## Usage
 
 -   Access the frontend at [http://localhost:3000](http://localhost:3000)
