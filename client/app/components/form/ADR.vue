@@ -83,44 +83,6 @@
 						<InstitutionPicker v-model="state.medical_institution_id" />
 					</UFormField>
 
-					<div v-if="medicalInstitutionData">
-						<div class="view-details-wrapper">
-							<p>Name</p>
-							<p>{{ medicalInstitutionData.name }}</p>
-						</div>
-						<USeparator />
-						<div class="view-details-wrapper">
-							<p>MFL Code</p>
-							<p>{{ medicalInstitutionData.mfl_code }}</p>
-						</div>
-						<USeparator />
-						<div class="view-details-wrapper">
-							<p>DHIS Code</p>
-							<p>
-								{{ medicalInstitutionData.dhis_code ?? "None" }}
-							</p>
-						</div>
-						<USeparator />
-						<div class="view-details-wrapper">
-							<p>County</p>
-							<p>{{ medicalInstitutionData.county ?? "None" }}</p>
-						</div>
-						<USeparator />
-						<div class="view-details-wrapper">
-							<p>Sub County</p>
-							<p>
-								{{
-									medicalInstitutionData.sub_county ?? "None"
-								}}
-							</p>
-						</div>
-					</div>
-					<p
-						v-if="!medicalInstitutionData"
-						class="italic text-gray-400 text-center my-4"
-					>
-						No medical institution created/chosen
-					</p>
 				</div>
 				<USeparator />
 				<div class="form-section">
@@ -432,7 +394,6 @@
 
 <script setup lang="ts">
 import { fetchCurrentUser } from "@/api/user";
-import type { MedicalInstitutionGetResponseInterface } from "@/types/medical_institution";
 import { adrFormCategoricalValues } from "@/values/adr";
 import type {
 	FormError,
@@ -444,7 +405,6 @@ import type {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { UserDetails } from "@/types/user";
 import { fetchAdrById, postAdr, putAdr } from "@/api/adr";
-import { fetchMedicalInstitutionById } from "@/api/medical_institution";
 import {
 	createDraftStore,
 	isDirty,
@@ -556,19 +516,6 @@ watch(
 		isDob.value = adr.patient_date_of_birth ? "dob-yes" : "dob-no";
 	},
 	{ immediate: true }
-);
-
-// Details of the chosen institution, in both modes.
-const { data: selectedInstitution } = useQuery({
-	queryKey: [
-		"medicalInstitution",
-		computed(() => state.medical_institution_id),
-	],
-	queryFn: () => fetchMedicalInstitutionById(state.medical_institution_id as string),
-	enabled: computed(() => !!state.medical_institution_id),
-});
-const medicalInstitutionData = computed<MedicalInstitutionGetResponseInterface | null>(
-	() => selectedInstitution.value ?? null
 );
 
 const UFormField = resolveComponent("UFormField");
