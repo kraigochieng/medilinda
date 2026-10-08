@@ -49,40 +49,10 @@
 				description="The model gives no reasons when it cannot classify a report. Add the missing facts to the report and save it, and the model will try again."
 				class="mt-4"
 			/>
-			<ClassRankings
-				v-if="
-					!['unclassified', 'unclassifiable'].includes(
-						firstCausalityAssessmentLevel?.causality_assessment_level_value ??
-							''
-					)
-				"
-				:base-values="firstCausalityAssessmentLevel?.base_values"
-				:shap-values="
-					firstCausalityAssessmentLevel?.shap_values_sum_per_class
-				"
-				:base-shap-values="
-					firstCausalityAssessmentLevel?.shap_values_and_base_values_sum_per_class
-				"
-			/>
-			<FeatureRankings
-				v-if="
-					firstCausalityAssessmentLevel &&
-					!['unclassified', 'unclassifiable'].includes(
-						firstCausalityAssessmentLevel.causality_assessment_level_value ??
-							''
-					)
-				"
-				:default-class="firstCausalityAssessmentLevel.causality_assessment_level_value"
-				:base-values="firstCausalityAssessmentLevel.base_values"
-				:shap-values="
-					firstCausalityAssessmentLevel.shap_values_sum_per_class
-				"
-				:base-shap-values="
-					firstCausalityAssessmentLevel.shap_values_and_base_values_sum_per_class
-				"
-				:shap-matrix="firstCausalityAssessmentLevel.shap_values_matrix"
-				:feature-names="firstCausalityAssessmentLevel.feature_names"
-				:feature-values="firstCausalityAssessmentLevel.feature_values"
+			<PredictionExplanation
+				v-else
+				:assessment="firstCausalityAssessmentLevel"
+				class="mt-4"
 			/>
 		</template>
 		<template #review>
