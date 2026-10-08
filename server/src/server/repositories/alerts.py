@@ -11,6 +11,7 @@ from server.models.medical_institution import (
 )
 from server.models.review import ReviewModel
 from server.models.sms import SMSMessageModel
+from server.repositories._newest_assessment import newest_assessment_ids
 from server.utils.alerts import transform_alert_rows
 from sqlalchemy import Select, and_, case, distinct, false, func, select, true
 from sqlalchemy.orm import Session
@@ -85,7 +86,10 @@ class AlertRepository:
         )
 
         # Apply WHERE filters
-        where_conditions = []
+        # Only the newest assessment of an ADR counts.
+        where_conditions = [
+            CausalityAssessmentLevelModel.id.in_(newest_assessment_ids())
+        ]
         if search_term:
             where_conditions.append(
                 func.lower(ADRModel.patient_name).like(func.lower(search_term))

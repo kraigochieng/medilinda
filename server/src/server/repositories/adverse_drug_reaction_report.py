@@ -43,7 +43,7 @@ class AdverseDrugReactionReportRepository:
         self, pagination_params: Params, query: str | None
     ) -> Page[ADRModel]:
         """
-        Gets a paginated list of ADRs with their first causality level
+        Gets a paginated list of ADRs with their newest causality level
         and review counts.
         """
         search_term = f"%{query}%" if query else None
@@ -54,7 +54,10 @@ class AdverseDrugReactionReportRepository:
             func.row_number()
             .over(
                 partition_by=CausalityAssessmentLevelModel.adr_id,
-                order_by=CausalityAssessmentLevelModel.created_at.asc(),
+                order_by=[
+                    CausalityAssessmentLevelModel.created_at.desc(),
+                    CausalityAssessmentLevelModel.id.desc(),
+                ],
             )
             .label("rn"),
         ).cte("ranked_causality")

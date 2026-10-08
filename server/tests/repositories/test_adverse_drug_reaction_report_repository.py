@@ -214,7 +214,7 @@ def test_get_paginated_adrs_with_reviews_with_data(
 ):
     adr = adr_repository.create(sample_adverse_drug_reaction_report_post_request)
 
-    # 2. Create CAL 1 (the first/oldest one)
+    # 2. Create CAL 1 (the oldest one)
     cal1 = CausalityAssessmentLevelModel(
         adr_id=adr.id,
         causality_assessment_level_value=CausalityAssessmentLevelEnum.unclassified,
@@ -232,14 +232,14 @@ def test_get_paginated_adrs_with_reviews_with_data(
     db.add(cal2)
     db.commit()
 
-    # 4. Create Reviews linked to CAL 1 (the one that should be picked)
+    # 4. Create Reviews linked to CAL 1 (history: ignored by the query)
     review1 = ReviewModel(
         causality_assessment_level_id=cal1.id, user_id=test_user.id, approved=True
     )
     review2 = ReviewModel(
         causality_assessment_level_id=cal1.id, user_id=test_user.id, approved=False
     )
-    # 5. Create a Review linked to CAL 2 (this one should be ignored by the query)
+    # 5. Create a Review linked to CAL 2 (the newest one, so the one that counts)
     review3 = ReviewModel(
         causality_assessment_level_id=cal2.id, user_id=test_user.id, approved=True
     )
@@ -256,14 +256,11 @@ def test_get_paginated_adrs_with_reviews_with_data(
     assert len(page.items) == 1
     item = page.items[0]
 
-    # Should pick the value from the *first* CAL (cal1)
-    assert (
-        item.causality_assessment_level_value
-        == CausalityAssessmentLevelEnum.unclassified
-    )
-    # Should count *only* reviews for cal1
+    # Should pick the value from the *newest* CAL (cal2)
+    assert item.causality_assessment_level_value == CausalityAssessmentLevelEnum.certain
+    # Should count *only* reviews for cal2
     assert item.approved_reviews == 1
-    assert item.unapproved_reviews == 1
+    assert item.unapproved_reviews == 0
 
 
 def test_get_paginated_adrs_with_reviews_search(
