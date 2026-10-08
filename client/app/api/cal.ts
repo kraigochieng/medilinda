@@ -18,3 +18,13 @@ export async function fetchCausalityAssessmentLevels(params: {
 		query: params,
 	});
 }
+
+export async function fetchCausalityAssessmentLevelById(
+	id: string
+): Promise<CausalityAssessmentLevelGetResponseInterface> {
+	const { $serverFetch } = useNuxtApp();
+	return await $serverFetch<CausalityAssessmentLevelGetResponseInterface>(
+		`/${path}/${id}`,
+		{ method: "GET" }
+	);
+}

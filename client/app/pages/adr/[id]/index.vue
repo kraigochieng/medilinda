@@ -82,20 +82,17 @@
 				:not-approved-count="reviewStats?.unapproved_reviews || 0"
 			/>
 			<ReviewDetails
-				:v-if="firstCurrentReview"
+				v-if="firstCurrentReview"
 				:data="firstCurrentReview"
-				:causality_assessment_level_id="
-					firstCurrentReview?.causality_assessment_level_id
-				"
+				:adr-id="id"
 			/>
-			<div v-if="!currentReviewDetails">
-				<UButton
-					class="my-4 w-full mx-auto"
-					@mouseup="router.push(`/adr/${id}/review`)"
-				>
-					Add Review
-				</UButton>
-			</div>
+			<UButton
+				v-else-if="firstCausalityAssessmentLevel && !iscurrentReviewDetailsPending"
+				class="my-4 w-full justify-center"
+				icon="i-lucide-clipboard-check"
+				:to="`/adr/${id}/review`"
+				label="Add your review"
+			/>
 			<UTable :data="reviewRows" :columns="reviewColumns" />
 		</template>
 		<template #history>
@@ -107,6 +104,7 @@
 <script setup lang="ts">
 import { fetchAdrById, deleteAdrById } from "@/api/adr";
 import { fetchCausalityAssessmentLevels } from "@/api/cal";
+import { fetchCurrentUser } from "@/api/user";
 import { savedBanner, type SavedKind } from "~/utils/adr-saved";
 import { fetchReviews, fetchReviewStats } from "@/api/review";
 import type { ADRGetResponseInterface } from "@/types/adr";
@@ -196,6 +194,12 @@ const banner = computed(() => {
 	});
 });
 
+// The signed-in user's own review of the current assessment ("My vote").
+const { data: currentUser } = useQuery({
+	queryKey: ["currentUser"],
+	queryFn: fetchCurrentUser,
+});
+
 const {
 	data: currentReviewDetails,
 	isPending: iscurrentReviewDetailsPending,
@@ -203,13 +207,20 @@ const {
 	error: reviewDetailsError,
 	status: reviewDetailsStatus,
 } = useQuery({
-	queryKey: computed(() => ["review-details", firstCausalityAssessmentLevel.value?.id]),
+	queryKey: computed(() => [
+		"my-review",
+		firstCausalityAssessmentLevel.value?.id,
+		currentUser.value?.id,
+	]),
 	queryFn: () =>
 		fetchReviews({
 			causality_assessment_level_id: firstCausalityAssessmentLevel.value
 				?.id as string,
+			user_id: currentUser.value?.id as string,
 		}),
-	enabled: computed(() => !!firstCausalityAssessmentLevel.value?.id),
+	enabled: computed(
+		() => !!firstCausalityAssessmentLevel.value?.id && !!currentUser.value?.id
+	),
 });
 
 const firstCurrentReview = computed(

@@ -1,145 +1,143 @@
 <template>
-	<p v-if="calStatus == 'pending'">Loading CAL...</p>
-	<p v-else-if="calStatus == 'error'">{{ calError }}</p>
-	<div v-else-if="calStatus == 'success'" class="page-wrapper">
-		<CausalityAssessmentLevelComparison
-			:value="calData?.causality_assessment_level_value"
-		/>
-		<Tabs default-value="review">
-			<div class="w-max mx-auto">
-				<TabsList>
-					<TabsTrigger value="adr">
-						Adverse Drug Reaction Report Details
-					</TabsTrigger>
-					<TabsTrigger
-						value="causality-assessment"
-						v-if="
-							calData &&
-							!['unclassified', 'unclassifiable'].includes(
-								calData.causality_assessment_level_value ?? ''
-							)
-						"
-					>
-						Prediction Explanations
-					</TabsTrigger>
-					<TabsTrigger value="review">Review Form</TabsTrigger>
-				</TabsList>
-			</div>
+	<div class="page-wrapper space-y-4">
+		<div class="flex items-center justify-between gap-4">
+			<h1 class="text-2xl font-bold">Review the prediction</h1>
+			<UButton :to="`/adr/${id}`" color="neutral" variant="outline" icon="i-lucide-arrow-left" label="Back to the ADR" />
+		</div>
 
-			<TabsContent value="adr">
-				<ADRDetails v-if="adrData" :data="adrData" />
-			</TabsContent>
-			<TabsContent
-				value="causality-assessment"
-				v-if="
-					calData &&
-					!['unclassified', 'unclassifiable'].includes(
-						calData.causality_assessment_level_value ?? ''
-					)
-				"
-			>
-				<ClassRankings
-					v-if="
-						calData &&
-						!['unclassified', 'unclassifiable'].includes(
-							calData.causality_assessment_level_value ?? ''
-						)
-					"
-					:base-values="calData.base_values"
-					:shap-values="calData.shap_values_sum_per_class"
-					:base-shap-values="
-						calData.shap_values_and_base_values_sum_per_class
-					"
-				/>
-				<FeatureRankings
-					v-if="
-						calData &&
-						!['unclassified', 'unclassifiable'].includes(
-							calData.causality_assessment_level_value ?? ''
-						)
-					"
-					:base-values="calData.base_values"
-					:shap-values="calData.shap_values_sum_per_class"
-					:base-shap-values="
-						calData.shap_values_and_base_values_sum_per_class
-					"
-					:shap-matrix="calData.shap_values_matrix"
-					:feature-names="calData.feature_names"
-					:feature-values="calData.feature_values"
-				/>
-			</TabsContent>
-			<TabsContent value="review">
-				<ADRReviewForm
-					:predicted_causality_assessment_level="
-						calData?.causality_assessment_level_value
-					"
-					:causality_assessment_level_id="calData?.id"
-					:mode="mode"
-				/>
-			</TabsContent>
-		</Tabs>
+		<UAlert
+			v-if="loadError"
+			color="error"
+			variant="subtle"
+			icon="i-lucide-triangle-alert"
+			title="Could not load this report"
+			:description="apiErrorMessage(loadError)"
+			:actions="[
+				{ label: 'Try again', color: 'neutral', onClick: () => reload() },
+				{ label: 'Back to ADRs', color: 'neutral', to: '/adr' },
+			]"
+		/>
+
+		<div v-else-if="isLoading" class="space-y-4" aria-busy="true">
+			<USkeleton class="h-40 w-full" />
+			<USkeleton class="h-72 w-full" />
+		</div>
+
+		<UAlert
+			v-else-if="!assessment"
+			color="warning"
+			variant="subtle"
+			icon="i-lucide-circle-help"
+			title="This report has no causality assessment yet"
+			description="There is nothing to review. Edit the report so the model can assess it."
+			:actions="[{ label: 'Edit the report', color: 'neutral', to: `/adr/${id}/edit` }]"
+		/>
+
+		<template v-else>
+			<CausalityAssessmentLevelComparison :value="assessment.causality_assessment_level_value" />
+
+			<UTabs v-model="tab" :items="tabs" color="neutral">
+				<template #review>
+					<div class="mt-4">
+						<ADRReviewForm
+							:key="myReview?.id ?? 'new'"
+							:causality-assessment-level-id="assessment.id"
+							:predicted-level="assessment.causality_assessment_level_value"
+							:existing-review="myReview"
+							@saved="navigateTo(`/adr/${id}`)"
+							@removed="navigateTo(`/adr/${id}`)"
+						/>
+					</div>
+				</template>
+
+				<template #adr>
+					<ADRDetails v-if="adr" :data="adr" />
+				</template>
+
+				<template #explanations>
+					<ClassRankings
+						:base-values="assessment.base_values"
+						:shap-values="assessment.shap_values_sum_per_class"
+						:base-shap-values="assessment.shap_values_and_base_values_sum_per_class"
+					/>
+					<FeatureRankings
+						:default-class="assessment.causality_assessment_level_value"
+						:base-values="assessment.base_values"
+						:shap-values="assessment.shap_values_sum_per_class"
+						:base-shap-values="assessment.shap_values_and_base_values_sum_per_class"
+						:shap-matrix="assessment.shap_values_matrix"
+						:feature-names="assessment.feature_names"
+						:feature-values="assessment.feature_values"
+					/>
+				</template>
+			</UTabs>
+		</template>
 	</div>
 </template>
 
 <script setup lang="ts">
-import type { ADRGetResponseInterface } from "@/app/types/adr";
-import type { CausalityAssessmentLevelGetResponseInterface } from "@/app/types/cal";
+import { fetchAdrById } from "@/api/adr";
+import { fetchCausalityAssessmentLevels } from "@/api/cal";
+import { fetchReviews } from "@/api/review";
+import { fetchCurrentUser } from "@/api/user";
+import type { TabsItem } from "@nuxt/ui";
+import { useQuery } from "@tanstack/vue-query";
+import { apiErrorMessage } from "~/utils/review-form";
 
 const route = useRoute();
 const id = route.params.id as string;
 
-type ModeType = "create" | "update";
-const mode: ModeType = (route.query.mode as ModeType) || "create"; // If the mode is not set, then the default is create
-const { $serverFetch } = useNuxtApp();
+const tab = ref("review");
 
-const calData = ref<CausalityAssessmentLevelGetResponseInterface | null>(null);
-const calError = ref<unknown | null>(null);
-const calStatus = ref<"idle" | "pending" | "success" | "error">("idle");
+// The same queries, and cache keys, as the ADR page.
+const adrQuery = useQuery({ queryKey: ["adr", id], queryFn: () => fetchAdrById(id) });
+const assessmentsQuery = useQuery({
+	queryKey: ["causality-assessment", id],
+	queryFn: () => fetchCausalityAssessmentLevels({ adr_id: id }),
+});
+const userQuery = useQuery({ queryKey: ["currentUser"], queryFn: fetchCurrentUser });
 
-const adrData = ref<ADRGetResponseInterface | null>(null);
-const adrError = ref<unknown | null>(null);
-const adrStatus = ref<"idle" | "pending" | "success" | "error">("idle");
+const adr = computed(() => adrQuery.data.value);
+// The server lists the newest assessment first. Only the newest can be reviewed.
+const assessment = computed(() => assessmentsQuery.data.value?.items?.[0]);
 
-onMounted(async () => {
-	await fetchADR();
-	await fetchCal();
+const myReviewQuery = useQuery({
+	queryKey: computed(() => ["my-review", assessment.value?.id, userQuery.data.value?.id]),
+	queryFn: () =>
+		fetchReviews({
+			causality_assessment_level_id: assessment.value!.id,
+			user_id: userQuery.data.value!.id,
+		}),
+	enabled: computed(() => !!assessment.value?.id && !!userQuery.data.value?.id),
+});
+const myReview = computed(() => myReviewQuery.data.value?.items?.[0] ?? null);
+
+const loadError = computed(() => adrQuery.error.value ?? assessmentsQuery.error.value ?? userQuery.error.value);
+const isLoading = computed(
+	() =>
+		adrQuery.isPending.value ||
+		assessmentsQuery.isPending.value ||
+		userQuery.isPending.value ||
+		(!!assessment.value && myReviewQuery.isPending.value)
+);
+
+function reload() {
+	adrQuery.refetch();
+	assessmentsQuery.refetch();
+	userQuery.refetch();
+}
+
+const tabs = computed<TabsItem[]>(() => {
+	const items: TabsItem[] = [
+		{ label: myReview.value ? "Your review" : "Review", value: "review", slot: "review" as const },
+		{ label: "Report details", value: "adr", slot: "adr" as const },
+	];
+	const level = assessment.value?.causality_assessment_level_value;
+	if (level && !["unclassified", "unclassifiable"].includes(level)) {
+		items.push({ label: "Prediction explanations", value: "explanations", slot: "explanations" as const });
+	}
+	return items;
 });
 
-async function fetchADR() {
-	adrStatus.value = "pending";
-	try {
-		const data = await $serverFetch<ADRGetResponseInterface>(
-			`/adr/${id}`,
-			{ method: "GET" }
-		);
-
-		if (!data) throw new Error("No ADR data received");
-
-		adrData.value = data;
-		adrStatus.value = "success";
-	} catch (error) {
-		adrError.value = error;
-		adrStatus.value = "error";
-	}
-}
-
-async function fetchCal() {
-	calStatus.value = "pending";
-	try {
-		const data = await $serverFetch<CausalityAssessmentLevelGetResponseInterface>(
-			`/specific_adr/${id}/causality_assessment_level`,
-			{ method: "GET" }
-		);
-
-		if (!data) throw new Error("No causality data received");
-
-		calData.value = data;
-		console.log(calData.value.causality_assessment_level_value);
-		calStatus.value = "success";
-	} catch (error) {
-		calError.value = error;
-		calStatus.value = "error";
-	}
-}
-useHead({ title: "Review a Causality Assessment Level | MediLinda" });
+useHead({ title: "Review the prediction | MediLinda" });
 </script>
