@@ -193,3 +193,59 @@ def test_assessments_are_listed_newest_first_with_a_stable_tie_break(
 
     # The one created with the ADR (now) is newest; of the two tied rows, the higher id first.
     assert [i["id"] for i in items][-2:] == ["zzz", "aaa"]
+
+
+def test_history_entries_say_what_they_are_about_without_the_full_snapshot(
+    client, adr_payload
+):
+    adr_id = create_adr(client, adr_payload)
+
+    activity = client.get(f"/api/v1/adrs/{adr_id}/activity").json()["items"]
+
+    by_type = {e["entity_type"]: e for e in activity}
+    assert by_type["adr"]["summary"] == {"patient_name": "Jane Smith"}
+    assert by_type["causality_assessment_level"]["summary"] == {
+        "causality_assessment_level_value": "likely",
+        "ml_model_id": "final_ml_model@champion",
+    }
+    assert all("snapshot" not in e for e in activity)
+
+
+def test_the_summary_never_includes_fields_outside_the_whitelist(client, adr_payload):
+    adr_id = create_adr(client, adr_payload)
+
+    versions = client.get(f"/api/v1/adrs/{adr_id}/versions").json()
+
+    # The patient's address and the rest stay in the snapshot, not in lists.
+    assert set(versions[0]["summary"]) == {"patient_name"}
+
+
+def test_deleted_adrs_lists_only_the_ones_deleted_right_now(client, adr_payload):
+    kept = create_adr(client, adr_payload)
+    gone = create_adr(client, {**adr_payload, "patient_name": "Gone Patient"})
+    undone = create_adr(client, {**adr_payload, "patient_name": "Undone Patient"})
+    client.delete(f"/api/v1/adrs/{gone}")
+    client.delete(f"/api/v1/adrs/{undone}")
+    client.post(f"/api/v1/adrs/{undone}/restore")
+
+    page = client.get("/api/v1/audit-logs/deleted-adrs").json()
+
+    assert page["total"] == 1
+    (item,) = page["items"]
+    assert item["entity_id"] == gone
+    assert item["summary"] == {"patient_name": "Gone Patient"}
+    assert item["actor_username"] == "testuser"
+    assert item["at"]
+    assert kept not in {i["entity_id"] for i in page["items"]}
+    assert "snapshot" not in item
+
+
+def test_an_adr_that_is_deleted_again_after_a_restore_is_listed_again(client, adr_payload):
+    adr_id = create_adr(client, adr_payload)
+    client.delete(f"/api/v1/adrs/{adr_id}")
+    client.post(f"/api/v1/adrs/{adr_id}/restore")
+    assert client.get("/api/v1/audit-logs/deleted-adrs").json()["total"] == 0
+
+    client.delete(f"/api/v1/adrs/{adr_id}")
+
+    assert client.get("/api/v1/audit-logs/deleted-adrs").json()["total"] == 1

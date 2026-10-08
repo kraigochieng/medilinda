@@ -14,6 +14,21 @@ def get_audit_log_repository(db: Session = Depends(get_db)):
 
 
 @router.get(
+    "/deleted-adrs",
+    response_model=Page[AuditLogGetResponse],
+    response_model_exclude={"items": {"__all__": {"snapshot", "changes"}}},
+    status_code=status.HTTP_200_OK,
+)
+def get_deleted_adrs(
+    pagination_params: Params = Depends(),
+    repository: AuditLogRepository = Depends(get_audit_log_repository),
+):
+    """ADRs that are deleted now, newest first. Restore one with
+    `POST /api/v1/adrs/{id}/restore`."""
+    return repository.deleted_adrs(pagination_params)
+
+
+@router.get(
     "/",
     response_model=Page[AuditLogGetResponse],
     response_model_exclude_none=True,

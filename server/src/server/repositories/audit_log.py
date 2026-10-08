@@ -1,6 +1,6 @@
 from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
-from sqlalchemy import desc, select
+from sqlalchemy import and_, desc, func, select
 from sqlalchemy.orm import Session
 
 from server.exceptions import ResourceNotFoundError
@@ -64,3 +64,31 @@ class AuditLogRepository:
             )
 
         return row
+
+    def deleted_adrs(self, pagination_params: Params) -> Page[AuditLogModel]:
+        """ADRs that are deleted right now: the latest thing that happened to
+        them is a delete (a restore would be a later version)."""
+        latest = (
+            select(
+                AuditLogModel.entity_id.label("entity_id"),
+                func.max(AuditLogModel.version).label("version"),
+            )
+            .where(AuditLogModel.entity_type == "adr")
+            .group_by(AuditLogModel.entity_id)
+            .subquery()
+        )
+
+        stmt = (
+            select(AuditLogModel)
+            .join(
+                latest,
+                and_(
+                    AuditLogModel.entity_id == latest.c.entity_id,
+                    AuditLogModel.version == latest.c.version,
+                ),
+            )
+            .where(AuditLogModel.entity_type == "adr", AuditLogModel.action == "delete")
+            .order_by(desc(AuditLogModel.at))
+        )
+
+        return paginate(self.db, stmt, params=pagination_params)
