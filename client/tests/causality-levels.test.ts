@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CAUSALITY_OPTIONS, ALL } from "../app/utils/adr-table";
+import { CAUSALITY_OPTIONS } from "../app/utils/adr-table";
 import { CAUSALITY_LEVELS, causalityLevel } from "../app/utils/causality-levels";
 
 describe("causality levels", () => {
@@ -42,9 +42,8 @@ describe("causality levels", () => {
 });
 
 describe("the list filter", () => {
-	it("offers every level, most certain first, after 'All levels'", () => {
+	it("offers every level, most certain first", () => {
 		expect(CAUSALITY_OPTIONS.map((o) => o.value)).toEqual([
-			ALL,
 			"certain",
 			"likely",
 			"possible",
