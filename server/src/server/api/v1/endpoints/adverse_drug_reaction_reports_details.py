@@ -10,6 +10,8 @@ from sqlalchemy.orm import Session
 from server.basemodels.adverse_drug_reaction_report import (
     ADRWithReviewsResponse,
     ReviewStatusFilter,
+    SortField,
+    SortOrder,
 )
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
@@ -45,12 +47,17 @@ def get_adrs_with_causality_and_review_count(
     query: str = Query(
         "", description="Search patient name, address, ward or inpatient number"
     ),
-    causality_level: CausalityAssessmentLevelEnum | None = Query(
-        None, description="Only ADRs whose newest assessment has this level"
+    causality_level: list[CausalityAssessmentLevelEnum] | None = Query(
+        None,
+        description="Only ADRs whose newest assessment has one of these levels. "
+        "Repeat the parameter for more than one.",
     ),
-    review_status: ReviewStatusFilter | None = Query(
-        None, description="needs_review, approved or not_approved"
+    review_status: list[ReviewStatusFilter] | None = Query(
+        None,
+        description="needs_review, approved or not_approved. Repeat for more than one.",
     ),
+    sort_by: SortField = Query(SortField.created_at, description="The column to sort by"),
+    sort_order: SortOrder = Query(SortOrder.desc, description="asc or desc"),
     service: AdverseDrugReactionReportService = Depends(
         get_adverse_drug_reaction_report_service
     ),
@@ -60,4 +67,6 @@ def get_adrs_with_causality_and_review_count(
         query=query,
         causality_level=causality_level,
         review_status=review_status,
+        sort_by=sort_by,
+        sort_order=sort_order,
     )

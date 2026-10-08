@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 import logging
 
 import pandas as pd
@@ -17,6 +18,8 @@ from server.basemodels.adverse_drug_reaction_report import (
     RechallengeEnum,
     MLModelOutput,
     ReviewStatusFilter,
+    SortField,
+    SortOrder,
 )
 from server.basemodels.causality_asssessment_level import (
     CausalityAssessmentLevelPostRequest,
@@ -63,8 +66,10 @@ class AdverseDrugReactionReportService:
         self,
         pagination_params: Params,
         query: str | None,
-        causality_level: CausalityAssessmentLevelEnum | None = None,
-        review_status: ReviewStatusFilter | None = None,
+        causality_level: Sequence[CausalityAssessmentLevelEnum] | None = None,
+        review_status: Sequence[ReviewStatusFilter] | None = None,
+        sort_by: SortField = SortField.created_at,
+        sort_order: SortOrder = SortOrder.desc,
     ) -> Page[ADRWithReviewsResponse]:
         """
         Pass-through method to get paginated ADRs with review counts.
@@ -74,6 +79,8 @@ class AdverseDrugReactionReportService:
             query=query,
             causality_level=causality_level,
             review_status=review_status,
+            sort_by=sort_by,
+            sort_order=sort_order,
         )
 
     def create(self, data: ADRPostRequest) -> ADRGetResponse:

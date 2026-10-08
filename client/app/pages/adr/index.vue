@@ -36,17 +36,25 @@
 					/>
 				</template>
 			</UInput>
-			<USelect
+			<USelectMenu
 				v-model="state.causality"
 				:items="CAUSALITY_OPTIONS"
+				value-key="value"
+				multiple
+				:search-input="false"
+				placeholder="Any causality level"
 				aria-label="Filter by causality level"
-				class="w-44"
+				class="w-56"
 			/>
-			<USelect
+			<USelectMenu
 				v-model="state.review"
 				:items="REVIEW_STATUS_OPTIONS"
+				value-key="value"
+				multiple
+				:search-input="false"
+				placeholder="Any review status"
 				aria-label="Filter by review status"
-				class="w-44"
+				class="w-56"
 			/>
 			<UButton
 				v-if="filtersActive"
@@ -186,18 +194,20 @@ import type { TableColumn, TableRow } from "@nuxt/ui";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import {
 	CAUSALITY_OPTIONS,
-	DEFAULT_LIST_STATE,
 	REVIEW_STATE_BADGE,
 	REVIEW_STATUS_OPTIONS,
+	type SortKey,
 	buildListParams,
 	formatDateTime,
 	hasActiveFilters,
+	nextSort,
 	parseListQuery,
 	reviewState,
 	serializeListQuery,
 } from "~/utils/adr-table";
 
 const PAGE_SIZE = 20;
+const UButton = resolveComponent("UButton");
 
 const route = useRoute();
 const router = useRouter();
@@ -209,7 +219,7 @@ const state = reactive({ ...parseListQuery(route.query) });
 const debouncedQuery = refDebounced(toRef(state, "query"), 400);
 const applied = computed(() => ({ ...state, query: debouncedQuery.value }));
 
-watch([debouncedQuery, () => state.causality, () => state.review], () => {
+watch([debouncedQuery, () => state.causality, () => state.review, () => state.sortBy, () => state.sortOrder], () => {
 	state.page = 1;
 });
 watch(applied, (value) => router.replace({ query: serializeListQuery(value) }));
@@ -217,7 +227,8 @@ watch(applied, (value) => router.replace({ query: serializeListQuery(value) }));
 const filtersActive = computed(() => hasActiveFilters(applied.value));
 
 function clearFilters() {
-	Object.assign(state, { ...DEFAULT_LIST_STATE });
+	// Clearing the filters keeps the sort: it hides nothing.
+	Object.assign(state, { query: "", causality: [], review: [], page: 1 });
 }
 
 const { data, isFetching, isError, error, refetch } = useQuery({
@@ -239,14 +250,39 @@ const summary = computed(() => {
 		: `${totalCount.value} ${noun}`;
 });
 
-const columns: TableColumn<Row>[] = [
-	{ accessorKey: "patient_name", header: "Patient" },
-	{ accessorKey: "causality_assessment_level_value", header: "Causality level" },
+// A header the user can click to sort by. The server sorts, so the whole list is
+// in order and not only the page on screen.
+function sortableHeader(label: string, key: SortKey) {
+	const active = state.sortBy === key;
+	const icon = !active
+		? "i-lucide-arrow-up-down"
+		: state.sortOrder === "asc"
+			? "i-lucide-arrow-up"
+			: "i-lucide-arrow-down";
+
+	return h(UButton, {
+		color: "neutral",
+		variant: "ghost",
+		label,
+		icon,
+		trailing: true,
+		class: "-mx-2.5",
+		"aria-label": `Sort by ${label}`,
+		onClick: () => Object.assign(state, nextSort(state, key)),
+	});
+}
+
+const columns = computed<TableColumn<Row>[]>(() => [
+	{ accessorKey: "patient_name", header: () => sortableHeader("Patient", "patient_name") },
+	{
+		accessorKey: "causality_assessment_level_value",
+		header: () => sortableHeader("Causality level", "causality_level"),
+	},
 	{ id: "review", header: "Review" },
-	{ accessorKey: "created_by", header: "Created by" },
-	{ accessorKey: "created_at", header: "Created" },
+	{ accessorKey: "created_by", header: () => sortableHeader("Created by", "created_by") },
+	{ accessorKey: "created_at", header: () => sortableHeader("Created", "created_at") },
 	{ id: "actions" },
-];
+]);
 
 function onSelect(row: TableRow<Row>) {
 	navigateTo(`/adr/${row.original.adr_id}`);

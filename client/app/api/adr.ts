@@ -74,8 +74,10 @@ export async function fetchAdrsWithCausalityAndReviewCount(params: {
 	page?: number;
 	size?: number;
 	query?: string;
-	causality_level?: string;
-	review_status?: string;
+	causality_level?: string[];
+	review_status?: string[];
+	sort_by?: string;
+	sort_order?: string;
 }): Promise<
 	PaginatedResponseInterface<ADRWithCausalityLevelAndReviewCountInterface>
 > {
