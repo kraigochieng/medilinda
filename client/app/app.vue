@@ -1,5 +1,7 @@
 <template>
 	<UApp>
+		<!-- A thin bar at the top while a page loads, so a click is never silent. -->
+		<NuxtLoadingIndicator color="var(--ui-primary)" :height="3" />
 		<NuxtLayout>
 			<NuxtPage />
 		</NuxtLayout>

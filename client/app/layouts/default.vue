@@ -71,7 +71,11 @@
 			</template>
 
 			<template #body>
-				<slot></slot>
+				<!-- The panel body is a flex column. Without this wrapper, a card with
+				     overflow hidden shrinks to nothing when the page below it is long. -->
+				<div class="min-w-0">
+					<slot></slot>
+				</div>
 			</template>
 		</UDashboardPanel>
 	</UDashboardGroup>

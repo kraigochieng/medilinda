@@ -67,8 +67,9 @@ import { z } from "zod";
 import { authClient } from "~/lib/auth-client";
 
 const loginValidationSchema = z.object({
-	username: z.string().min(1, "Username is required"),
-	password: z.string().min(1, "Password is required"),
+	// An untouched field is undefined, which has its own message.
+	username: z.string({ error: "Username is required" }).min(1, "Username is required"),
+	password: z.string({ error: "Password is required" }).min(1, "Password is required"),
 });
 
 type LoginForm = z.output<typeof loginValidationSchema>;

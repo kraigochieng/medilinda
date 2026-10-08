@@ -112,7 +112,6 @@ import { fetchReviews, fetchReviewStats } from "@/api/review";
 import type { ADRGetResponseInterface } from "@/types/adr";
 import type { TableColumn, TabsItem } from "@nuxt/ui";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
-import { capitalize } from "lodash-es";
 import type { ReviewGetResponse } from "~/types/review";
 
 // Get ADR id
@@ -322,30 +321,9 @@ const reviewColumns: TableColumn<ReviewGetResponse>[] = [
 				return h("div", { class: "badge blank-badge italic" }, "BLANK");
 			}
 
-			let color = "";
-			if (row.original.proposed_causality_level == "certain") {
-				color = "bg-red-500 text-white";
-			} else if (row.original.proposed_causality_level == "likely") {
-				color = "bg-red-400";
-			} else if (row.original.proposed_causality_level == "possible") {
-				color = "bg-yellow-500";
-			} else if (row.original.proposed_causality_level == "unlikely") {
-				color = "bg-yellow-300";
-			} else if (
-				row.original.proposed_causality_level == "unclassified"
-			) {
-				color = "bg-slate-500 text-white";
-			} else if (
-				row.original.proposed_causality_level == "unclassifiable"
-			) {
-				color = "bg-slate-300";
-			}
-
-			return h(
-				"div",
-				{ class: `badge ${color}` },
-				capitalize(row.getValue("proposed_causality_level"))
-			);
+			return h(resolveComponent("CausalityBadge"), {
+				value: row.original.proposed_causality_level,
+			});
 		},
 
 		enableSorting: false,

@@ -4,112 +4,43 @@
 			<div class="flex flex-col">
 				<h2 class="text-lg font-semibold">Predicted Causality Level</h2>
 				<p class="text-sm text-gray-500">
-					Predicted level is the visible one. This is just a
-					prediction, not the final result.
+					Predicted level is the visible one. This is just a prediction, not the final result.
+					Hover a level to see what it means.
 				</p>
 			</div>
 		</template>
 
 		<template #default>
-			<div class="flex w-max mx-auto flex-col md:flex-row">
-				<div
-					v-for="(level, i) in levels"
-					:key="i"
-					class="box-size"
-					:class="[
-						level.color,
-						value === level.label.toLowerCase()
-							? 'opacity-100 shadow-2xl scale-110 z-10 rounded-sm'
-							: 'opacity-30',
-						level.textColor ?? 'text-black',
-					]"
-				>
-					{{ level.label }}
-				</div>
-			</div>
-		</template>
-
-		<template #footer>
-			<div class="flex justify-end">
-				<UModal>
-					<UButton
-						label="Causality Assessment Level Descriptions"
-						icon="i-lucide-circle-question-mark"
-						color="neutral"
-						variant="ghost"
-					/>
-					<template #content>
-						<div class="p-4">
-							<h3 class="text-lg font-semibold">
-								Causality Assessment Level Descriptions
-							</h3>
-							<p class="text-sm text-gray-500">
-								Get a short description of each causality
-								assessment level
-							</p>
-
-							<ul
-								class="py-4 text-sm text-gray-700 dark:text-gray-400 space-y-2"
-							>
-								<li>
-									<strong>Certain:</strong> Clear link to drug
-									intake with no alternative explanation and
-									strong evidence, including positive
-									withdrawal and rechallenge if needed.
-								</li>
-								<li>
-									<strong>Probable/Likely:</strong> Reasonable
-									link to drug, unlikely due to other causes,
-									with improvement on withdrawal—rechallenge
-									not needed.
-								</li>
-								<li>
-									<strong>Possible:</strong> Reasonable
-									timing, but the event could also be due to
-									other factors, and withdrawal data may be
-									unclear.
-								</li>
-								<li>
-									<strong>Unlikely:</strong> Timing and
-									context make a drug link improbable, with
-									other causes being more plausible.
-								</li>
-								<li>
-									<strong>Conditional/Unclassified:</strong>
-									Event noted, but more data or analysis is
-									needed before making a conclusion.
-								</li>
-								<li>
-									<strong
-										>Unassessable/Unclassifiable:</strong
-									>
-									Insufficient or contradictory information
-									prevents any judgment.
-								</li>
-							</ul>
-						</div>
-					</template>
-				</UModal>
+			<div class="flex w-max mx-auto flex-col md:flex-row" role="list">
+				<CausalityTooltip v-for="level in CAUSALITY_LEVELS" :key="level.value" :level="level.value">
+					<button
+						type="button"
+						role="listitem"
+						class="box-size cursor-help"
+						:aria-current="isPredicted(level.value) ? 'true' : undefined"
+						:class="[
+							level.badgeClass,
+							isPredicted(level.value)
+								? 'opacity-100 shadow-2xl scale-110 z-10 rounded-sm'
+								: 'opacity-30',
+						]"
+					>
+						{{ level.label }}
+					</button>
+				</CausalityTooltip>
 			</div>
 		</template>
 	</UCard>
 </template>
 
 <script setup lang="ts">
-import type { CausalityAssessmentLevelEnum } from "@/types/adr";
+import { CAUSALITY_LEVELS } from "~/utils/causality-levels";
 
 const props = defineProps<{
-	value?: CausalityAssessmentLevelEnum;
+	value?: string | null;
 }>();
 
-const levels = [
-	{ label: "Unclassifiable", color: "bg-slate-300" },
-	{ label: "Unclassified", color: "bg-slate-500", textColor: "text-white" },
-	{ label: "Unlikely", color: "bg-yellow-300" },
-	{ label: "Possible", color: "bg-yellow-500" },
-	{ label: "Likely", color: "bg-red-400" },
-	{ label: "Certain", color: "bg-red-500", textColor: "text-white" },
-];
+const isPredicted = (level: string) => props.value?.toLowerCase() === level;
 </script>
 
 <style scoped>
