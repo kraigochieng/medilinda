@@ -176,3 +176,22 @@ export function summaryOf(adr: ADRGetResponseInterface): SummaryItem[] {
 		{ label: "Outcome", value: optionLabel("outcome", adr.outcome) },
 	];
 }
+
+export interface OptionState {
+	value: string;
+	label: string;
+	chosen: boolean;
+}
+
+// Every option of a choice field, with the chosen one marked. The view shows them all, so
+// the reader sees what else was possible.
+export function optionStates(
+	group: keyof typeof adrFormCategoricalValues,
+	value: string | Blank,
+): OptionState[] {
+	return adrFormCategoricalValues[group].map((option) => ({
+		value: option.value,
+		label: option.label,
+		chosen: !!value && option.value === value,
+	}));
+}

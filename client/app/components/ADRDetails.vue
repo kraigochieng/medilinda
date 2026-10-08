@@ -41,9 +41,15 @@
 					<ADRField label="Name" :value="show(data?.patient_name)" />
 					<ADRField label="Date of birth" :value="formatDay(data?.patient_date_of_birth)" />
 					<ADRField label="Age" :value="data?.patient_age != null ? `${data.patient_age} yrs` : NONE" />
-					<ADRField label="Gender" :value="optionLabel('patientGender', data?.patient_gender)" />
-					<ADRField label="Pregnancy status" :value="optionLabel('pregnancyStatus', data?.pregnancy_status)" />
-					<ADRField label="Known allergy" :value="optionLabel('knownAllergy', data?.known_allergy)" />
+					<ADRField label="Gender">
+						<ADROptions group="patientGender" :value="data?.patient_gender" :label="'Gender'" />
+					</ADRField>
+					<ADRField label="Pregnancy status">
+						<ADROptions group="pregnancyStatus" :value="data?.pregnancy_status" :label="'Pregnancy status'" />
+					</ADRField>
+					<ADRField label="Known allergy">
+						<ADROptions group="knownAllergy" :value="data?.known_allergy" :label="'Known allergy'" />
+					</ADRField>
 					<ADRField label="Height" :value="data?.patient_height_cm != null ? `${data.patient_height_cm} cm` : NONE" />
 					<ADRField label="Weight" :value="data?.patient_weight_kg != null ? `${data.patient_weight_kg} kg` : NONE" />
 					<ADRField label="Inpatient / outpatient no." :value="show(data?.inpatient_or_outpatient_number)" />
@@ -126,22 +132,33 @@
 			<UCard id="view-rechallenge" class="scroll-mt-4">
 				<template #header><h3 class="font-semibold">Rechallenge and dechallenge</h3></template>
 				<dl class="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
-					<ADRField label="Rechallenge" :value="optionLabel('rechallenge', data?.rechallenge)" />
-					<ADRField label="Dechallenge" :value="optionLabel('dechallenge', data?.dechallenge)" />
+					<ADRField label="Rechallenge">
+						<ADROptions group="rechallenge" :value="data?.rechallenge" :label="'Rechallenge'" />
+					</ADRField>
+					<ADRField label="Dechallenge">
+						<ADROptions group="dechallenge" :value="data?.dechallenge" :label="'Dechallenge'" />
+					</ADRField>
 				</dl>
 			</UCard>
 
 			<UCard id="view-grading" class="scroll-mt-4">
 				<template #header><h3 class="font-semibold">Grading of the event</h3></template>
 				<dl class="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
-					<ADRField label="Severity" :value="optionLabel('severity', data?.severity)" />
-					<ADRField label="Serious" :value="optionLabel('isSerious', data?.is_serious)" />
-					<ADRField
-						label="Criteria for seriousness"
-						:value="optionLabel('criteriaForSeriousness', data?.criteria_for_seriousness)"
-					/>
-					<ADRField label="Action taken" :value="optionLabel('actionTaken', data?.action_taken)" />
-					<ADRField label="Outcome" :value="optionLabel('outcome', data?.outcome)" />
+					<ADRField label="Severity">
+						<ADROptions group="severity" :value="data?.severity" :label="'Severity'" />
+					</ADRField>
+					<ADRField label="Serious">
+						<ADROptions group="isSerious" :value="data?.is_serious" :label="'Serious'" />
+					</ADRField>
+					<ADRField label="Criteria for seriousness">
+						<ADROptions group="criteriaForSeriousness" :value="data?.criteria_for_seriousness" :label="'Criteria for seriousness'" />
+					</ADRField>
+					<ADRField label="Action taken">
+						<ADROptions group="actionTaken" :value="data?.action_taken" :label="'Action taken'" />
+					</ADRField>
+					<ADRField label="Outcome">
+						<ADROptions group="outcome" :value="data?.outcome" :label="'Outcome'" />
+					</ADRField>
 					<ADRField v-if="data?.comments" label="Comments" :value="data.comments" wide />
 				</dl>
 			</UCard>
