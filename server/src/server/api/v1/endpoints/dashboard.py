@@ -20,6 +20,7 @@ from server.models.causality_assessment_level import (
 from server.models.medical_institution import MedicalInstitutionModel
 from server.models.review import ReviewModel
 from server.models.sms import SMSMessageModel
+from server.repositories.dashboard import DashboardRepository
 from server.services.dashboard import DashboardService
 from server.utils.auth import get_current_active_user
 
@@ -27,7 +28,7 @@ router = APIRouter(prefix="/api/v1/dashboard", tags=["dashboard", "v1"])
 
 
 def get_dashboard_service(db: Session = Depends(get_db)):
-    return DashboardService(db)
+    return DashboardService(DashboardRepository(db))
 
 
 @router.get("/adr-monitoring", status_code=status.HTTP_200_OK)
