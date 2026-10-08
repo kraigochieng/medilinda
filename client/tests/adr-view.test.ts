@@ -5,6 +5,7 @@ import {
 	formatDay,
 	medicinesOf,
 	optionLabel,
+	optionStates,
 	show,
 	summaryOf,
 	timelineOf,
@@ -164,5 +165,23 @@ describe("summaryOf", () => {
 		);
 
 		expect(byLabel["Age and gender"]).toBe(NONE);
+	});
+});
+
+describe("optionStates", () => {
+	it("lists every option and marks the chosen one", () => {
+		const states = optionStates("severity", "moderate");
+
+		expect(states.map((s) => s.label)).toEqual(["Mild", "Moderate", "Severe", "Fatal", "Unknown"]);
+		expect(states.filter((s) => s.chosen).map((s) => s.value)).toEqual(["moderate"]);
+	});
+
+	it("marks nothing when no option was chosen", () => {
+		expect(optionStates("severity", undefined).some((s) => s.chosen)).toBe(false);
+		expect(optionStates("severity", null).some((s) => s.chosen)).toBe(false);
+	});
+
+	it("marks nothing for a value that is not an option", () => {
+		expect(optionStates("severity", "odd").some((s) => s.chosen)).toBe(false);
 	});
 });

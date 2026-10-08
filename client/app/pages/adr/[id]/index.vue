@@ -27,19 +27,28 @@
 		:value="firstCausalityAssessmentLevel?.causality_assessment_level_value"
 	/>
 
-	<UTabs :items="tabs" color="neutral">
+	<UTabs :items="tabs" :model-value="activeTab" color="neutral" @update:model-value="setTab">
 		<template #adr>
 			<ADRDetails v-if="adrData" :data="adrData" />
 		</template>
-		<template
-			#causality-assessment
-			v-if="
-				!['unclassified', 'unclassifiable'].includes(
-					firstCausalityAssessmentLevel?.causality_assessment_level_value ??
-						''
-				)
-			"
-		>
+		<template #causality-assessment>
+			<UAlert
+				v-if="!firstCausalityAssessmentLevel"
+				color="neutral"
+				variant="subtle"
+				icon="i-lucide-circle-help"
+				title="This report has no prediction yet"
+				class="mt-4"
+			/>
+			<UAlert
+				v-else-if="!hasExplanation"
+				color="neutral"
+				variant="subtle"
+				icon="i-lucide-circle-help"
+				title="There is no explanation for this level"
+				description="The model gives no reasons when it cannot classify a report. Add the missing facts to the report and save it, and the model will try again."
+				class="mt-4"
+			/>
 			<ClassRankings
 				v-if="
 					!['unclassified', 'unclassifiable'].includes(
@@ -107,6 +116,7 @@ import { fetchCausalityAssessmentLevels } from "@/api/cal";
 import { fetchCurrentUser } from "@/api/user";
 import { formatDateTime } from "~/utils/adr-table";
 import { savedBanner, type SavedKind } from "~/utils/adr-saved";
+import { ADR_TABS, parseTab, tabQuery, withoutSaved, type AdrTab } from "~/utils/adr-tabs";
 import { fetchReviews, fetchReviewStats } from "@/api/review";
 import type { ADRGetResponseInterface } from "@/types/adr";
 import type { TableColumn, TabsItem } from "@nuxt/ui";
@@ -118,25 +128,26 @@ const route = useRoute();
 const router = useRouter();
 const id = route.params.id as string;
 
-const tabs: TabsItem[] = [
-	{
-		label: "ADR Details",
-		slot: "adr",
-	},
-	{
-		label: "Prediction Explanations",
-		slot: "causality-assessment",
-	},
-	{
-		label: "Review Details",
-		slot: "review",
-	},
-	{
-		label: "History",
-		slot: "history",
-		icon: "i-lucide-history",
-	},
-];
+// The active tab is in the address (?tab=review), so the list can link to a tab.
+const SLOTS: Record<AdrTab, string> = {
+	details: "adr",
+	prediction: "causality-assessment",
+	review: "review",
+	history: "history",
+};
+const tabs: TabsItem[] = ADR_TABS.map((tab) => ({
+	label: tab.label,
+	icon: tab.icon,
+	value: tab.value,
+	slot: SLOTS[tab.value],
+}));
+
+const activeTab = computed(() => parseTab(route.query.tab));
+
+function setTab(value: string | number) {
+	router.replace({ query: tabQuery(parseTab(value), route.query) });
+}
+
 const {
 	data: adrData,
 	isPending: isAdrPending,
@@ -166,6 +177,15 @@ const firstCausalityAssessmentLevel = computed(
 	() => causalityAssessmentLevelData.value?.items?.[0]
 );
 
+// The model gives reasons only when it classified the report.
+const hasExplanation = computed(
+	() =>
+		!!firstCausalityAssessmentLevel.value &&
+		!["unclassified", "unclassifiable"].includes(
+			firstCausalityAssessmentLevel.value.causality_assessment_level_value ?? ""
+		)
+);
+
 // ---- Just saved ----------------------------------------------------------------
 // The form sends us here with ?created=1 or ?saved=1. Remember it, then take it
 // out of the address, so a refresh or a shared link does not show the banner again.
@@ -173,7 +193,7 @@ const savedKind = ref<SavedKind | null>(
 	route.query.created ? "created" : route.query.saved ? "updated" : null
 );
 onMounted(() => {
-	if (savedKind.value) router.replace({ query: {} });
+	if (savedKind.value) router.replace({ query: withoutSaved(route.query) });
 });
 
 const banner = computed(() => {
