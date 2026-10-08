@@ -37,7 +37,11 @@ class CausalityAssessmentLevelRepository:
         if adr_id:
             stmt = stmt.where(CausalityAssessmentLevelModel.adr_id == adr_id)
 
-        stmt = stmt.order_by(desc(CausalityAssessmentLevelModel.created_at))
+        # Newest first. The id breaks a tie, so the order is always the same.
+        stmt = stmt.order_by(
+            desc(CausalityAssessmentLevelModel.created_at),
+            desc(CausalityAssessmentLevelModel.id),
+        )
 
         return paginate(self.db, stmt, params=pagination_params)
 

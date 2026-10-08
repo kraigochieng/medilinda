@@ -154,3 +154,42 @@ def test_audit_logs_can_be_filtered_by_actor(client, adr_payload):
 
     assert mine["total"] > 0
     assert nobody["total"] == 0
+
+
+def test_an_adr_without_an_inpatient_number_can_be_created_and_read(client, adr_payload):
+    payload = {**adr_payload, "inpatient_or_outpatient_number": None}
+
+    adr_id = create_adr(client, payload)
+
+    response = client.get(f"/api/v1/adrs/{adr_id}")
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["inpatient_or_outpatient_number"] is None
+    assert client.put(f"/api/v1/adrs/{adr_id}", json=payload).status_code == 200
+
+
+def test_assessments_are_listed_newest_first_with_a_stable_tie_break(
+    client, db, adr_payload
+):
+    import datetime
+
+    from server.models.causality_assessment_level import CausalityAssessmentLevelModel
+
+    adr_id = create_adr(client, adr_payload)
+    same_moment = datetime.datetime(2025, 5, 5, 12, 0, 0)
+    for id_, value in [("aaa", "possible"), ("zzz", "certain")]:
+        db.add(
+            CausalityAssessmentLevelModel(
+                id=id_,
+                adr_id=adr_id,
+                causality_assessment_level_value=value,
+                created_at=same_moment,
+            )
+        )
+    db.commit()
+
+    items = client.get(
+        "/api/v1/causality-assessment-levels/", params={"adr_id": adr_id}
+    ).json()["items"]
+
+    # The one created with the ADR (now) is newest; of the two tied rows, the higher id first.
+    assert [i["id"] for i in items][-2:] == ["zzz", "aaa"]
