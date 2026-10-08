@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     africas_talking_username: str
     africas_talking_api_key: str
 
+    better_auth_url: str
+    better_auth_audience: str = "medilinda-api"
+
     server_access_secret_key: str
     server_refresh_secret_key: str
     server_access_algorithm: str

@@ -1,3 +1,7 @@
+import os
+
+os.environ.setdefault("BETTER_AUTH_URL", "http://localhost:3000")
+
 from contextlib import asynccontextmanager
 
 import pytest

@@ -26,7 +26,7 @@ async def read_users_me(
                 UserModel.last_name,
             )
         )
-        .filter(UserModel.username == current_user.username)
+        .filter(UserModel.id == current_user.id)
         .first()
     )
 
