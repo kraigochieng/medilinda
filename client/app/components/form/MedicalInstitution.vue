@@ -82,15 +82,15 @@
 							:key="index"
 							class="flex items-center gap-2"
 						>
-							<UInput
-								v-model="state.telephone_numbers[index]"
-								:name="`telephone_number_${index}`"
-								type="tel"
-								pattern="^(\+254(1|7)\d{8}|0(1|7)\d{8})$"
-								placeholder="e.g +254712345678 or 0712345678"
-								class="flex-1"
-								required
-							/>
+							<UFormField :name="`telephone_numbers.${index}`" class="flex-1">
+								<UInput
+									v-model="state.telephone_numbers[index]"
+									type="tel"
+									autocomplete="tel"
+									placeholder="e.g. 0712 345 678 or +254 712 345 678"
+									class="w-full"
+								/>
+							</UFormField>
 
 							<UButton
 								type="button"
@@ -139,7 +139,12 @@ import type {
 } from "@/types/medical_institution";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { useMutation } from "@tanstack/vue-query";
-import { z } from "zod";
+import {
+	emptyInstitutionForm,
+	institutionFormSchema,
+	toInstitutionPayload,
+	type InstitutionForm,
+} from "~/utils/institution-form";
 import type { TelephonePostRequest } from "~/types/telephone";
 
 const props = withDefaults(
@@ -151,28 +156,12 @@ const props = withDefaults(
 	{ isInDialog: false }
 );
 
-const schema = z.object({
-	name: z.string().default("The default hospital name"),
-	mfl_code: z.string().default("999999"),
-	dhis_code: z.string().optional(),
-	county: z.string().default("Nairobi").optional(),
-	sub_county: z.string().default("Langata").optional(),
-	telephone_numbers: z
-		.array(z.string())
-		.min(1, "At least one phone number is required")
-		.default([]),
-});
+const schema = institutionFormSchema;
 
-export type Schema = z.infer<typeof schema>;
+type Schema = InstitutionForm;
 
-const state = reactive<Partial<Schema>>({
-	name: undefined,
-	mfl_code: undefined,
-	dhis_code: undefined,
-	county: undefined,
-	sub_county: undefined,
-	telephone_numbers: ["+254777529295", "0787654321"],
-});
+// Blank on purpose: SMS alerts go to these numbers, so nothing may be preset.
+const state = reactive<Partial<Schema>>(emptyInstitutionForm());
 
 const emit = defineEmits<{
 	(
@@ -315,17 +304,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 	const { data } = event;
 
 	if (props.mode === "create") {
-		const institutionPayload: MedicalInstitutionPostRequestInterface = {
-			name: data.name,
-			mfl_code: data.mfl_code,
-			dhis_code: data.dhis_code,
-			county: data.county,
-			sub_county: data.sub_county,
-		};
+		const { institution, phones } = toInstitutionPayload(data);
 
 		createMedicalInstitution({
-			institutionData: institutionPayload,
-			phoneNumbers: data.telephone_numbers,
+			institutionData: institution,
+			phoneNumbers: phones,
 		});
 	} else if (props.mode === "update" && props.id) {
 		updateMedicalInstitution({
