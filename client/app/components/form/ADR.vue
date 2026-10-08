@@ -1,6 +1,24 @@
 <template>
 	<ADRMenu />
+	<UAlert
+		v-if="loadError"
+		color="error"
+		variant="subtle"
+		icon="i-lucide-triangle-alert"
+		title="Could not load this ADR"
+		:description="loadError.message"
+		:actions="[
+			{ label: 'Back to ADRs', color: 'neutral', to: '/adr' },
+			{ label: 'Try again', color: 'neutral', onClick: () => refetchExisting() },
+		]"
+	/>
+	<div v-else-if="loadingExisting" class="space-y-4" aria-busy="true">
+		<USkeleton class="h-10 w-1/3" />
+		<USkeleton class="h-64 w-full" />
+		<USkeleton class="h-64 w-full" />
+	</div>
 	<UForm
+		v-else
 		:schema="schema"
 		:state="state"
 		@submit="onSubmit"
@@ -154,10 +172,20 @@
 						/>
 
 						<USeparator orientation="vertical" />
-						<!-- <UCalendar
-							v-model="patientDobModel"
-							v-if="isDob == 'dob-yes'"
-						/> -->
+						<div class="w-full" v-if="isDob == 'dob-yes'">
+							<UFormField
+								label="Date of Birth"
+								name="patient_date_of_birth"
+								help="The patient's date of birth"
+							>
+								<UInput
+									v-model="state.patient_date_of_birth"
+									type="date"
+									:max="today"
+									class="w-full"
+								/>
+							</UFormField>
+						</div>
 
 						<div class="w-full" v-if="isDob == 'dob-no'">
 							<UFormField
@@ -279,15 +307,18 @@
 					>
 						3. Suspected Adverse Reaction
 					</p>
-					<!-- <FormSelectDatePicker
+					<UFormField
 						name="date_of_onset_of_reaction"
 						label="Date Of Onset Of Reaction"
-						description="The date of onset of reaction"
-						v-model="selectedDateOfOnsetOfReaction"
-						default-year="2025"
-						default-month="1"
-						default-day="1"
-					/> -->
+						help="The date the reaction started"
+					>
+						<UInput
+							v-model="state.date_of_onset_of_reaction"
+							type="date"
+							:max="today"
+							class="w-full"
+						/>
+					</UFormField>
 					<UFormField
 						name="description_of_reaction"
 						label="Description of Reaction"
@@ -410,8 +441,9 @@
 				<UButton
 					type="submit"
 					class="w-full mx-auto my-4 justify-center"
+					:loading="isSubmitting || isUpdating"
 				>
-					{{ props.mode == "create" ? "Add ADR" : "Edit ADR" }}
+					{{ props.mode == "create" ? "Add ADR" : "Save changes" }}
 				</UButton>
 			</template>
 		</UCard>
@@ -422,26 +454,40 @@
 import { fetchCurrentUser } from "@/api/user";
 import type { MedicalInstitutionGetResponseInterface } from "@/types/medical_institution";
 import { adrFormCategoricalValues } from "@/values/adr";
-import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
 import type {
 	FormErrorEvent,
 	FormSubmitEvent,
 	RadioGroupItem,
 	TableColumn,
 } from "@nuxt/ui";
-import { useMutation, useQuery } from "@tanstack/vue-query";
-import { z } from "zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { fetchMedicalInstitutions } from "~/api/medical_institution";
 import type { PaginatedResponseInterface } from "~/types/pagination";
 import type { UserDetails } from "@/types/user";
-import { postAdr } from "@/api/adr";
+import { fetchAdrById, postAdr, putAdr } from "@/api/adr";
+import { fetchMedicalInstitutionById } from "@/api/medical_institution";
+import {
+	adrFormSchema,
+	adrToFormState,
+	emptyFormState,
+	formStateToPayload,
+	sampleFormState,
+	type AdrForm,
+} from "~/utils/adr-form";
 import type {
 	ADRGetResponseInterface,
 	ADRPostRequestInterface,
 } from "~/types/adr";
 
+const props = defineProps<{
+	id?: string;
+	mode: "create" | "update";
+}>();
+
 const toast = useToast();
 const router = useRouter();
+const queryClient = useQueryClient();
+const today = new Date().toISOString().slice(0, 10);
 type MedicineRow = {
 	name?: string;
 	suspected?: boolean;
@@ -454,8 +500,6 @@ type MedicineRow = {
 	stop_date?: string;
 };
 
-const medicalInstitutionData =
-	ref<MedicalInstitutionGetResponseInterface | null>();
 
 // const medicalInstitutionId = ref<string | undefined>();
 const medicalInstitutionSearchInput = ref<string>("");
@@ -467,134 +511,49 @@ const isDobItems = ref<RadioGroupItem[]>([
 	{ label: "No", value: "dob-no" },
 ]);
 
-const schema = z.object({
-	medical_institution_id: z
-		.string()
-		.uuid("Please select a medical institution."),
-	patient_name: z.string().min(3, "Name must be at least 3 characters."),
-	// patient_date_of_birth: z
-	// 	.instanceof(CalendarDate, { message: "Please select a valid date." })
-	// 	.transform((val) => val.toDate(getLocalTimeZone())),
-	patient_date_of_birth: z.date(),
-	patient_age: z.number().positive().min(0).max(120).optional(),
-	patient_height_cm: z.number().positive().optional(),
-	patient_weight_kg: z.number().positive().optional(),
-	inpatient_or_outpatient_number: z.string().optional(),
-	ward_or_clinic: z.string().optional(),
-	patient_address: z.string().optional(),
-	patient_gender: z.string().optional(),
-	date_of_onset_of_reaction: z.string().optional(),
-	pregnancy_status: z.string().optional(),
-	description_of_reaction: z
-		.string()
-		.min(10, "Description is too short.")
-		.optional(),
-	medicines: z.array(
-		z.object({
-			name: z.string(),
-			suspected: z.boolean().default(false),
-			batch_no: z.string().optional(),
-			manufacturer: z.string().optional(),
-			dose_amount: z.number().positive().optional(),
-			frequency_number: z.number().positive().optional(),
-			route: z.string().optional(),
-			start_date: z.string().optional(),
-			stop_date: z.string().optional(),
-		})
-	),
-	severity: z.string().optional(),
-	outcome: z.string().optional(),
+const schema = adrFormSchema;
 
-	known_allergy: z.string().optional(),
-	rechallenge: z.string().optional(),
-	dechallenge: z.string().optional(),
-	is_serious: z.string().optional(),
-	criteria_for_seriousness: z.string().optional(),
-	action_taken: z.string().optional(),
-	comments: z.string().optional(),
+// Add starts with sample data for now. Edit starts empty and fills in from the record.
+const state = reactive<Partial<AdrForm>>(
+	props.mode === "create" ? sampleFormState() : emptyFormState()
+);
+
+const {
+	data: existingAdr,
+	isPending: loadingExistingRaw,
+	error: loadError,
+	refetch: refetchExisting,
+} = useQuery({
+	queryKey: ["adr", props.id],
+	queryFn: () => fetchAdrById(props.id as string),
+	enabled: props.mode === "update" && !!props.id,
 });
+const loadingExisting = computed(
+	() => props.mode === "update" && loadingExistingRaw.value && !loadError.value
+);
 
-type AdrForm = z.infer<typeof schema>;
-
-const state = reactive<Partial<AdrForm>>({
-	medical_institution_id: undefined,
-	patient_name: "Kraig Ochieng",
-	patient_date_of_birth: undefined,
-	inpatient_or_outpatient_number: "IP-123456",
-	patient_weight_kg: 60,
-	patient_gender: "male",
-	patient_height_cm: 178,
-	patient_address: "Kileleshwa, Nairobi",
-	ward_or_clinic: "Main Clininc",
-	date_of_onset_of_reaction: undefined,
-	description_of_reaction: "Very disturbing. Vomiting",
-	medicines: [
-		{
-			name: "Rifampicin",
-			suspected: false,
-			batch_no: "",
-			manufacturer: "",
-			dose_amount: undefined,
-			route: "oral",
-			frequency_number: undefined,
-			start_date: "",
-			stop_date: "",
-		},
-		{
-			name: "Isoniazid",
-			suspected: false,
-			batch_no: "",
-			manufacturer: "",
-			dose_amount: undefined,
-			route: "oral",
-			frequency_number: undefined,
-			start_date: "",
-			stop_date: "",
-		},
-		{
-			name: "Pyrazinamide",
-			suspected: false,
-			batch_no: "",
-			manufacturer: "",
-			dose_amount: undefined,
-			route: undefined,
-			frequency_number: undefined,
-			start_date: "",
-			stop_date: "",
-		},
-		{
-			name: "Ethambutol",
-			suspected: false,
-			batch_no: "",
-			manufacturer: "",
-			dose_amount: undefined,
-			route: "oral",
-			frequency_number: undefined,
-			start_date: "",
-			stop_date: "",
-		},
-	],
-	pregnancy_status: "not applicable",
-	known_allergy: "no",
-	rechallenge: "yes",
-	dechallenge: "yes",
-	is_serious: "no",
-	criteria_for_seriousness: "hospitalisation",
-	action_taken: "unknown",
-	outcome: "recovered",
-	comments: "Will be looked into",
-});
-
-const patientDobModel = ref(new CalendarDate(2022, 1, 1));
-
+// Fill the form from the record, once.
 watch(
-	patientDobModel,
-	(newDate) => {
-		if (newDate) {
-			state.patient_date_of_birth = newDate.toDate(getLocalTimeZone());
-		}
+	existingAdr,
+	(adr) => {
+		if (!adr) return;
+		Object.assign(state, adrToFormState(adr));
+		isDob.value = adr.patient_date_of_birth ? "dob-yes" : "dob-no";
 	},
 	{ immediate: true }
+);
+
+// Details of the chosen institution, in both modes.
+const { data: selectedInstitution } = useQuery({
+	queryKey: [
+		"medicalInstitution",
+		computed(() => state.medical_institution_id),
+	],
+	queryFn: () => fetchMedicalInstitutionById(state.medical_institution_id as string),
+	enabled: computed(() => !!state.medical_institution_id),
+});
+const medicalInstitutionData = computed<MedicalInstitutionGetResponseInterface | null>(
+	() => selectedInstitution.value ?? null
 );
 
 const UFormField = resolveComponent("UFormField");
@@ -653,6 +612,33 @@ const { mutate: createADR, isPending: isSubmitting } = useMutation<
 		toast.add({
 			title: "Error",
 			description: `Failed to create ADR: ${error.message}`,
+			color: "error",
+		});
+	},
+});
+
+const { mutate: updateADR, isPending: isUpdating } = useMutation<
+	ADRGetResponseInterface,
+	Error,
+	ADRPostRequestInterface
+>({
+	mutationFn: (payload) => putAdr(props.id as string, payload),
+	onSuccess: () => {
+		queryClient.invalidateQueries({ queryKey: ["adrs"] });
+		queryClient.invalidateQueries({ queryKey: ["adr", props.id] });
+		queryClient.invalidateQueries({ queryKey: ["causality-assessment-levels"] });
+		toast.add({
+			title: "ADR updated",
+			description:
+				"The change is saved and kept in the history. If it changed anything the model reads, the causality level was re-assessed and needs a new review.",
+			color: "success",
+		});
+		router.push(`/adr/${props.id}`);
+	},
+	onError: (error) => {
+		toast.add({
+			title: "Could not save the ADR",
+			description: error.message,
 			color: "error",
 		});
 	},
@@ -828,86 +814,7 @@ const medicineColumns: TableColumn<MedicineRow>[] = [
 	},
 ];
 
-// V-model for columns
-const selectedDateOfOnsetOfReaction = ref<string>("");
-
-const months = [
-	"January",
-	"February",
-	"March",
-	"April",
-	"May",
-	"June",
-	"July",
-	"August",
-	"September",
-	"October",
-	"November",
-	"December",
-];
-
-function transformDataToPayload(
-	data: AdrForm,
-	userId: string
-): ADRPostRequestInterface {
-	// 1. Destructure the `medicines` array out
-	const { medicines, ...baseData } = data;
-
-	// 2. Create a helper map for prefixes
-	const medicineMap: { [key: string]: string } = {
-		Rifampicin: "rifampicin",
-		Isoniazid: "isoniazid",
-		Pyrazinamide: "pyrazinamide",
-		Ethambutol: "ethambutol",
-	};
-
-	const flatMedicineData: Partial<ADRPostRequestInterface> = {};
-
-	// 3. Loop over the `medicines` array and flatten
-	if (medicines) {
-		for (const med of medicines) {
-			const prefix = medicineMap[med.name as keyof typeof medicineMap];
-			if (prefix) {
-				// Assign each field with its prefix
-				(flatMedicineData as any)[`${prefix}_suspected`] =
-					med.suspected;
-				(flatMedicineData as any)[`${prefix}_start_date`] =
-					med.start_date || null;
-				(flatMedicineData as any)[`${prefix}_stop_date`] =
-					med.stop_date || null;
-				(flatMedicineData as any)[`${prefix}_dose_amount`] =
-					med.dose_amount;
-				(flatMedicineData as any)[`${prefix}_frequency_number`] =
-					med.frequency_number;
-				(flatMedicineData as any)[`${prefix}_route`] = med.route;
-				(flatMedicineData as any)[`${prefix}_batch_no`] = med.batch_no;
-				(flatMedicineData as any)[`${prefix}_manufacturer`] =
-					med.manufacturer;
-			}
-		}
-	}
-
-	// 4. Construct the final payload
-	const payload: ADRPostRequestInterface = {
-		...baseData,
-		user_id: userId,
-		medical_institution_id: baseData.medical_institution_id, // Ensure it's passed
-
-		// Convert Date object to YYYY-MM-DD string
-		patient_date_of_birth: baseData.patient_date_of_birth
-			? baseData.patient_date_of_birth.toISOString().split("T")[0]
-			: undefined,
-
-		// Add the flattened medicine data
-		...flatMedicineData,
-	};
-
-	return payload;
-}
-
 async function onSubmit(event: FormSubmitEvent<AdrForm>) {
-	console.log("Form validated...");
-
 	if (!currentUser.value?.id) {
 		toast.add({
 			title: "Error",
@@ -917,16 +824,22 @@ async function onSubmit(event: FormSubmitEvent<AdrForm>) {
 		return;
 	}
 
-	const payload = transformDataToPayload(event.data, currentUser.value.id);
+	const knowsDob = isDob.value === "dob-yes";
+	if (knowsDob && !event.data.patient_date_of_birth) {
+		toast.add({
+			title: "Date of birth missing",
+			description: "Enter the date of birth, or choose No and give the age.",
+			color: "error",
+		});
+		return;
+	}
 
-	console.log("Submitting payload:", payload);
+	const payload = formStateToPayload(event.data, currentUser.value.id, { knowsDob });
 
 	if (props.mode === "create") {
 		createADR(payload);
 	} else if (props.mode === "update" && props.id) {
-		// TODO: Implement update logic
-		// You would need a `putADR` mutation and call it here
-		console.warn("Update functionality is not yet implemented.");
+		updateADR(payload);
 	}
 }
 
@@ -939,8 +852,4 @@ function onFormError(event: FormErrorEvent) {
     });
 	// You'll see an array of all validation issues here
 }
-const props = defineProps<{
-	id?: string;
-	mode: "create" | "update";
-}>();
 </script>

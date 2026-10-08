@@ -1,5 +1,14 @@
 <template>
-	<h1 class="page-title">Adverse Drug Reaction Details</h1>
+	<div class="mb-6 flex items-center justify-between gap-4">
+		<h1 class="text-2xl font-bold">Adverse Drug Reaction Details</h1>
+		<UButton
+			:to="`/adr/${id}/edit`"
+			icon="i-lucide-pencil"
+			color="neutral"
+			variant="outline"
+			label="Edit"
+		/>
+	</div>
 
 	<CausalityAssessmentLevelComparison
 		:value="firstCausalityAssessmentLevel?.causality_assessment_level_value"

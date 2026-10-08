@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
 	deleteAdrById,
 	fetchAdrsWithCausalityAndReviewCount,
+	putAdr,
 	restoreAdrById,
 } from "../app/api/adr";
 
@@ -19,6 +20,14 @@ describe("ADR API calls", () => {
 		await deleteAdrById("abc");
 
 		expect(serverFetch).toHaveBeenCalledWith("/adrs/abc", { method: "DELETE" });
+	});
+
+	it("saves an edit with PUT /adrs/{id} and the payload as the body", async () => {
+		const payload = { patient_name: "Jane", medical_institution_id: "m1", user_id: "u1" };
+
+		await putAdr("abc", payload);
+
+		expect(serverFetch).toHaveBeenCalledWith("/adrs/abc", { method: "PUT", body: payload });
 	});
 
 	it("restores with POST /adrs/{id}/restore", async () => {

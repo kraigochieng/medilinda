@@ -38,6 +38,18 @@ export async function deleteAdrById(id: string): Promise<void> {
 	});
 }
 
+export async function putAdr(
+	id: string,
+	data: ADRPostRequestInterface
+): Promise<ADRGetResponseInterface> {
+	const { $serverFetch } = useNuxtApp();
+
+	return await $serverFetch<ADRGetResponseInterface>(`/${path}/${id}`, {
+		method: "PUT",
+		body: data,
+	});
+}
+
 // Undoes a delete: brings back the ADR with its assessments and reviews.
 export async function restoreAdrById(id: string): Promise<ADRGetResponseInterface> {
 	const { $serverFetch } = useNuxtApp();

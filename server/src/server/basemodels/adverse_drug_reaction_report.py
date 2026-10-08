@@ -257,7 +257,7 @@ class ADRGetResponse(BaseModel):
     medical_institution_id: str | None = None
     # Personal Details
     patient_name: str
-    inpatient_or_outpatient_number: str
+    inpatient_or_outpatient_number: str | None = None
     patient_age: int | None = None
     patient_date_of_birth: date | None = None
     patient_address: str | None = None
