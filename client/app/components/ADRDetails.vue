@@ -1,639 +1,241 @@
 <template>
-	<UCard class="my-4">
-		<template #header>
-			<h3
-				class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
-			>
-				1. Institution Details
-			</h3>
-		</template>
-
-		<div class="space-y-3">
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Name</p>
-				<div
-					v-if="medicalInstitutionData?.name"
-					class="view-details-content"
-				>
-					{{ medicalInstitutionData?.name }}
-				</div>
-				<UBadge v-else color="neutral">BLANK</UBadge>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">County</p>
-				<div
-					v-if="medicalInstitutionData?.county"
-					class="view-details-content"
-				>
-					{{ medicalInstitutionData?.county }}
-				</div>
-				<UBadge v-else color="neutral">BLANK</UBadge>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Sub County</p>
-				<div
-					v-if="medicalInstitutionData?.sub_county"
-					class="view-details-content"
-				>
-					{{ medicalInstitutionData?.sub_county }}
-				</div>
-				<UBadge v-else color="neutral">BLANK</UBadge>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">MFL Code</p>
-				<div
-					v-if="medicalInstitutionData?.mfl_code != '0'"
-					class="view-details-content"
-				>
-					{{ medicalInstitutionData?.mfl_code }}
-				</div>
-				<UBadge v-else color="neutral">BLANK</UBadge>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">DHIS Code</p>
-				<div
-					v-if="medicalInstitutionData?.dhis_code != '0'"
-					class="view-details-content"
-				>
-					{{ medicalInstitutionData?.dhis_code }}
-				</div>
-				<UBadge v-else color="neutral">BLANK</UBadge>
-			</div>
-		</div>
-	</UCard>
-
-	<UCard class="my-4">
-		<template #header>
-			<h3
-				class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
-			>
-				2. Patient Details
-			</h3>
-		</template>
-		<div class="space-y-3">
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Name</p>
-				<p class="view-details-content">
-					{{ props.data?.patient_name }}
-				</p>
-			</div>
-			<USeparator />
-			<div v-if="props.data?.patient_date_of_birth">
-				<div class="view-details-wrapper">
-					<p class="view-details-header">Date of Birth</p>
-					<p class="view-details-content">
-						{{ props.data?.patient_date_of_birth }}
-					</p>
-				</div>
-				<USeparator />
-			</div>
-			<div v-if="props.data?.patient_age">
-				<div class="view-details-wrapper">
-					<p class="view-details-header">Age (yrs)</p>
-					<p class="view-details-content">
-						{{ props.data?.patient_age }}
-					</p>
-				</div>
-				<USeparator />
-			</div>
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Height (cm)</p>
-				<div
-					v-if="props.data?.patient_height_cm"
-					class="view-details-content"
-				>
-					{{ props.data?.patient_height_cm }}
-				</div>
-				<UBadge v-else color="neutral">BLANK</UBadge>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Weight (kg)</p>
-				<div
-					v-if="props.data?.patient_weight_kg"
-					class="view-details-content"
-				>
-					{{ props.data?.patient_weight_kg }}
-				</div>
-				<UBadge v-else color="neutral">BLANK</UBadge>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Inpatient/Outpatient Number</p>
-				<div
-					v-if="props.data?.inpatient_or_outpatient_number"
-					class="view-details-content"
-				>
-					{{ props.data?.inpatient_or_outpatient_number }}
-				</div>
-				<UBadge v-else color="neutral">BLANK</UBadge>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Patient Address</p>
-				<div
-					v-if="props.data?.patient_address"
-					class="view-details-content"
-				>
-					{{ props.data?.patient_address }}
-				</div>
-				<UBadge v-else color="neutral">BLANK</UBadge>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Ward/Clinic</p>
-				<div
-					v-if="props.data?.ward_or_clinic"
-					class="view-details-content"
-				>
-					{{ props.data?.ward_or_clinic }}
-				</div>
-				<UBadge v-else color="neutral">BLANK</UBadge>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Gender</p>
-				<div class="flex flex-wrap gap-2">
-					<UBadge
-						v-for="value in adrFormCategoricalValues[
-							'patientGender'
-						]"
-						:key="value.value"
-						:color="
-							value.value === props.data?.patient_gender
-								? 'success'
-								: 'neutral'
-						"
-						variant="solid"
-					>
-						{{ value.label }}
-					</UBadge>
-				</div>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Pregnancy Status</p>
-				<div class="flex flex-wrap gap-2">
-					<UBadge
-						v-for="value in adrFormCategoricalValues[
-							'pregnancyStatus'
-						]"
-						:key="value.value"
-						:color="
-							value.value === props.data?.pregnancy_status
-								? 'success'
-								: 'neutral'
-						"
-						variant="solid"
-					>
-						{{ value.label }}
-					</UBadge>
-				</div>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Known Allergy</p>
-				<div class="flex flex-wrap gap-2">
-					<UBadge
-						v-for="value in adrFormCategoricalValues[
-							'knownAllergy'
-						]"
-						:key="value.value"
-						:color="
-							value.value === props.data?.known_allergy
-								? 'success'
-								: 'neutral'
-						"
-						variant="solid"
-					>
-						{{ value.label }}
-					</UBadge>
-				</div>
-			</div>
-		</div>
-	</UCard>
-
-	<UCard class="my-4">
-		<template #header>
-			<h3
-				class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
-			>
-				3. Suspected Adverse Reaction
-			</h3>
-		</template>
-		<div class="space-y-3">
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Date of Onset of Reaction</p>
-				<p class="view-details-content">
-					{{ props.data?.date_of_onset_of_reaction }}
-				</p>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Description of Reaction</p>
-				<p class="view-details-content">
-					{{ props.data?.description_of_reaction }}
-				</p>
-			</div>
-		</div>
-	</UCard>
-
-	<UCard class="my-4">
-		<template #header>
-			<h3
-				class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
-			>
-				4. Medicines
-			</h3>
-		</template>
-		<UTable :data="medicines" :columns="medicineTableColumns" />
-	</UCard>
-
-	<UCard class="my-4">
-		<template #header>
-			<h3
-				class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
-			>
-				5. Rechallenge/Dechallenge
-			</h3>
-		</template>
-		<div class="space-y-3">
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Rechallenge</p>
-				<div class="flex flex-wrap gap-2">
-					<UBadge
-						v-for="value in adrFormCategoricalValues['rechallenge']"
-						:key="value.value"
-						:color="
-							value.value === props.data?.rechallenge
-								? 'success'
-								: 'neutral'
-						"
-						variant="solid"
-					>
-						{{ value.label }}
-					</UBadge>
-				</div>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Dechallenge</p>
-				<div class="flex flex-wrap gap-2">
-					<UBadge
-						v-for="value in adrFormCategoricalValues['dechallenge']"
-						:key="value.value"
-						:color="
-							value.value === props.data?.dechallenge
-								? 'success'
-								: 'neutral'
-						"
-						variant="solid"
-					>
-						{{ value.label }}
-					</UBadge>
-				</div>
-			</div>
-		</div>
-	</UCard>
-
-	<UCard class="my-4">
-		<template #header>
-			<h3
-				class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
-			>
-				6. Grading of the Event
-			</h3>
-		</template>
-		<div class="space-y-3">
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Severity</p>
-				<div class="flex flex-wrap gap-2">
-					<UBadge
-						v-for="value in adrFormCategoricalValues['severity']"
-						:key="value.value"
-						:color="
-							value.value === props.data?.severity
-								? 'success'
-								: 'neutral'
-						"
-						variant="solid"
-					>
-						{{ value.label }}
-					</UBadge>
-				</div>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Is Serious</p>
-				<div class="flex flex-wrap gap-2">
-					<UBadge
-						v-for="value in adrFormCategoricalValues['isSerious']"
-						:key="value.value"
-						:color="
-							value.value === props.data?.is_serious
-								? 'success'
-								: 'neutral'
-						"
-						variant="solid"
-					>
-						{{ value.label }}
-					</UBadge>
-				</div>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Criteria for Seriousness</p>
-				<div class="flex flex-wrap gap-2">
-					<UBadge
-						v-for="value in adrFormCategoricalValues[
-							'criteriaForSeriousness'
-						]"
-						:key="value.value"
-						:color="
-							value.value === props.data?.criteria_for_seriousness
-								? 'success'
-								: 'neutral'
-						"
-						variant="solid"
-					>
-						{{ value.label }}
-					</UBadge>
-				</div>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Action Taken</p>
-				<div class="flex flex-wrap gap-2">
-					<UBadge
-						v-for="value in adrFormCategoricalValues['actionTaken']"
-						:key="value.value"
-						:color="
-							value.value === props.data?.action_taken
-								? 'success'
-								: 'neutral'
-						"
-						variant="solid"
-					>
-						{{ value.label }}
-					</UBadge>
-				</div>
-			</div>
-			<USeparator />
-			<div class="view-details-wrapper">
-				<p class="view-details-header">Outcome</p>
-				<div class="flex flex-wrap gap-2">
-					<UBadge
-						v-for="value in adrFormCategoricalValues['outcome']"
-						:key="value.value"
-						:color="
-							value.value === props.data?.outcome
-								? 'success'
-								: 'neutral'
-						"
-						variant="solid"
-					>
-						{{ value.label }}
-					</UBadge>
-				</div>
-			</div>
-		</div>
-	</UCard>
-
-	<div class="flex space-x-2 justify-end">
-		<UButton @click="router.push(`/adr/${props.data?.id}/edit`)">
-			Edit ADR
-		</UButton>
-		<UModal
-			v-model:open="isDeleteModalOpen"
-			title="Are you sure you want to delete it?"
-			description="This action cannot be undone. This will permanently delete this record."
+	<div class="grid items-start gap-6 lg:grid-cols-[11rem_minmax(0,1fr)]">
+		<nav
+			aria-label="Report sections"
+			class="hidden rounded-lg border border-default p-3 text-sm lg:sticky lg:top-4 lg:block"
 		>
-			<UButton color="error">Delete ADR</UButton>
-			<template #body>
-				<UButton color="error" @mouseup="handleDelete">
-					Delete ADR
-				</UButton>
-			</template>
-		</UModal>
+			<ol class="space-y-0.5">
+				<li v-for="section in sections" :key="section.id">
+					<a
+						:href="`#${section.id}`"
+						class="block rounded-md px-2 py-1.5 hover:bg-elevated"
+						:class="active === section.id ? 'bg-elevated font-medium' : ''"
+						:aria-current="active === section.id ? 'location' : undefined"
+						@click.prevent="go(section.id)"
+					>
+						{{ section.label }}
+					</a>
+				</li>
+			</ol>
+		</nav>
+
+		<div class="min-w-0 space-y-4">
+			<dl class="grid grid-cols-2 gap-x-6 gap-y-3 rounded-lg border border-default bg-elevated/40 p-4 sm:grid-cols-3 xl:grid-cols-6">
+				<ADRField v-for="item in summary" :key="item.label" :label="item.label" :value="item.value" />
+			</dl>
+
+			<UCard id="view-institution" class="scroll-mt-4">
+				<template #header><h3 class="font-semibold">Institution</h3></template>
+				<dl class="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+					<ADRField label="Name" :value="institution?.name" wide />
+					<ADRField label="County" :value="institution?.county" />
+					<ADRField label="Sub county" :value="institution?.sub_county" />
+					<ADRField label="MFL code" :value="institution?.mfl_code" />
+					<ADRField label="DHIS code" :value="institution?.dhis_code" />
+				</dl>
+			</UCard>
+
+			<UCard id="view-patient" class="scroll-mt-4">
+				<template #header><h3 class="font-semibold">Patient</h3></template>
+				<dl class="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+					<ADRField label="Name" :value="show(data?.patient_name)" />
+					<ADRField label="Date of birth" :value="formatDay(data?.patient_date_of_birth)" />
+					<ADRField label="Age" :value="data?.patient_age != null ? `${data.patient_age} yrs` : NONE" />
+					<ADRField label="Gender" :value="optionLabel('patientGender', data?.patient_gender)" />
+					<ADRField label="Pregnancy status" :value="optionLabel('pregnancyStatus', data?.pregnancy_status)" />
+					<ADRField label="Known allergy" :value="optionLabel('knownAllergy', data?.known_allergy)" />
+					<ADRField label="Height" :value="data?.patient_height_cm != null ? `${data.patient_height_cm} cm` : NONE" />
+					<ADRField label="Weight" :value="data?.patient_weight_kg != null ? `${data.patient_weight_kg} kg` : NONE" />
+					<ADRField label="Inpatient / outpatient no." :value="show(data?.inpatient_or_outpatient_number)" />
+					<ADRField label="Address" :value="show(data?.patient_address)" />
+					<ADRField label="Ward or clinic" :value="show(data?.ward_or_clinic)" />
+				</dl>
+			</UCard>
+
+			<UCard id="view-reaction" class="scroll-mt-4">
+				<template #header><h3 class="font-semibold">Suspected adverse reaction</h3></template>
+				<dl class="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+					<ADRField label="Date of onset" :value="formatDay(data?.date_of_onset_of_reaction)" />
+					<ADRField label="Description" :value="show(data?.description_of_reaction)" wide />
+				</dl>
+			</UCard>
+
+			<UCard id="view-medicines" class="scroll-mt-4">
+				<template #header><h3 class="font-semibold">Medicines</h3></template>
+
+				<ol v-if="timeline.length" class="mb-6 space-y-3" aria-label="Timeline of the medicines and the reaction">
+					<li v-for="(event, index) in timeline" :key="index" class="flex gap-3">
+						<span
+							class="mt-1.5 size-2.5 shrink-0 rounded-full"
+							:class="DOT[event.kind]"
+							aria-hidden="true"
+						/>
+						<div class="min-w-0">
+							<p class="text-sm">
+								<span class="font-medium">{{ formatDay(event.date) }}</span>
+								<span class="text-muted"> · {{ event.title }}</span>
+								<span v-if="event.kind !== 'onset'">: {{ event.label }}</span>
+							</p>
+							<p v-if="event.note" class="text-xs text-muted">{{ event.note }}</p>
+						</div>
+					</li>
+				</ol>
+
+				<div class="overflow-x-auto">
+					<table class="w-full min-w-[40rem] text-sm">
+						<thead>
+							<tr class="border-b border-default text-left text-xs uppercase tracking-wide text-muted">
+								<th class="py-2 pr-4 font-medium">Medicine</th>
+								<th class="py-2 pr-4 font-medium">Dose</th>
+								<th class="py-2 pr-4 font-medium">Frequency</th>
+								<th class="py-2 pr-4 font-medium">Route</th>
+								<th class="py-2 pr-4 font-medium">Started</th>
+								<th class="py-2 pr-4 font-medium">Stopped</th>
+								<th class="py-2 pr-4 font-medium">Days</th>
+								<th class="py-2 pr-4 font-medium">Batch</th>
+								<th class="py-2 font-medium">Manufacturer</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr
+								v-for="medicine in medicines"
+								:key="medicine.key"
+								class="border-b border-default last:border-0"
+								:class="medicine.suspected ? '' : 'text-muted'"
+							>
+								<td class="py-2 pr-4">
+									<span class="font-medium">{{ medicine.name }}</span>
+									<UBadge v-if="medicine.suspected" color="warning" variant="subtle" size="sm" class="ml-2">
+										Suspected
+									</UBadge>
+								</td>
+								<td class="py-2 pr-4">{{ medicine.dose != null ? `${medicine.dose} mg` : NONE }}</td>
+								<td class="py-2 pr-4">{{ medicine.frequency != null ? `${medicine.frequency} a day` : NONE }}</td>
+								<td class="py-2 pr-4">{{ optionLabel("route", medicine.route) }}</td>
+								<td class="py-2 pr-4 whitespace-nowrap">{{ formatDay(medicine.start) }}</td>
+								<td class="py-2 pr-4 whitespace-nowrap">{{ formatDay(medicine.stop) }}</td>
+								<td class="py-2 pr-4">{{ medicine.days != null ? medicine.days : NONE }}</td>
+								<td class="py-2 pr-4">{{ show(medicine.batch) }}</td>
+								<td class="py-2">{{ show(medicine.manufacturer) }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</UCard>
+
+			<UCard id="view-rechallenge" class="scroll-mt-4">
+				<template #header><h3 class="font-semibold">Rechallenge and dechallenge</h3></template>
+				<dl class="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+					<ADRField label="Rechallenge" :value="optionLabel('rechallenge', data?.rechallenge)" />
+					<ADRField label="Dechallenge" :value="optionLabel('dechallenge', data?.dechallenge)" />
+				</dl>
+			</UCard>
+
+			<UCard id="view-grading" class="scroll-mt-4">
+				<template #header><h3 class="font-semibold">Grading of the event</h3></template>
+				<dl class="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+					<ADRField label="Severity" :value="optionLabel('severity', data?.severity)" />
+					<ADRField label="Serious" :value="optionLabel('isSerious', data?.is_serious)" />
+					<ADRField
+						label="Criteria for seriousness"
+						:value="optionLabel('criteriaForSeriousness', data?.criteria_for_seriousness)"
+					/>
+					<ADRField label="Action taken" :value="optionLabel('actionTaken', data?.action_taken)" />
+					<ADRField label="Outcome" :value="optionLabel('outcome', data?.outcome)" />
+					<ADRField v-if="data?.comments" label="Comments" :value="data.comments" wide />
+				</dl>
+			</UCard>
+
+			<div class="flex justify-end gap-2">
+				<UButton :to="`/adr/${data?.id}/edit`" icon="i-lucide-pencil" label="Edit ADR" />
+				<UModal
+					v-model:open="isDeleteModalOpen"
+					title="Are you sure you want to delete it?"
+					description="The report moves to Recently deleted. You can restore it from there."
+				>
+					<UButton color="error" variant="outline" icon="i-lucide-trash-2" label="Delete ADR" />
+					<template #body>
+						<UButton color="error" :loading="isDeleting" label="Delete ADR" @click="handleDelete" />
+					</template>
+				</UModal>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import type { ADRGetResponseInterface } from "@/types/adr";
-import { adrFormCategoricalValues } from "@/values/adr";
-
-import { useQuery } from "@tanstack/vue-query";
-
 import { deleteAdrById } from "@/api/adr";
 import { fetchMedicalInstitutionById } from "@/api/medical_institution";
-import type { TableColumn } from "@nuxt/ui";
-import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import type { ADRGetResponseInterface } from "@/types/adr";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import {
+	NONE,
+	formatDay,
+	medicinesOf,
+	optionLabel,
+	show,
+	summaryOf,
+	timelineOf,
+	type TimelineKind,
+} from "~/utils/adr-view";
+
+const props = defineProps<{ data?: ADRGetResponseInterface }>();
 
 const toast = useToast();
 const queryClient = useQueryClient();
 const router = useRouter();
-
 const isDeleteModalOpen = ref(false);
-const UBadge = resolveComponent("UBadge");
-const UCheckbox = resolveComponent("UCheckbox");
-const props = defineProps<{ data?: ADRGetResponseInterface }>();
 
-const {
-	data: medicalInstitutionData,
-	isPending: isMedicalInstitutionPending,
-	isError: isMedicalInstitutionError,
-	error: medicalInstitutionError,
-	status: medicalInstitutionStatus,
-} = useQuery({
+const { data: institution } = useQuery({
 	queryKey: ["medical-institution", props.data?.medical_institution_id],
-	queryFn: () =>
-		fetchMedicalInstitutionById(
-			props.data?.medical_institution_id as string
-		),
-	enabled: computed(() => !!props.data?.medical_institution_id), // only runs when id exists
+	queryFn: () => fetchMedicalInstitutionById(props.data?.medical_institution_id as string),
+	enabled: computed(() => !!props.data?.medical_institution_id),
 });
 
-interface MedicineInterface {
-	name: string;
-	suspected: boolean;
-	batch_no?: string | null;
-	manufacturer?: string | null;
-	dose?: number | null;
-	route?: string | null;
-	frequency?: number | null;
-	start_date?: string | null;
-	stop_date?: string | null;
-}
-// Restructure medicine data for UTable
-const medicines = computed(() => {
-	if (!props.data) return [];
-	return [
-		{
-			name: "Rifampicin",
-			suspected: props.data.rifampicin_suspected,
-			batch_no: props.data.rifampicin_batch_no,
-			manufacturer: props.data.rifampicin_manufacturer,
-			dose: props.data.rifampicin_dose_amount,
-			route: props.data.rifampicin_route,
-			frequency: props.data.rifampicin_frequency_number,
-			start_date: props.data.rifampicin_start_date,
-			stop_date: props.data.rifampicin_stop_date,
-		},
-		{
-			name: "Isoniazid",
-			suspected: props.data.isoniazid_suspected,
-			batch_no: props.data.isoniazid_batch_no,
-			manufacturer: props.data.isoniazid_manufacturer,
-			dose: props.data.isoniazid_dose_amount,
-			route: props.data.isoniazid_route,
-			frequency: props.data.isoniazid_frequency_number,
-			start_date: props.data.isoniazid_start_date,
-			stop_date: props.data.isoniazid_stop_date,
-		},
-		{
-			name: "Pyrazinamide",
-			suspected: props.data.pyrazinamide_suspected,
-			batch_no: props.data.pyrazinamide_batch_no,
-			manufacturer: props.data.pyrazinamide_manufacturer,
-			dose: props.data.pyrazinamide_dose_amount,
-			route: props.data.pyrazinamide_route,
-			frequency: props.data.pyrazinamide_frequency_number,
-			start_date: props.data.pyrazinamide_start_date,
-			stop_date: props.data.pyrazinamide_stop_date,
-		},
-		{
-			name: "Ethambutol",
-			suspected: props.data.ethambutol_suspected,
-			batch_no: props.data.ethambutol_batch_no,
-			manufacturer: props.data.ethambutol_manufacturer,
-			dose: props.data.ethambutol_dose_amount,
-			route: props.data.ethambutol_route,
-			frequency: props.data.ethambutol_frequency_number,
-			start_date: props.data.ethambutol_start_date,
-			stop_date: props.data.ethambutol_stop_date,
-		},
-	] as MedicineInterface[];
-});
+const medicines = computed(() => (props.data ? medicinesOf(props.data) : []));
+const timeline = computed(() => (props.data ? timelineOf(props.data) : []));
+const summary = computed(() => (props.data ? summaryOf(props.data) : []));
 
-const medicineTableColumns: TableColumn<MedicineInterface>[] = [
-	{
-		accessorKey: "suspected",
-		header: "Suspected",
-		cell: ({ row }) => {
-			return h(UCheckbox, {
-				modelValue: row.original.suspected,
-				disabled: true,
-			});
-		},
-	},
-	{
-		accessorKey: "name",
-		header: "INN/Generic Name",
-	},
-	{
-		accessorKey: "batch_no",
-		header: "Batch Number",
-		cell: ({ row }) => {
-			return row.original.batch_no
-				? h("div", {}, row.original.batch_no)
-				: h(
-						UBadge,
-						{ color: "gray", variant: "italic" },
-						() => "BLANK"
-				  );
-		},
-	},
-	{
-		accessorKey: "manufacturer",
-		header: "Manufacturer",
-		cell: ({ row }) => {
-			return row.original.manufacturer
-				? h("div", {}, row.original.manufacturer)
-				: h(
-						UBadge,
-						{ color: "gray", variant: "italic" },
-						() => "BLANK"
-				  );
-		},
-	},
-	{
-		accessorKey: "dose",
-		header: "Dose",
-		cell: ({ row }) => {
-			return row.original.dose
-				? h("div", {}, `${row.original.dose} mg`)
-				: h(
-						UBadge,
-						{ color: "gray", variant: "italic" },
-						() => "BLANK"
-				  );
-		},
-	},
-	{
-		accessorKey: "route",
-		header: "Route",
-		cell: ({ row }) => {
-			// Assumes `adrFormCategoricalValues` is accessible in this scope
-			const badges = adrFormCategoricalValues["route"].map((value) =>
-				h(
-					UBadge,
-					{
-						color:
-							value.value === row.original.route
-								? "primary"
-								: "gray",
-						variant: "solid",
-					},
-					() => value.label
-				)
-			);
-			return h("div", { class: "flex flex-wrap gap-2" }, badges);
-		},
-	},
-	{
-		accessorKey: "frequency",
-		header: "Frequency",
-		cell: ({ row }) => {
-			return row.original.frequency
-				? h("div", {}, `${row.original.frequency} daily`)
-				: h(
-						UBadge,
-						{ color: "gray", variant: "italic" },
-						() => "BLANK"
-				  );
-		},
-	},
-	{
-		accessorKey: "start_date",
-		header: "Treatment Start Date",
-		cell: ({ row }) => {
-			return row.original.start_date
-				? h("div", {}, row.original.start_date)
-				: h(
-						UBadge,
-						{ color: "gray", variant: "italic" },
-						() => "BLANK"
-				  );
-		},
-	},
-	{
-		accessorKey: "stop_date",
-		header: "Treatment Stop Date",
-		cell: ({ row }) => {
-			return row.original.stop_date
-				? h("div", {}, row.original.stop_date)
-				: h(
-						UBadge,
-						{ color: "gray", variant: "italic" },
-						() => "BLANK"
-				  );
-		},
-	},
+const DOT: Record<TimelineKind, string> = {
+	start: "bg-primary",
+	onset: "bg-error",
+	stop: "bg-neutral",
+};
+
+const sections = [
+	{ id: "view-institution", label: "Institution" },
+	{ id: "view-patient", label: "Patient" },
+	{ id: "view-reaction", label: "Reaction" },
+	{ id: "view-medicines", label: "Medicines" },
+	{ id: "view-rechallenge", label: "Rechallenge" },
+	{ id: "view-grading", label: "Grading" },
 ];
+
+const active = ref("");
+
+function go(id: string) {
+	document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+	active.value = id;
+}
+
+// Highlight the section being read, as the form's list does.
+let observer: IntersectionObserver | undefined;
+
+onMounted(() => {
+	observer = new IntersectionObserver(
+		(entries) => {
+			for (const entry of entries) if (entry.isIntersecting) active.value = entry.target.id;
+		},
+		{ rootMargin: "-10% 0px -75% 0px" },
+	);
+	for (const section of sections) {
+		const element = document.getElementById(section.id);
+		if (element) observer.observe(element);
+	}
+});
+
+onBeforeUnmount(() => observer?.disconnect());
+
 const { mutate: deleteAdr, isPending: isDeleting } = useMutation<
 	void, // Return type from deleteAdrById
 	Error, // Error type
@@ -675,20 +277,3 @@ function handleDelete() {
 	deleteAdr(props.data?.id as string);
 }
 </script>
-
-<style scoped>
-@reference "assets/css/main.css";
-
-/* These custom styles can be kept for layout purposes */
-.view-details-wrapper {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-.view-details-header {
-	font-weight: 500;
-}
-.view-details-content {
-	text-align: right;
-}
-</style>
