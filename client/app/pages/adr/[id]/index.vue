@@ -160,7 +160,7 @@ const {
 	error: reviewDetailsError,
 	status: reviewDetailsStatus,
 } = useQuery({
-	queryKey: ["review-details", firstCausalityAssessmentLevel.value?.id],
+	queryKey: computed(() => ["review-details", firstCausalityAssessmentLevel.value?.id]),
 	queryFn: () =>
 		fetchReviews({
 			causality_assessment_level_id: firstCausalityAssessmentLevel.value
@@ -178,10 +178,10 @@ const {
 	isLoading,
 	isError,
 } = useQuery({
-	queryKey: [
+	queryKey: computed(() => [
 		"reviews-by-causality-level",
 		firstCausalityAssessmentLevel.value?.id,
-	],
+	]),
 	queryFn: () =>
 		fetchReviews({
 			causality_assessment_level_id:
@@ -197,7 +197,7 @@ const {
 	error: statsError,
 	refetch: refetchStats,
 } = useQuery({
-	queryKey: ["reviews-stats", firstCausalityAssessmentLevel.value?.id],
+	queryKey: computed(() => ["reviews-stats", firstCausalityAssessmentLevel.value?.id]),
 	queryFn: () =>
 		fetchReviewStats(firstCausalityAssessmentLevel.value?.id as string),
 	enabled: computed(() => !!firstCausalityAssessmentLevel.value?.id),
