@@ -14,6 +14,9 @@ const isoDate = z
 	.regex(/^\d{4}-\d{2}-\d{2}$/, "Enter a valid date.")
 	.or(z.literal(""));
 
+// The server has no default for these, so the form must ask for them.
+const required = (message: string) => z.string({ error: message }).min(1, message);
+
 export const adrFormSchema = z.object({
 	medical_institution_id: z.string().uuid("Please select a medical institution."),
 	patient_name: z.string().min(3, "Name must be at least 3 characters."),
@@ -25,9 +28,9 @@ export const adrFormSchema = z.object({
 	inpatient_or_outpatient_number: z.string().optional(),
 	ward_or_clinic: z.string().optional(),
 	patient_address: z.string().optional(),
-	patient_gender: z.string().optional(),
+	patient_gender: required("Select the patient's gender."),
 	date_of_onset_of_reaction: z.string().optional(),
-	pregnancy_status: z.string().optional(),
+	pregnancy_status: required("Select the pregnancy status."),
 	description_of_reaction: z.string().min(10, "Description is too short.").optional(),
 	medicines: z.array(
 		z.object({
@@ -44,11 +47,11 @@ export const adrFormSchema = z.object({
 	),
 	severity: z.string().optional(),
 	outcome: z.string().optional(),
-	known_allergy: z.string().optional(),
+	known_allergy: required("Select whether the patient has a known allergy."),
 	rechallenge: z.string().optional(),
 	dechallenge: z.string().optional(),
-	is_serious: z.string().optional(),
-	criteria_for_seriousness: z.string().optional(),
+	is_serious: required("Select whether the reaction is serious."),
+	criteria_for_seriousness: required("Select the criteria for seriousness."),
 	action_taken: z.string().optional(),
 	comments: z.string().optional(),
 });
@@ -63,15 +66,24 @@ export function emptyMedicines(): MedicineFormRow[] {
 		batch_no: "",
 		manufacturer: "",
 		dose_amount: undefined,
-		route: undefined,
+		route: "oral",
 		frequency_number: undefined,
 		start_date: "",
 		stop_date: "",
 	}));
 }
 
+// A blank report. Only the fields the server defaults to "unknown" are preset.
 export function emptyFormState(): Partial<AdrForm> {
-	return { patient_name: "", medicines: emptyMedicines() };
+	return {
+		patient_name: "",
+		medicines: emptyMedicines(),
+		rechallenge: "unknown",
+		dechallenge: "unknown",
+		severity: "unknown",
+		action_taken: "unknown",
+		outcome: "unknown",
+	};
 }
 
 // The values the Add form starts with today.
