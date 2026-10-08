@@ -100,7 +100,7 @@ class AdverseDrugReactionReportService:
     def delete_by_id(self, id: str) -> None:
         self.repository.delete(id=id)
 
-    def _predict(self, data: ADRPostRequest, adr_model: ADRModel) -> MLModelOutput:
+    def _predict(self, adr_model: ADRModel) -> MLModelOutput:
         try:
             ml_model_input = MLModelInput.model_validate(adr_model)
 
@@ -163,7 +163,7 @@ class AdverseDrugReactionReportService:
             )
 
         # Case 2: Data exists, run prediction
-        ml_model_output = self._predict(adr_model=adr_model)  # Note: no 'data' param
+        ml_model_output = self._predict(adr_model=adr_model)
 
         final_feature_names = ml_model_output.shap_values.feature_names
         final_feature_values = ml_model_output.shap_values.data[0].tolist()
