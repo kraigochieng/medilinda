@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "vitest run"
   },
   "dependencies": {
     "@better-auth/api-key": "^1.7.7",
@@ -56,6 +57,7 @@
     "@types/humps": "^2.0.6",
     "@types/lodash": "^4.17.16",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^24.7.0"
+    "@types/node": "^24.7.0",
+    "vitest": "^5.0.3"
   }
 }
