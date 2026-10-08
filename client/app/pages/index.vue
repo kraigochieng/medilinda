@@ -1,101 +1,99 @@
 <template>
-	<div class="text-center mb-16">
-		<h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
-			ML-Driven Causality Assessment with Explainable Predictions
-		</h1>
-		<p class="text-lg text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
-			Understand drug safety insights using AI-powered causality
-			assessments and transparent, explainable results.
-		</p>
-		<p>
-			Thanks to
-			<NuxtLink to="https://www.intellisoftkenya.com" target="_blank">
+	<div class="mx-auto max-w-4xl space-y-8">
+		<div class="flex flex-wrap items-center justify-between gap-4">
+			<div>
+				<h1 class="text-2xl font-bold">{{ title }}</h1>
+				<p class="text-muted">Here is where your ADR work stands.</p>
+			</div>
+			<UButton to="/adr/add" icon="i-lucide-plus" label="Add ADR" size="lg" />
+		</div>
+
+		<UAlert
+			v-if="isError"
+			color="error"
+			variant="subtle"
+			icon="i-lucide-triangle-alert"
+			title="Could not load the counts"
+			:actions="[{ label: 'Try again', color: 'neutral', onClick: () => refetchAll() }]"
+		/>
+
+		<div class="grid gap-4 sm:grid-cols-3">
+			<NuxtLink
+				v-for="card in cards"
+				:key="card.key"
+				:to="card.to"
+				class="group block rounded-lg focus-visible:outline-2 focus-visible:outline-primary"
+			>
+				<UCard class="h-full transition group-hover:bg-elevated">
+					<div class="flex items-start justify-between gap-2">
+						<div>
+							<p class="text-sm font-medium text-muted">{{ card.label }}</p>
+							<USkeleton v-if="card.value === undefined && !isError" class="mt-2 h-9 w-16" />
+							<p v-else class="mt-1 text-3xl font-bold">{{ card.value ?? "—" }}</p>
+						</div>
+						<UIcon :name="card.icon" class="size-6 text-muted" />
+					</div>
+					<p class="mt-2 text-xs text-muted">{{ card.hint }}</p>
+				</UCard>
+			</NuxtLink>
+		</div>
+
+		<p class="text-sm text-muted">
+			New here? Read <ULink to="/about" class="text-primary">how the assessment works</ULink>.
+			MediLinda was built with
+			<ULink to="https://www.intellisoftkenya.com" target="_blank" class="text-primary">
 				IntelliSOFT Consulting Ltd
-			</NuxtLink>
-			and
-			<NuxtLink to="https://web.pharmacyboardkenya.org/" target="_blank">
+			</ULink>
+			and the
+			<ULink to="https://web.pharmacyboardkenya.org/" target="_blank" class="text-primary">
 				Pharmacy and Poisons Board
-			</NuxtLink>
+			</ULink>.
 		</p>
-	</div>
-
-	<div class="flex space-x-8 p-8">
-		<UCard>
-			<template #header>
-				<div class="flex items-center gap-4">
-					<UIcon
-						name="i-heroicons-exclamation-triangle"
-						class="w-7 h-7 text-red-500"
-					/>
-					<h3 class="text-lg font-semibold">What is an ADR?</h3>
-				</div>
-			</template>
-			<p class="text-gray-500 dark:text-gray-400">
-				An ADR (Adverse Drug Reaction) is a harmful or unintended
-				response to a medication. It occurs even when a drug is used
-				correctly.
-			</p>
-		</UCard>
-
-		<UCard>
-			<template #header>
-				<div class="flex items-center gap-4">
-					<UIcon
-						name="i-heroicons-cpu-chip"
-						class="w-7 h-7 text-primary-500"
-					/>
-					<h3 class="text-lg font-semibold">
-						What is a Causality Assessment?
-					</h3>
-				</div>
-			</template>
-			<p class="text-gray-500 dark:text-gray-400">
-				Causality Assessment helps determine the likelihood that a drug
-				caused a specific adverse reaction. It follows structured
-				medical criteria.
-			</p>
-		</UCard>
-
-		<UCard>
-			<template #header>
-				<div class="flex items-center gap-4">
-					<UIcon
-						name="i-heroicons-variable"
-						class="w-7 h-7 text-blue-500"
-					/>
-					<h3 class="text-lg font-semibold">
-						How is the ML Model Working?
-					</h3>
-				</div>
-			</template>
-			<p class="text-gray-500 dark:text-gray-400">
-				Our machine learning model analyzes patient data and symptoms to
-				classify ADRs using explainable AI techniques like SHAP.
-			</p>
-		</UCard>
-
-		<UCard class="md:col-span-2 lg:col-span-1">
-			<template #header>
-				<div class="flex items-center gap-4">
-					<UIcon
-						name="i-heroicons-question-mark-circle"
-						class="w-7 h-7 text-green-500"
-					/>
-					<h3 class="text-lg font-semibold">
-						Why is This Important?
-					</h3>
-				</div>
-			</template>
-			<p class="text-gray-500 dark:text-gray-400">
-				Timely ADR identification improves patient safety, reduces
-				drug-related harm, and supports regulatory pharmacovigilance
-				systems.
-			</p>
-		</UCard>
 	</div>
 </template>
 
 <script setup lang="ts">
-// Your script remains the same, as it was only setting the page title.
+import { fetchAdrsWithCausalityAndReviewCount } from "@/api/adr";
+import { fetchCurrentUser } from "@/api/user";
+import { useQuery } from "@tanstack/vue-query";
+import { greeting, homeCards } from "~/utils/home";
+
+// Only the total of each list matters, so each query asks for one row.
+const count = (review?: string[]) =>
+	useQuery({
+		queryKey: ["adrs", "home", review ?? "all"],
+		queryFn: async () =>
+			(await fetchAdrsWithCausalityAndReviewCount({ page: 1, size: 1, review_status: review })).total,
+	});
+
+const all = count();
+const needsReview = count(["needs_review"]);
+const notApproved = count(["not_approved"]);
+
+const { data: user } = useQuery({ queryKey: ["currentUser"], queryFn: fetchCurrentUser });
+
+const cards = computed(() =>
+	homeCards({
+		all: all.data.value,
+		needsReview: needsReview.data.value,
+		notApproved: notApproved.data.value,
+	}),
+);
+
+const isError = computed(() => all.isError.value || needsReview.isError.value || notApproved.isError.value);
+
+function refetchAll() {
+	all.refetch();
+	needsReview.refetch();
+	notApproved.refetch();
+}
+
+// The hour comes from the browser, after the page loads. The server's hour can differ,
+// and the two would not match.
+const hour = ref<number>();
+onMounted(() => (hour.value = new Date().getHours()));
+
+const title = computed(() => (hour.value === undefined ? "Welcome" : greeting(user.value, hour.value)));
+
 useHead({ title: "Home | MediLinda" });
 </script>
