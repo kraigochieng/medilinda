@@ -14,6 +14,13 @@ class ReviewStatusFilter(str, enum.Enum):
     not_approved = "not_approved"  # reviewed, but approvals do not outnumber rejections
 
 
+class MyReviewFilter(str, enum.Enum):
+    """Filter for the ADR list, based on the reviews of the signed-in user."""
+
+    reviewed = "reviewed"  # the user reviewed the newest assessment
+    not_reviewed = "not_reviewed"  # it has one, and the user did not review it
+
+
 class SortField(str, enum.Enum):
     """The columns the ADR list can be sorted by."""
 
@@ -343,6 +350,8 @@ class ADRWithReviewsResponse(BaseModel):
 
     approved_reviews: int
     unapproved_reviews: int
+    # Did the signed-in user review the newest assessment?
+    reviewed_by_me: bool = False
 
 
 class MLModelOutput(BaseModel):

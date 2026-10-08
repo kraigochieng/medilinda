@@ -4,6 +4,7 @@ from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
 from server.basemodels.adverse_drug_reaction_report import (
     ADRPostRequest,
+    MyReviewFilter,
     ReviewStatusFilter,
     SortField,
     SortOrder,
@@ -16,7 +17,7 @@ from server.models.causality_assessment_level import (
 )
 from server.models.review import ReviewModel
 from server.models.user import UserModel
-from sqlalchemy import and_, case, desc, false, func, or_, select, true
+from sqlalchemy import and_, case, desc, false, func, literal, or_, select, true
 from sqlalchemy.orm import Session
 
 
@@ -68,6 +69,8 @@ class AdverseDrugReactionReportRepository:
         review_status: Sequence[ReviewStatusFilter] | None = None,
         sort_by: SortField = SortField.created_at,
         sort_order: SortOrder = SortOrder.desc,
+        current_user_id: str | None = None,
+        my_review: Sequence[MyReviewFilter] | None = None,
     ) -> Page[ADRModel]:
         """
         Gets a paginated list of ADRs with their newest causality level
@@ -93,6 +96,13 @@ class AdverseDrugReactionReportRepository:
         approved_count = func.count(case((ReviewModel.approved == true(), 1)))
         unapproved_count = func.count(case((ReviewModel.approved == false(), 1)))
 
+        # 1 if the signed-in user reviewed the newest assessment, else 0.
+        mine = func.max(
+            case((ReviewModel.user_id == current_user_id, 1), else_=0)
+            if current_user_id is not None
+            else literal(0)
+        )
+
         main_stmt = (
             select(
                 ADRModel.id.label("adr_id"),
@@ -102,6 +112,7 @@ class AdverseDrugReactionReportRepository:
                 ranked_causality_cte.c.causality_assessment_level_value,
                 approved_count.label("approved_reviews"),
                 unapproved_count.label("unapproved_reviews"),
+                (mine == 1).label("reviewed_by_me"),
             )
             .select_from(ADRModel)
             .join(UserModel, ADRModel.user_id == UserModel.id)
@@ -159,6 +170,15 @@ class AdverseDrugReactionReportRepository:
         if review_status:
             main_stmt = main_stmt.having(
                 or_(*(review_conditions[status] for status in set(review_status)))
+            )
+
+        if my_review:
+            my_conditions = {
+                MyReviewFilter.reviewed: mine == 1,
+                MyReviewFilter.not_reviewed: and_(has_assessment, mine == 0),
+            }
+            main_stmt = main_stmt.having(
+                or_(*(my_conditions[choice] for choice in set(my_review)))
             )
 
         main_stmt = main_stmt.order_by(

@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from server.basemodels.adverse_drug_reaction_report import (
     ADRWithReviewsResponse,
+    MyReviewFilter,
     ReviewStatusFilter,
     SortField,
     SortOrder,
@@ -56,6 +57,11 @@ def get_adrs_with_causality_and_review_count(
         None,
         description="needs_review, approved or not_approved. Repeat for more than one.",
     ),
+    my_review: list[MyReviewFilter] | None = Query(
+        None,
+        description="reviewed or not_reviewed: whether the signed-in user reviewed the "
+        "newest assessment. Repeat for more than one.",
+    ),
     sort_by: SortField = Query(SortField.created_at, description="The column to sort by"),
     sort_order: SortOrder = Query(SortOrder.desc, description="asc or desc"),
     service: AdverseDrugReactionReportService = Depends(
@@ -69,4 +75,6 @@ def get_adrs_with_causality_and_review_count(
         review_status=review_status,
         sort_by=sort_by,
         sort_order=sort_order,
+        current_user_id=current_user.id,
+        my_review=my_review,
     )

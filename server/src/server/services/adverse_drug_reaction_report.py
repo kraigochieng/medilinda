@@ -17,6 +17,7 @@ from server.basemodels.adverse_drug_reaction_report import (
     MLModelInput,
     RechallengeEnum,
     MLModelOutput,
+    MyReviewFilter,
     ReviewStatusFilter,
     SortField,
     SortOrder,
@@ -70,6 +71,8 @@ class AdverseDrugReactionReportService:
         review_status: Sequence[ReviewStatusFilter] | None = None,
         sort_by: SortField = SortField.created_at,
         sort_order: SortOrder = SortOrder.desc,
+        current_user_id: str | None = None,
+        my_review: Sequence[MyReviewFilter] | None = None,
     ) -> Page[ADRWithReviewsResponse]:
         """
         Pass-through method to get paginated ADRs with review counts.
@@ -81,6 +84,8 @@ class AdverseDrugReactionReportService:
             review_status=review_status,
             sort_by=sort_by,
             sort_order=sort_order,
+            current_user_id=current_user_id,
+            my_review=my_review,
         )
 
     def create(self, data: ADRPostRequest) -> ADRGetResponse:
