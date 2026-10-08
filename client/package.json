@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@better-auth/api-key": "^1.7.7",
     "@internationalized/date": "^3.7.0",
     "@libsql/client": "^0.18.0",
     "@libsql/kysely-libsql": "^0.4.1",
