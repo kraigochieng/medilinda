@@ -28,6 +28,11 @@ class ResourceNotFoundError(RepositoryError):
         super().__init__(message, status_code=status.HTTP_404_NOT_FOUND)
 
 
+class ResourceConflictError(RepositoryError):
+    def __init__(self, message: str):
+        super().__init__(message, status_code=status.HTTP_409_CONFLICT)
+
+
 class DatabaseError(RepositoryError):
     """Raised for general database-level errors."""
 

@@ -9,7 +9,11 @@ from server.models.causality_assessment_level import CausalityAssessmentLevelMod
 from server.models.medical_institution import MedicalInstitutionModel
 from server.models.review import ReviewModel
 from server.models.sms import SMSMessageModel
-from sqlalchemy import Column, Row, case, desc, func, select, text
+from server.repositories._newest_assessment import (
+    NEWEST_ASSESSMENT_SQL,
+    newest_assessment_ids,
+)
+from sqlalchemy import Column, Row, and_, case, desc, func, select, text
 from sqlalchemy.orm import Session
 
 
@@ -64,7 +68,10 @@ class DashboardRepository:
             .select_from(ADRModel)
             .join(
                 CausalityAssessmentLevelModel,
-                CausalityAssessmentLevelModel.adr_id == ADRModel.id,
+                and_(
+                    CausalityAssessmentLevelModel.adr_id == ADRModel.id,
+                    CausalityAssessmentLevelModel.id.in_(newest_assessment_ids()),
+                ),
                 isouter=True,
             )
             .join(
@@ -82,6 +89,8 @@ class DashboardRepository:
         stmt = select(
             CausalityAssessmentLevelModel.causality_assessment_level_value,
             func.count().label("count"),
+        ).where(
+            CausalityAssessmentLevelModel.id.in_(newest_assessment_ids())
         ).group_by(CausalityAssessmentLevelModel.causality_assessment_level_value)
 
         return self.db.execute(stmt).all()
@@ -102,6 +111,7 @@ class DashboardRepository:
                     END AS status
                 FROM causality_assessment_level cal
                 JOIN review r ON cal.id = r.causality_assessment_level_id
+                WHERE """ + NEWEST_ASSESSMENT_SQL + """
                 GROUP BY cal.id
             ) AS sub
             GROUP BY status

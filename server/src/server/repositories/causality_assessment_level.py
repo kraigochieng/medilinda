@@ -42,12 +42,15 @@ class CausalityAssessmentLevelRepository:
         return paginate(self.db, stmt, params=pagination_params)
 
     def create(
-        self, data: CausalityAssessmentLevelPostRequest
+        self, data: CausalityAssessmentLevelPostRequest, commit: bool = True
     ) -> CausalityAssessmentLevelModel:
         model = CausalityAssessmentLevelModel(**data.model_dump())
 
         self.db.add(model)
-        self.db.commit()
+        if commit:
+            self.db.commit()
+        else:
+            self.db.flush()
         self.db.refresh(model)
 
         return model

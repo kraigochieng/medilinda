@@ -38,87 +38,6 @@ def adr_repository(db: Session) -> AdverseDrugReactionReportRepository:
     return AdverseDrugReactionReportRepository(db)
 
 
-@pytest.fixture
-def sample_medical_institution_post_request(db: Session) -> MedicalInstitutionModel:
-    """Fixture to create a sample medical institution in the database."""
-    institution = MedicalInstitutionModel(
-        name="Test Hospital",
-        mfl_code="MFL999",
-    )
-
-    db.add(institution)
-    db.commit()
-    db.refresh(institution)
-
-    return institution
-
-
-@pytest.fixture
-def sample_adverse_drug_reaction_report_post_request(
-    test_user: UserModel,
-    sample_medical_institution_post_request: MedicalInstitutionModel,
-) -> ADRPostRequest:
-    """Fixture for creating a sample ADRPostRequest."""
-    return ADRPostRequest(
-        medical_institution_id=sample_medical_institution_post_request.id,
-        user_id=test_user.id,
-        # Personal Details
-        patient_name="Jane Smith",
-        inpatient_or_outpatient_number="OP-123456",
-        patient_age=45.0,
-        patient_date_of_birth=date(1980, 5, 10),
-        patient_address="123 Kijabe Street, Nairobi",
-        patient_weight_kg=68.5,
-        patient_height_cm=165.0,
-        ward_or_clinic="TB Clinic A",
-        patient_gender=GenderEnum.female,
-        pregnancy_status=PregnancyStatusEnum.not_pregnant,
-        known_allergy=KnownAllergyEnum.yes,
-        # Suspected Adverse Reaction
-        date_of_onset_of_reaction=date(2025, 10, 15),
-        description_of_reaction="Severe rash, jaundice (yellowing of skin and eyes), and elevated liver enzymes.",
-        # --- Medicine fields ---
-        rifampicin_suspected=True,
-        rifampicin_start_date=date(2025, 10, 1),
-        rifampicin_stop_date=date(2025, 10, 16),
-        rifampicin_dose_amount=600.0,
-        rifampicin_frequency_number=1.0,
-        rifampicin_route="Oral",
-        rifampicin_batch_no="RF-BATCH-001",
-        rifampicin_manufacturer="Kenya Medical Supplies",
-        isoniazid_suspected=True,
-        isoniazid_start_date=date(2025, 10, 1),
-        isoniazid_stop_date=date(2025, 10, 16),
-        isoniazid_dose_amount=300.0,
-        isoniazid_frequency_number=1.0,
-        isoniazid_route="Oral",
-        isoniazid_batch_no="IZ-BATCH-002",
-        isoniazid_manufacturer="Kenya Medical Supplies",
-        pyrazinamide_suspected=False,
-        pyrazinamide_start_date=date(2025, 10, 1),
-        pyrazinamide_stop_date=None,
-        pyrazinamide_dose_amount=1500.0,
-        pyrazinamide_frequency_number=1.0,
-        pyrazinamide_route="Oral",
-        ethambutol_suspected=False,
-        ethambutol_start_date=date(2025, 10, 1),
-        ethambutol_stop_date=None,
-        ethambutol_dose_amount=800.0,
-        ethambutol_frequency_number=1.0,
-        ethambutol_route="Oral",
-        # Rechallenge/Dechallenge
-        rechallenge=RechallengeEnum.no,
-        dechallenge=DechallengeEnum.yes,
-        # Grading of Reaction/Event
-        severity=SeverityEnum.severe,
-        is_serious=IsSeriousEnum.yes,
-        criteria_for_seriousness=CriteriaForSeriousnessEnum.hospitalisation,
-        action_taken=ActionTakenEnum.drug_withdrawn,
-        outcome=OutcomeEnum.recovering,
-        comments="Patient has a known allergy to penicillin. LFTs on 15/10/2025 showed ALT 450 U/L, AST 380 U/L, Total Bili 4.5 mg/dL. Patient admitted for monitoring.",
-    )
-
-
 # --- UPDATED FIXTURE ---
 @pytest.fixture
 def sample_adverse_drug_reaction_report_post_request_updated(
@@ -295,7 +214,7 @@ def test_get_paginated_adrs_with_reviews_with_data(
 ):
     adr = adr_repository.create(sample_adverse_drug_reaction_report_post_request)
 
-    # 2. Create CAL 1 (the first/oldest one)
+    # 2. Create CAL 1 (the oldest one)
     cal1 = CausalityAssessmentLevelModel(
         adr_id=adr.id,
         causality_assessment_level_value=CausalityAssessmentLevelEnum.unclassified,
@@ -313,14 +232,14 @@ def test_get_paginated_adrs_with_reviews_with_data(
     db.add(cal2)
     db.commit()
 
-    # 4. Create Reviews linked to CAL 1 (the one that should be picked)
+    # 4. Create Reviews linked to CAL 1 (history: ignored by the query)
     review1 = ReviewModel(
         causality_assessment_level_id=cal1.id, user_id=test_user.id, approved=True
     )
     review2 = ReviewModel(
         causality_assessment_level_id=cal1.id, user_id=test_user.id, approved=False
     )
-    # 5. Create a Review linked to CAL 2 (this one should be ignored by the query)
+    # 5. Create a Review linked to CAL 2 (the newest one, so the one that counts)
     review3 = ReviewModel(
         causality_assessment_level_id=cal2.id, user_id=test_user.id, approved=True
     )
@@ -337,14 +256,11 @@ def test_get_paginated_adrs_with_reviews_with_data(
     assert len(page.items) == 1
     item = page.items[0]
 
-    # Should pick the value from the *first* CAL (cal1)
-    assert (
-        item.causality_assessment_level_value
-        == CausalityAssessmentLevelEnum.unclassified
-    )
-    # Should count *only* reviews for cal1
+    # Should pick the value from the *newest* CAL (cal2)
+    assert item.causality_assessment_level_value == CausalityAssessmentLevelEnum.certain
+    # Should count *only* reviews for cal2
     assert item.approved_reviews == 1
-    assert item.unapproved_reviews == 1
+    assert item.unapproved_reviews == 0
 
 
 def test_get_paginated_adrs_with_reviews_search(

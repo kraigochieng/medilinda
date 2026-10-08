@@ -15,6 +15,7 @@ from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
 from server.models.user import UserModel
 from server.settings import settings
+from server.utils.audit import Actor, bind_actor
 
 _API_KEY_CACHE_TTL_SECONDS = 60
 _api_key_cache: dict[str, tuple[str, float]] = {}
@@ -119,6 +120,9 @@ async def get_current_user(
         raise _unauthorized()
 
     user = _get_or_create_local_user(db, user_id, claims)
+
+    # From here on, changes made by this request are written to the audit log.
+    bind_actor(Actor(id=user.id, username=user.username))
 
     return UserDetailsBaseModel(
         id=user.id,

@@ -31,6 +31,7 @@ from server.repositories.adverse_drug_reaction_report import (
 from server.repositories.causality_assessment_level import (
     CausalityAssessmentLevelRepository,
 )
+from server.utils.audit import restore_deleted, serialize_value
 from server.utils.ml import get_shap_values
 
 
@@ -42,6 +43,7 @@ class AdverseDrugReactionReportService:
         encoder: OrdinalEncoder,
         explainer: KernelExplainer,
     ):
+        self.db = db
         self.repository = AdverseDrugReactionReportRepository(db)
         self.cal_repository = CausalityAssessmentLevelRepository(db)
         self.ml_model = ml_model
@@ -72,12 +74,19 @@ class AdverseDrugReactionReportService:
         return ADRGetResponse.model_validate(model)
 
     def create_and_predict(self, data: ADRPostRequest) -> ADRGetResponse:
-        adr_model = self.repository.create(data=data)
+        # One transaction: either the ADR and its assessment are saved, or neither.
+        try:
+            adr_model = self.repository.create(data=data, commit=False)
 
-        cal_data = self._generate_causality_assessment_data(adr_model=adr_model)
+            cal_data = self._generate_causality_assessment_data(adr_model=adr_model)
 
-        logging.info("Creating causality after prediction...")
-        self.cal_repository.create(data=cal_data)
+            logging.info("Creating causality after prediction...")
+            self.cal_repository.create(data=cal_data, commit=False)
+
+            self.db.commit()
+        except Exception:
+            self.db.rollback()
+            raise
 
         return ADRGetResponse.model_validate(adr_model)
 
@@ -87,20 +96,61 @@ class AdverseDrugReactionReportService:
     def update_and_predict(
         self, id: str, data: ADRPostRequest
     ) -> ADRGetResponse | None:
-        adr_model = self.repository.update(id=id, data=data)
+        """Save the edit. If it changes anything the ML model reads, add a new
+        causality assessment. The old one stays, with the reviews given on it,
+        so the ADR shows as needing review again and nothing is lost."""
+        adr_model = self.repository.get_by_id(id=id)
+        inputs_before = self._ml_inputs(adr_model)
 
-        cal_data = self._generate_causality_assessment_data(adr_model=adr_model)
+        try:
+            adr_model = self.repository.update(id=id, data=data, commit=False)
 
-        self.cal_repository.update(
-            id=adr_model.causality_assessment_levels[0].id, data=cal_data
-        )
+            if (
+                self._ml_inputs(adr_model) != inputs_before
+                or not adr_model.causality_assessment_levels
+            ):
+                cal_data = self._generate_causality_assessment_data(
+                    adr_model=adr_model
+                )
+                self.cal_repository.create(data=cal_data, commit=False)
+
+            self.db.commit()
+        except Exception:
+            self.db.rollback()
+            raise
 
         return ADRGetResponse.model_validate(adr_model)
 
     def delete_by_id(self, id: str) -> None:
-        self.repository.delete(id=id)
+        """Remove the ADR with its assessments and reviews. The audit log keeps
+        a snapshot of each, so `restore` can bring them back."""
+        try:
+            self.repository.delete(id=id, commit=False)
+            self.db.commit()
+        except Exception:
+            self.db.rollback()
+            raise
 
-    def _predict(self, data: ADRPostRequest, adr_model: ADRModel) -> MLModelOutput:
+    def restore(self, id: str) -> ADRGetResponse:
+        try:
+            adr_model = restore_deleted(self.db, entity_type="adr", entity_id=id)
+            self.db.commit()
+        except Exception:
+            self.db.rollback()
+            raise
+
+        return ADRGetResponse.model_validate(adr_model)
+
+    @staticmethod
+    def _ml_inputs(adr_model: ADRModel) -> dict:
+        """The values of every field the ML model reads, in comparable form."""
+        return {
+            field: serialize_value(getattr(adr_model, field))
+            for field in MLModelInput.model_fields
+            if field != "created_at"
+        }
+
+    def _predict(self, adr_model: ADRModel) -> MLModelOutput:
         try:
             ml_model_input = MLModelInput.model_validate(adr_model)
 
@@ -163,7 +213,7 @@ class AdverseDrugReactionReportService:
             )
 
         # Case 2: Data exists, run prediction
-        ml_model_output = self._predict(adr_model=adr_model)  # Note: no 'data' param
+        ml_model_output = self._predict(adr_model=adr_model)
 
         final_feature_names = ml_model_output.shap_values.feature_names
         final_feature_values = ml_model_output.shap_values.data[0].tolist()

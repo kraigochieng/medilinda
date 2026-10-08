@@ -201,6 +201,16 @@ Every query is a network call, so keep the server and the database in nearby reg
 docker-compose up --build
 ```
 
+## Audit trail and history
+
+Every change to an ADR, its causality assessments, reviews, SMS messages, medical institutions and telephones is written to an append-only `audit_log` table: who, when, which fields changed (old and new), and a full snapshot of the row. Only requests from a signed-in user are recorded.
+
+-   Editing an ADR keeps every earlier version. If the edit changes anything the ML model reads, a **new** causality assessment is added. The old one stays with the reviews given on it, so the ADR shows as needing review again.
+-   Deleting an ADR removes it and its assessments and reviews, and records a snapshot of each. It can be undone with `POST /api/v1/adrs/{id}/restore`.
+-   History endpoints: `GET /api/v1/adrs/{id}/versions`, `GET /api/v1/adrs/{id}/versions/{n}`, `GET /api/v1/adrs/{id}/activity`, `GET /api/v1/audit-logs`.
+-   Rows that existed before auditing was added get a baseline version 1 the first time they change.
+-   Bulk updates and raw SQL on audited tables bypass the hooks, so use the ORM for writes.
+
 ## Usage
 
 -   Access the frontend at [http://localhost:3000](http://localhost:3000)

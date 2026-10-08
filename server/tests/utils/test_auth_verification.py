@@ -346,3 +346,56 @@ def test_new_users_get_distinct_placeholder_passwords(raw_client, db, private_ke
 
     passwords = [u.password for u in db.query(UserModel).all()]
     assert len(set(passwords)) == 2
+
+
+def post_institution(client, headers):
+    return client.post(
+        "/api/v1/medical-institutions/",
+        json={"name": "Audit Hospital", "mfl_code": "AUD-1"},
+        headers=headers,
+    )
+
+
+def audit_rows(db, entity_type):
+    from server.models.audit_log import AuditLogModel
+
+    return db.query(AuditLogModel).filter_by(entity_type=entity_type).all()
+
+
+def test_changes_made_with_a_token_are_recorded_against_that_user(
+    raw_client, db, private_key
+):
+    response = post_institution(raw_client, bearer(make_token(private_key)))
+
+    assert response.status_code == status.HTTP_201_CREATED
+    (row,) = audit_rows(db, "medical_institution")
+    assert (row.action, row.entity_id) == ("create", response.json()["id"])
+    assert (row.actor_id, row.actor_username) == ("ba-user-1", "kraig")
+    assert row.snapshot["name"] == "Audit Hospital"
+
+
+def test_changes_made_with_an_api_key_are_recorded_against_the_key_owner(
+    raw_client, db, fake_api_key_http
+):
+    db.add(UserModel(id="owner-1", username="owner", password="x"))
+    db.commit()
+    fake_api_key_http.payload = {"valid": True, "key": {"referenceId": "owner-1"}}
+
+    response = post_institution(raw_client, {"x-api-key": "key-1"})
+
+    assert response.status_code == status.HTTP_201_CREATED
+    (row,) = audit_rows(db, "medical_institution")
+    assert (row.actor_id, row.actor_username) == ("owner-1", "owner")
+
+
+def test_each_request_gets_its_own_audit_group(raw_client, db, private_key):
+    headers = bearer(make_token(private_key))
+    post_institution(raw_client, headers)
+    raw_client.post(
+        "/api/v1/medical-institutions/",
+        json={"name": "Second", "mfl_code": "AUD-2"},
+        headers=headers,
+    )
+
+    groups = {row.group_id for row in audit_rows(db, "medical_institution")}
+    assert len(groups) == 2

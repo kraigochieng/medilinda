@@ -24,8 +24,10 @@ from server.basemodels.adverse_drug_reaction_report import (
 from server.basemodels.causality_asssessment_level import (
     CausalityAssessmentLevelGetResponse,
 )
+from server.basemodels.audit_log import AuditLogGetResponse
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
+from server.repositories.audit_log import AuditLogRepository
 
 # from server.ml.artifacts import (
 #     ENCODERS_PATH,
@@ -123,3 +125,57 @@ def delete_adr_by_id(
     service.delete_by_id(id)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.post("/{id}/restore", response_model=ADRGetResponse, status_code=status.HTTP_200_OK)
+def restore_adr(
+    id: str = Path(..., description="ID of the deleted ADR to restore"),
+    service: AdverseDrugReactionReportService = Depends(
+        get_adverse_drug_reaction_report_service
+    ),
+):
+    return service.restore(id)
+
+
+@router.get(
+    "/{id}/versions",
+    response_model=list[AuditLogGetResponse],
+    response_model_exclude={"__all__": {"snapshot"}},
+    status_code=status.HTTP_200_OK,
+)
+def get_adr_versions(
+    id: str = Path(..., description="ID of the ADR (it may have been deleted)"),
+    db: Session = Depends(get_db),
+):
+    """Every recorded change to this ADR, newest first."""
+    return AuditLogRepository(db).versions_of("adr", id)
+
+
+@router.get(
+    "/{id}/versions/{version}",
+    response_model=AuditLogGetResponse,
+    status_code=status.HTTP_200_OK,
+)
+def get_adr_version(
+    id: str = Path(..., description="ID of the ADR"),
+    version: int = Path(..., ge=1),
+    db: Session = Depends(get_db),
+):
+    """One version, with the full record as it was then."""
+    return AuditLogRepository(db).get_version("adr", id, version)
+
+
+@router.get(
+    "/{id}/activity",
+    response_model=Page[AuditLogGetResponse],
+    response_model_exclude={"items": {"__all__": {"snapshot"}}},
+    status_code=status.HTTP_200_OK,
+)
+def get_adr_activity(
+    id: str = Path(..., description="ID of the ADR"),
+    pagination_params: Params = Depends(),
+    db: Session = Depends(get_db),
+):
+    """Everything that happened to this ADR and the rows that belong to it
+    (assessments, reviews, SMS messages), newest first."""
+    return AuditLogRepository(db).get(pagination_params=pagination_params, root_id=id)
