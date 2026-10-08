@@ -1,4 +1,5 @@
 from sqlalchemy import Engine, create_engine
+from sqlalchemy.pool import NullPool
 
 from server.settings import settings
 
@@ -24,8 +25,12 @@ def build_engine(
     return create_engine(
         f"sqlite+libsql://{host}?secure=true",
         connect_args={"auth_token": turso_token},
-        pool_pre_ping=True,
-        pool_recycle=300,
+        # Turso closes the stream of an idle connection, and the next query on it fails
+        # with a plain ValueError ("stream not found"). SQLAlchemy does not see that as a
+        # lost connection, so neither pool_pre_ping nor pool_recycle can save a pooled
+        # connection, and the pool stays broken. A new connection for each request cannot
+        # go stale.
+        poolclass=NullPool,
     )
 
 
