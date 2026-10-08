@@ -40,12 +40,9 @@ useHead({
 	}
 }
 
-.page-responsive-width {
-	@apply px-8 lg:px-32;
-}
-
+/* The dashboard panel already pads the page body. */
 .page-wrapper {
-	@apply px-8 lg:px-32 py-8;
+	@apply w-full;
 }
 
 .page-title {
