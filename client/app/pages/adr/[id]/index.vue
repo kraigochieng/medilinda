@@ -85,6 +85,9 @@
 			</div>
 			<UTable :data="reviewRows" :columns="reviewColumns" />
 		</template>
+		<template #history>
+			<ADRHistory :adr-id="id" />
+		</template>
 	</UTabs>
 </template>
 
@@ -115,6 +118,11 @@ const tabs: TabsItem[] = [
 	{
 		label: "Review Details",
 		slot: "review",
+	},
+	{
+		label: "History",
+		slot: "history",
+		icon: "i-lucide-history",
 	},
 ];
 const {
