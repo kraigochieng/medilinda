@@ -23,5 +23,5 @@ export interface SMSMessageCountGetResponse {
 	patient_name: string;
 	sms_count: number;
 	created_at: string;
-	telephones: []
+	telephones: string[]
 }
