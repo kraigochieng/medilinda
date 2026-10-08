@@ -136,6 +136,7 @@ class FakeApiKeyHttp:
 
     calls = 0
     payload: dict = {}
+    last_headers: dict = {}
 
     def __init__(self, *args, **kwargs):
         pass
@@ -146,8 +147,9 @@ class FakeApiKeyHttp:
     async def __aexit__(self, *exc):
         return False
 
-    async def post(self, url, json):
+    async def post(self, url, json, headers):
         FakeApiKeyHttp.calls += 1
+        FakeApiKeyHttp.last_headers = headers
 
         class Response:
             @staticmethod
@@ -173,6 +175,9 @@ def test_valid_api_key_authenticates(raw_client, db, fake_api_key_http):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["id"] == "owner-1"
+    assert fake_api_key_http.last_headers == {
+        "x-internal-secret": settings.better_auth_internal_secret
+    }
 
 
 def test_invalid_api_key_is_rejected(raw_client, fake_api_key_http):

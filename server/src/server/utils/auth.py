@@ -75,8 +75,9 @@ async def verify_api_key(api_key: str) -> str:
     try:
         async with httpx.AsyncClient(timeout=5) as http:
             response = await http.post(
-                f"{settings.better_auth_url}/api/auth/api-key/verify",
+                f"{settings.better_auth_url}/api/auth/verify-api-key",
                 json={"key": api_key},
+                headers={"x-internal-secret": settings.better_auth_internal_secret},
             )
         result = response.json()
     except (httpx.HTTPError, ValueError):

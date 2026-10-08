@@ -21,6 +21,7 @@ class Settings(BaseSettings):
 
     better_auth_url: str
     better_auth_audience: str = "medilinda-api"
+    better_auth_internal_secret: str
 
     server_access_secret_key: str
     server_refresh_secret_key: str
