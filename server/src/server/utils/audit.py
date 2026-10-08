@@ -228,7 +228,7 @@ def _current_versions(conn, keys: list[tuple[str, str]]) -> dict[tuple[str, str]
 
 
 def _entry(
-    *, obj, spec, conn, actor, action, version, changes, snapshot, at=None
+    *, obj, spec, conn, actor, action, version, changes, snapshot, flush_id, at=None
 ) -> dict[str, Any]:
     counter = _counter.get()
     seq = 0
@@ -239,6 +239,7 @@ def _entry(
     return {
         "id": str(uuid.uuid4()),
         "group_id": _group.get() or str(uuid.uuid4()),
+        "flush_id": flush_id,
         "seq": seq,
         "entity_type": obj.__table__.name,
         "entity_id": obj.id,
@@ -255,7 +256,7 @@ def _entry(
     }
 
 
-def _baseline(obj, spec, conn, snapshot_before) -> dict[str, Any]:
+def _baseline(obj, spec, conn, snapshot_before, flush_id) -> dict[str, Any]:
     """Version 1 for a row that existed before auditing was switched on."""
     created = snapshot_before.get("created_at")
     at = datetime.datetime.fromisoformat(created) if created else None
@@ -268,6 +269,7 @@ def _baseline(obj, spec, conn, snapshot_before) -> dict[str, Any]:
         version=1,
         changes=None,
         snapshot=snapshot_before,
+        flush_id=flush_id,
         at=at,
     )
 
@@ -279,6 +281,7 @@ def _record(session: Session, items: list[tuple[Any, str]]) -> None:
         return
 
     conn = session.connection()
+    flush_id = session.info.get(_FLUSH_KEY) or str(uuid.uuid4())
     rows: list[dict[str, Any]] = []
     latest = _current_versions(
         conn, [(obj.__table__.name, obj.id) for obj, _ in items]
@@ -303,7 +306,7 @@ def _record(session: Session, items: list[tuple[Any, str]]) -> None:
             before = dict(snapshot)
             for change in changes or []:
                 before[change["field"]] = change["old"]
-            rows.append(_baseline(obj, spec, conn, before))
+            rows.append(_baseline(obj, spec, conn, before, flush_id))
             version = 2
 
         rows.append(
@@ -316,6 +319,7 @@ def _record(session: Session, items: list[tuple[Any, str]]) -> None:
                 version=version,
                 changes=changes,
                 snapshot=snapshot,
+                flush_id=flush_id,
             )
         )
 
@@ -329,7 +333,13 @@ def _delete_order(items):
     return sorted(items, key=lambda item: tables.get(item.__table__.name, 0), reverse=True)
 
 
+_FLUSH_KEY = "audit_flush_id"
+
+
 def _before_flush(session: Session, flush_context, instances) -> None:
+    # One id per flush: the delete (here) and the changes it cascades to (in
+    # after_flush) are written with the same id.
+    session.info[_FLUSH_KEY] = str(uuid.uuid4())
     if _actor.get() is None:
         return
     deleted = _delete_order([o for o in session.deleted if _spec_for(o)])
@@ -375,9 +385,9 @@ def model_for_table(table_name: str):
 def restore_deleted(session: Session, entity_type: str, entity_id: str):
     """Undo the delete of one row, and everything that was deleted with it.
 
-    A delete is logged as one group of rows (the row, its assessments, its
-    reviews...). Recreate them all from their snapshots, and put back any
-    field the same request changed on rows that still exist (for example an
+    A delete is logged as a set of rows written by one flush (the row, its
+    assessments, its reviews...). Recreate them all from their snapshots, and
+    put back any field the same flush changed on rows that still exist (for example an
     SMS message that was unlinked from the ADR). The caller commits.
     """
     last = (
@@ -395,7 +405,7 @@ def restore_deleted(session: Session, entity_type: str, entity_id: str):
 
     group = (
         session.query(AuditLogModel)
-        .filter_by(group_id=last.group_id)
+        .filter_by(flush_id=last.flush_id)
         .order_by(AuditLogModel.seq)
         .all()
     )

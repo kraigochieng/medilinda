@@ -19,6 +19,9 @@ class AuditLogModel(Base):
 
     # Every row written by one request shares a group id. `seq` keeps their order.
     group_id = Column(String, nullable=False)
+    # Rows written by one database flush (a delete and everything it cascades to)
+    # share a flush id. Restore uses it to undo exactly one delete.
+    flush_id = Column(String, nullable=False)
     seq = Column(Integer, nullable=False, default=0)
 
     entity_type = Column(String, nullable=False)  # table name, e.g. "adr"
@@ -44,5 +47,6 @@ class AuditLogModel(Base):
         Index("ix_audit_entity", "entity_type", "entity_id"),
         Index("ix_audit_root", "root_type", "root_id"),
         Index("ix_audit_group", "group_id"),
+        Index("ix_audit_flush", "flush_id"),
         Index("ix_audit_at", "at"),
     )

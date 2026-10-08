@@ -286,6 +286,23 @@ class TestDeleteAndRestore:
         ]
         assert versions == [(1, "create"), (2, "delete"), (3, "restore")]
 
+    def test_restore_undoes_only_the_delete_not_earlier_edits_in_the_same_request(
+        self, db, service, adr_data, adr_with_history
+    ):
+        """Everything here runs under one bound actor, so it is one audit group."""
+        service.update_and_predict(
+            adr_with_history, adr_data.model_copy(update={"comments": "Edited"})
+        )
+        service.delete_by_id(adr_with_history)
+
+        service.restore(adr_with_history)
+
+        assert db.get(ADRModel, adr_with_history).comments == "Edited"
+        actions = [
+            r.action for r in audit(db, entity_type="adr", entity_id=adr_with_history)
+        ]
+        assert actions == ["create", "update", "delete", "restore"]  # no extra update
+
     def test_restoring_something_that_was_never_deleted_is_a_404(self, service):
         with pytest.raises(ResourceNotFoundError):
             service.restore("never-existed")
