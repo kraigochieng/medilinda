@@ -199,7 +199,7 @@ const summary = computed(() => (props.data ? summaryOf(props.data) : []));
 const DOT: Record<TimelineKind, string> = {
 	start: "bg-primary",
 	onset: "bg-error",
-	stop: "bg-neutral",
+	stop: "bg-neutral-400",
 };
 
 const sections = [
