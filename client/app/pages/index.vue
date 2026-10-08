@@ -38,17 +38,25 @@
 			</NuxtLink>
 		</div>
 
-		<p class="text-sm text-muted">
-			New here? Read <ULink to="/about" class="text-primary">how the assessment works</ULink>.
-			MediLinda was built with
-			<ULink to="https://www.intellisoftkenya.com" target="_blank" class="text-primary">
-				IntelliSOFT Consulting Ltd
-			</ULink>
-			and the
-			<ULink to="https://web.pharmacyboardkenya.org/" target="_blank" class="text-primary">
-				Pharmacy and Poisons Board
-			</ULink>.
-		</p>
+		<div class="space-y-1 text-sm text-muted">
+			<p>
+				New here? Read the
+				<ULink to="/about" class="text-primary">story of a case, from report to review</ULink>.
+			</p>
+			<p>
+				The ADR data comes from the
+				<ULink to="https://web.pharmacyboardkenya.org/" target="_blank" class="text-primary">
+					Pharmacy and Poisons Board
+				</ULink>.
+				The Board did not work on MediLinda.
+			</p>
+			<p>
+				Thanks to
+				<ULink to="https://www.intellisoftkenya.com" target="_blank" class="text-primary">
+					IntelliSOFT Consulting Ltd
+				</ULink>.
+			</p>
+		</div>
 	</div>
 </template>
 
