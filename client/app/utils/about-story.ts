@@ -123,7 +123,7 @@ export const STORY: StoryStep[] = [
 		icon: "i-lucide-message-square-text",
 		title: "The health facility hears back",
 		story:
-			"After review, MediLinda can send text messages to the phone numbers of the facility that reported the case. A certain, approved prediction becomes an individual alert. A report the model could not classify becomes a request for more information. The facility can then follow up with the patient.",
+			"After review, MediLinda can send text messages to the phone numbers of the facility that reported the case. A certain, approved prediction becomes an individual alert. A report the model could not classify becomes a request for more information. MediLinda uses these messages to follow up with the facility.",
 		definitions: [],
 		where: [
 			{

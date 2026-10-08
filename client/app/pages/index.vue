@@ -54,6 +54,10 @@
 				Thanks to
 				<ULink to="https://www.intellisoftkenya.com" target="_blank" class="text-primary">
 					IntelliSOFT Consulting Ltd
+				</ULink>
+				and the
+				<ULink to="https://computerscience.uonbi.ac.ke/" target="_blank" class="text-primary">
+					Department of Computer Science, University of Nairobi
 				</ULink>.
 			</p>
 		</div>
