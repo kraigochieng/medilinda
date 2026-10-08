@@ -25,6 +25,7 @@ dependencies = [
     "scispacy>=0.5.5",
     "seaborn>=0.13.2",
     "shap>=0.48.0",
+    "sqlalchemy-libsql>=0.2.0",
 ]
 
 [tool.setuptools.packages.find]
