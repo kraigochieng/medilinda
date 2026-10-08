@@ -100,7 +100,6 @@ const KNOWN_BROKEN: Record<string, string[]> = {
 		"Tabs", "TabsContent", "TabsList", "TabsTrigger",
 	],
 	"app/pages/about.vue": ["Card", "CardContent", "CardHeader", "CardTitle"],
-	"app/pages/adr/[id]/review.vue": ["Tabs", "TabsContent", "TabsList", "TabsTrigger"],
 };
 
 describe("components used by the pages", () => {
