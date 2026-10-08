@@ -69,11 +69,11 @@
 						/>
 					</div> -->
 
-					<GraphsReviewedVSUnreviewed />
-					<GraphsCausalityDistribution />
-					<GraphsApprovalStatus />
-					<GraphsTopInstitutions />
-					<!-- <GraphsAdrsWeekly /> -->
+					<GraphReviewedVSUnreviewed />
+					<GraphCausalityDistribution />
+					<GraphApprovalStatus />
+					<GraphTopInstitutions />
+					<!-- <GraphAdrsWeekly /> -->
 				</div>
 			</template>
 			<template #adr>
