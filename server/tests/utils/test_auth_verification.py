@@ -1,6 +1,7 @@
 import time
 
 import jwt
+from jwt.exceptions import PyJWKClientError
 import pytest
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from fastapi import status
@@ -197,3 +198,151 @@ def test_valid_api_key_result_is_cached(raw_client, db, fake_api_key_http):
     raw_client.get("/api/v1/users/me", headers={"x-api-key": "key-1"})
 
     assert fake_api_key_http.calls == 1
+
+
+def test_malformed_token_is_rejected(raw_client):
+    response = raw_client.get("/api/v1/users/me", headers=bearer("not-a-jwt"))
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_token_without_subject_is_rejected(raw_client, private_key):
+    claims = {
+        "aud": settings.better_auth_audience,
+        "iss": settings.better_auth_url,
+        "exp": int(time.time()) + 300,
+    }
+    token = jwt.encode(claims, private_key, algorithm="EdDSA")
+
+    response = raw_client.get("/api/v1/users/me", headers=bearer(token))
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_wrong_issuer_is_rejected(raw_client, private_key):
+    token = make_token(private_key, iss="https://evil.example.com")
+    response = raw_client.get("/api/v1/users/me", headers=bearer(token))
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_unreachable_jwks_is_rejected(raw_client, monkeypatch):
+    class BrokenJwksClient:
+        def get_signing_key_from_jwt(self, token):
+            raise PyJWKClientError("jwks unreachable")
+
+    monkeypatch.setattr(auth_utils, "get_jwks_client", lambda: BrokenJwksClient())
+
+    response = raw_client.get("/api/v1/users/me", headers=bearer("a.b.c"))
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_bearer_token_wins_over_api_key(raw_client, db, private_key, fake_api_key_http):
+    db.add(UserModel(id="ba-user-1", username="kraig", password="x"))
+    db.commit()
+    fake_api_key_http.payload = {"valid": True, "key": {"referenceId": "someone-else"}}
+
+    response = raw_client.get(
+        "/api/v1/users/me",
+        headers={**bearer(make_token(private_key)), "x-api-key": "key-1"},
+    )
+
+    assert response.json()["id"] == "ba-user-1"
+    assert fake_api_key_http.calls == 0
+
+
+def test_api_key_cache_expires(raw_client, db, fake_api_key_http, monkeypatch):
+    db.add(UserModel(id="owner-1", username="owner", password="x"))
+    db.commit()
+    fake_api_key_http.payload = {"valid": True, "key": {"referenceId": "owner-1"}}
+    clock = {"now": 1000.0}
+    monkeypatch.setattr(auth_utils.time, "monotonic", lambda: clock["now"])
+
+    raw_client.get("/api/v1/users/me", headers={"x-api-key": "key-1"})
+    clock["now"] += auth_utils._API_KEY_CACHE_TTL_SECONDS - 1
+    raw_client.get("/api/v1/users/me", headers={"x-api-key": "key-1"})
+    assert fake_api_key_http.calls == 1
+
+    clock["now"] += 2  # past the 60 second window
+    raw_client.get("/api/v1/users/me", headers={"x-api-key": "key-1"})
+    assert fake_api_key_http.calls == 2
+
+
+def test_revoked_key_is_rejected_after_cache_expires(
+    raw_client, db, fake_api_key_http, monkeypatch
+):
+    db.add(UserModel(id="owner-1", username="owner", password="x"))
+    db.commit()
+    clock = {"now": 1000.0}
+    monkeypatch.setattr(auth_utils.time, "monotonic", lambda: clock["now"])
+
+    fake_api_key_http.payload = {"valid": True, "key": {"referenceId": "owner-1"}}
+    assert raw_client.get("/api/v1/users/me", headers={"x-api-key": "k"}).status_code == 200
+
+    fake_api_key_http.payload = {"valid": False, "key": None, "error": {}}
+    clock["now"] += auth_utils._API_KEY_CACHE_TTL_SECONDS + 1
+    assert raw_client.get("/api/v1/users/me", headers={"x-api-key": "k"}).status_code == 401
+
+
+def test_invalid_api_key_is_not_cached(raw_client, fake_api_key_http):
+    fake_api_key_http.payload = {"valid": False, "key": None, "error": {}}
+
+    raw_client.get("/api/v1/users/me", headers={"x-api-key": "bad"})
+    raw_client.get("/api/v1/users/me", headers={"x-api-key": "bad"})
+
+    assert fake_api_key_http.calls == 2
+
+
+def test_auth_service_outage_returns_503(raw_client, monkeypatch):
+    class DownHttp:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *exc):
+            return False
+
+        async def post(self, url, json, headers):
+            raise auth_utils.httpx.ConnectError("down")
+
+    monkeypatch.setattr(auth_utils.httpx, "AsyncClient", DownHttp)
+
+    response = raw_client.get("/api/v1/users/me", headers={"x-api-key": "k"})
+
+    assert response.status_code == status.HTTP_503_SERVICE_UNAVAILABLE
+
+
+def test_non_json_reply_from_auth_service_returns_503(raw_client, monkeypatch):
+    class HtmlHttp:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *exc):
+            return False
+
+        async def post(self, url, json, headers):
+            class Response:
+                @staticmethod
+                def json():
+                    raise ValueError("not json")
+
+            return Response()
+
+    monkeypatch.setattr(auth_utils.httpx, "AsyncClient", HtmlHttp)
+
+    response = raw_client.get("/api/v1/users/me", headers={"x-api-key": "k"})
+
+    assert response.status_code == status.HTTP_503_SERVICE_UNAVAILABLE
+
+
+def test_new_users_get_distinct_placeholder_passwords(raw_client, db, private_key):
+    for sub, name in [("ba-1", "one"), ("ba-2", "two")]:
+        token = make_token(private_key, sub=sub, username=name)
+        assert raw_client.get("/api/v1/users/me", headers=bearer(token)).status_code == 200
+
+    passwords = [u.password for u in db.query(UserModel).all()]
+    assert len(set(passwords)) == 2
