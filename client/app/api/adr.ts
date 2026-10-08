@@ -76,6 +76,7 @@ export async function fetchAdrsWithCausalityAndReviewCount(params: {
 	query?: string;
 	causality_level?: string[];
 	review_status?: string[];
+	my_review?: string[];
 	sort_by?: string;
 	sort_order?: string;
 }): Promise<

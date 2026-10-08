@@ -1,4 +1,5 @@
 // Pure helpers for the ADR table, kept apart from the page so they can be tested.
+import { tabAddress, type AdrTab } from "~/utils/adr-tabs";
 import { CAUSALITY_LEVELS } from "~/utils/causality-levels";
 
 export type ReviewState =
@@ -47,6 +48,12 @@ export const REVIEW_STATUS_OPTIONS = [
 	{ label: "Not approved", value: "not_approved" },
 ];
 
+// The reviews of the signed-in user. "Needs your review" comes first: it is what a reviewer wants.
+export const MY_REVIEW_OPTIONS = [
+	{ label: "Needs your review", value: "not_reviewed" },
+	{ label: "Reviewed by you", value: "reviewed" },
+];
+
 export type SortKey = "patient_name" | "causality_level" | "created_by" | "created_at";
 export type SortOrder = "asc" | "desc";
 
@@ -57,6 +64,7 @@ export interface AdrListState {
 	query: string;
 	causality: string[]; // empty: any level
 	review: string[]; // empty: any status
+	mine: string[]; // empty: no matter who reviewed it
 	sortBy: SortKey;
 	sortOrder: SortOrder;
 }
@@ -66,6 +74,7 @@ export const DEFAULT_LIST_STATE: AdrListState = {
 	query: "",
 	causality: [],
 	review: [],
+	mine: [],
 	sortBy: "created_at",
 	sortOrder: "desc",
 };
@@ -98,6 +107,7 @@ export function parseListQuery(query: Record<string, unknown>): AdrListState {
 		query: typeof search === "string" ? search : "",
 		causality: validOptions(CAUSALITY_OPTIONS, query.causality),
 		review: validOptions(REVIEW_STATUS_OPTIONS, query.review),
+		mine: validOptions(MY_REVIEW_OPTIONS, query.mine),
 		sortBy: SORT_KEYS.includes(sort as SortKey) ? (sort as SortKey) : DEFAULT_LIST_STATE.sortBy,
 		sortOrder: order === "asc" || order === "desc" ? order : DEFAULT_LIST_STATE.sortOrder,
 	};
@@ -110,6 +120,7 @@ export function serializeListQuery(state: AdrListState): Record<string, string> 
 	if (state.query.trim()) out.q = state.query.trim();
 	if (state.causality.length) out.causality = state.causality.join(",");
 	if (state.review.length) out.review = state.review.join(",");
+	if (state.mine.length) out.mine = state.mine.join(",");
 	if (state.sortBy !== DEFAULT_LIST_STATE.sortBy) out.sort = state.sortBy;
 	if (state.sortOrder !== DEFAULT_LIST_STATE.sortOrder) out.order = state.sortOrder;
 	return out;
@@ -117,7 +128,7 @@ export function serializeListQuery(state: AdrListState): Record<string, string> 
 
 // A sort alone is not a filter: it hides nothing.
 export function hasActiveFilters(state: AdrListState): boolean {
-	return Boolean(state.query.trim()) || state.causality.length > 0 || state.review.length > 0;
+	return Boolean(state.query.trim()) || state.causality.length > 0 || state.review.length > 0 || state.mine.length > 0;
 }
 
 // The parameters the server's list endpoint understands.
@@ -128,6 +139,7 @@ export function buildListParams(state: AdrListState, size: number) {
 		query: state.query.trim() || undefined,
 		causality_level: state.causality.length ? state.causality : undefined,
 		review_status: state.review.length ? state.review : undefined,
+		my_review: state.mine.length ? state.mine : undefined,
 		sort_by: state.sortBy,
 		sort_order: state.sortOrder,
 	};
@@ -159,4 +171,67 @@ export function formatDateTime(iso: string, timeZone?: string): string {
 		timeStyle: "short",
 		timeZone,
 	}).format(parseServerDate(iso));
+}
+
+
+// --- The tag and the menu of a row ----------------------------------------------------
+
+export interface MyReviewRow {
+	causality_assessment_level_value?: string | null;
+	reviewed_by_me?: boolean;
+}
+
+// Did the signed-in user review the newest prediction? A report with no prediction has nothing to review.
+export function myReviewTag(
+	row: MyReviewRow,
+): { label: string; color: "warning" | "success"; icon: string } | null {
+	if (!row.causality_assessment_level_value) return null;
+	return row.reviewed_by_me
+		? { label: "Reviewed by you", color: "success", icon: "i-lucide-check" }
+		: { label: "Needs your review", color: "warning", icon: "i-lucide-clock" };
+}
+
+export interface MenuItem {
+	label: string;
+	icon: string;
+	to?: string;
+	id?: string;
+	color?: "error";
+}
+
+// The menu of a row: a view of each tab, the review action, then edit and delete.
+// The prediction and the review need a prediction, so a report without one has only the others.
+export function rowMenu(row: MyReviewRow & { adr_id: string }): MenuItem[][] {
+	const hasPrediction = !!row.causality_assessment_level_value;
+	const to = (tab: AdrTab) => tabAddress(row.adr_id, tab);
+
+	const views: MenuItem[] = [
+		{ label: "View details", icon: "i-lucide-file-text", to: to("details") },
+		...(hasPrediction
+			? [
+					{ label: "View prediction", icon: "i-lucide-brain-circuit", to: to("prediction") },
+					{ label: "View review", icon: "i-lucide-clipboard-check", to: to("review") },
+				]
+			: []),
+		{ label: "View history", icon: "i-lucide-history", to: to("history") },
+	];
+
+	const review: MenuItem[] = hasPrediction
+		? [
+				{
+					label: row.reviewed_by_me ? "Edit review" : "Add review",
+					icon: row.reviewed_by_me ? "i-lucide-pencil-line" : "i-lucide-message-square-plus",
+					to: `/adr/${row.adr_id}/review`,
+				},
+			]
+		: [];
+
+	return [
+		views,
+		...(review.length ? [review] : []),
+		[
+			{ label: "Edit ADR", icon: "i-lucide-pencil", to: `/adr/${row.adr_id}/edit` },
+			{ label: "Delete", icon: "i-lucide-trash-2", id: "delete", color: "error" },
+		],
+	];
 }

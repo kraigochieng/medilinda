@@ -56,6 +56,16 @@
 				aria-label="Filter by review status"
 				class="w-56"
 			/>
+			<USelectMenu
+				v-model="state.mine"
+				:items="MY_REVIEW_OPTIONS"
+				value-key="value"
+				multiple
+				:search-input="false"
+				placeholder="Your review"
+				aria-label="Filter by your review"
+				class="w-56"
+			/>
 			<UButton
 				v-if="filtersActive"
 				color="neutral"
@@ -104,6 +114,18 @@
 						{{ row.original.unapproved_reviews }} not
 					</span>
 				</div>
+			</template>
+
+			<template #mine-cell="{ row }">
+				<UBadge
+					v-if="myReviewTag(row.original)"
+					:color="myReviewTag(row.original)!.color"
+					:variant="myReviewTag(row.original)!.color === 'warning' ? 'solid' : 'subtle'"
+					:icon="myReviewTag(row.original)!.icon"
+				>
+					{{ myReviewTag(row.original)!.label }}
+				</UBadge>
+				<span v-else class="text-muted">—</span>
 			</template>
 
 			<template #created_at-cell="{ row }">
@@ -194,15 +216,18 @@ import type { TableColumn, TableRow } from "@nuxt/ui";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import {
 	CAUSALITY_OPTIONS,
+	MY_REVIEW_OPTIONS,
 	REVIEW_STATE_BADGE,
 	REVIEW_STATUS_OPTIONS,
 	type SortKey,
 	buildListParams,
 	formatDateTime,
+	myReviewTag,
 	hasActiveFilters,
 	nextSort,
 	parseListQuery,
 	reviewState,
+	rowMenu,
 	serializeListQuery,
 } from "~/utils/adr-table";
 
@@ -219,16 +244,19 @@ const state = reactive({ ...parseListQuery(route.query) });
 const debouncedQuery = refDebounced(toRef(state, "query"), 400);
 const applied = computed(() => ({ ...state, query: debouncedQuery.value }));
 
-watch([debouncedQuery, () => state.causality, () => state.review, () => state.sortBy, () => state.sortOrder], () => {
-	state.page = 1;
-});
+watch(
+	[debouncedQuery, () => state.causality, () => state.review, () => state.mine, () => state.sortBy, () => state.sortOrder],
+	() => {
+		state.page = 1;
+	},
+);
 watch(applied, (value) => router.replace({ query: serializeListQuery(value) }));
 
 const filtersActive = computed(() => hasActiveFilters(applied.value));
 
 function clearFilters() {
 	// Clearing the filters keeps the sort: it hides nothing.
-	Object.assign(state, { query: "", causality: [], review: [], page: 1 });
+	Object.assign(state, { query: "", causality: [], review: [], mine: [], page: 1 });
 }
 
 const { data, isFetching, isError, error, refetch } = useQuery({
@@ -279,6 +307,7 @@ const columns = computed<TableColumn<Row>[]>(() => [
 		header: () => sortableHeader("Causality level", "causality_level"),
 	},
 	{ id: "review", header: "Review" },
+	{ id: "mine", header: "Your review" },
 	{ accessorKey: "created_by", header: () => sortableHeader("Created by", "created_by") },
 	{ accessorKey: "created_at", header: () => sortableHeader("Created", "created_at") },
 	{ id: "actions" },
@@ -288,21 +317,11 @@ function onSelect(row: TableRow<Row>) {
 	navigateTo(`/adr/${row.original.adr_id}`);
 }
 
+// The menu comes from a tested rule. The delete item opens the confirm dialog.
 function rowItems(adr: Row) {
-	return [
-		[
-			{ label: "View", icon: "i-lucide-eye", to: `/adr/${adr.adr_id}` },
-			{ label: "Edit", icon: "i-lucide-pencil", to: `/adr/${adr.adr_id}/edit` },
-		],
-		[
-			{
-				label: "Delete",
-				icon: "i-lucide-trash-2",
-				color: "error" as const,
-				onSelect: () => (toDelete.value = adr),
-			},
-		],
-	];
+	return rowMenu(adr).map((group) =>
+		group.map(({ id, ...item }) => (id === "delete" ? { ...item, onSelect: () => (toDelete.value = adr) } : item)),
+	);
 }
 
 // ---- Delete, with undo -------------------------------------------------
