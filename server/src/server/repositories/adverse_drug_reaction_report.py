@@ -1,12 +1,18 @@
 from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
-from server.basemodels.adverse_drug_reaction_report import ADRPostRequest
+from server.basemodels.adverse_drug_reaction_report import (
+    ADRPostRequest,
+    ReviewStatusFilter,
+)
 from server.exceptions import ResourceNotFoundError
 from server.models.adverse_drug_reaction_report import ADRModel
-from server.models.causality_assessment_level import CausalityAssessmentLevelModel
+from server.models.causality_assessment_level import (
+    CausalityAssessmentLevelEnum,
+    CausalityAssessmentLevelModel,
+)
 from server.models.review import ReviewModel
 from server.models.user import UserModel
-from sqlalchemy import and_, case, desc, false, func, select, true
+from sqlalchemy import and_, case, desc, false, func, or_, select, true
 from sqlalchemy.orm import Session
 
 
@@ -40,11 +46,16 @@ class AdverseDrugReactionReportRepository:
         return model
 
     def get_paginated_adrs_with_reviews(
-        self, pagination_params: Params, query: str | None
+        self,
+        pagination_params: Params,
+        query: str | None,
+        causality_level: CausalityAssessmentLevelEnum | None = None,
+        review_status: ReviewStatusFilter | None = None,
     ) -> Page[ADRModel]:
         """
         Gets a paginated list of ADRs with their newest causality level
-        and review counts.
+        and review counts. Search and filters run in the database, so the
+        total and the pages stay correct.
         """
         search_term = f"%{query}%" if query else None
 
@@ -62,6 +73,9 @@ class AdverseDrugReactionReportRepository:
             .label("rn"),
         ).cte("ranked_causality")
 
+        approved_count = func.count(case((ReviewModel.approved == true(), 1)))
+        unapproved_count = func.count(case((ReviewModel.approved == false(), 1)))
+
         main_stmt = (
             select(
                 ADRModel.id.label("adr_id"),
@@ -69,12 +83,8 @@ class AdverseDrugReactionReportRepository:
                 (UserModel.first_name + " " + UserModel.last_name).label("created_by"),
                 ADRModel.created_at,
                 ranked_causality_cte.c.causality_assessment_level_value,
-                func.count(case((ReviewModel.approved == true(), 1))).label(
-                    "approved_reviews"
-                ),
-                func.count(case((ReviewModel.approved == false(), 1))).label(
-                    "unapproved_reviews"
-                ),
+                approved_count.label("approved_reviews"),
+                unapproved_count.label("unapproved_reviews"),
             )
             .select_from(ADRModel)
             .join(UserModel, ADRModel.user_id == UserModel.id)
@@ -103,7 +113,33 @@ class AdverseDrugReactionReportRepository:
 
         if search_term:
             main_stmt = main_stmt.where(
-                func.lower(ADRModel.patient_name).like(func.lower(search_term))
+                or_(
+                    ADRModel.patient_name.ilike(search_term),
+                    ADRModel.patient_address.ilike(search_term),
+                    ADRModel.ward_or_clinic.ilike(search_term),
+                    ADRModel.inpatient_or_outpatient_number.ilike(search_term),
+                )
+            )
+
+        if causality_level is not None:
+            main_stmt = main_stmt.where(
+                ranked_causality_cte.c.causality_assessment_level_value
+                == causality_level
+            )
+
+        has_assessment = ranked_causality_cte.c.id.is_not(None)
+        if review_status == ReviewStatusFilter.needs_review:
+            main_stmt = main_stmt.having(
+                and_(has_assessment, approved_count + unapproved_count == 0)
+            )
+        elif review_status == ReviewStatusFilter.approved:
+            main_stmt = main_stmt.having(approved_count > unapproved_count)
+        elif review_status == ReviewStatusFilter.not_approved:
+            main_stmt = main_stmt.having(
+                and_(
+                    approved_count + unapproved_count > 0,
+                    approved_count <= unapproved_count,
+                )
             )
 
         return paginate(self.db, main_stmt, params=pagination_params)

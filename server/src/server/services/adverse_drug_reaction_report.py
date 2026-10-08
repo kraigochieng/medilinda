@@ -16,6 +16,7 @@ from server.basemodels.adverse_drug_reaction_report import (
     MLModelInput,
     RechallengeEnum,
     MLModelOutput,
+    ReviewStatusFilter,
 )
 from server.basemodels.causality_asssessment_level import (
     CausalityAssessmentLevelPostRequest,
@@ -59,13 +60,20 @@ class AdverseDrugReactionReportService:
         return ADRGetResponse.model_validate(model)
 
     def get_adrs_with_causality_and_review_count(
-        self, pagination_params: Params, query: str | None
+        self,
+        pagination_params: Params,
+        query: str | None,
+        causality_level: CausalityAssessmentLevelEnum | None = None,
+        review_status: ReviewStatusFilter | None = None,
     ) -> Page[ADRWithReviewsResponse]:
         """
         Pass-through method to get paginated ADRs with review counts.
         """
         return self.repository.get_paginated_adrs_with_reviews(
-            pagination_params=pagination_params, query=query
+            pagination_params=pagination_params,
+            query=query,
+            causality_level=causality_level,
+            review_status=review_status,
         )
 
     def create(self, data: ADRPostRequest) -> ADRGetResponse:

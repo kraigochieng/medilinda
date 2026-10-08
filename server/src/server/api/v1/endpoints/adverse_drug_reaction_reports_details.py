@@ -7,9 +7,13 @@ from shap import KernelExplainer
 from sklearn.preprocessing import OrdinalEncoder
 from sqlalchemy.orm import Session
 
-from server.basemodels.adverse_drug_reaction_report import ADRWithReviewsResponse
+from server.basemodels.adverse_drug_reaction_report import (
+    ADRWithReviewsResponse,
+    ReviewStatusFilter,
+)
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
+from server.models.causality_assessment_level import CausalityAssessmentLevelEnum
 from server.services.adverse_drug_reaction_report import (
     AdverseDrugReactionReportService,
 )
@@ -38,11 +42,22 @@ def get_adverse_drug_reaction_report_service(
 def get_adrs_with_causality_and_review_count(
     current_user: Annotated[UserDetailsBaseModel, Depends(get_current_active_user)],
     pagination_params: Params = Depends(),
-    query: str = Query("", description="Search query (optional)"),
+    query: str = Query(
+        "", description="Search patient name, address, ward or inpatient number"
+    ),
+    causality_level: CausalityAssessmentLevelEnum | None = Query(
+        None, description="Only ADRs whose newest assessment has this level"
+    ),
+    review_status: ReviewStatusFilter | None = Query(
+        None, description="needs_review, approved or not_approved"
+    ),
     service: AdverseDrugReactionReportService = Depends(
         get_adverse_drug_reaction_report_service
     ),
 ):
     return service.get_adrs_with_causality_and_review_count(
-        pagination_params=pagination_params, query=query
+        pagination_params=pagination_params,
+        query=query,
+        causality_level=causality_level,
+        review_status=review_status,
     )
