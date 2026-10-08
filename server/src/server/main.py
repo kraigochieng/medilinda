@@ -12,7 +12,6 @@ from server.api.v1.endpoints import (
     adverse_drug_reaction_reports_details as adverse_drug_reaction_report_details_v1,
 )
 from server.api.v1.endpoints import alerts as alerts_v1
-from server.api.v1.endpoints import auth as auth_v1
 from server.api.v1.endpoints import (
     causality_assessment_levels as causality_assessment_level_v1,
 )
@@ -50,7 +49,6 @@ add_pagination(app)
 
 # Routers
 app.include_router(alerts_v1.router)
-app.include_router(auth_v1.router)
 app.include_router(adverse_drug_reaction_report_v1.router)
 app.include_router(adverse_drug_reaction_report_details_v1.router)
 app.include_router(causality_assessment_level_v1.router)

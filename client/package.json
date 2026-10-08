@@ -10,7 +10,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@better-auth/api-key": "^1.7.7",
     "@internationalized/date": "^3.7.0",
+    "@libsql/client": "^0.18.0",
+    "@libsql/kysely-libsql": "^0.4.1",
     "@nuxt/icon": "^1.10.3",
     "@nuxt/ui": "^4.0.1",
     "@nuxtjs/color-mode": "^3.5.2",
@@ -23,6 +26,8 @@
     "@vueuse/core": "^12.8.2",
     "@vueuse/nuxt": "^13.1.0",
     "apexcharts": "^4.7.0",
+    "bcryptjs": "^3.0.3",
+    "better-auth": "^1.7.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "humps": "^2.0.1",

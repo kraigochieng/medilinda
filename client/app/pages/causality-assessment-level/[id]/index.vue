@@ -112,7 +112,6 @@
 // const id = route.params.id as string;
 
 // // Fetch ADR Data
-// const authStore = useAuthStore();
 
 // const causalityAssessmentLevelData =
 // 	ref<CausalityAssessmentLevelWithReviewCountGetResponseInterface | null>(

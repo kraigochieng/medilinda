@@ -19,13 +19,9 @@ class Settings(BaseSettings):
     africas_talking_username: str
     africas_talking_api_key: str
 
-    server_access_secret_key: str
-    server_refresh_secret_key: str
-    server_access_algorithm: str
-    server_refresh_algorithm: str
-    server_access_token_expire_minutes: int
-    server_refresh_token_expire_days: int
-
+    better_auth_url: str
+    better_auth_audience: str = "medilinda-api"
+    better_auth_internal_secret: str
 
     model_config = SettingsConfigDict(env_file=find_dotenv(), extra="allow")
 

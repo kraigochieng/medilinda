@@ -72,15 +72,15 @@
 </template>
 
 <script setup lang="ts">
-import type { UserDetails } from "@/types/user";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { z } from "zod";
+import { authClient } from "~/lib/auth-client";
 
 const signupValidationSchema = z.object({
-	username: z.string(),
-	firstName: z.string(),
-	lastName: z.string(),
-	password: z.string(),
+	username: z.string().min(3, "Username must be at least 3 characters"),
+	firstName: z.string().min(1, "First name is required"),
+	lastName: z.string().min(1, "Last name is required"),
+	password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 type signupTypeValidationSchema = z.infer<typeof signupValidationSchema>;
@@ -96,40 +96,30 @@ const isSubmitting = ref(false);
 const apiError = ref<string | null>(null);
 
 async function onSubmit(event: FormSubmitEvent<signupTypeValidationSchema>) {
-	// Reset previous errors and set loading state
 	apiError.value = null;
 	isSubmitting.value = true;
 
-	try {
-		// Use Nuxt's built-in $fetch to make the API call.
-		// The body is URL-encoded, which is common for OAuth2 login endpoints.
-		const response = await $fetch<UserDetails>(
-			`${useRuntimeConfig().public.serverApi}/api/v1/auth/token`,
-			{
-				method: "POST",
-				body: {
-					user_name: event.data.username,
-					password: event.data.password,
-					first_name: event.data.firstName,
-					last_name: event.data.lastName,
-				},
-			}
-		);
+	const { username, password, firstName, lastName } = event.data;
 
-		console.log("Signup successful:", response);
+	// Better Auth requires an email. Users log in with their username,
+	// so a placeholder address is stored.
+	const { error } = await authClient.signUp.email({
+		email: `${username.toLowerCase()}@users.medilinda.local`,
+		name: `${firstName} ${lastName}`,
+		password,
+		username,
+		firstName,
+		lastName,
+	} as Parameters<typeof authClient.signUp.email>[0]);
 
-		// On success, redirect the user to their dashboard.
-		await navigateTo("/auth/login");
-	} catch (error: any) {
-		// If the API call fails, extract the error message and display it.
-		// FastAPI often puts the error details in `error.data.detail`.
-		apiError.value =
-			error.data?.detail ||
-			"An unexpected error occurred. Please try again.";
-	} finally {
-		// Always reset the loading state, whether the call succeeds or fails.
-		isSubmitting.value = false;
+	isSubmitting.value = false;
+
+	if (error) {
+		apiError.value = error.message || "Signup failed. Please try again.";
+		return;
 	}
+
+	await navigateTo("/adr");
 }
 
 definePageMeta({

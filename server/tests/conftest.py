@@ -1,3 +1,8 @@
+import os
+
+os.environ.setdefault("BETTER_AUTH_URL", "http://localhost:3000")
+os.environ.setdefault("BETTER_AUTH_INTERNAL_SECRET", "test-internal-secret")
+
 from contextlib import asynccontextmanager
 
 import pytest

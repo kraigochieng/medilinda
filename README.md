@@ -133,7 +133,7 @@ Copy `.env.example` to `.env` and fill in required values for both `client/` and
 
 ```sh
 cd client
-npm install
+npm install --legacy-peer-deps
 ```
 
 **Backend:**
@@ -143,7 +143,30 @@ cd ../server
 uv pip install --system -r pyproject.toml
 ```
 
-#### 4. Run the Application
+#### 4. Set up authentication
+
+Authentication uses [Better Auth](https://www.better-auth.com), which runs inside the Nuxt app. FastAPI only verifies the tokens.
+
+1. Set the auth variables from `.env.example` (`BETTER_AUTH_*`, `INTERNAL_API_SECRET`, `TURSO_*`).
+   `INTERNAL_API_SECRET` (client) and `BETTER_AUTH_INTERNAL_SECRET` (server) must hold the same value.
+2. Create the auth tables:
+    ```sh
+    cd client
+    npx @better-auth/cli migrate --config server/utils/auth.ts
+    ```
+3. Optional: copy users from the old FastAPI database. This keeps user ids and passwords.
+    ```sh
+    node scripts/migrate-users.mjs --dry-run   # preview
+    node scripts/migrate-users.mjs
+    ```
+
+**API keys for scripts.** Sign in, open the avatar menu, choose **API keys**, and create a key. Then call the API directly:
+
+```sh
+curl -H "x-api-key: <your key>" http://localhost:8000/api/v1/users/me
+```
+
+#### 5. Run the Application
 
 **Development (separate terminals):**
 

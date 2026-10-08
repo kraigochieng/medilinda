@@ -90,8 +90,7 @@ const id = route.params.id as string;
 
 type ModeType = "create" | "update";
 const mode: ModeType = (route.query.mode as ModeType) || "create"; // If the mode is not set, then the default is create
-// Store
-const authStore = useAuthStore();
+const { $serverFetch } = useNuxtApp();
 
 const calData = ref<CausalityAssessmentLevelGetResponseInterface | null>(null);
 const calError = ref<unknown | null>(null);
@@ -109,14 +108,9 @@ onMounted(async () => {
 async function fetchADR() {
 	adrStatus.value = "pending";
 	try {
-		const data = await $fetch<ADRGetResponseInterface>(
-			`${useRuntimeConfig().public.serverApi}/adr/${id}`,
-			{
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${authStore.accessToken}`,
-				},
-			}
+		const data = await $serverFetch<ADRGetResponseInterface>(
+			`/adr/${id}`,
+			{ method: "GET" }
 		);
 
 		if (!data) throw new Error("No ADR data received");
@@ -132,16 +126,9 @@ async function fetchADR() {
 async function fetchCal() {
 	calStatus.value = "pending";
 	try {
-		const data = await $fetch<CausalityAssessmentLevelGetResponseInterface>(
-			`${
-				useRuntimeConfig().public.serverApi
-			}/specific_adr/${id}/causality_assessment_level`,
-			{
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${authStore.accessToken}`,
-				},
-			}
+		const data = await $serverFetch<CausalityAssessmentLevelGetResponseInterface>(
+			`/specific_adr/${id}/causality_assessment_level`,
+			{ method: "GET" }
 		);
 
 		if (!data) throw new Error("No causality data received");

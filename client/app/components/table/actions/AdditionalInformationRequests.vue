@@ -25,7 +25,6 @@
 
 // const router = useRouter();
 
-// const authStore = useAuthStore();
 
 // function handleViewADR() {
 // 	router.push(`/adr/${props.row.adr_id}`);
