@@ -55,6 +55,23 @@ def client(db):
     app.dependency_overrides.clear()
 
 
+@pytest.fixture(scope="function")
+def anon_client(db):
+    """A client with the real auth dependency (nothing overridden) and no lifespan."""
+
+    def override_get_db():
+        yield db
+
+    app.dependency_overrides[get_db] = override_get_db
+    app.router.lifespan_context = no_lifespan
+    add_pagination(app)
+
+    with TestClient(app) as c:
+        yield c
+
+    app.dependency_overrides.clear()
+
+
 @pytest.fixture
 def review_repository(db):
     return ReviewRepository(db)
