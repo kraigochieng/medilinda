@@ -18,9 +18,7 @@
 			<div class="flex justify-between items-center">
 				<p class="font-medium">Proposed Causality Assessment Level</p>
 				<template v-if="data?.proposed_causality_level">
-					<UBadge :class="proposedCalColor" size="md">
-						{{ capitalize(data.proposed_causality_level) }}
-					</UBadge>
+					<CausalityBadge :value="data.proposed_causality_level" />
 				</template>
 				<BlankBadge v-else />
 			</div>
@@ -98,7 +96,6 @@
 </template>
 
 <script setup lang="ts">
-import { capitalize } from "lodash-es";
 
 import type { CausalityAssessmentLevelEnum } from "@/types/adr";
 import type { ReviewGetResponse } from "@/types/review";
@@ -109,25 +106,6 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
-
-const proposedCalColor = computed(() => {
-	switch (props.data?.proposed_causality_level) {
-		case "certain":
-			return "bg-red-500 text-white";
-		case "likely":
-			return "bg-red-400";
-		case "possible":
-			return "bg-yellow-500";
-		case "unlikely":
-			return "bg-yellow-300";
-		case "unclassified":
-			return "bg-slate-500 text-white";
-		case "unclassifiable":
-			return "bg-slate-300";
-		default:
-			return "";
-	}
-});
 
 async function handleDelete() {
 	// const runtimeConfig = useRuntimeConfig();

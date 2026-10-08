@@ -76,13 +76,7 @@
 			@select="onSelect"
 		>
 			<template #causality_assessment_level_value-cell="{ row }">
-				<UBadge
-					v-if="row.original.causality_assessment_level_value"
-					:class="CAUSALITY_BADGE_CLASS[row.original.causality_assessment_level_value]"
-				>
-					{{ capitalize(row.original.causality_assessment_level_value) }}
-				</UBadge>
-				<span v-else class="text-muted">—</span>
+				<CausalityBadge :value="row.original.causality_assessment_level_value" />
 			</template>
 
 			<template #review-cell="{ row }">
@@ -190,9 +184,7 @@ import { deleteAdrById, fetchAdrsWithCausalityAndReviewCount, restoreAdrById } f
 import type { ADRWithCausalityLevelAndReviewCountInterface as Row } from "@/types/adr";
 import type { TableColumn, TableRow } from "@nuxt/ui";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { capitalize } from "lodash-es";
 import {
-	CAUSALITY_BADGE_CLASS,
 	CAUSALITY_OPTIONS,
 	DEFAULT_LIST_STATE,
 	REVIEW_STATE_BADGE,

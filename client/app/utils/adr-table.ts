@@ -1,4 +1,5 @@
 // Pure helpers for the ADR table, kept apart from the page so they can be tested.
+import { CAUSALITY_LEVELS } from "~/utils/causality-levels";
 
 export type ReviewState =
 	| "no_assessment"
@@ -35,25 +36,12 @@ export const REVIEW_STATE_BADGE: Record<
 	not_approved: { label: "Not approved", color: "error", icon: "i-lucide-x" },
 };
 
-export const CAUSALITY_BADGE_CLASS: Record<string, string> = {
-	certain: "bg-red-500 text-white",
-	likely: "bg-red-400 text-black",
-	possible: "bg-yellow-500 text-black",
-	unlikely: "bg-yellow-300 text-black",
-	unclassified: "bg-slate-500 text-white",
-	unclassifiable: "bg-slate-300 text-black",
-};
-
 export const ALL = "all";
 
+// Most certain first, the way people scan a list.
 export const CAUSALITY_OPTIONS = [
 	{ label: "All levels", value: ALL },
-	{ label: "Certain", value: "certain" },
-	{ label: "Likely", value: "likely" },
-	{ label: "Possible", value: "possible" },
-	{ label: "Unlikely", value: "unlikely" },
-	{ label: "Unclassified", value: "unclassified" },
-	{ label: "Unclassifiable", value: "unclassifiable" },
+	...[...CAUSALITY_LEVELS].reverse().map(({ label, value }) => ({ label, value })),
 ];
 
 export const REVIEW_STATUS_OPTIONS = [
