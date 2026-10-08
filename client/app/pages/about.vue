@@ -1,56 +1,77 @@
 <template>
-	<section class="mx-auto max-w-6xl px-4 py-8">
-		<div class="mb-10 text-center">
-			<h1 class="mb-4 text-3xl font-bold">ML-driven causality assessment with explainable predictions</h1>
+	<div class="mx-auto max-w-3xl space-y-10">
+		<header class="space-y-3 text-center">
+			<h1 class="text-3xl font-bold">From a suspected reaction to a safer patient</h1>
 			<p class="mx-auto max-w-2xl text-lg text-muted">
-				Understand drug safety with AI-powered causality assessments.
+				MediLinda helps health workers report harm from medicines, judge what caused it, and tell
+				the facility what to do next. Follow one case through the six steps.
 			</p>
+		</header>
+
+		<UTimeline :items="items" :default-value="0" size="xl" color="primary" class="px-2">
+			<template #date="{ item }">
+				<span class="font-medium text-primary">{{ item.date }}</span>
+			</template>
+
+			<template #description="{ item }">
+				<div class="space-y-4 pb-8">
+					<p>{{ steps[item.value as number]!.story }}</p>
+
+					<div v-if="steps[item.value as number]!.levels" class="space-y-2">
+						<p class="text-sm font-medium">The six levels. Point at one to read what it means.</p>
+						<div class="flex flex-wrap gap-2">
+							<CausalityTooltip v-for="level in steps[item.value as number]!.levels" :key="level" :value="level">
+								<CausalityBadge :value="level" />
+							</CausalityTooltip>
+						</div>
+					</div>
+
+					<dl v-if="steps[item.value as number]!.definitions.length" class="space-y-2">
+						<div
+							v-for="definition in steps[item.value as number]!.definitions"
+							:key="definition.term"
+							class="rounded-md border border-default bg-elevated/40 p-3 text-sm"
+						>
+							<dt class="font-semibold">{{ definition.term }}</dt>
+							<dd class="text-muted">{{ definition.text }}</dd>
+						</div>
+					</dl>
+
+					<ul v-if="steps[item.value as number]!.where.length" class="space-y-2">
+						<li v-for="place in steps[item.value as number]!.where" :key="place.to">
+							<UButton
+								:to="place.to"
+								color="neutral"
+								variant="outline"
+								size="sm"
+								trailing-icon="i-lucide-arrow-right"
+								:label="place.label"
+							/>
+							<span class="ms-2 text-sm text-muted">{{ place.note }}</span>
+						</li>
+					</ul>
+				</div>
+			</template>
+		</UTimeline>
+
+		<div class="flex justify-center">
+			<UButton to="/adr/add" icon="i-lucide-plus" size="lg" label="Report a case" />
 		</div>
-
-		<div class="grid gap-6 text-left md:grid-cols-2">
-			<UCard>
-				<template #header>
-					<div class="flex items-center gap-3">
-						<UIcon name="i-lucide:octagon-alert" class="size-6 text-error" />
-						<h2 class="font-semibold">What is an ADR?</h2>
-					</div>
-				</template>
-				<p class="text-muted">An ADR (Adverse Drug Reaction) is a harmful or unintended response to a medication. It occurs even when a drug is used correctly.</p>
-			</UCard>
-
-			<UCard>
-				<template #header>
-					<div class="flex items-center gap-3">
-						<UIcon name="i-lucide:brain" class="size-6 text-primary" />
-						<h2 class="font-semibold">What is a causality assessment?</h2>
-					</div>
-				</template>
-				<p class="text-muted">A causality assessment estimates how likely it is that a drug caused a specific adverse reaction. It follows structured medical criteria.</p>
-			</UCard>
-
-			<UCard>
-				<template #header>
-					<div class="flex items-center gap-3">
-						<UIcon name="i-lucide:cpu" class="size-6 text-info" />
-						<h2 class="font-semibold">How does the model work?</h2>
-					</div>
-				</template>
-				<p class="text-muted">The model reads the patient data and the report, predicts a causality level, and explains the prediction with SHAP values.</p>
-			</UCard>
-
-			<UCard>
-				<template #header>
-					<div class="flex items-center gap-3">
-						<UIcon name="i-lucide:circle-help" class="size-6 text-warning" />
-						<h2 class="font-semibold">Why is this needed?</h2>
-					</div>
-				</template>
-				<p class="text-muted">Finding ADRs early improves patient safety, reduces drug-related harm, and supports pharmacovigilance.</p>
-			</UCard>
-		</div>
-	</section>
+	</div>
 </template>
 
 <script setup lang="ts">
+import { STORY } from "~/utils/about-story";
+
+const steps = STORY;
+
+// One timeline item for each step. The value is its position, so the slot can find the step.
+const items = STORY.map((step, index) => ({
+	value: index,
+	date: step.stage,
+	title: step.title,
+	icon: step.icon,
+}));
+
 useHead({ title: "About | MediLinda" });
 </script>

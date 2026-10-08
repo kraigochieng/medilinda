@@ -29,7 +29,7 @@ export function homeCards(counts: { all?: number; needsReview?: number; notAppro
 		},
 		{
 			key: "needs_review",
-			label: "Need a review",
+			label: "ADRs needing a review",
 			hint: "A prediction with no review yet",
 			icon: "i-lucide-clock",
 			value: counts.needsReview,
@@ -37,7 +37,7 @@ export function homeCards(counts: { all?: number; needsReview?: number; notAppro
 		},
 		{
 			key: "not_approved",
-			label: "Not approved",
+			label: "ADRs not approved",
 			hint: "Reviewers did not agree with the prediction",
 			icon: "i-lucide-circle-x",
 			value: counts.notApproved,

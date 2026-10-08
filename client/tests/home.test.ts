@@ -12,6 +12,10 @@ describe("homeCards", () => {
 		]);
 	});
 
+	it("uses the titles the project asked for", () => {
+		expect(cards.map((c) => c.label)).toEqual(["All ADRs", "ADRs needing a review", "ADRs not approved"]);
+	});
+
 	it("links each count to the list with the matching filter", () => {
 		expect(cards.map((c) => c.to)).toEqual(["/adr", "/adr?review=needs_review", "/adr?review=not_approved"]);
 	});
