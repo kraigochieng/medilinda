@@ -18,6 +18,8 @@ from typing import Any, Callable
 from sqlalchemy import Date, DateTime, Enum, event, inspect, insert, select, text
 from sqlalchemy.orm import Session
 
+from server.db.base import Base
+from server.exceptions import ResourceConflictError, ResourceNotFoundError
 from server.models._mixins import utcnow
 from server.models.audit_log import AuditLogModel
 
@@ -333,3 +335,65 @@ def register_audit_hooks() -> None:
     event.listen(Session, "before_flush", _before_flush)
     event.listen(Session, "after_flush", _after_flush)
     _registered = True
+
+
+# ---------------------------------------------------------------------- restore
+
+
+def model_for_table(table_name: str):
+    for mapper in Base.registry.mappers:
+        if mapper.local_table.name == table_name:
+            return mapper.class_
+    raise ValueError(f"No model for table {table_name}")
+
+
+def restore_deleted(session: Session, entity_type: str, entity_id: str):
+    """Undo the delete of one row, and everything that was deleted with it.
+
+    A delete is logged as one group of rows (the row, its assessments, its
+    reviews...). Recreate them all from their snapshots, and put back any
+    field the same request changed on rows that still exist (for example an
+    SMS message that was unlinked from the ADR). The caller commits.
+    """
+    last = (
+        session.query(AuditLogModel)
+        .filter_by(entity_type=entity_type, entity_id=entity_id, action="delete")
+        .order_by(AuditLogModel.version.desc())
+        .first()
+    )
+    if last is None:
+        raise ResourceNotFoundError(f"No deleted {entity_type} with id {entity_id}")
+
+    model_cls = model_for_table(entity_type)
+    if session.get(model_cls, entity_id) is not None:
+        raise ResourceConflictError(f"{entity_type} {entity_id} already exists")
+
+    group = (
+        session.query(AuditLogModel)
+        .filter_by(group_id=last.group_id)
+        .order_by(AuditLogModel.seq)
+        .all()
+    )
+    table_order = {t.name: i for i, t in enumerate(Base.metadata.sorted_tables)}
+
+    with audit_action("restore"):
+        deleted = sorted(
+            (r for r in group if r.action == "delete"),
+            key=lambda r: table_order.get(r.entity_type, 0),
+        )
+        for row in deleted:
+            cls = model_for_table(row.entity_type)
+            session.add(cls(**deserialize_row(cls, row.snapshot)))
+        session.flush()
+
+        for row in (r for r in group if r.action == "update"):
+            cls = model_for_table(row.entity_type)
+            obj = session.get(cls, row.entity_id)
+            if obj is None:
+                continue
+            for change in row.changes or []:
+                old = deserialize_row(cls, {change["field"]: change["old"]})
+                setattr(obj, change["field"], old[change["field"]])
+        session.flush()
+
+    return session.get(model_cls, entity_id)

@@ -35,7 +35,7 @@ class AdverseDrugReactionReportRepository:
         model = self.db.scalar(stmt)
 
         if not model:
-            raise ResourceNotFoundError(f"User with id {id} not found")
+            raise ResourceNotFoundError(f"ADR with id {id} not found")
 
         return model
 
@@ -108,28 +108,36 @@ class AdverseDrugReactionReportRepository:
 
         return paginate(self.db, main_stmt, params=pagination_params)
 
-    def create(self, data: ADRPostRequest) -> ADRModel:
+    def _save(self, model: ADRModel | None, commit: bool) -> None:
+        """Commit, or only flush so the caller can finish a larger transaction."""
+        if commit:
+            self.db.commit()
+        else:
+            self.db.flush()
+        if model is not None:
+            self.db.refresh(model)
+
+    def create(self, data: ADRPostRequest, commit: bool = True) -> ADRModel:
         model = ADRModel(**data.model_dump())
 
         self.db.add(model)
-        self.db.commit()
-        self.db.refresh(model)
+        self._save(model, commit)
 
         return model
 
-    def update(self, id: str, data: ADRPostRequest) -> ADRModel:
+    def update(self, id: str, data: ADRPostRequest, commit: bool = True) -> ADRModel:
         model = self.get_by_id(id)
 
-        for key, value in data.model_dump().items():
+        # The creator of a report never changes when someone else edits it.
+        for key, value in data.model_dump(exclude={"user_id"}).items():
             setattr(model, key, value)
 
-        self.db.commit()
-        self.db.refresh(model)
+        self._save(model, commit)
 
         return model
 
-    def delete(self, id: str) -> None:
+    def delete(self, id: str, commit: bool = True) -> None:
         model = self.get_by_id(id)
 
         self.db.delete(model)
-        self.db.commit()
+        self._save(None, commit)
