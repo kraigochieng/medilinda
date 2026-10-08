@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from server.basemodels.review import (
     ReviewGetResponse,
     ReviewPostRequest,
+    ReviewUpdateRequest,
 )
 from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
@@ -43,7 +44,7 @@ async def post_review(
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     service: ReviewService = Depends(get_review_service),
 ):
-    return service.create_review(data=data)
+    return service.create_review(data=data, user=current_user)
 
 
 @router.get("/{id}", response_model=ReviewGetResponse, status_code=status.HTTP_200_OK)
@@ -57,19 +58,20 @@ async def get_review_by_id(
 
 @router.put("/{id}", response_model=ReviewGetResponse, status_code=status.HTTP_200_OK)
 async def update_review_by_id(
+    data: ReviewUpdateRequest,
     current_user: UserDetailsBaseModel = Depends(get_current_active_user),
-    data: ReviewPostRequest = None,
     id: str = Path(..., description="ID of review to update"),
     service: ReviewService = Depends(get_review_service),
 ):
-    return service.update_review(id=id, data=data)
+    return service.update_review(id=id, data=data, user=current_user)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_review_by_id(
+    current_user: UserDetailsBaseModel = Depends(get_current_active_user),
     id: str = Path(..., description="ID of review to delete"),
     service: ReviewService = Depends(get_review_service),
 ):
-    service.delete_review(id=id)
+    service.delete_review(id=id, user=current_user)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)

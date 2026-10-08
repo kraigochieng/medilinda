@@ -54,9 +54,18 @@ class ReviewGetResponse(BaseModel):
 
 class ReviewPostRequest(BaseModel):
     model_config = ConfigDict(from_attributes=True)
-    
+
     causality_assessment_level_id: str
-    user_id: str
+    # The reviewer is always the signed-in user. A value sent here is ignored.
+    user_id: str | None = None
+    approved: bool
+    proposed_causality_level: CausalityAssessmentLevelEnum | None = None
+    reason: str | None = None
+
+
+class ReviewUpdateRequest(BaseModel):
+    """What the author of a review may change. The assessment and the author stay."""
+
     approved: bool
     proposed_causality_level: CausalityAssessmentLevelEnum | None = None
     reason: str | None = None
