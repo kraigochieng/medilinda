@@ -1,101 +1,112 @@
 <template>
-	<UCard class="w-96 mt-16 mx-auto">
+	<UCard class="mx-auto mt-16 w-full max-w-sm">
 		<template #header>
-			<h2>Signup</h2>
+			<h1 class="text-lg font-semibold">Create an account</h1>
 		</template>
-		<UForm
-			:schema="signupValidationSchema"
-			:state="signupFormState"
-			class="space-y-6"
-			@submit="onSubmit"
-		>
+
+		<UForm :schema="signupSchema" :state="state" class="space-y-6" @submit="onSubmit">
 			<UAlert
 				v-if="apiError"
-				icon="i-heroicons-exclamation-triangle"
-				variant="soft"
+				color="error"
+				variant="subtle"
+				icon="i-lucide-triangle-alert"
 				:title="apiError"
-				:close-button="{
-					icon: 'i-heroicons-x-mark-20-solid',
-					color: 'red',
-					variant: 'link',
-					padded: false,
-				}"
-				@close="apiError = null"
+				close
+				@update:open="apiError = null"
 			/>
 
 			<UFormField label="Username" name="username">
 				<UInput
-					v-model="signupFormState.username"
-					placeholder="Enter Username"
+					v-model="state.username"
+					placeholder="Choose a username"
 					icon="i-lucide-user"
 					size="lg"
 					autofocus
+					autocomplete="username"
 					class="w-full"
 				/>
 			</UFormField>
 
-			<UFormField label="First Name" name="firstName">
+			<div class="grid gap-6 sm:grid-cols-2">
+				<UFormField label="First name" name="firstName">
+					<UInput
+						v-model="state.firstName"
+						placeholder="First name"
+						size="lg"
+						autocomplete="given-name"
+						class="w-full"
+					/>
+				</UFormField>
+				<UFormField label="Last name" name="lastName">
+					<UInput
+						v-model="state.lastName"
+						placeholder="Last name"
+						size="lg"
+						autocomplete="family-name"
+						class="w-full"
+					/>
+				</UFormField>
+			</div>
+
+			<UFormField label="Password" name="password" help="Use at least 8 characters.">
 				<UInput
-					v-model="signupFormState.firstName"
-					type="text"
-					placeholder="Enter Firstname"
+					v-model="state.password"
+					:type="showPassword ? 'text' : 'password'"
+					placeholder="Choose a password"
 					icon="i-lucide-lock"
 					size="lg"
+					autocomplete="new-password"
 					class="w-full"
-				/>
+					:ui="{ trailing: 'pe-1' }"
+				>
+					<template #trailing>
+						<UButton
+							type="button"
+							color="neutral"
+							variant="link"
+							size="sm"
+							:icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+							:aria-label="showPassword ? 'Hide password' : 'Show password'"
+							@click="showPassword = !showPassword"
+						/>
+					</template>
+				</UInput>
 			</UFormField>
-			<UFormField label="Last Name" name="lastName">
-				<UInput
-					v-model="signupFormState.lastName"
-					type="text"
-					placeholder="Enter Lastname"
-					icon="i-lucide-lock"
-					size="lg"
-					class="w-full"
-				/>
-			</UFormField>
+
 			<UButton
 				type="submit"
 				trailing-icon="i-lucide-circle-arrow-right"
 				:loading="isSubmitting"
-				label="Signup"
+				label="Create account"
 				size="lg"
-				class="w-full"
 				block
 			/>
-			<div class="w-full flex justify-between">
-				<ULink to="/auth/signup">Forgot Password</ULink>
-				<ULink to="/auth/login">Login</ULink>
-			</div>
+
+			<p class="text-center text-sm text-muted">
+				Already have an account?
+				<ULink to="/auth/login" class="font-medium text-primary">Log in</ULink>
+			</p>
 		</UForm>
 	</UCard>
 </template>
 
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui";
-import { z } from "zod";
 import { authClient } from "~/lib/auth-client";
+import { signupSchema, type SignupForm } from "~/utils/auth-forms";
 
-const signupValidationSchema = z.object({
-	username: z.string().min(3, "Username must be at least 3 characters"),
-	firstName: z.string().min(1, "First name is required"),
-	lastName: z.string().min(1, "Last name is required"),
-	password: z.string().min(8, "Password must be at least 8 characters"),
-});
-
-type signupTypeValidationSchema = z.infer<typeof signupValidationSchema>;
-
-const signupFormState = reactive<Partial<signupTypeValidationSchema>>({
+const state = reactive<Partial<SignupForm>>({
 	username: undefined,
-	password: undefined,
 	firstName: undefined,
 	lastName: undefined,
+	password: undefined,
 });
 
+const showPassword = ref(false);
 const isSubmitting = ref(false);
 const apiError = ref<string | null>(null);
 
-async function onSubmit(event: FormSubmitEvent<signupTypeValidationSchema>) {
+async function onSubmit(event: FormSubmitEvent<SignupForm>) {
 	apiError.value = null;
 	isSubmitting.value = true;
 
@@ -115,15 +126,13 @@ async function onSubmit(event: FormSubmitEvent<signupTypeValidationSchema>) {
 	isSubmitting.value = false;
 
 	if (error) {
-		apiError.value = error.message || "Signup failed. Please try again.";
+		apiError.value = error.message || "Sign-up failed. Try again.";
 		return;
 	}
 
 	await navigateTo("/adr");
 }
 
-definePageMeta({
-	layout: "auth",
-});
-useHead({ title: "Signup | MediLinda" });
+definePageMeta({ layout: "auth" });
+useHead({ title: "Create an account | MediLinda" });
 </script>

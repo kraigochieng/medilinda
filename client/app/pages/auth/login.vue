@@ -1,84 +1,82 @@
 <template>
-	<UCard class="w-96 mt-16 mx-auto">
+	<UCard class="mx-auto mt-16 w-full max-w-sm">
 		<template #header>
-			<h2>Login</h2>
+			<h1 class="text-lg font-semibold">Log in</h1>
 		</template>
-		<UForm
-			:schema="loginValidationSchema"
-			:state="loginFormState"
-			class="space-y-6"
-			@submit="onSubmit"
-		>
+
+		<UForm :schema="loginSchema" :state="state" class="space-y-6" @submit="onSubmit">
 			<UAlert
 				v-if="apiError"
-				icon="i-heroicons-exclamation-triangle"
-				variant="soft"
+				color="error"
+				variant="subtle"
+				icon="i-lucide-triangle-alert"
 				:title="apiError"
-				:close-button="{
-					icon: 'i-heroicons-x-mark-20-solid',
-					color: 'red',
-					variant: 'link',
-					padded: false,
-				}"
-				@close="apiError = null"
+				close
+				@update:open="apiError = null"
 			/>
 
 			<UFormField label="Username" name="username">
 				<UInput
-					v-model="loginFormState.username"
-					placeholder="Enter Username"
+					v-model="state.username"
+					placeholder="Enter your username"
 					icon="i-lucide-user"
 					size="lg"
 					autofocus
+					autocomplete="username"
 					class="w-full"
 				/>
 			</UFormField>
 
 			<UFormField label="Password" name="password">
 				<UInput
-					v-model="loginFormState.password"
-					type="password"
-					placeholder="Enter Password"
+					v-model="state.password"
+					:type="showPassword ? 'text' : 'password'"
+					placeholder="Enter your password"
 					icon="i-lucide-lock"
 					size="lg"
+					autocomplete="current-password"
 					class="w-full"
-				/>
+					:ui="{ trailing: 'pe-1' }"
+				>
+					<template #trailing>
+						<UButton
+							type="button"
+							color="neutral"
+							variant="link"
+							size="sm"
+							:icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+							:aria-label="showPassword ? 'Hide password' : 'Show password'"
+							@click="showPassword = !showPassword"
+						/>
+					</template>
+				</UInput>
 			</UFormField>
+
 			<UButton
 				type="submit"
 				trailing-icon="i-lucide-circle-arrow-right"
 				:loading="isSubmitting"
-				label="Login"
+				label="Log in"
 				size="lg"
-				class="w-full"
 				block
 			/>
-			<div class="w-full flex justify-between">
-				<ULink to="/auth/signup">Forgot Password</ULink>
-				<ULink to="/auth/signup">Create a new account</ULink>
-			</div>
+
+			<p class="text-center text-sm text-muted">
+				No account yet?
+				<ULink to="/auth/signup" class="font-medium text-primary">Create one</ULink>
+			</p>
 		</UForm>
 	</UCard>
 </template>
 
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui";
-import { z } from "zod";
 import { authClient } from "~/lib/auth-client";
+import { loginSchema, type LoginForm } from "~/utils/auth-forms";
 
-const loginValidationSchema = z.object({
-	// An untouched field is undefined, which has its own message.
-	username: z.string({ error: "Username is required" }).min(1, "Username is required"),
-	password: z.string({ error: "Password is required" }).min(1, "Password is required"),
-});
+const state = reactive<Partial<LoginForm>>({ username: undefined, password: undefined });
 
-type LoginForm = z.output<typeof loginValidationSchema>;
-
-const loginFormState = reactive<Partial<LoginForm>>({
-	username: undefined,
-	password: undefined,
-});
-
+const showPassword = ref(false);
 const isSubmitting = ref(false);
 const apiError = ref<string | null>(null);
 
@@ -94,19 +92,13 @@ async function onSubmit(event: FormSubmitEvent<LoginForm>) {
 	isSubmitting.value = false;
 
 	if (error) {
-		apiError.value = error.message || "Login failed. Please try again.";
+		apiError.value = error.message || "Login failed. Try again.";
 		return;
 	}
 
 	await navigateTo("/adr");
 }
 
-definePageMeta({
-	layout: "auth",
-});
-useHead({ title: "Login | MediLinda" });
+definePageMeta({ layout: "auth" });
+useHead({ title: "Log in | MediLinda" });
 </script>
-
-<style scoped>
-@reference "assets/css/main.css";
-</style>
