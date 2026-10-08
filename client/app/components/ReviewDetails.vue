@@ -1,140 +1,58 @@
 <template>
 	<UCard class="my-4">
 		<template #header>
-			<div class="flex flex-col">
-				<h3 class="text-lg font-semibold">Review Details</h3>
-			</div>
+			<h3 class="text-lg font-semibold">Your review</h3>
 		</template>
 
 		<div class="space-y-4">
-			<!-- My Vote -->
-			<div class="flex justify-between items-center">
-				<p class="font-medium">My Vote</p>
+			<div class="flex items-center justify-between">
+				<p class="font-medium">Your vote</p>
 				<ApprovedBadge :is-approved="data?.approved" />
 			</div>
 			<USeparator />
 
-			<!-- Proposed Causality Assessment Level -->
-			<div class="flex justify-between items-center">
-				<p class="font-medium">Proposed Causality Assessment Level</p>
-				<template v-if="data?.proposed_causality_level">
-					<CausalityBadge :value="data.proposed_causality_level" />
-				</template>
+			<div class="flex items-center justify-between">
+				<p class="font-medium">Proposed causality level</p>
+				<CausalityBadge v-if="data?.proposed_causality_level" :value="data.proposed_causality_level" />
 				<BlankBadge v-else />
 			</div>
 			<USeparator />
 
-			<!-- Reason -->
-			<div class="flex justify-between items-start">
+			<div class="flex items-start justify-between gap-4">
 				<p class="font-medium">Reason</p>
-				<p
-					v-if="data?.reason"
-					class="text-sm text-neutral-700 dark:text-neutral-300 max-w-md text-right"
-				>
-					{{ data.reason }}
-				</p>
+				<p v-if="data?.reason" class="max-w-md text-right text-sm text-muted">{{ data.reason }}</p>
 				<BlankBadge v-else />
 			</div>
 			<USeparator />
 
-			<!-- Created At -->
-			<div class="flex justify-between items-center">
-				<p class="font-medium">Created At</p>
-				<p
-					v-if="data?.created_at"
-					class="text-sm text-neutral-600 dark:text-neutral-400"
-				>
-					{{
-						`${data.created_at.slice(0, 10)} ${formatTime(
-							data.created_at
-						)}`
-					}}
-				</p>
+			<div class="flex items-center justify-between">
+				<p class="font-medium">Reviewed</p>
+				<p v-if="data?.created_at" class="text-sm text-muted">{{ formatDateTime(data.created_at) }}</p>
 				<BlankBadge v-else />
 			</div>
 		</div>
 
-		<!-- <template #footer>
-			<div class="flex justify-end gap-2">
+		<template #footer>
+			<div class="flex justify-end">
 				<UButton
-					color="primary"
-					variant="soft"
-					@click="
-						router.push({
-							path: `/causality-assessment-level/${causality_assessment_level_id}/review`,
-							query: { mode: 'update' },
-						})
-					"
-				>
-					<UIcon name="i-lucide-pencil" class="mr-1" /> Edit Review
-				</UButton>
-
-				<UAlertDialog>
-					<UAlertDialogTrigger as-child>
-						<UButton variant="soft">
-							<UIcon name="i-lucide-trash-2" class="mr-1" /> Delete Review
-						</UButton>
-					</UAlertDialogTrigger>
-
-					<UAlertDialogContent>
-						<UAlertDialogHeader>
-							<UAlertDialogTitle>Are you sure?</UAlertDialogTitle>
-							<UAlertDialogDescription>
-								This action cannot be undone. This will permanently delete this record.
-							</UAlertDialogDescription>
-						</UAlertDialogHeader>
-
-						<UAlertDialogFooter>
-							<UAlertDialogCancel>Cancel</UAlertDialogCancel>
-							<UAlertDialogAction @click="handleDelete">Continue</UAlertDialogAction>
-						</UAlertDialogFooter>
-					</UAlertDialogContent>
-				</UAlertDialog>
+					:to="`/adr/${adrId}/review`"
+					color="neutral"
+					variant="outline"
+					icon="i-lucide-pencil"
+					label="Change my review"
+				/>
 			</div>
-		</template> -->
+		</template>
 	</UCard>
 </template>
 
 <script setup lang="ts">
-
-import type { CausalityAssessmentLevelEnum } from "@/types/adr";
 import type { ReviewGetResponse } from "@/types/review";
+import { formatDateTime } from "~/utils/adr-table";
 
-const props = defineProps<{
+// The signed-in user's own review of the current assessment.
+defineProps<{
 	data?: ReviewGetResponse;
-	causality_assessment_level_id?: string;
+	adrId: string;
 }>();
-
-const router = useRouter();
-
-async function handleDelete() {
-	// const runtimeConfig = useRuntimeConfig();
-	// const serverApi = runtimeConfig.public.serverApi;
-
-	// await $fetch(`${serverApi}/review/${props.data?.id}`, {
-	// 	method: "DELETE",
-	// 	headers: {
-	// 		Authorization: `Bearer ${authStore.accessToken}`,
-	// 	},
-	// });
-
-	navigateTo("/adr");
-}
-
-function formatTime(isoString: string): string {
-	const date = new Date(isoString);
-	return new Intl.DateTimeFormat("en-US", {
-		hour: "numeric",
-		minute: "numeric",
-		hour12: true,
-	}).format(date);
-}
 </script>
-
-<style scoped>
-@reference "assets/css/main.css";
-
-.card-footer {
-	@apply flex space-x-2 justify-end w-full;
-}
-</style>
