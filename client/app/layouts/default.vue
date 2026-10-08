@@ -84,6 +84,7 @@ import { useQuery } from "@tanstack/vue-query";
 import { fetchCurrentUser } from "@/api/user";
 import { capitalize } from "lodash-es";
 import { authClient } from "~/lib/auth-client";
+import { createDraftStore } from "~/utils/adr-draft";
 
 const collapsed = ref(false);
 
@@ -159,6 +160,8 @@ const userMenuItems: DropdownMenuItem[][] = [
 			label: "Sign out",
 			icon: "i-lucide-log-out",
 			onSelect: async () => {
+				// Nothing of this user's unfinished reports should stay in the browser.
+				createDraftStore(window.sessionStorage).clearAll();
 				await authClient.signOut();
 				await navigateTo("/auth/login");
 			},
