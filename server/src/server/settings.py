@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     better_auth_audience: str = "medilinda-api"
     better_auth_internal_secret: str
 
+    # App data in Turso. Leave unset to use the local SQLite file.
+    turso_app_database_url: str | None = None
+    turso_app_auth_token: str | None = None
+
     model_config = SettingsConfigDict(env_file=find_dotenv(), extra="allow")
 
     # model_config = SettingsConfigDict(env_file=".env")
