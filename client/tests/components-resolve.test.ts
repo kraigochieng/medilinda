@@ -50,6 +50,7 @@ const provided = new Set([
 ]);
 
 function templateOf(source: string): string {
+	source = source.replace(/<!--[\s\S]*?-->/g, ""); // commented-out code is not used
 	const match = source.match(/<template>([\s\S]*)<\/template>\s*(?:<script|<style|$)/);
 	return (match?.[1] ?? source.split("<script")[0] ?? "").replace(/<!--[\s\S]*?-->/g, "");
 }
@@ -93,14 +94,7 @@ export function unresolvedComponents(): Record<string, string[]> {
 
 // Leftovers from the move from shadcn to Nuxt UI. Fix a page, then remove it
 // here. The test also fails when an entry is no longer needed.
-const KNOWN_BROKEN: Record<string, string[]> = {
-	"app/components/FeatureRankings.vue": [
-		"Card", "CardContent", "CardDescription", "CardHeader", "CardTitle",
-		"Table", "TableBody", "TableCaption", "TableCell", "TableHead", "TableHeader", "TableRow",
-		"Tabs", "TabsContent", "TabsList", "TabsTrigger",
-	],
-	"app/pages/about.vue": ["Card", "CardContent", "CardHeader", "CardTitle"],
-};
+const KNOWN_BROKEN: Record<string, string[]> = {};
 
 describe("components used by the pages", () => {
 	it("every component a page uses exists, apart from the known leftovers", () => {
