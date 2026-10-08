@@ -28,11 +28,14 @@ from server.exceptions import MedilindaError
 from server.lifespan.lifespan import lifespan
 from server.logging_config import setup_logging
 from server.settings import settings
+from server.utils.audit import register_audit_hooks
 from server.utils.auth import get_current_active_user
 
 # Logging
 setup_logging()
 logger = logging.getLogger(__name__)
+
+register_audit_hooks()
 
 app = FastAPI(lifespan=lifespan)
 
