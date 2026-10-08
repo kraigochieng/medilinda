@@ -3,6 +3,7 @@ import datetime
 import pytest
 from fastapi_pagination import Params
 from server.basemodels.adverse_drug_reaction_report import (
+    MyReviewFilter,
     ReviewStatusFilter,
     SortField,
     SortOrder,
@@ -240,3 +241,119 @@ def test_sorting_keeps_paging_stable(repo, adrs):
         seen += [row.patient_name for row in page.items]
 
     assert seen == sorted(seen) and len(seen) == 5
+
+
+# --- The reviews of the signed-in user ----------------------------------------------
+
+ME = "me"
+OTHER = "someone-else"
+
+
+def make_reviewed(repo, template, db, name, level, votes):
+    """An ADR with one assessment and reviews given as (user_id, approved) pairs."""
+    adr = repo.create(data=template.model_copy(update={"patient_name": name}))
+    cal = CausalityAssessmentLevelModel(
+        adr_id=adr.id, causality_assessment_level_value=level, created_at=T0
+    )
+    db.add(cal)
+    db.commit()
+    for user_id, approved in votes:
+        db.add(
+            ReviewModel(
+                causality_assessment_level_id=cal.id, user_id=user_id, approved=approved
+            )
+        )
+    db.commit()
+    return adr
+
+
+@pytest.fixture
+def mine(db, repo, sample_adverse_drug_reaction_report_post_request):
+    t = sample_adverse_drug_reaction_report_post_request
+    make_reviewed(repo, t, db, "Reviewed By Me", Level.likely, [(ME, True)])
+    make_reviewed(repo, t, db, "Reviewed By Both", Level.certain, [(ME, False), (OTHER, True)])
+    make_reviewed(repo, t, db, "Reviewed By Other", Level.possible, [(OTHER, True)])
+    make_reviewed(repo, t, db, "Nobody Yet", Level.likely, [])
+    make_adr(repo, t, db, "No Assessment", None)
+
+
+def rows(repo, **kw):
+    page = repo.get_paginated_adrs_with_reviews(pagination_params=PARAMS, query=None, **kw)
+    return {row.patient_name: row for row in page.items}
+
+
+def test_each_row_says_whether_the_user_reviewed_it(repo, mine):
+    result = rows(repo, current_user_id=ME)
+
+    assert {n: bool(r.reviewed_by_me) for n, r in result.items()} == {
+        "Reviewed By Me": True,
+        "Reviewed By Both": True,
+        "Reviewed By Other": False,
+        "Nobody Yet": False,
+        "No Assessment": False,
+    }
+
+
+def test_without_a_user_nothing_counts_as_mine(repo, mine):
+    assert not any(r.reviewed_by_me for r in rows(repo).values())
+
+
+def test_filter_reviewed_by_me(repo, mine):
+    assert set(rows(repo, current_user_id=ME, my_review=[MyReviewFilter.reviewed])) == {
+        "Reviewed By Me",
+        "Reviewed By Both",
+    }
+
+
+def test_filter_not_reviewed_by_me_means_it_needs_my_review(repo, mine):
+    assert set(rows(repo, current_user_id=ME, my_review=[MyReviewFilter.not_reviewed])) == {
+        "Reviewed By Other",
+        "Nobody Yet",
+    }
+
+
+def test_a_report_with_no_assessment_is_neither(repo, mine):
+    both = rows(
+        repo,
+        current_user_id=ME,
+        my_review=[MyReviewFilter.reviewed, MyReviewFilter.not_reviewed],
+    )
+
+    assert "No Assessment" not in both
+    assert len(both) == 4
+
+
+def test_the_filter_combines_with_the_others(repo, mine):
+    assert set(
+        rows(
+            repo,
+            current_user_id=ME,
+            my_review=[MyReviewFilter.not_reviewed],
+            causality_level=[Level.likely],
+        )
+    ) == {"Nobody Yet"}
+
+
+def test_only_the_newest_assessment_counts_for_my_review(
+    db, repo, sample_adverse_drug_reaction_report_post_request
+):
+    adr = make_reviewed(
+        repo,
+        sample_adverse_drug_reaction_report_post_request,
+        db,
+        "Edited",
+        Level.possible,
+        [(ME, True)],
+    )
+    db.add(
+        CausalityAssessmentLevelModel(
+            adr_id=adr.id,
+            causality_assessment_level_value=Level.likely,
+            created_at=T0 + datetime.timedelta(days=1),
+        )
+    )
+    db.commit()
+
+    result = rows(repo, current_user_id=ME)
+    assert not result["Edited"].reviewed_by_me
+    assert set(rows(repo, current_user_id=ME, my_review=[MyReviewFilter.not_reviewed])) == {"Edited"}

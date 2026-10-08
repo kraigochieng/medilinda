@@ -5,7 +5,10 @@ import {
 	formatDateTime,
 	hasActiveFilters,
 	parseListQuery,
+	MY_REVIEW_OPTIONS,
+	myReviewTag,
 	nextSort,
+	rowMenu,
 	reviewState,
 	serializeListQuery,
 } from "../app/utils/adr-table";
@@ -46,6 +49,7 @@ describe("list state in the URL", () => {
 			query: "alice",
 			causality: ["likely", "certain"],
 			review: ["needs_review", "approved"],
+			mine: ["not_reviewed"],
 			sortBy: "patient_name",
 			sortOrder: "asc",
 		});
@@ -121,6 +125,7 @@ describe("hasActiveFilters", () => {
 		expect(hasActiveFilters(state({ query: "x" }))).toBe(true);
 		expect(hasActiveFilters(state({ causality: ["certain"] }))).toBe(true);
 		expect(hasActiveFilters(state({ review: ["approved"] }))).toBe(true);
+		expect(hasActiveFilters(state({ mine: ["not_reviewed"] }))).toBe(true);
 	});
 
 	it("ignores a search of only spaces", () => {
@@ -136,6 +141,7 @@ describe("buildListParams", () => {
 			query: undefined,
 			causality_level: undefined,
 			review_status: undefined,
+			my_review: undefined,
 			sort_by: "created_at",
 			sort_order: "desc",
 		});
@@ -149,6 +155,7 @@ describe("buildListParams", () => {
 					query: " alice ",
 					causality: ["likely", "certain"],
 					review: ["needs_review"],
+					mine: ["not_reviewed", "reviewed"],
 					sortBy: "causality_level",
 					sortOrder: "asc",
 				}),
@@ -160,6 +167,7 @@ describe("buildListParams", () => {
 			query: "alice",
 			causality_level: ["likely", "certain"],
 			review_status: ["needs_review"],
+			my_review: ["not_reviewed", "reviewed"],
 			sort_by: "causality_level",
 			sort_order: "asc",
 		});
@@ -206,5 +214,93 @@ describe("formatDateTime", () => {
 
 	it("handles fractional seconds", () => {
 		expect(formatDateTime("2025-03-04T09:05:00.123456", "UTC")).toBe("4 Mar 2025, 09:05");
+	});
+});
+
+
+describe("the reviews of the signed-in user", () => {
+	it("offers needs your review first, then reviewed by you", () => {
+		expect(MY_REVIEW_OPTIONS).toEqual([
+			{ label: "Needs your review", value: "not_reviewed" },
+			{ label: "Reviewed by you", value: "reviewed" },
+		]);
+	});
+
+	it("keeps the filter in the address", () => {
+		expect(serializeListQuery(state({ mine: ["not_reviewed"] }))).toEqual({ mine: "not_reviewed" });
+		expect(parseListQuery({ mine: "reviewed,bogus,not_reviewed" }).mine).toEqual(["reviewed", "not_reviewed"]);
+		expect(parseListQuery({ mine: "bogus" }).mine).toEqual([]);
+	});
+});
+
+describe("myReviewTag", () => {
+	const row = (extra = {}) => ({
+		causality_assessment_level_value: "likely",
+		reviewed_by_me: false,
+		...extra,
+	});
+
+	it("says needs your review when the user has not reviewed the newest prediction", () => {
+		expect(myReviewTag(row())).toMatchObject({ label: "Needs your review", color: "warning" });
+	});
+
+	it("says reviewed by you when the user has", () => {
+		expect(myReviewTag(row({ reviewed_by_me: true }))).toMatchObject({
+			label: "Reviewed by you",
+			color: "success",
+		});
+	});
+
+	it("has no tag when there is no prediction to review", () => {
+		expect(myReviewTag(row({ causality_assessment_level_value: null }))).toBeNull();
+		expect(myReviewTag(row({ causality_assessment_level_value: undefined }))).toBeNull();
+	});
+});
+
+describe("rowMenu", () => {
+	const row = (extra = {}) => ({
+		adr_id: "a1",
+		causality_assessment_level_value: "likely",
+		reviewed_by_me: false,
+		...extra,
+	});
+	const labels = (menu: ReturnType<typeof rowMenu>) => menu.map((group) => group.map((item) => item.label));
+
+	it("links to each tab of the ADR", () => {
+		const [views] = rowMenu(row());
+
+		expect(views!.map((i) => [i.label, i.to])).toEqual([
+			["View details", "/adr/a1"],
+			["View prediction", "/adr/a1?tab=prediction"],
+			["View review", "/adr/a1?tab=review"],
+			["View history", "/adr/a1?tab=history"],
+		]);
+	});
+
+	it("offers to add a review when the user has none", () => {
+		const menu = rowMenu(row());
+
+		expect(labels(menu)[1]).toEqual(["Add review"]);
+		expect(menu[1]![0]!.to).toBe("/adr/a1/review");
+	});
+
+	it("offers to edit the review when the user has one", () => {
+		expect(labels(rowMenu(row({ reviewed_by_me: true })))[1]).toEqual(["Edit review"]);
+	});
+
+	it("leaves out the prediction, the review and the review action when there is no prediction", () => {
+		const menu = rowMenu(row({ causality_assessment_level_value: null }));
+
+		expect(labels(menu)[0]).toEqual(["View details", "View history"]);
+		expect(labels(menu).flat()).not.toContain("Add review");
+		expect(labels(menu).flat()).not.toContain("Edit review");
+	});
+
+	it("ends with edit and delete", () => {
+		const menu = rowMenu(row());
+
+		expect(labels(menu).at(-1)).toEqual(["Edit ADR", "Delete"]);
+		expect(menu.at(-1)![0]!.to).toBe("/adr/a1/edit");
+		expect(menu.at(-1)![1]!.id).toBe("delete");
 	});
 });

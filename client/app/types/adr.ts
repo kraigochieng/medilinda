@@ -302,4 +302,5 @@ export interface ADRWithCausalityLevelAndReviewCountInterface {
 	causality_assessment_level_value: string;
 	approved_reviews: number;
 	unapproved_reviews: number;
+	reviewed_by_me?: boolean;
 }

@@ -44,8 +44,8 @@
 							:causality-assessment-level-id="assessment.id"
 							:predicted-level="assessment.causality_assessment_level_value"
 							:existing-review="myReview"
-							@saved="navigateTo(`/adr/${id}`)"
-							@removed="navigateTo(`/adr/${id}`)"
+							@saved="navigateTo(tabAddress(id, 'review'))"
+							@removed="navigateTo(tabAddress(id, 'review'))"
 						/>
 					</div>
 				</template>
@@ -69,6 +69,7 @@ import { fetchReviews } from "@/api/review";
 import { fetchCurrentUser } from "@/api/user";
 import type { TabsItem } from "@nuxt/ui";
 import { useQuery } from "@tanstack/vue-query";
+import { tabAddress } from "~/utils/adr-tabs";
 import { apiErrorMessage } from "~/utils/review-form";
 
 const route = useRoute();

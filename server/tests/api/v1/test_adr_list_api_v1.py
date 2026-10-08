@@ -99,3 +99,20 @@ def test_the_list_can_be_sorted(client, two_adrs):
 
 def test_an_unknown_sort_field_is_refused(client, two_adrs):
     assert client.get(f"{URL}?sort_by=password").status_code == 422
+
+
+def test_each_row_says_whether_the_signed_in_user_reviewed_it(client, two_adrs):
+    items = client.get(URL).json()["items"]
+
+    assert all(item["reviewed_by_me"] is False for item in items)
+
+
+def test_the_my_review_filter_can_be_repeated(client, two_adrs):
+    response = client.get(f"{URL}?my_review=not_reviewed&my_review=reviewed")
+
+    assert response.status_code == status.HTTP_200_OK
+    assert names(response) == {"Alice", "Bob"}
+
+
+def test_an_unknown_my_review_value_is_refused(client, two_adrs):
+    assert client.get(f"{URL}?my_review=maybe").status_code == 422
