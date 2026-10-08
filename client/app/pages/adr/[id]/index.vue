@@ -105,6 +105,7 @@
 import { fetchAdrById, deleteAdrById } from "@/api/adr";
 import { fetchCausalityAssessmentLevels } from "@/api/cal";
 import { fetchCurrentUser } from "@/api/user";
+import { formatDateTime } from "~/utils/adr-table";
 import { savedBanner, type SavedKind } from "~/utils/adr-saved";
 import { fetchReviews, fetchReviewStats } from "@/api/review";
 import type { ADRGetResponseInterface } from "@/types/adr";
@@ -262,27 +263,18 @@ const reviewRows = computed(
 	() => (reviewData.value?.items as ReviewGetResponse[]) ?? []
 );
 
-function formatTime(isoString: string): string {
-	const date = new Date(isoString);
-	return new Intl.DateTimeFormat("en-US", {
-		hour: "numeric",
-		minute: "numeric",
-		hour12: true,
-	}).format(date);
-}
-
 const reviewColumns: TableColumn<ReviewGetResponse>[] = [
 	{
 		id: "user.first_name",
 		accessorKey: "user.first_name",
-		header: "First Name",
+		header: "First name",
 		cell: ({ row }) => h("div", {}, row.getValue("user.first_name")),
 		enableSorting: false,
 	},
 	{
 		id: "user.last_name",
 		accessorKey: "user.last_name",
-		header: "Last Name",
+		header: "Last name",
 		cell: ({ row }) => h("div", {}, row.getValue("user.last_name")),
 		enableSorting: false,
 	},
@@ -317,7 +309,7 @@ const reviewColumns: TableColumn<ReviewGetResponse>[] = [
 			if (row.original.reason) {
 				return h("div", {}, row.getValue("reason"));
 			} else {
-				return h("div", { class: "badge blank-badge italic" }, "BLANK");
+				return h(resolveComponent("BlankBadge"));
 			}
 		},
 		enableSorting: false,
@@ -326,10 +318,10 @@ const reviewColumns: TableColumn<ReviewGetResponse>[] = [
 	{
 		id: "proposed_causality_level",
 		accessorKey: "proposed_causality_level",
-		header: "Proposed Causality Asssessment Level",
+		header: "Proposed causality level",
 		cell: ({ row }) => {
 			if (!row.original.proposed_causality_level) {
-				return h("div", { class: "badge blank-badge italic" }, "BLANK");
+				return h(resolveComponent("BlankBadge"));
 			}
 
 			return h(resolveComponent("CausalityBadge"), {
@@ -342,16 +334,8 @@ const reviewColumns: TableColumn<ReviewGetResponse>[] = [
 	{
 		id: "created_at",
 		accessorKey: "created_at",
-		header: "Created At",
-		cell: ({ row }) => {
-			return h(
-				"div",
-				{},
-				`${row.original.created_at.slice(0, 10) || ""} ${formatTime(
-					row.original.created_at
-				)}`
-			);
-		},
+		header: "Reviewed",
+		cell: ({ row }) => h("div", {}, formatDateTime(row.original.created_at)),
 		enableSorting: true,
 	},
 ];
