@@ -143,3 +143,10 @@ export function requiredProgress(issues: FormIssue[]): { done: number; total: nu
 export function firstSectionWithProblems(statuses: SectionStatus[]): FormSection | undefined {
 	return statuses.find((status) => status.state === "error")?.section;
 }
+
+// The line that sums up how much of the form is done.
+export function progressText(progress: { done: number; total: number }): string {
+	if (progress.total === 0) return "No required fields";
+	if (progress.done === progress.total) return "All required fields done";
+	return `${progress.done} of ${progress.total} required field${progress.total === 1 ? "" : "s"}`;
+}

@@ -58,3 +58,8 @@
   --custom-primary: oklch(0.72 0.192 149.58);
   --custom-secondary: oklch(0.63 0.1963 157.86);
 }
+
+/* A jump to a form section must stop below the sticky bar of the section list. */
+.form-section-header {
+  scroll-margin-top: 5rem;
+}

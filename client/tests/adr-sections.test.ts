@@ -6,6 +6,7 @@ import {
 	requiredProgress,
 	sectionOf,
 	sectionStatuses,
+	progressText,
 } from "../app/utils/adr-sections";
 import { adrFormSchema, emptyFormState, sampleFormState } from "../app/utils/adr-form";
 
@@ -152,5 +153,20 @@ describe("first section with problems", () => {
 	it("is nothing when there are no errors", () => {
 		const form = complete();
 		expect(firstSectionWithProblems(sectionStatuses(form, [], true))).toBeUndefined();
+	});
+});
+
+describe("progressText", () => {
+	it("counts the required fields done", () => {
+		expect(progressText({ done: 1, total: 4 })).toBe("1 of 4 required fields");
+	});
+
+	it("says when all are done, and when there is nothing to fill", () => {
+		expect(progressText({ done: 4, total: 4 })).toBe("All required fields done");
+		expect(progressText({ done: 0, total: 0 })).toBe("No required fields");
+	});
+
+	it("uses the singular for one field", () => {
+		expect(progressText({ done: 0, total: 1 })).toBe("0 of 1 required field");
 	});
 });
