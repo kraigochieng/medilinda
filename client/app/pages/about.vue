@@ -20,9 +20,11 @@
 					<div v-if="steps[item.value as number]!.levels" class="space-y-2">
 						<p class="text-sm font-medium">The six levels. Point at one to read what it means.</p>
 						<div class="flex flex-wrap gap-2">
-							<CausalityTooltip v-for="level in steps[item.value as number]!.levels" :key="level" :value="level">
-								<CausalityBadge :value="level" />
-							</CausalityTooltip>
+							<CausalityBadge
+								v-for="level in steps[item.value as number]!.levels"
+								:key="level"
+								:value="level"
+							/>
 						</div>
 					</div>
 

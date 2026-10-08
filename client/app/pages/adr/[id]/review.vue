@@ -55,20 +55,7 @@
 				</template>
 
 				<template #explanations>
-					<ClassRankings
-						:base-values="assessment.base_values"
-						:shap-values="assessment.shap_values_sum_per_class"
-						:base-shap-values="assessment.shap_values_and_base_values_sum_per_class"
-					/>
-					<FeatureRankings
-						:default-class="assessment.causality_assessment_level_value"
-						:base-values="assessment.base_values"
-						:shap-values="assessment.shap_values_sum_per_class"
-						:base-shap-values="assessment.shap_values_and_base_values_sum_per_class"
-						:shap-matrix="assessment.shap_values_matrix"
-						:feature-names="assessment.feature_names"
-						:feature-values="assessment.feature_values"
-					/>
+					<PredictionExplanation :assessment="assessment" class="mt-4" />
 				</template>
 			</UTabs>
 		</template>
