@@ -1,0 +1,60 @@
+name: Tests
+
+on:
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+
+jobs:
+    client:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: client
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+                  cache-dependency-path: client/package-lock.json
+
+            # client/.npmrc sets legacy-peer-deps (better-auth has an optional
+            # sveltekit peer that conflicts with vite).
+            - run: npm ci --ignore-scripts
+
+            - run: npm test
+
+    server:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: server
+        env:
+            # Dummy values: the tests never reach these services.
+            CLIENT_URL: http://localhost:3000
+            MLFLOW_EXPERIMENT_NAME: x
+            MLFLOW_EXPERIMENT_PATH: x
+            MLFLOW_ARTIFACT_PATH: x
+            MLFLOW_TRACKING_URI: x
+            MLFLOW_MODEL_NAME: x
+            MLFLOW_MODEL_VERSION: "1"
+            DATABRICKS_HOST: x
+            DATABRICKS_TOKEN: x
+            AFRICAS_TALKING_USERNAME: x
+            AFRICAS_TALKING_API_KEY: x
+            BETTER_AUTH_URL: http://localhost:3000
+            BETTER_AUTH_INTERNAL_SECRET: test-secret
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: astral-sh/setup-uv@v5
+              with:
+                  enable-cache: true
+                  cache-dependency-glob: server/uv.lock
+
+            - run: uv sync --group dev
+
+            - run: uv run pytest
