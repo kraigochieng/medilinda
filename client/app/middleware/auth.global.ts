@@ -1,17 +1,14 @@
-export default defineNuxtRouteMiddleware(async (to, from) => {
-	// const token = useCookie("medilindaBearerToken").value;
+import { authClient } from "~/lib/auth-client";
 
-	// // If no token at all, redirect early
-	// if (!token) {
-	// 	return navigateTo("/auth/login");
-	// }
+export default defineNuxtRouteMiddleware(async (to) => {
+	if (to.path.startsWith("/auth/")) return;
 
-	// try {
-	// 	const { $serverFetch } = useNuxtApp();
-	// 	await $serverFetch("/users/me"); // protected route
-	// } catch (error: any) {
-	// 	if (error?.response?.status === 401) {
-	// 		return navigateTo("/auth/login");
-	// 	}
-	// }
+	const headers = import.meta.server ? useRequestHeaders(["cookie"]) : undefined;
+	const { data: session } = await authClient.getSession({
+		fetchOptions: { headers },
+	});
+
+	if (!session) {
+		return navigateTo("/auth/login");
+	}
 });

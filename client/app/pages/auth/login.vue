@@ -62,9 +62,9 @@
 </template>
 
 <script setup lang="ts">
-import type { TokenResponse } from "@/types/auth";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { z } from "zod";
+import { authClient } from "~/lib/auth-client";
 
 const loginValidationSchema = z.object({
 	username: z.string().min(1, "Username is required"),
@@ -82,43 +82,22 @@ const isSubmitting = ref(false);
 const apiError = ref<string | null>(null);
 
 async function onSubmit(event: FormSubmitEvent<LoginForm>) {
-	// Reset previous errors and set loading state
 	apiError.value = null;
 	isSubmitting.value = true;
 
-	try {
-		// Use Nuxt's built-in $fetch to make the API call.
-		// The body is URL-encoded, which is common for OAuth2 login endpoints.
-		const response = await $fetch<TokenResponse>(
-			`${useRuntimeConfig().public.serverApi}/api/v1/auth/token`,
-			{
-				method: "POST",
-				body: new URLSearchParams(event.data as Record<string, string>),
-				headers: {
-					"Content-Type": "application/x-www-form-urlencoded",
-				},
-			}
-		);
+	const { error } = await authClient.signIn.username({
+		username: event.data.username,
+		password: event.data.password,
+	});
 
-		console.log("Login successful:", response);
+	isSubmitting.value = false;
 
-		const medilindaBearerToken = useCookie<string | null>(
-			"medilindaBearerToken"
-		);
-		medilindaBearerToken.value = response.access_token;
-
-		// On success, redirect the user to their dashboard.
-		await navigateTo("/adr");
-	} catch (error: any) {
-		// If the API call fails, extract the error message and display it.
-		// FastAPI often puts the error details in `error.data.detail`.
-		apiError.value =
-			error.data?.detail ||
-			"An unexpected error occurred. Please try again.";
-	} finally {
-		// Always reset the loading state, whether the call succeeds or fails.
-		isSubmitting.value = false;
+	if (error) {
+		apiError.value = error.message || "Login failed. Please try again.";
+		return;
 	}
+
+	await navigateTo("/adr");
 }
 
 definePageMeta({

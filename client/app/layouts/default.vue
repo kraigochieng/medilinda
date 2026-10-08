@@ -6,12 +6,15 @@
 
 		<UNavigationMenu :items="items" />
 
-		<UAvatar
-			:alt="`${capitalize(userData?.first_name.charAt(0))} ${capitalize(
-				userData?.last_name.charAt(0)
-			)}`"
-			size="lg"
-		/>
+		<UDropdownMenu :items="userMenuItems">
+			<UAvatar
+				:alt="`${capitalize(userData?.first_name?.charAt(0))} ${capitalize(
+					userData?.last_name?.charAt(0)
+				)}`"
+				size="lg"
+				class="cursor-pointer"
+			/>
+		</UDropdownMenu>
 	</div>
 
 	<div class="page-wrapper">
@@ -24,6 +27,7 @@ import { useQuery } from "@tanstack/vue-query";
 
 import { fetchCurrentUser } from "@/api/user";
 import { capitalize } from "lodash-es";
+import { authClient } from "~/lib/auth-client";
 
 const items = ref<NavigationMenuItem[]>([
 	{
@@ -55,6 +59,24 @@ const items = ref<NavigationMenuItem[]>([
 		to: "/dashboard",
 	},
 ]);
+
+const userMenuItems = [
+	[
+		{
+			label: "API keys",
+			icon: "i-lucide-key-round",
+			to: "/settings/api-keys",
+		},
+		{
+			label: "Sign out",
+			icon: "i-lucide-log-out",
+			onSelect: async () => {
+				await authClient.signOut();
+				await navigateTo("/auth/login");
+			},
+		},
+	],
+];
 
 const { data: userData } = useQuery({
 	queryKey: ["users"],
