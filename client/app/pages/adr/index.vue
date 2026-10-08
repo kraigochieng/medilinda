@@ -5,7 +5,16 @@
 				<h1 class="text-2xl font-bold">ADRs</h1>
 				<p class="text-sm text-muted" aria-live="polite">{{ summary }}</p>
 			</div>
-			<UButton to="/adr/add" icon="i-lucide-plus" label="Add ADR" />
+			<div class="flex items-center gap-2">
+				<UButton
+					to="/adr/deleted"
+					color="neutral"
+					variant="ghost"
+					icon="i-lucide-trash-2"
+					label="Recently deleted"
+				/>
+				<UButton to="/adr/add" icon="i-lucide-plus" label="Add ADR" />
+			</div>
 		</div>
 
 		<div class="flex flex-wrap items-center gap-2">
