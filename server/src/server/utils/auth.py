@@ -1,4 +1,3 @@
-import datetime
 import hashlib
 import time
 from functools import lru_cache
@@ -9,7 +8,6 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import APIKeyHeader, HTTPAuthorizationCredentials, HTTPBearer
 from jwt import PyJWKClient
 from jwt.exceptions import InvalidTokenError, PyJWKClientError
-from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from typing_extensions import Annotated
 
@@ -17,17 +15,6 @@ from server.basemodels.user import UserDetailsBaseModel
 from server.dependencies import get_db
 from server.models.user import UserModel
 from server.settings import settings
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-def get_password_hash(plain_password):
-    return pwd_context.hash(plain_password)
-
 
 _API_KEY_CACHE_TTL_SECONDS = 60
 _api_key_cache: dict[str, tuple[str, float]] = {}
@@ -148,37 +135,3 @@ async def get_current_active_user(
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
-
-
-def create_access_token(data: dict, expires_delta: datetime.timedelta | None = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.datetime.now(datetime.timezone.utc) + expires_delta
-    else:
-        expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
-            minutes=15
-        )
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(
-        to_encode,
-        settings.server_access_secret_key,
-        algorithm=settings.server_access_algorithm,
-    )
-    return encoded_jwt
-
-
-# def create_refresh_token(data: dict, expires_delta: datetime.timedelta | None = None):
-#     to_encode = data.copy()
-#     if expires_delta:
-#         expire = datetime.datetime.now(datetime.timezone.utc) + expires_delta
-#     else:
-#         expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
-#             days=7
-#         )
-#     to_encode.update({"exp": expire})
-#     encoded_jwt = jwt.encode(
-#         to_encode,
-#         settings.server_refresh_secret_key,
-#         algorithm=settings.server_refresh_algorithm,
-#     )
-#     return encoded_jwt
