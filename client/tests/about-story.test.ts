@@ -55,6 +55,13 @@ describe("the story", () => {
 		expect(step.levels).toEqual(CAUSALITY_LEVELS.map((l) => l.value));
 	});
 
+	it("says the messages are a follow-up with the facility, not with the patient", () => {
+		const step = STORY.find((s) => s.id === "communicate")!;
+
+		expect(step.story).toContain("facility");
+		expect(step.story.toLowerCase()).not.toContain("patient");
+	});
+
 	it("uses short sentences, as the project style asks", () => {
 		for (const step of STORY) {
 			for (const sentence of step.story.split(/(?<=[.!?])\s+/)) {
