@@ -9,6 +9,11 @@ export default defineNuxtConfig({
 	routeRules: {
 		"/monitoring": { redirect: { to: "/dashboard", statusCode: 302 } },
 		"/monitoring/**": { redirect: { to: "/dashboard", statusCode: 302 } },
+		// Reviews and assessments are read and written on the ADR's own page.
+		"/review": { redirect: { to: "/adr", statusCode: 302 } },
+		"/review/**": { redirect: { to: "/adr", statusCode: 302 } },
+		"/causality-assessment-level": { redirect: { to: "/adr", statusCode: 302 } },
+		"/causality-assessment-level/**": { redirect: { to: "/adr", statusCode: 302 } },
 	},
 	runtimeConfig: {
 		public: {

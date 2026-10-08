@@ -94,22 +94,7 @@ const collapsed = ref(false);
 
 const mainItems: NavigationMenuItem[] = [
 	{ label: "Home", icon: "i-lucide-house", to: "/", exact: true },
-	{
-		label: "ADRs",
-		icon: "i-lucide-file-heart",
-		defaultOpen: true,
-		children: [
-			{ label: "View ADRs", to: "/adr", exact: true },
-			{ label: "Add ADR", to: "/adr/add" },
-			{ label: "Recently deleted", to: "/adr/deleted" },
-		],
-	},
-	{ label: "Reviews", icon: "i-lucide-clipboard-check", to: "/review" },
-	{
-		label: "Causality assessment",
-		icon: "i-lucide-scale",
-		to: "/causality-assessment-level",
-	},
+	{ label: "ADRs", icon: "i-lucide-file-heart", to: "/adr" },
 	{
 		label: "Communication",
 		icon: "i-lucide-messages-square",
