@@ -1,8 +1,12 @@
+from collections.abc import Sequence
+
 from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
 from server.basemodels.adverse_drug_reaction_report import (
     ADRPostRequest,
     ReviewStatusFilter,
+    SortField,
+    SortOrder,
 )
 from server.exceptions import ResourceNotFoundError
 from server.models.adverse_drug_reaction_report import ADRModel
@@ -14,6 +18,17 @@ from server.models.review import ReviewModel
 from server.models.user import UserModel
 from sqlalchemy import and_, case, desc, false, func, or_, select, true
 from sqlalchemy.orm import Session
+
+
+# From the least to the most certain. Used to sort the list by causality level.
+CAUSALITY_ORDER = [
+    CausalityAssessmentLevelEnum.unclassifiable,
+    CausalityAssessmentLevelEnum.unclassified,
+    CausalityAssessmentLevelEnum.unlikely,
+    CausalityAssessmentLevelEnum.possible,
+    CausalityAssessmentLevelEnum.likely,
+    CausalityAssessmentLevelEnum.certain,
+]
 
 
 class AdverseDrugReactionReportRepository:
@@ -49,8 +64,10 @@ class AdverseDrugReactionReportRepository:
         self,
         pagination_params: Params,
         query: str | None,
-        causality_level: CausalityAssessmentLevelEnum | None = None,
-        review_status: ReviewStatusFilter | None = None,
+        causality_level: Sequence[CausalityAssessmentLevelEnum] | None = None,
+        review_status: Sequence[ReviewStatusFilter] | None = None,
+        sort_by: SortField = SortField.created_at,
+        sort_order: SortOrder = SortOrder.desc,
     ) -> Page[ADRModel]:
         """
         Gets a paginated list of ADRs with their newest causality level
@@ -108,7 +125,6 @@ class AdverseDrugReactionReportRepository:
                 UserModel.last_name,
                 ranked_causality_cte.c.causality_assessment_level_value,
             )
-            .order_by(ADRModel.created_at.desc())
         )
 
         if search_term:
@@ -121,28 +137,65 @@ class AdverseDrugReactionReportRepository:
                 )
             )
 
-        if causality_level is not None:
+        # Several values in one filter match any of them. Different filters all apply.
+        if causality_level:
             main_stmt = main_stmt.where(
-                ranked_causality_cte.c.causality_assessment_level_value
-                == causality_level
-            )
-
-        has_assessment = ranked_causality_cte.c.id.is_not(None)
-        if review_status == ReviewStatusFilter.needs_review:
-            main_stmt = main_stmt.having(
-                and_(has_assessment, approved_count + unapproved_count == 0)
-            )
-        elif review_status == ReviewStatusFilter.approved:
-            main_stmt = main_stmt.having(approved_count > unapproved_count)
-        elif review_status == ReviewStatusFilter.not_approved:
-            main_stmt = main_stmt.having(
-                and_(
-                    approved_count + unapproved_count > 0,
-                    approved_count <= unapproved_count,
+                ranked_causality_cte.c.causality_assessment_level_value.in_(
+                    causality_level
                 )
             )
 
+        has_assessment = ranked_causality_cte.c.id.is_not(None)
+        review_conditions = {
+            ReviewStatusFilter.needs_review: and_(
+                has_assessment, approved_count + unapproved_count == 0
+            ),
+            ReviewStatusFilter.approved: approved_count > unapproved_count,
+            ReviewStatusFilter.not_approved: and_(
+                approved_count + unapproved_count > 0,
+                approved_count <= unapproved_count,
+            ),
+        }
+        if review_status:
+            main_stmt = main_stmt.having(
+                or_(*(review_conditions[status] for status in set(review_status)))
+            )
+
+        main_stmt = main_stmt.order_by(
+            *self._list_order(ranked_causality_cte, sort_by, sort_order)
+        )
+
         return paginate(self.db, main_stmt, params=pagination_params)
+
+    def _list_order(self, causality_cte, sort_by: SortField, sort_order: SortOrder):
+        """The ORDER BY of the list. The id breaks ties, so paging stays stable."""
+        descending = sort_order == SortOrder.desc
+
+        if sort_by == SortField.causality_level:
+            # The levels run from least to most certain. A report without an
+            # assessment goes last in both directions.
+            rank = case(
+                *(
+                    (causality_cte.c.causality_assessment_level_value == level, i)
+                    for i, level in enumerate(CAUSALITY_ORDER)
+                ),
+                else_=-1,
+            )
+            first = [
+                case((causality_cte.c.id.is_(None), 1), else_=0),
+                rank.desc() if descending else rank.asc(),
+            ]
+        else:
+            column = {
+                SortField.patient_name: func.lower(ADRModel.patient_name),
+                SortField.created_by: func.lower(
+                    UserModel.first_name + " " + UserModel.last_name
+                ),
+                SortField.created_at: ADRModel.created_at,
+            }[sort_by]
+            first = [column.desc() if descending else column.asc()]
+
+        return [*first, ADRModel.id]
 
     def _save(self, model: ADRModel | None, commit: bool) -> None:
         """Commit, or only flush so the caller can finish a larger transaction."""

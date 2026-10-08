@@ -78,3 +78,24 @@ def test_searches_by_text(client, two_adrs):
 )
 def test_rejects_unknown_filter_values(client, two_adrs, params):
     assert client.get(URL, params=params).status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_a_repeated_query_value_means_any_of_them(client, two_adrs):
+    response = client.get(f"{URL}?causality_level=likely&causality_level=certain")
+
+    assert response.status_code == status.HTTP_200_OK
+    assert names(response) == {"Alice", "Bob"}
+
+
+def test_one_value_still_filters(client, two_adrs):
+    assert names(client.get(f"{URL}?causality_level=certain")) == {"Bob"}
+
+
+def test_the_list_can_be_sorted(client, two_adrs):
+    response = client.get(f"{URL}?sort_by=patient_name&sort_order=desc")
+
+    assert [i["patient_name"] for i in response.json()["items"]] == ["Bob", "Alice"]
+
+
+def test_an_unknown_sort_field_is_refused(client, two_adrs):
+    assert client.get(f"{URL}?sort_by=password").status_code == 422

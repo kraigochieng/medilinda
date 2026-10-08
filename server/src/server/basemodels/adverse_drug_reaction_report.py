@@ -14,6 +14,20 @@ class ReviewStatusFilter(str, enum.Enum):
     not_approved = "not_approved"  # reviewed, but approvals do not outnumber rejections
 
 
+class SortField(str, enum.Enum):
+    """The columns the ADR list can be sorted by."""
+
+    patient_name = "patient_name"
+    causality_level = "causality_level"
+    created_by = "created_by"
+    created_at = "created_at"
+
+
+class SortOrder(str, enum.Enum):
+    asc = "asc"
+    desc = "desc"
+
+
 class GenderEnum(str, enum.Enum):
     male = "male"
     female = "female"
