@@ -655,13 +655,8 @@ const { mutate: createADR, isPending: isSubmitting } = useMutation<
 	onSuccess: (data) => {
 		submitted.value = true;
 		if (currentUser.value?.id) draftStore.clear(currentUser.value.id);
-		toast.add({
-			title: "Success",
-			description: "ADR report created successfully.",
-			color: "success",
-		});
-		// You can navigate away or reset the form
-		router.push(`/adr/${data.id}`); // Example navigation
+		// The ADR page says what the model made of the report and what to do next.
+		router.push({ path: `/adr/${data.id}`, query: { created: "1" } });
 	},
 	onError: (error) => {
 		console.error("Failed to create ADR:", error);
@@ -684,14 +679,16 @@ const { mutate: updateADR, isPending: isUpdating } = useMutation<
 		queryClient.invalidateQueries({ queryKey: ["adrs"] });
 		queryClient.invalidateQueries({ queryKey: ["adr", props.id] });
 		queryClient.invalidateQueries({ queryKey: ["adr-activity", props.id] });
-		queryClient.invalidateQueries({ queryKey: ["causality-assessment-levels"] });
-		toast.add({
-			title: "ADR updated",
-			description:
-				"The change is saved and kept in the history. If it changed anything the model reads, the causality level was re-assessed and needs a new review.",
-			color: "success",
-		});
-		router.push(`/adr/${props.id}`);
+		// What the ADR page shows must not come from before this edit.
+		for (const key of [
+			"causality-assessment",
+			"review-details",
+			"reviews-stats",
+			"reviews-by-causality-level",
+		]) {
+			queryClient.invalidateQueries({ queryKey: [key] });
+		}
+		router.push({ path: `/adr/${props.id}`, query: { saved: "1" } });
 	},
 	onError: (error) => {
 		toast.add({

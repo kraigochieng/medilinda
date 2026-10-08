@@ -10,6 +10,19 @@
 		/>
 	</div>
 
+	<UAlert
+		v-if="banner"
+		:color="banner.color"
+		variant="subtle"
+		:icon="banner.icon"
+		:title="banner.title"
+		:description="banner.description"
+		:actions="banner.actions.map((a) => ({ label: a.label, to: a.to, color: 'neutral', variant: 'outline' }))"
+		close
+		class="mb-4"
+		@update:open="savedKind = null"
+	/>
+
 	<CausalityAssessmentLevelComparison
 		:value="firstCausalityAssessmentLevel?.causality_assessment_level_value"
 	/>
@@ -94,6 +107,7 @@
 <script setup lang="ts">
 import { fetchAdrById, deleteAdrById } from "@/api/adr";
 import { fetchCausalityAssessmentLevels } from "@/api/cal";
+import { savedBanner, type SavedKind } from "~/utils/adr-saved";
 import { fetchReviews, fetchReviewStats } from "@/api/review";
 import type { ADRGetResponseInterface } from "@/types/adr";
 import type { TableColumn, TabsItem } from "@nuxt/ui";
@@ -140,6 +154,7 @@ const {
 const {
 	data: causalityAssessmentLevelData,
 	isPending: isCausalityAssessmentPending,
+	isFetching: isCausalityAssessmentFetching,
 	isError: isCausalityAssessmentError,
 	error: causalityAssessmentError,
 	status: causalityAssessmentStatus,
@@ -152,6 +167,35 @@ const {
 const firstCausalityAssessmentLevel = computed(
 	() => causalityAssessmentLevelData.value?.items?.[0]
 );
+
+// ---- Just saved ----------------------------------------------------------------
+// The form sends us here with ?created=1 or ?saved=1. Remember it, then take it
+// out of the address, so a refresh or a shared link does not show the banner again.
+const savedKind = ref<SavedKind | null>(
+	route.query.created ? "created" : route.query.saved ? "updated" : null
+);
+onMounted(() => {
+	if (savedKind.value) router.replace({ query: {} });
+});
+
+const banner = computed(() => {
+	if (!savedKind.value) return null;
+
+	const hasAssessment = !!firstCausalityAssessmentLevel.value;
+	const loading =
+		isCausalityAssessmentPending.value ||
+		isCausalityAssessmentFetching.value ||
+		(hasAssessment && (isStatsPending.value || isStatsFetching.value));
+
+	return savedBanner({
+		kind: savedKind.value,
+		adrId: id,
+		level: firstCausalityAssessmentLevel.value?.causality_assessment_level_value,
+		approved: reviewStats.value?.approved_reviews ?? 0,
+		unapproved: reviewStats.value?.unapproved_reviews ?? 0,
+		loading,
+	});
+});
 
 const {
 	data: currentReviewDetails,
@@ -193,6 +237,7 @@ const {
 const {
 	data: reviewStats,
 	isPending: isStatsPending,
+	isFetching: isStatsFetching,
 	isError: isStatsError,
 	error: statsError,
 	refetch: refetchStats,
