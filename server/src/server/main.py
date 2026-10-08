@@ -12,6 +12,7 @@ from server.api.v1.endpoints import (
     adverse_drug_reaction_reports_details as adverse_drug_reaction_report_details_v1,
 )
 from server.api.v1.endpoints import alerts as alerts_v1
+from server.api.v1.endpoints import audit_logs as audit_logs_v1
 from server.api.v1.endpoints import (
     causality_assessment_levels as causality_assessment_level_v1,
 )
@@ -57,6 +58,7 @@ add_pagination(app)
 require_login = [Depends(get_current_active_user)]
 
 app.include_router(alerts_v1.router, dependencies=require_login)
+app.include_router(audit_logs_v1.router, dependencies=require_login)
 app.include_router(adverse_drug_reaction_report_v1.router, dependencies=require_login)
 app.include_router(adverse_drug_reaction_report_details_v1.router, dependencies=require_login)
 app.include_router(causality_assessment_level_v1.router, dependencies=require_login)
