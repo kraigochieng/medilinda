@@ -116,7 +116,6 @@
 // const error = ref<string | null>(null);
 
 // // Stores
-// const authStore = useAuthStore();
 
 // // Lifecycle Hooks
 // onMounted(async () => {

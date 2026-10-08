@@ -117,7 +117,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 onMounted(async () => {
 	// const runtimeConfig = useRuntimeConfig();
 	// const serverApi = runtimeConfig.public.serverApi;
-	// const authStore = useAuthStore();
 	// if (props.mode == "update") {
 	// 	const response = await $fetch(
 	// 		`${serverApi}/review_for_specific_user_and_causality_assessment_level`,

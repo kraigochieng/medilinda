@@ -60,7 +60,6 @@
 // type ModeType = "create" | "update";
 // const mode: ModeType = (route.query.mode as ModeType) || "create"; // If the mode is not set, then the default is create
 // // Store
-// const authStore = useAuthStore();
 
 // const smsData = ref<PaginatedResponseInterface<SMSMessageGetResponse> | null>(
 // 	null

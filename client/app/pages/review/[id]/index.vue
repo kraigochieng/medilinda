@@ -54,7 +54,6 @@
 // const router = useRouter();
 
 // // Store
-// const authStore = useAuthStore();
 
 // const causalityAssessmentLevelData =
 // 	ref<CausalityAssessmentLevelWithReviewCountGetResponseInterface | null>(
