@@ -74,72 +74,14 @@
 							1. Institution Details
 						</p>
 					</div>
-					<div class="flex items-center justify-between space-x-2">
-						<div class="flex space-x-1">
-							<UModal title="Add Medical Institution">
-								<span class="underline hover:cursor-pointer">
-									Create
-								</span>
-								<template #body>
-									<p class="italic">Form to be added</p>
-									<!-- <FormMedicalInstitution
-										mode="create"
-										:is-in-dialog="true"
-										@submitted="
-											handleMedicalInstitutionFormSubmitted
-										"
-									/> -->
-								</template>
-							</UModal>
-							<span>or</span>
-							<UModal
-								title="Choose a medical institution"
-								description="Choose an existing Medical Institution | Search for a medical institution"
-							>
-								<span class="underline hover:cursor-pointer">
-									find
-								</span>
-								<template #body>
-									<div>
-										<UInput
-											type="text"
-											placeholder="Seach for a hospital, minimum 3 characters, by name, MFL Code or location"
-											v-model="
-												medicalInstitutionSearchInput
-											"
-										/>
-										<URadioGroup
-											v-if="
-												medicalInstitutionList?.items &&
-												medicalInstitutionList.items
-													?.length > 0
-											"
-											v-model="
-												state.medical_institution_id
-											"
-											:items="
-												medicalInstitutionList?.items?.map(
-													(item) => ({
-														label: `${item.name} | ${item.county} | ${item.sub_county}`,
-														value: item.id,
-													})
-												)
-											"
-										/>
-										<div
-											v-if="
-												medicalInstitutionList?.items
-													?.length == 0
-											"
-										>
-											No hospitals
-										</div>
-									</div>
-								</template>
-							</UModal>
-							<span>a Medical Institution</span>
-						</div>
-					</div>
+					<UFormField
+						label="Medical institution"
+						name="medical_institution_id"
+						required
+						help="Search by name, MFL code or county. If it is not listed, you can add it."
+					>
+						<InstitutionPicker v-model="state.medical_institution_id" />
+					</UFormField>
 
 					<div v-if="medicalInstitutionData">
 						<div class="view-details-wrapper">
@@ -500,8 +442,6 @@ import type {
 	TableColumn,
 } from "@nuxt/ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { fetchMedicalInstitutions } from "~/api/medical_institution";
-import type { PaginatedResponseInterface } from "~/types/pagination";
 import type { UserDetails } from "@/types/user";
 import { fetchAdrById, postAdr, putAdr } from "@/api/adr";
 import { fetchMedicalInstitutionById } from "@/api/medical_institution";
@@ -555,7 +495,6 @@ type MedicineRow = {
 
 
 // const medicalInstitutionId = ref<string | undefined>();
-const medicalInstitutionSearchInput = ref<string>("");
 
 const isDob = ref<string>("dob-yes");
 
@@ -636,29 +575,6 @@ const UFormField = resolveComponent("UFormField");
 const UCheckbox = resolveComponent("UCheckbox");
 const UInput = resolveComponent("UInput");
 const USelect = resolveComponent("USelect");
-
-const debouncedMedicalInstitutionSearchInput = refDebounced(
-	medicalInstitutionSearchInput,
-	500
-);
-
-const {
-	data: medicalInstitutionList,
-	isPending,
-	isError,
-	error,
-	isFetching,
-} = useQuery<
-	PaginatedResponseInterface<MedicalInstitutionGetResponseInterface>,
-	Error
->({
-	queryKey: ["medicalInstitutions", debouncedMedicalInstitutionSearchInput],
-	queryFn: () =>
-		fetchMedicalInstitutions({
-			size: 10,
-			query: debouncedMedicalInstitutionSearchInput.value,
-		}),
-});
 
 const { data: currentUser, isPending: isUserPending } = useQuery<
 	UserDetails,
