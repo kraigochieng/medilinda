@@ -270,6 +270,39 @@ class ADRGetResponse(BaseModel):
     # Suspected Adverse Reaction
     date_of_onset_of_reaction: date | None = None
     description_of_reaction: str | None = None
+    # Medicines
+    rifampicin_suspected: bool | None = None
+    rifampicin_start_date: date | None = None
+    rifampicin_stop_date: date | None = None
+    rifampicin_dose_amount: float | None = None
+    rifampicin_frequency_number: float | None = None
+    rifampicin_route: str | None = None
+    rifampicin_batch_no: str | None = None
+    rifampicin_manufacturer: str | None = None
+    isoniazid_suspected: bool | None = None
+    isoniazid_start_date: date | None = None
+    isoniazid_stop_date: date | None = None
+    isoniazid_dose_amount: float | None = None
+    isoniazid_frequency_number: float | None = None
+    isoniazid_route: str | None = None
+    isoniazid_batch_no: str | None = None
+    isoniazid_manufacturer: str | None = None
+    pyrazinamide_suspected: bool | None = None
+    pyrazinamide_start_date: date | None = None
+    pyrazinamide_stop_date: date | None = None
+    pyrazinamide_dose_amount: float | None = None
+    pyrazinamide_frequency_number: float | None = None
+    pyrazinamide_route: str | None = None
+    pyrazinamide_batch_no: str | None = None
+    pyrazinamide_manufacturer: str | None = None
+    ethambutol_suspected: bool | None = None
+    ethambutol_start_date: date | None = None
+    ethambutol_stop_date: date | None = None
+    ethambutol_dose_amount: float | None = None
+    ethambutol_frequency_number: float | None = None
+    ethambutol_route: str | None = None
+    ethambutol_batch_no: str | None = None
+    ethambutol_manufacturer: str | None = None
     # Rechallenge/Dechallenge
     rechallenge: RechallengeEnum
     dechallenge: DechallengeEnum
