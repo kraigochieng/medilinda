@@ -1,9 +1,8 @@
 <template>
 	<div class="page-wrapper">
-		<p
-			class="my-4 bg-gray-200 border border-dashed border-black border-1 rounded-sm p-4 italic"
-		>
-			Note: The prefilled ADR Data is for the class of Likely
+		<p class="mb-4 text-sm text-muted">
+			Fill in the report. Your work is saved as a draft in this browser tab, so a refresh does not lose
+			it. Use <strong>Fill sample data</strong> to try the form with an example patient.
 		</p>
 		<FormADR mode="create" />
 	</div>

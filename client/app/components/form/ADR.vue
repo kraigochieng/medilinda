@@ -1,6 +1,19 @@
 <template>
 	<ADRMenu />
 	<UAlert
+		v-if="pendingDraft"
+		color="info"
+		variant="subtle"
+		icon="i-lucide-file-clock"
+		title="You have an unfinished report"
+		:description="`Saved ${formatDateTime(pendingDraft.savedAt)} in this browser tab. Restore it to carry on where you stopped.`"
+		:actions="[
+			{ label: 'Restore draft', color: 'neutral', onClick: restoreDraft },
+			{ label: 'Discard', color: 'neutral', variant: 'outline', onClick: discardDraft },
+		]"
+		class="mb-4"
+	/>
+	<UAlert
 		v-if="loadError"
 		color="error"
 		variant="subtle"
@@ -26,8 +39,21 @@
 	>
 		<UCard>
 			<template #header>
-				{{ props.mode == "create" ? "Add" : "Edit" }} an Adverse Drug
-				Reaction (ADR) Report
+				<div class="flex items-center justify-between gap-2">
+					<span>
+						{{ props.mode == "create" ? "Add" : "Edit" }} an Adverse Drug
+						Reaction (ADR) Report
+					</span>
+					<UButton
+						v-if="props.mode == 'create'"
+						size="sm"
+						color="neutral"
+						variant="ghost"
+						icon="i-lucide-flask-conical"
+						label="Fill sample data"
+						@click="fillSample"
+					/>
+				</div>
 			</template>
 			<template #default>
 				<div class="form-section">
@@ -467,6 +493,14 @@ import type { UserDetails } from "@/types/user";
 import { fetchAdrById, postAdr, putAdr } from "@/api/adr";
 import { fetchMedicalInstitutionById } from "@/api/medical_institution";
 import {
+	createDraftStore,
+	isDirty,
+	isMeaningful,
+	stableString,
+	type Draft,
+} from "~/utils/adr-draft";
+import { formatDateTime } from "~/utils/adr-table";
+import {
 	adrFormSchema,
 	adrToFormState,
 	emptyFormState,
@@ -513,10 +547,31 @@ const isDobItems = ref<RadioGroupItem[]>([
 
 const schema = adrFormSchema;
 
-// Add starts with sample data for now. Edit starts empty and fills in from the record.
-const state = reactive<Partial<AdrForm>>(
-	props.mode === "create" ? sampleFormState() : emptyFormState()
-);
+// Both modes start blank. Edit fills in from the record; Add can be filled with
+// sample data on request, and offers back an unfinished draft.
+const state = reactive<Partial<AdrForm>>(emptyFormState());
+
+// What the form held when it was last "clean": blank, or the loaded record.
+const baseline = ref<Partial<AdrForm>>(emptyFormState());
+const dirty = computed(() => isDirty(baseline.value, state));
+const submitted = ref(false);
+
+// Replace every field, so nothing from the old values is left behind.
+function replaceState(next: Partial<AdrForm>) {
+	for (const key of Object.keys(state)) delete (state as Record<string, unknown>)[key];
+	Object.assign(state, next);
+}
+
+function fillSample() {
+	if (
+		dirty.value &&
+		!window.confirm("Replace what you have entered with sample data?")
+	) {
+		return;
+	}
+	replaceState(sampleFormState());
+	isDob.value = "dob-yes";
+}
 
 const {
 	data: existingAdr,
@@ -537,7 +592,9 @@ watch(
 	existingAdr,
 	(adr) => {
 		if (!adr) return;
-		Object.assign(state, adrToFormState(adr));
+		const loaded = adrToFormState(adr);
+		replaceState(loaded);
+		baseline.value = JSON.parse(JSON.stringify(loaded));
 		isDob.value = adr.patient_date_of_birth ? "dob-yes" : "dob-no";
 	},
 	{ immediate: true }
@@ -592,6 +649,68 @@ const { data: currentUser, isPending: isUserPending } = useQuery<
 	queryFn: fetchCurrentUser,
 });
 
+// ---- Draft (Add only) -------------------------------------------------------
+// Kept in this browser tab only, because it holds patient data.
+const draftStore = createDraftStore(import.meta.client ? window.sessionStorage : undefined);
+const pendingDraft = ref<Draft | null>(null);
+const draftChecked = ref(false);
+
+watch(
+	() => currentUser.value?.id,
+	(userId) => {
+		if (props.mode !== "create" || !userId || draftChecked.value) return;
+		draftChecked.value = true;
+
+		const draft = draftStore.load(userId);
+		if (draft && isMeaningful(draft.state)) pendingDraft.value = draft;
+	},
+	{ immediate: true }
+);
+
+function restoreDraft() {
+	if (!pendingDraft.value) return;
+	replaceState(pendingDraft.value.state);
+	isDob.value = pendingDraft.value.knowsDob ? "dob-yes" : "dob-no";
+	pendingDraft.value = null;
+}
+
+function discardDraft() {
+	if (currentUser.value?.id) draftStore.clear(currentUser.value.id);
+	pendingDraft.value = null;
+}
+
+// Save as you type. A form that is blank again removes the draft.
+watchDebounced(
+	() => [stableString(state), isDob.value],
+	() => {
+		const userId = currentUser.value?.id;
+		if (props.mode !== "create" || !userId || !draftChecked.value) return;
+		if (pendingDraft.value || submitted.value) return; // the user has not decided yet
+
+		if (isMeaningful(state)) draftStore.save(userId, state, isDob.value === "dob-yes");
+		else draftStore.clear(userId);
+	},
+	{ debounce: 800 }
+);
+
+// ---- Unsaved changes ---------------------------------------------------------
+// Edit has no draft, so leaving asks first. Add keeps a draft, so only closing the
+// tab (which would lose it) asks.
+onBeforeRouteLeave(() => {
+	if (props.mode === "update" && dirty.value && !submitted.value) {
+		return window.confirm("You have unsaved changes. Leave this page and lose them?");
+	}
+});
+
+function warnBeforeUnload(event: BeforeUnloadEvent) {
+	if (dirty.value && !submitted.value) {
+		event.preventDefault();
+		event.returnValue = "";
+	}
+}
+onMounted(() => window.addEventListener("beforeunload", warnBeforeUnload));
+onBeforeUnmount(() => window.removeEventListener("beforeunload", warnBeforeUnload));
+
 const { mutate: createADR, isPending: isSubmitting } = useMutation<
 	ADRGetResponseInterface,
 	Error,
@@ -599,6 +718,8 @@ const { mutate: createADR, isPending: isSubmitting } = useMutation<
 >({
 	mutationFn: (payload) => postAdr(payload),
 	onSuccess: (data) => {
+		submitted.value = true;
+		if (currentUser.value?.id) draftStore.clear(currentUser.value.id);
 		toast.add({
 			title: "Success",
 			description: "ADR report created successfully.",
@@ -624,6 +745,7 @@ const { mutate: updateADR, isPending: isUpdating } = useMutation<
 >({
 	mutationFn: (payload) => putAdr(props.id as string, payload),
 	onSuccess: () => {
+		submitted.value = true;
 		queryClient.invalidateQueries({ queryKey: ["adrs"] });
 		queryClient.invalidateQueries({ queryKey: ["adr", props.id] });
 		queryClient.invalidateQueries({ queryKey: ["adr-activity", props.id] });
