@@ -6,6 +6,14 @@ from pydantic import BaseModel, ConfigDict
 from server.basemodels.causality_asssessment_level import CausalityAssessmentLevelEnum
 
 
+class ReviewStatusFilter(str, enum.Enum):
+    """Filter for the ADR list, based on the reviews of the newest assessment."""
+
+    needs_review = "needs_review"  # has an assessment, no reviews yet
+    approved = "approved"  # more approvals than rejections
+    not_approved = "not_approved"  # reviewed, but approvals do not outnumber rejections
+
+
 class GenderEnum(str, enum.Enum):
     male = "male"
     female = "female"
