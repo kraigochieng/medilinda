@@ -1,7 +1,9 @@
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, model_validator
+
+from server.utils.audit_summary import summarize
 
 
 class AuditChange(BaseModel):
@@ -29,4 +31,20 @@ class AuditLogGetResponse(BaseModel):
     at: datetime
     changes: list[AuditChange] | None = None
     reason: str | None = None
+    # A few fields that say what the entry is about, even when the snapshot is left out.
+    summary: dict[str, Any] | None = None
     snapshot: dict[str, Any] | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _add_summary(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            return data
+
+        values = {
+            name: getattr(data, name, None)
+            for name in cls.model_fields
+            if name != "summary"
+        }
+        values["summary"] = summarize(data.entity_type, data.snapshot)
+        return values

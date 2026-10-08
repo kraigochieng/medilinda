@@ -96,6 +96,7 @@ const mainItems: NavigationMenuItem[] = [
 		children: [
 			{ label: "View ADRs", to: "/adr", exact: true },
 			{ label: "Add ADR", to: "/adr/add" },
+			{ label: "Recently deleted", to: "/adr/deleted" },
 		],
 	},
 	{ label: "Reviews", icon: "i-lucide-clipboard-check", to: "/review" },

@@ -626,6 +626,7 @@ const { mutate: updateADR, isPending: isUpdating } = useMutation<
 	onSuccess: () => {
 		queryClient.invalidateQueries({ queryKey: ["adrs"] });
 		queryClient.invalidateQueries({ queryKey: ["adr", props.id] });
+		queryClient.invalidateQueries({ queryKey: ["adr-activity", props.id] });
 		queryClient.invalidateQueries({ queryKey: ["causality-assessment-levels"] });
 		toast.add({
 			title: "ADR updated",
