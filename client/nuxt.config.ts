@@ -5,6 +5,11 @@ export default defineNuxtConfig({
 	compatibilityDate: "2024-11-01",
 	devtools: { enabled: false },
 	css: ["~/assets/css/main.css"],
+	// The Monitoring pages are unfinished (all of their code is commented out).
+	routeRules: {
+		"/monitoring": { redirect: { to: "/dashboard", statusCode: 302 } },
+		"/monitoring/**": { redirect: { to: "/dashboard", statusCode: 302 } },
+	},
 	runtimeConfig: {
 		public: {
 			serverApi:

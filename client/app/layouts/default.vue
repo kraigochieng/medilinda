@@ -124,16 +124,6 @@ const mainItems: NavigationMenuItem[] = [
 			},
 		],
 	},
-	{
-		label: "Monitoring",
-		icon: "i-lucide-activity",
-		children: [
-			{ label: "Overview", to: "/monitoring", exact: true },
-			{ label: "ADR", to: "/monitoring/adr" },
-			{ label: "Review", to: "/monitoring/review" },
-			{ label: "SMS", to: "/monitoring/sms" },
-		],
-	},
 	{ label: "Dashboard", icon: "i-lucide-layout-dashboard", to: "/dashboard" },
 ];
 
