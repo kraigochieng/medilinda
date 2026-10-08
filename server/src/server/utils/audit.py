@@ -15,8 +15,20 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import Any, Callable
 
-from sqlalchemy import Date, DateTime, Enum, event, inspect, insert, select, text
+from sqlalchemy import (
+    Date,
+    DateTime,
+    Enum,
+    event,
+    func,
+    inspect,
+    insert,
+    select,
+    text,
+    tuple_,
+)
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.base import NO_VALUE
 
 from server.db.base import Base
 from server.exceptions import ResourceConflictError, ResourceNotFoundError
@@ -97,6 +109,10 @@ def _via_adr_id(conn, obj):
 
 
 def _review_root(conn, obj):
+    loaded = inspect(obj).attrs.causality_assessment_level.loaded_value
+    if loaded is not None and loaded is not NO_VALUE:
+        return ("adr", loaded.adr_id) if loaded.adr_id else None
+
     row = conn.execute(
         text("select adr_id from causality_assessment_level where id = :id"),
         {"id": obj.causality_assessment_level_id},
@@ -191,16 +207,24 @@ def _changes(obj) -> list[dict[str, Any]]:
 # ---------------------------------------------------------------------- writing
 
 
-def _next_version(conn, entity_type: str, entity_id: str) -> int:
-    current = conn.execute(
-        select(text("max(version)"))
-        .select_from(AuditLogModel.__table__)
-        .where(
-            AuditLogModel.__table__.c.entity_type == entity_type,
-            AuditLogModel.__table__.c.entity_id == entity_id,
+def _current_versions(conn, keys: list[tuple[str, str]]) -> dict[tuple[str, str], int]:
+    """Latest version of each (entity_type, entity_id), in as few queries as possible.
+
+    One round trip per chunk instead of one per row matters when the database
+    is remote.
+    """
+    table = AuditLogModel.__table__
+    versions: dict[tuple[str, str], int] = {}
+    for start in range(0, len(keys), 200):
+        chunk = keys[start : start + 200]
+        rows = conn.execute(
+            select(table.c.entity_type, table.c.entity_id, func.max(table.c.version))
+            .where(tuple_(table.c.entity_type, table.c.entity_id).in_(chunk))
+            .group_by(table.c.entity_type, table.c.entity_id)
         )
-    ).scalar()
-    return (current or 0) + 1
+        for entity_type, entity_id, version in rows:
+            versions[(entity_type, entity_id)] = version
+    return versions
 
 
 def _entry(
@@ -256,7 +280,9 @@ def _record(session: Session, items: list[tuple[Any, str]]) -> None:
 
     conn = session.connection()
     rows: list[dict[str, Any]] = []
-    versions: dict[tuple[str, str], int] = {}
+    latest = _current_versions(
+        conn, [(obj.__table__.name, obj.id) for obj, _ in items]
+    )
 
     for obj, action in items:
         spec = _spec_for(obj)
@@ -271,7 +297,7 @@ def _record(session: Session, items: list[tuple[Any, str]]) -> None:
         elif action == "create":
             action = _action_hint.get() or "create"
 
-        version = _next_version(conn, *key)
+        version = latest.get(key, 0) + 1
 
         if action in ("update", "delete") and version == 1:
             before = dict(snapshot)
@@ -280,7 +306,6 @@ def _record(session: Session, items: list[tuple[Any, str]]) -> None:
             rows.append(_baseline(obj, spec, conn, before))
             version = 2
 
-        versions[key] = version
         rows.append(
             _entry(
                 obj=obj,

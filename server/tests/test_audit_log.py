@@ -1,4 +1,5 @@
 import pytest
+from sqlalchemy import event
 from server.models.audit_log import AuditLogModel
 from server.models.adverse_drug_reaction_report import ADRModel
 from server.models.causality_assessment_level import (
@@ -210,3 +211,39 @@ class TestSnapshots:
         db.commit()
 
         assert db.query(AuditLogModel).count() == 0
+
+
+class TestRoundTrips:
+    def test_versions_are_looked_up_in_one_query_not_one_per_row(
+        self, db, adr_data, test_user
+    ):
+        """Each query is a network call when the database is remote (Turso)."""
+        adr = create_adr(db, adr_data)
+        cal, _ = add_assessment_and_review(db, adr, test_user)
+        for _ in range(6):
+            db.add(
+                ReviewModel(
+                    causality_assessment_level_id=cal.id,
+                    user_id=test_user.id,
+                    approved=False,
+                )
+            )
+        db.commit()
+        bind_actor(ALICE)
+
+        version_lookups = []
+
+        def count(conn, cursor, statement, parameters, context, executemany):
+            if "max(audit_log.version)" in statement.lower().replace(" ", ""):
+                version_lookups.append(statement)
+
+        engine = db.get_bind()
+        event.listen(engine, "before_cursor_execute", count)
+        try:
+            db.delete(adr)  # cascades to 1 assessment and 7 reviews
+            db.commit()
+        finally:
+            event.remove(engine, "before_cursor_execute", count)
+
+        assert db.query(AuditLogModel).filter_by(action="delete").count() == 9
+        assert len(version_lookups) <= 2
