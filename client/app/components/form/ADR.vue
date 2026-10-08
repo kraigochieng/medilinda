@@ -1,5 +1,12 @@
 <template>
-	<ADRMenu />
+	<div class="grid items-start gap-6 lg:grid-cols-[13rem_minmax(0,1fr)]">
+		<ADRSectionNav
+			v-if="!loadError && !loadingExisting"
+			:statuses="statuses"
+			:progress="progress"
+			class="lg:sticky lg:top-4"
+		/>
+		<div class="min-w-0">
 	<UAlert
 		v-if="pendingDraft"
 		color="info"
@@ -34,6 +41,7 @@
 		v-else
 		:schema="schema"
 		:state="state"
+		:validate="validateExtra"
 		@submit="onSubmit"
 		@error="onFormError"
 	>
@@ -464,16 +472,20 @@
 				</UFormField>
 			</template>
 			<template #footer>
-				<UButton
-					type="submit"
-					class="w-full mx-auto my-4 justify-center"
-					:loading="isSubmitting || isUpdating"
-				>
-					{{ props.mode == "create" ? "Add ADR" : "Save changes" }}
-				</UButton>
+				<div id="submit" class="scroll-mt-20">
+					<UButton
+						type="submit"
+						class="w-full mx-auto my-4 justify-center"
+						:loading="isSubmitting || isUpdating"
+					>
+						{{ props.mode == "create" ? "Add ADR" : "Save changes" }}
+					</UButton>
+				</div>
 			</template>
 		</UCard>
 	</UForm>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -481,6 +493,7 @@ import { fetchCurrentUser } from "@/api/user";
 import type { MedicalInstitutionGetResponseInterface } from "@/types/medical_institution";
 import { adrFormCategoricalValues } from "@/values/adr";
 import type {
+	FormError,
 	FormErrorEvent,
 	FormSubmitEvent,
 	RadioGroupItem,
@@ -500,6 +513,12 @@ import {
 	type Draft,
 } from "~/utils/adr-draft";
 import { formatDateTime } from "~/utils/adr-table";
+import {
+	firstSectionWithProblems,
+	requiredProgress,
+	sectionStatuses,
+	type FormIssue,
+} from "~/utils/adr-sections";
 import {
 	adrFormSchema,
 	adrToFormState,
@@ -948,14 +967,6 @@ async function onSubmit(event: FormSubmitEvent<AdrForm>) {
 	}
 
 	const knowsDob = isDob.value === "dob-yes";
-	if (knowsDob && !event.data.patient_date_of_birth) {
-		toast.add({
-			title: "Date of birth missing",
-			description: "Enter the date of birth, or choose No and give the age.",
-			color: "error",
-		});
-		return;
-	}
 
 	const payload = formStateToPayload(event.data, currentUser.value.id, { knowsDob });
 
@@ -966,13 +977,48 @@ async function onSubmit(event: FormSubmitEvent<AdrForm>) {
 	}
 }
 
+// ---- Section list: what is done, what needs attention ---------------------------
+
+// The schema cannot know whether the user chose "I know the date of birth".
+const dobMissing = computed(
+	() => isDob.value === "dob-yes" && !state.patient_date_of_birth
+);
+
+function validateExtra(): FormError[] {
+	return dobMissing.value
+		? [
+				{
+					name: "patient_date_of_birth",
+					message: "Enter the date of birth, or choose No and give the age.",
+				},
+			]
+		: [];
+}
+
+// Until the first failed save, only missing required fields are flagged.
+const attempted = ref(false);
+
+const issues = computed<FormIssue[]>(() => {
+	const found: FormIssue[] = [...(adrFormSchema.safeParse(state).error?.issues ?? [])];
+	if (dobMissing.value) found.push({ path: ["patient_date_of_birth"] });
+	return found;
+});
+const statuses = computed(() => sectionStatuses(state, issues.value, attempted.value));
+const progress = computed(() => requiredProgress(issues.value));
+
 function onFormError(event: FormErrorEvent) {
-	console.error("Form validation failed:", event.errors);
+	attempted.value = true;
+	const sections = statuses.value.filter((status) => status.state === "error").length;
+
 	toast.add({
-        title: "Validation Error",
-        description: "Please check the form for errors.",
-        color: "error",
-    });
-	// You'll see an array of all validation issues here
+		title: "Some fields need attention",
+		description: `${event.errors.length} ${event.errors.length === 1 ? "problem" : "problems"} in ${sections} ${sections === 1 ? "section" : "sections"}. They are marked in the list.`,
+		color: "error",
+	});
+
+	nextTick(() => {
+		const first = firstSectionWithProblems(statuses.value);
+		if (first) document.getElementById(first.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+	});
 }
 </script>
