@@ -166,7 +166,21 @@ Authentication uses [Better Auth](https://www.better-auth.com), which runs insid
 curl -H "x-api-key: <your key>" http://localhost:8000/api/v1/users/me
 ```
 
-#### 5. Run the Application
+#### 5. App database (Turso, optional)
+
+By default the server uses the SQLite file in `server/src/server/db/`. Hosts without a persistent disk (such as Render) lose that file on every restart. To keep data, store it in Turso:
+
+```sh
+turso db create medilinda-app --from-file server/src/server/db/db.sqlite   # one-time import
+turso db show medilinda-app --url
+turso db tokens create medilinda-app
+```
+
+Set `TURSO_APP_DATABASE_URL` and `TURSO_APP_AUTH_TOKEN` on the server. Leave them unset for local development and tests. This is a separate database from the auth one (`medilinda-auth`).
+
+Every query is a network call, so keep the server and the database in nearby regions.
+
+#### 6. Run the Application
 
 **Development (separate terminals):**
 
