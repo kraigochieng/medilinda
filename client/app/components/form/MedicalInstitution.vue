@@ -74,7 +74,7 @@
 					/>
 				</UFormField>
 				<div>
-					<Label>Telephone Numbers</Label>
+					<p class="font-medium">Telephone Numbers</p>
 					<div class="flex flex-col gap-2 my-4">
 						<div
 							v-if="state.telephone_numbers"
