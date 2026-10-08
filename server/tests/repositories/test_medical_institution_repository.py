@@ -126,3 +126,42 @@ def test_get_all_and_filter(
     page = institution_repository.get_all(pagination_params=Params(page=1, size=50))
     assert len(page.items) == 2
     assert page.total == 2
+
+
+@pytest.mark.parametrize(
+    "query,expected",
+    [
+        ("kijabe", {"Kijabe Mission Hospital"}),  # name, any case
+        ("Nairobi", {"Nairobi Hospital"}),  # county
+        ("upper", {"Nairobi Hospital"}),  # sub-county
+        ("12345", {"Kijabe Mission Hospital"}),  # MFL code
+        ("DHIS-77", {"Nairobi Hospital"}),  # DHIS code
+        ("", {"Kijabe Mission Hospital", "Nairobi Hospital"}),
+        ("no such place", set()),
+    ],
+)
+def test_search_matches_name_location_and_facility_codes(
+    institution_repository, query, expected
+):
+    institution_repository.create(
+        MedicalInstitutionPostRequest(
+            name="Nairobi Hospital",
+            mfl_code="MFL001",
+            dhis_code="DHIS-77",
+            county="Nairobi",
+            sub_county="Upper Hill",
+        )
+    )
+    institution_repository.create(
+        MedicalInstitutionPostRequest(
+            name="Kijabe Mission Hospital",
+            mfl_code="12345",
+            dhis_code="DHIS-01",
+            county="Kiambu",
+            sub_county="Lari",
+        )
+    )
+
+    page = institution_repository.get_all(Params(page=1, size=50), query=query)
+
+    assert {item.name for item in page.items} == expected

@@ -30,6 +30,9 @@ class MedicalInstitutionRepository:
                     MedicalInstitutionModel.name.ilike(f"%{query}%"),
                     MedicalInstitutionModel.county.ilike(f"%{query}%"),
                     MedicalInstitutionModel.sub_county.ilike(f"%{query}%"),
+                    # Clinicians usually know the facility code, not the exact name.
+                    MedicalInstitutionModel.mfl_code.ilike(f"%{query}%"),
+                    MedicalInstitutionModel.dhis_code.ilike(f"%{query}%"),
                 )
             )
 
