@@ -2,7 +2,7 @@
 
 Side effects: disk. Run it from the `server` folder:
 
-    PYTHONPATH=src uv run python ../medilinda_ml/golden.py <version folder>
+    PYTHONPATH=src uv run python -m medilinda_ml.golden <version folder>
 """
 
 import json

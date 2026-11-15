@@ -19,7 +19,7 @@ The goal of Medilinda-ML is to provide a reproducible and easy-to-use system for
 ## Where the code lives
 
 The Python package `medilinda_ml` is part of the server. It is in `server/src/medilinda_ml/`.
-This folder holds the training data (`data/`) and the notebooks (`notebooks/`) only.
+The training data is in `data/` and the notebooks are in `notebooks/`. The Docker image leaves both out.
 Nothing publishes the package to PyPI.
 
 ## Training
@@ -31,7 +31,7 @@ uv sync --group train
 PYTHONPATH=src uv run python -m medilinda_ml.modeling.train_model
 ```
 
-The training code reads `medilinda_ml/data/data.csv`.
+The training code reads `data/data.csv` in this folder.
 It writes a new version folder in `server/models/`. See the README of the repository for the layout.
 
 ## License

@@ -11,6 +11,8 @@ Dockerfile
 # Not needed in the image
 
 notebooks/
+src/medilinda_ml/notebooks/
+src/medilinda_ml/data/*.csv
 tests/
 artifacts/
 .pytest_cache/

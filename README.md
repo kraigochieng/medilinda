@@ -232,8 +232,7 @@ Nothing deploys by itself, so the free plans are not used up. Deploy when you wa
 ```
 client/                    # Nuxt 3 frontend
 server/                    # FastAPI backend
-server/src/medilinda_ml/   # ML pipeline and model code (part of the server)
-medilinda_ml/              # Training data and notebooks
+server/src/medilinda_ml/   # ML pipeline, training data, notebooks and model code (part of the server)
 ```
 
 ### The model
@@ -264,7 +263,7 @@ PYTHONPATH=src uv run python -m medilinda_ml.modeling.train_model
 Export the model that is in Databricks (needs the `DATABRICKS_*` and `MLFLOW_*` settings in `.env`):
 
 ```sh
-PYTHONPATH=src uv run --group train python ../medilinda_ml/export_from_databricks.py \
+PYTHONPATH=src uv run --group train python -m medilinda_ml.export_from_databricks \
     --model-uri models:/<name>/<version> --model-name <name>
 ```
 
