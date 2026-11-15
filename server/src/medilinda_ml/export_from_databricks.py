@@ -4,7 +4,7 @@ Side effects: network (Databricks), disk (the model store).
 Run it from the `server` folder with the Databricks settings in `.env`:
 
     uv sync --group train
-    PYTHONPATH=src uv run python ../medilinda_ml/export_from_databricks.py \
+    PYTHONPATH=src uv run python -m medilinda_ml.export_from_databricks \
         --model-uri models:/<name>/<version> --model-name medilinda_rf_smote_pipeline
 
 The script checks that the raw pipeline gives the same output as the MLflow model
@@ -22,7 +22,7 @@ from pathlib import Path
 import joblib
 import mlflow
 import numpy as np
-from golden import GOLDEN_ROW_COUNT, build_golden_inputs, inputs_to_frame, write_golden
+from medilinda_ml.golden import GOLDEN_ROW_COUNT, build_golden_inputs, inputs_to_frame, write_golden
 from medilinda_ml.model_store import write_version
 from medilinda_ml.settings import settings
 from server.config import ADR_CSV_PATH
