@@ -42,7 +42,14 @@ from medilinda_ml.features.build_features import (
 from medilinda_ml.logging_config import setup_logging
 from medilinda_ml.evaluation import classify, headline_metrics, max_additivity_error
 from medilinda_ml.model_store import write_version
-from medilinda_ml.paths import DATA_DIR, MODELS_DIR, TRACKING_DIR
+from medilinda_ml.paths import (
+    DATA_DIR,
+    MODELS_DIR,
+    REPOSITORY_ROOT,
+    SERVER_DIR,
+    TRACKING_DIR,
+)
+from medilinda_ml.tracking_store import make_absolute, make_relative
 from medilinda_ml.utils import ShapModelWrapper
 # The model goes to the model store. MLflow tracks the experiment in a local folder.
 # MLFLOW-DISABLED (#119): the Databricks and model logging code below stays off.
@@ -141,6 +148,24 @@ def start_local_tracking() -> None:
 
 
 def train_model(df_path: str) -> None:
+    """Side effect (disk): train, and keep the runs folder in the relative form.
+
+    The folder is made absolute for MLflow, and relative again when training ends,
+    also after a failure. So git sees no path of this machine.
+    """
+    TRACKING_DIR.mkdir(parents=True, exist_ok=True)
+    make_absolute(tracking_dir=TRACKING_DIR, server_dir=SERVER_DIR)
+    try:
+        run_training(df_path=df_path)
+    finally:
+        make_relative(
+            tracking_dir=TRACKING_DIR,
+            server_dir=SERVER_DIR,
+            repository_root=REPOSITORY_ROOT,
+        )
+
+
+def run_training(df_path: str) -> None:
     start_local_tracking()
     df = pd.read_csv(df_path)
 
