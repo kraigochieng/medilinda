@@ -271,11 +271,13 @@ To use an older version, set `MODEL_VERSION` to its folder name.
 
 ### Experiment tracking
 
-Training logs each run to MLflow, in the local folder `server/mlruns/`. No server and no Databricks are needed. The folder is not in git and not in the image.
+Training logs each run to MLflow, in the local folder `server/mlruns/`. No server and no Databricks are needed. The folder is in git, so the record is shared. It is not in the image.
 
 Each run records the dataset, the split and search settings, the library versions, the git commit, every search candidate, the validation and test metrics with their reports, and the SHAP additivity check. The test split is evaluated once. The manifest of a model version names its run.
 
-Open the run browser from the repository root:
+MLflow writes absolute paths. Training rewrites them to relative paths (`medilinda_ml/tracking_store.py`) when it ends, so the committed folder opens on any machine. Run training and the run browser from the `server` folder, because the artifact locations are relative to it.
+
+Open the run browser:
 
 ```sh
 cd server && uv run --group train mlflow ui --backend-store-uri mlruns

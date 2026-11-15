@@ -1,0 +1,7 @@
+FinalColumnSelectorTransformer(columns=['dechallenge_yes', 'rechallenge_yes',
+                                        'severity_fatal',
+                                        'num_suspected_drugs_1', 'patient_bmi',
+                                        'rifampicin_start_stop_difference',
+                                        'isoniazid_start_stop_difference',
+                                        'pyrazinamide_start_stop_difference',
+                                        'ethambutol_start_stop_difference'])
