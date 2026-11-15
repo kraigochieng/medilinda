@@ -1,0 +1,21 @@
+{
+  "model_name": "medilinda_rf_smote_pipeline_decision_tree",
+  "version": "medilinda_rf_smote_pipeline_decision_tree-20261115T214843Z-85cf8b27e5bb",
+  "created_at": "2026-11-15T21:48:43.716465Z",
+  "source": "trained locally with medilinda_ml.modeling.train_model",
+  "library_versions": {
+    "scikit-learn": "1.7.2",
+    "imbalanced-learn": "0.14.0",
+    "numpy": "2.3.3",
+    "pandas": "2.3.3",
+    "scipy": "1.16.2",
+    "shap": "0.48.0",
+    "joblib": "1.5.2"
+  },
+  "file_hashes": {
+    "pipeline.pkl": "1b53fb8d0c8b04ed7ba57cbd486bdbdefa0b5f1deb82f372a679fecd27cb06a1",
+    "encoder.pkl": "57b2b0b5c142bac04d6ce489f1efa04092eb669279d22189a622280d52832e9d",
+    "explainer.pkl": "bf70bf65fe844331a2b3787dd43a89456aff9bab152206dac427255dd510f60d"
+  },
+  "digest": "85cf8b27e5bb6dc00f4272a572bf59029a614ddc9fb920c1d4099be1a06ea247"
+}
