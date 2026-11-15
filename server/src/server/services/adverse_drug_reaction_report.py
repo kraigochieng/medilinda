@@ -4,7 +4,7 @@ import uuid
 
 import pandas as pd
 from fastapi_pagination import Page, Params
-from mlflow.pyfunc import PyFuncModel
+from medilinda_ml.model_store import ModelPipeline
 from pydantic import ValidationError
 from shap import Explanation, KernelExplainer
 from sklearn.preprocessing import OrdinalEncoder
@@ -47,7 +47,7 @@ class AdverseDrugReactionReportService:
     def __init__(
         self,
         db: Session,
-        ml_model: PyFuncModel,
+        ml_model: ModelPipeline,
         encoder: OrdinalEncoder,
         explainer: KernelExplainer,
     ):

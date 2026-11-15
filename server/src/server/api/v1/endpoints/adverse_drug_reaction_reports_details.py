@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query, Request, status
 from fastapi_pagination import Page, Params
-from mlflow.pyfunc import PyFuncModel
+from medilinda_ml.model_store import ModelPipeline
 from shap import KernelExplainer
 from sklearn.preprocessing import OrdinalEncoder
 from sqlalchemy.orm import Session
@@ -28,7 +28,7 @@ router = APIRouter(prefix="/api/v1/adrs-details", tags=["adr-details", "v1"])
 def get_adverse_drug_reaction_report_service(
     request: Request, db: Session = Depends(get_db)
 ):
-    ml_model: PyFuncModel = request.app.state.ml_model
+    ml_model: ModelPipeline = request.app.state.ml_model
     encoder: OrdinalEncoder = request.app.state.encoder
     explainer: KernelExplainer = request.app.state.explainer
 

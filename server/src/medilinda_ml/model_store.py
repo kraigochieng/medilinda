@@ -27,6 +27,9 @@ from pydantic import BaseModel, ConfigDict
 from shap import KernelExplainer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OrdinalEncoder
+from typing import TypeAlias
+
+ModelPipeline: TypeAlias = Pipeline | ImbalancedLearnPipeline
 
 LATEST_FILE_NAME = "LATEST"
 LATEST_ALIAS = "latest"
@@ -62,7 +65,7 @@ class ModelEnsemble(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     version: str
-    pipeline: Pipeline | ImbalancedLearnPipeline
+    pipeline: ModelPipeline
     encoder: OrdinalEncoder
     explainer: KernelExplainer
 
@@ -104,7 +107,7 @@ def write_version(
     *,
     root: Path,
     model_name: str,
-    pipeline: Pipeline | ImbalancedLearnPipeline,
+    pipeline: ModelPipeline,
     encoder: OrdinalEncoder,
     explainer: KernelExplainer,
     created_at: datetime,

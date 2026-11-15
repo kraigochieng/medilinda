@@ -1,76 +1,79 @@
-import os
-from pathlib import Path
-from typing import TypedDict
+# MLFLOW-DISABLED (#119): the server loads the model from the model store (see model_loader.py).
+# Keep this file to bring MLflow back.
 
-import joblib
-import mlflow
-from medilinda_ml.utils import (
-    ShapModelWrapper,
-)  # Imported so that the shap expliner works...
-from mlflow.pyfunc import PyFuncModel
-from shap import KernelExplainer
-from sklearn.preprocessing import OrdinalEncoder
+# import os
+# from pathlib import Path
+# from typing import TypedDict
 
-
-class MLEnsemble(TypedDict):
-    model: PyFuncModel
-    encoder: OrdinalEncoder
-    explainer: KernelExplainer
+# import joblib
+# import mlflow
+# from medilinda_ml.utils import (
+#     ShapModelWrapper,
+# )  # Imported so that the shap expliner works...
+# from mlflow.pyfunc import PyFuncModel
+# from shap import KernelExplainer
+# from sklearn.preprocessing import OrdinalEncoder
 
 
-def mlflow_setup(
-    databricks_host: str,
-    databricks_token: str,
-    mlflow_tracking_uri: str,
-    mlflow_artifact_path: str,
-    mlflow_experiment_path: str,
-    mlflow_model_name: str,
-    mlflow_model_version: str,
-    local_artifacts_path: Path = Path(__file__).parent.parent.parent.parent / "artifacts",
-) -> MLEnsemble:
-    os.environ["DATABRICKS_HOST"] = databricks_host
-    os.environ["DATABRICKS_TOKEN"] = databricks_token
+# class MLEnsemble(TypedDict):
+#     model: PyFuncModel
+#     encoder: OrdinalEncoder
+#     explainer: KernelExplainer
 
-    os.environ["MLFLOW_TRACKING_URI"] = mlflow_tracking_uri
 
-    # Set tracking URI
-    mlflow.set_tracking_uri(mlflow_tracking_uri)
+# def mlflow_setup(
+#     databricks_host: str,
+#     databricks_token: str,
+#     mlflow_tracking_uri: str,
+#     mlflow_artifact_path: str,
+#     mlflow_experiment_path: str,
+#     mlflow_model_name: str,
+#     mlflow_model_version: str,
+#     local_artifacts_path: Path = Path(__file__).parent.parent.parent.parent / "artifacts",
+# ) -> MLEnsemble:
+#     os.environ["DATABRICKS_HOST"] = databricks_host
+#     os.environ["DATABRICKS_TOKEN"] = databricks_token
 
-    if mlflow.get_experiment_by_name(mlflow_experiment_path) is None:
-        mlflow.create_experiment(
-            name=mlflow_experiment_path,
-            artifact_location=mlflow_artifact_path,
-        )
+#     os.environ["MLFLOW_TRACKING_URI"] = mlflow_tracking_uri
 
-    mlflow.set_experiment(mlflow_experiment_path)
+#     # Set tracking URI
+#     mlflow.set_tracking_uri(mlflow_tracking_uri)
 
-    model_uri = f"models:/{mlflow_model_name}/{mlflow_model_version}"
+#     if mlflow.get_experiment_by_name(mlflow_experiment_path) is None:
+#         mlflow.create_experiment(
+#             name=mlflow_experiment_path,
+#             artifact_location=mlflow_artifact_path,
+#         )
 
-    model = mlflow.pyfunc.load_model(model_uri)
+#     mlflow.set_experiment(mlflow_experiment_path)
 
-    run_id = model.metadata.run_id
-    encoder_path_on_server = "encoders/ordinal_encoder.pkl"
+#     model_uri = f"models:/{mlflow_model_name}/{mlflow_model_version}"
 
-    if not os.path.exists(local_artifacts_path):
-        os.mkdir(local_artifacts_path)
+#     model = mlflow.pyfunc.load_model(model_uri)
 
-    local_encoder_path = mlflow.artifacts.download_artifacts(
-        run_id=run_id,
-        artifact_path=encoder_path_on_server,
-        dst_path=local_artifacts_path,
-    )
+#     run_id = model.metadata.run_id
+#     encoder_path_on_server = "encoders/ordinal_encoder.pkl"
 
-    ordinal_encoder: OrdinalEncoder = joblib.load(local_encoder_path)
+#     if not os.path.exists(local_artifacts_path):
+#         os.mkdir(local_artifacts_path)
 
-    explainer_path_on_server = "explainers/shap_explainer.pkl"
-    local_explainer_path = mlflow.artifacts.download_artifacts(
-        run_id=run_id,
-        artifact_path=explainer_path_on_server,
-        dst_path=local_artifacts_path,
-    )
-    shap_explainer: KernelExplainer = joblib.load(local_explainer_path)
+#     local_encoder_path = mlflow.artifacts.download_artifacts(
+#         run_id=run_id,
+#         artifact_path=encoder_path_on_server,
+#         dst_path=local_artifacts_path,
+#     )
 
-    return {"model": model, "encoder": ordinal_encoder, "explainer": shap_explainer}
+#     ordinal_encoder: OrdinalEncoder = joblib.load(local_encoder_path)
+
+#     explainer_path_on_server = "explainers/shap_explainer.pkl"
+#     local_explainer_path = mlflow.artifacts.download_artifacts(
+#         run_id=run_id,
+#         artifact_path=explainer_path_on_server,
+#         dst_path=local_artifacts_path,
+#     )
+#     shap_explainer: KernelExplainer = joblib.load(local_explainer_path)
+
+#     return {"model": model, "encoder": ordinal_encoder, "explainer": shap_explainer}
 
 
 # # --- Example Usage ---
