@@ -236,16 +236,39 @@ server/src/medilinda_ml/   # ML pipeline and model code (part of the server)
 medilinda_ml/              # Training data and notebooks
 ```
 
-### Train the model
+### The model
 
-Run these commands from the `server` folder:
+The model is part of the server image. It is in `server/models/`. MLflow and Databricks are not used at run time.
+
+```
+server/models/
+  LATEST                                       the name of the newest version
+  <model name>-<UTC time>-<12 hash digits>/    one version
+    pipeline.pkl  encoder.pkl  explainer.pkl
+    manifest.json                              the SHA-256 of each file
+```
+
+-   The name of a version holds the creation time and the start of the hash of its files. A version folder never changes. A new model is a new folder.
+-   The server checks every file against `manifest.json` when it starts. It stops with an error when a hash differs.
+-   The setting `MODEL_VERSION` picks a version by folder name. The default is `latest`.
+
+Run these commands from the `server` folder.
+
+Train a new version (writes a folder in `server/models/` and moves `LATEST`):
 
 ```sh
 uv sync --group train
 PYTHONPATH=src uv run python -m medilinda_ml.modeling.train_model
 ```
 
-The training code needs the MLflow and Databricks settings in `.env`.
+Export the model that is in Databricks (needs the `DATABRICKS_*` and `MLFLOW_*` settings in `.env`):
+
+```sh
+PYTHONPATH=src uv run --group train python ../medilinda_ml/export_from_databricks.py \
+    --model-uri models:/<name>/<version> --model-name <name>
+```
+
+To use an older version, set `MODEL_VERSION` to its folder name.
 
 ## Acknowledgements
 
