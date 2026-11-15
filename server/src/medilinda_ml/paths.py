@@ -8,3 +8,7 @@ DATA_DIR = PACKAGE_DIR / "data"
 
 # The model store is in the server folder, so that the server image holds the models.
 MODELS_DIR = Path(__file__).resolve().parents[2] / "models"
+
+# MLflow keeps the runs of the experiments in this folder. It is not in git and not
+# in the server image. Open it with `mlflow ui --backend-store-uri server/mlruns`.
+TRACKING_DIR = Path(__file__).resolve().parents[2] / "mlruns"

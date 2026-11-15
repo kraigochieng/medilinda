@@ -174,3 +174,5 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+# MLflow runs of the training experiments (see medilinda_ml/paths.py)
+mlruns/
