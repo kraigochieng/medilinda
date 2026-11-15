@@ -35,14 +35,6 @@ jobs:
         env:
             # Dummy values: the tests never reach these services.
             CLIENT_URL: http://localhost:3000
-            MLFLOW_EXPERIMENT_NAME: x
-            MLFLOW_EXPERIMENT_PATH: x
-            MLFLOW_ARTIFACT_PATH: x
-            MLFLOW_TRACKING_URI: x
-            MLFLOW_MODEL_NAME: x
-            MLFLOW_MODEL_VERSION: "1"
-            DATABRICKS_HOST: x
-            DATABRICKS_TOKEN: x
             AFRICAS_TALKING_USERNAME: x
             AFRICAS_TALKING_API_KEY: x
             BETTER_AUTH_URL: http://localhost:3000

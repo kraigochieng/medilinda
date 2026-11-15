@@ -29,6 +29,9 @@ COPY --from=dependencies /usr/local/bin /usr/local/bin
 # Copy your application's source code.
 COPY ./src ./src
 
+# Copy the model store: the model, the encoder and the explainer.
+COPY ./models ./models
+
 # --- Runtime Configuration ---
 EXPOSE 8000
 
