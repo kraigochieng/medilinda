@@ -8,15 +8,19 @@
 Dockerfile
 .dockerignore
 
-# Notebooks and data (not needed for production)
+# Not needed in the image
 
 notebooks/
-_.csv
-_.xlsx
+tests/
+artifacts/
+.pytest_cache/
+src/basic.log
+*.csv
+*.xlsx
 
 # Python caches and virtual environments
 
-**pycache**/
-\*.pyc
+**/__pycache__/
+**/*.pyc
 .venv/
 venv/
