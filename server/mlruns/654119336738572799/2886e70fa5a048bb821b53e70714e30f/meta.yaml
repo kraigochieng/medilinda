@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/2886e70fa5a048bb821b53e70714e30f/artifacts
+end_time: 1794779966968
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 2886e70fa5a048bb821b53e70714e30f
+run_name: unleashed-bug-139
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794779955993
+status: 3
+tags: []
+user_id: kraigochieng
