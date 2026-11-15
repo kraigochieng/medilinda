@@ -13,7 +13,6 @@ outputs in `golden.json` inside the version folder.
 """
 
 import argparse
-import json
 import os
 import tempfile
 from datetime import datetime, timezone
@@ -23,14 +22,10 @@ from pathlib import Path
 import joblib
 import mlflow
 import numpy as np
-import pandas as pd
+from golden import GOLDEN_ROW_COUNT, build_golden_inputs, inputs_to_frame, write_golden
 from medilinda_ml.model_store import write_version
 from medilinda_ml.settings import settings
-from server.basemodels.adverse_drug_reaction_report import MLModelInput
 from server.config import ADR_CSV_PATH
-from server.services.adverse_drug_reaction_report import (
-    AdverseDrugReactionReportService,
-)
 
 LIBRARIES_TO_RECORD: tuple[str, ...] = (
     "scikit-learn",
@@ -42,8 +37,6 @@ LIBRARIES_TO_RECORD: tuple[str, ...] = (
     "joblib",
     "mlflow",
 )
-GOLDEN_ROW_COUNT = 8
-GOLDEN_CREATED_AT = "2025-10-08T13:35:00"
 ENCODER_ARTIFACT_PATH = "encoders/ordinal_encoder.pkl"
 EXPLAINER_ARTIFACT_PATH = "explainers/shap_explainer.pkl"
 
@@ -51,30 +44,6 @@ EXPLAINER_ARTIFACT_PATH = "explainers/shap_explainer.pkl"
 def record_library_versions() -> dict[str, str]:
     """Return the installed version of each library that a pickle depends on."""
     return {name: installed_version(name) for name in LIBRARIES_TO_RECORD}
-
-
-def build_golden_inputs(*, adr_csv_path: Path, row_count: int) -> list[dict[str, object]]:
-    """Read sample rows from the seed CSV as model inputs, as JSON-ready records."""
-    adr_frame = pd.read_csv(adr_csv_path).head(row_count)
-    records: list[dict[str, object]] = []
-    for row in adr_frame.to_dict(orient="records"):
-        cleaned_row = {
-            field: (None if pd.isna(row.get(field)) else row.get(field))
-            for field in MLModelInput.model_fields
-            if field != "created_at"
-        }
-        model_input = MLModelInput.model_validate(
-            {**cleaned_row, "created_at": GOLDEN_CREATED_AT}
-        )
-        records.append(model_input.model_dump(mode="json"))
-    return records
-
-
-def inputs_to_frame(*, records: list[dict[str, object]]) -> pd.DataFrame:
-    """Build the data frame the server gives the model: one row for each record."""
-    return AdverseDrugReactionReportService.build_model_frame(
-        model_inputs=[MLModelInput.model_validate(record) for record in records]
-    )
 
 
 def export_model(*, model_uri: str, model_name: str, root: Path) -> Path:
@@ -126,12 +95,7 @@ def export_model(*, model_uri: str, model_name: str, root: Path) -> Path:
         source=f"databricks run {run_id}, {model_uri}",
         library_versions=record_library_versions(),
     )
-    (version_folder / "golden.json").write_text(
-        json.dumps(
-            {"inputs": golden_records, "outputs": expected_outputs.tolist()}, indent=2
-        ),
-        encoding="utf-8",
-    )
+    write_golden(version_folder=version_folder, expected_outputs=expected_outputs.tolist())
     return version_folder
 
 
