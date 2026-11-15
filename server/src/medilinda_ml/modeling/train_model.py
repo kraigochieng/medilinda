@@ -3,11 +3,15 @@ import matplotlib
 matplotlib.use("agg")
 
 import logging
-from contextlib import nullcontext
+import subprocess
 from datetime import datetime, timezone
 from importlib.metadata import version as installed_version
+from pathlib import Path
 from pprint import pprint
 
+import mlflow
+import mlflow.data
+import mlflow.sklearn
 import numpy as np
 import pandas as pd
 import shap
@@ -36,10 +40,12 @@ from medilinda_ml.features.build_features import (
     PatientBMITransformer,
 )
 from medilinda_ml.logging_config import setup_logging
+from medilinda_ml.evaluation import classify, headline_metrics, max_additivity_error
 from medilinda_ml.model_store import write_version
-from medilinda_ml.paths import DATA_DIR, MODELS_DIR
+from medilinda_ml.paths import DATA_DIR, MODELS_DIR, TRACKING_DIR
 from medilinda_ml.utils import ShapModelWrapper
-# MLFLOW-DISABLED (#119): MLflow logging is off. The model goes to the model store.
+# The model goes to the model store. MLflow tracks the experiment in a local folder.
+# MLFLOW-DISABLED (#119): the Databricks and model logging code below stays off.
 # import joblib
 # import mlflow
 # from medilinda_ml.settings import settings
@@ -88,23 +94,69 @@ setup_logging()
 # mlflow.set_experiment(settings.mlflow_experiment_path)
 
 
+EXPERIMENT_NAME = "medilinda-causality"
+SPLIT_SEED = 42
+TEST_FRACTION = 0.25
+VALIDATION_FRACTION = 0.2
+CV_SPLITS = 5
+CV_REPEATS = 3
+SCORING = "f1_weighted"
+MAX_SEARCH_DRAWS = 20
+SHAP_BACKGROUND_ROWS = 100
+SHAP_SEED = 42
+SHAP_ADDITIVITY_ROWS = 5
+LIBRARIES_TO_RECORD: tuple[str, ...] = (
+    "scikit-learn",
+    "imbalanced-learn",
+    "numpy",
+    "pandas",
+    "scipy",
+    "shap",
+    "joblib",
+    "mlflow",
+)
+
+
+def current_git_commit() -> str | None:
+    """Side effect (runs git): the commit of the code that trains, or None if unknown."""
+    try:
+        completed = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=Path(__file__).parent,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return completed.stdout.strip()
+
+
+def start_local_tracking() -> None:
+    """Side effect (disk): send MLflow runs to the local folder, and pick the experiment."""
+    mlflow.set_tracking_uri(TRACKING_DIR.as_uri())
+    mlflow.set_experiment(EXPERIMENT_NAME)
+    # The search and its candidates are logged. The model goes to the model store.
+    mlflow.sklearn.autolog(log_models=False, log_datasets=False, silent=True)
+
+
 def train_model(df_path: str) -> None:
-    # MLFLOW-DISABLED (#119): mlflow.autolog()
+    start_local_tracking()
     df = pd.read_csv(df_path)
 
     X = df.drop(columns=[TARGET_COLUMN], axis=1)
     y = df[TARGET_COLUMN]
 
     X_train_and_val, X_test, y_train_and_val, y_test = train_test_split(
-        X, y, stratify=y, test_size=0.25
+        X, y, stratify=y, test_size=TEST_FRACTION, random_state=SPLIT_SEED
     )
 
     X_train, X_val, y_train, y_val = train_test_split(
         X_train_and_val,
         y_train_and_val,
         stratify=y_train_and_val,
-        test_size=0.2,
-        random_state=42,
+        test_size=VALIDATION_FRACTION,
+        random_state=SPLIT_SEED,
     )
 
     ordinal_encoder = OrdinalEncoder(
@@ -164,7 +216,9 @@ def train_model(df_path: str) -> None:
         # "naive_bayes": (GaussianNB(), {}),
     }
     # --- Cross-validation setup ---
-    cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=3, random_state=42)
+    cv = RepeatedStratifiedKFold(
+        n_splits=CV_SPLITS, n_repeats=CV_REPEATS, random_state=SPLIT_SEED
+    )
 
     best_estimators_and_best_param_grids = {}
 
@@ -245,14 +299,48 @@ def train_model(df_path: str) -> None:
             estimator=pipeline,
             param_distributions=tuned_params,
             cv=cv,
-            n_iter=int(min(20, np.prod([len(v) for v in tuned_params.values()]))),
-            scoring="f1_weighted",
+            n_iter=int(
+                min(MAX_SEARCH_DRAWS, np.prod([len(v) for v in tuned_params.values()]))
+            ),
+            scoring=SCORING,
+            random_state=SPLIT_SEED,
             verbose=2,
             n_jobs=-1,
         )
 
-        # MLFLOW-DISABLED (#119): with mlflow.start_run():
-        with nullcontext():
+        with mlflow.start_run(run_name=f"{name}") as run:
+            mlflow.log_input(
+                mlflow.data.from_pandas(
+                    df, source=str(df_path), name=Path(df_path).name, targets=TARGET_COLUMN
+                ),
+                context="training",
+            )
+            mlflow.log_params(
+                {
+                    "split_seed": SPLIT_SEED,
+                    "test_fraction": TEST_FRACTION,
+                    "validation_fraction": VALIDATION_FRACTION,
+                    "stratified": True,
+                    "cv_splits": CV_SPLITS,
+                    "cv_repeats": CV_REPEATS,
+                    "scoring": SCORING,
+                    "train_rows": len(X_train),
+                    "validation_rows": len(X_val),
+                    "test_rows": len(X_test),
+                    "shap_background_rows": SHAP_BACKGROUND_ROWS,
+                    "shap_seed": SHAP_SEED,
+                }
+            )
+            mlflow.set_tags(
+                {
+                    "git_commit": current_git_commit() or "unknown",
+                    **{
+                        f"library.{library}": installed_version(library)
+                        for library in LIBRARIES_TO_RECORD
+                    },
+                }
+            )
+
             search.fit(X_train, y_train_enc)
 
             # --- Results ---
@@ -276,6 +364,30 @@ def train_model(df_path: str) -> None:
 
             print("\n📊 Validation Results:")
             print(classification_report(decoded_y_val, decoded_y_pred))
+
+            labels: list[str] = ordinal_encoder.categories_[0].tolist()
+            validation_result = classify(
+                true_labels=decoded_y_val.tolist(),
+                predicted_labels=decoded_y_pred.tolist(),
+                labels=labels,
+            )
+            mlflow.log_metrics(headline_metrics(split="validation", result=validation_result))
+            mlflow.log_dict(validation_result.model_dump(), "validation_result.json")
+
+            # --- Evaluate once on the held-out test data ---
+            decoded_test_prediction = ordinal_encoder.inverse_transform(
+                best_estimator.predict(X_test).reshape(-1, 1)
+            ).ravel()
+            test_result = classify(
+                true_labels=y_test.tolist(),
+                predicted_labels=decoded_test_prediction.tolist(),
+                labels=labels,
+            )
+            mlflow.log_metrics(headline_metrics(split="test", result=test_result))
+            mlflow.log_dict(test_result.model_dump(), "test_result.json")
+
+            print("\n🧪 Test Results (held-out, evaluated once):")
+            print(classification_report(y_test.tolist(), decoded_test_prediction))
 
             print("═" * 80)
 
@@ -354,9 +466,24 @@ def train_model(df_path: str) -> None:
 
             print("📦 Creating the SHAP explainer...")
 
-            background_data = X_train.sample(100, random_state=42)
+            background_data = X_train.sample(
+                SHAP_BACKGROUND_ROWS, random_state=SHAP_SEED
+            )
             predict_function = ShapModelWrapper(best_estimator, X_train.columns)
             explainer = shap.KernelExplainer(predict_function, background_data)
+
+            # The SHAP values plus the base value must add up to the model output.
+            # Use a second explainer: after a call, an explainer cannot be pickled.
+            checking_explainer = shap.KernelExplainer(predict_function, background_data)
+            additivity_rows = X_test.iloc[:SHAP_ADDITIVITY_ROWS]
+            explanation = checking_explainer(additivity_rows)
+            additivity_error = max_additivity_error(
+                shap_values=np.asarray(explanation.values),
+                base_values=np.asarray(explanation.base_values),
+                model_output=best_estimator.predict_proba(additivity_rows),
+            )
+            mlflow.log_metric("shap_max_additivity_error", additivity_error)
+            print(f"🔎 Largest SHAP additivity error: {additivity_error:.6f}")
 
             version_folder = write_version(
                 root=MODELS_DIR,
@@ -365,20 +492,13 @@ def train_model(df_path: str) -> None:
                 encoder=ordinal_encoder,
                 explainer=explainer,
                 created_at=datetime.now(timezone.utc),
-                source="trained locally with medilinda_ml.modeling.train_model",
+                source=f"trained locally; MLflow experiment {EXPERIMENT_NAME}, run {run.info.run_id}",
                 library_versions={
                     library: installed_version(library)
-                    for library in (
-                        "scikit-learn",
-                        "imbalanced-learn",
-                        "numpy",
-                        "pandas",
-                        "scipy",
-                        "shap",
-                        "joblib",
-                    )
+                    for library in LIBRARIES_TO_RECORD
                 },
             )
+            mlflow.set_tag("model_version", version_folder.name)
             print(f"📦 Model saved to {version_folder}")
 
         print("DONE")

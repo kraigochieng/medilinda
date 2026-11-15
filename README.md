@@ -269,6 +269,18 @@ PYTHONPATH=src uv run --group train python -m medilinda_ml.export_from_databrick
 
 To use an older version, set `MODEL_VERSION` to its folder name.
 
+### Experiment tracking
+
+Training logs each run to MLflow, in the local folder `server/mlruns/`. No server and no Databricks are needed. The folder is not in git and not in the image.
+
+Each run records the dataset, the split and search settings, the library versions, the git commit, every search candidate, the validation and test metrics with their reports, and the SHAP additivity check. The test split is evaluated once. The manifest of a model version names its run.
+
+Open the run browser from the repository root:
+
+```sh
+cd server && uv run --group train mlflow ui --backend-store-uri mlruns
+```
+
 ## Acknowledgements
 
 -   Kenya Pharmacy and Poisons Board (PPB)

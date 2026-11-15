@@ -1,0 +1,22 @@
+{
+  "model_name": "medilinda_rf_smote_pipeline_decision_tree",
+  "version": "medilinda_rf_smote_pipeline_decision_tree-20261115T215949Z-a04fc75517c7",
+  "created_at": "2026-11-15T21:59:49.052563Z",
+  "source": "trained locally; MLflow experiment medilinda-causality, run f6d2628144df4211a5f8a7fc74fb61c0",
+  "library_versions": {
+    "scikit-learn": "1.7.2",
+    "imbalanced-learn": "0.14.0",
+    "numpy": "2.3.3",
+    "pandas": "2.3.3",
+    "scipy": "1.16.2",
+    "shap": "0.48.0",
+    "joblib": "1.5.2",
+    "mlflow": "3.4.0"
+  },
+  "file_hashes": {
+    "pipeline.pkl": "54a997a1548e6f8f30cabf4cb0faee2000f6b160672cc1d8de51dc9de902fb58",
+    "encoder.pkl": "57b2b0b5c142bac04d6ce489f1efa04092eb669279d22189a622280d52832e9d",
+    "explainer.pkl": "183f3b2091cc3d083a19dfb1f061222cbbb3d51de5e8ea86780e940f8b3c1bbf"
+  },
+  "digest": "a04fc75517c78c8e3544e1dd1d025fb3b5b19493e9cd0eaadf05efa215c34319"
+}
