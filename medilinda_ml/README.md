@@ -32,7 +32,7 @@ PYTHONPATH=src uv run python -m medilinda_ml.modeling.train_model
 ```
 
 The training code reads `medilinda_ml/data/data.csv`.
-It needs the MLflow and Databricks settings in a `.env` file.
+It writes a new version folder in `server/models/`. See the README of the repository for the layout.
 
 ## License
 

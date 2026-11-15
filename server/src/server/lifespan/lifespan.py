@@ -10,7 +10,7 @@ from uuid import uuid4
 import pandas as pd
 import shap
 from fastapi import FastAPI
-from mlflow.pyfunc import PyFuncModel
+from medilinda_ml.model_store import ModelPipeline
 from shap import KernelExplainer
 from sklearn.preprocessing import OrdinalEncoder
 from sqlalchemy.orm import Session
@@ -31,7 +31,8 @@ from server.lifespan.db import (
     insert_users,
     setup_db,
 )
-from server.lifespan.mlflow_setup import MLEnsemble, mlflow_setup
+from server.config import MODELS_DIR
+from server.lifespan.model_loader import load_model_ensemble
 from server.models.adverse_drug_reaction_report import ADRModel
 from server.settings import settings
 
@@ -52,23 +53,28 @@ from server.settings import settings
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # ML Model Artifacts
-    ml_ensemble: MLEnsemble = mlflow_setup(
-        databricks_host=settings.databricks_host,
-        databricks_token=settings.databricks_token,
-        mlflow_tracking_uri=settings.mlflow_tracking_uri,
-        mlflow_experiment_path=settings.mlflow_experiment_path,
-        mlflow_artifact_path=settings.mlflow_artifact_path,
-        mlflow_model_name=settings.mlflow_model_name,
-        mlflow_model_version=settings.mlflow_model_version,
+    ml_ensemble = load_model_ensemble(
+        models_root=MODELS_DIR, version=settings.model_version
     )
 
-    app.state.ml_model = ml_ensemble["model"]
-    app.state.encoder = ml_ensemble["encoder"]
-    app.state.explainer = ml_ensemble["explainer"]
+    app.state.ml_model = ml_ensemble.pipeline
+    app.state.encoder = ml_ensemble.encoder
+    app.state.explainer = ml_ensemble.explainer
 
-    ml_model: PyFuncModel = app.state.ml_model
+    ml_model: ModelPipeline = app.state.ml_model
     encoder: OrdinalEncoder = app.state.encoder
     explainer: KernelExplainer = app.state.explainer
+
+    # MLFLOW-DISABLED (#119): the lines below loaded the model from MLflow.
+    # ml_ensemble: MLEnsemble = mlflow_setup(
+    #     databricks_host=settings.databricks_host,
+    #     databricks_token=settings.databricks_token,
+    #     mlflow_tracking_uri=settings.mlflow_tracking_uri,
+    #     mlflow_experiment_path=settings.mlflow_experiment_path,
+    #     mlflow_artifact_path=settings.mlflow_artifact_path,
+    #     mlflow_model_name=settings.mlflow_model_name,
+    #     mlflow_model_version=settings.mlflow_model_version,
+    # )
 
     # Load and preprocess new data
     new_data_df = pd.read_csv(ADR_CSV_PATH)

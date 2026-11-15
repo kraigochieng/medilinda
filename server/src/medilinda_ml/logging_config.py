@@ -3,7 +3,6 @@ import sys
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-from medilinda_ml.settings import settings
 
 
 def setup_logging():

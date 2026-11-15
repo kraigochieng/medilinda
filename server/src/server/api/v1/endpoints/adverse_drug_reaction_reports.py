@@ -8,7 +8,7 @@ from fastapi.requests import Request
 from fastapi.responses import JSONResponse, Response
 from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
-from mlflow.pyfunc import PyFuncModel
+from medilinda_ml.model_store import ModelPipeline
 from shap import KernelExplainer
 from sklearn.base import BaseEstimator
 from sklearn.preprocessing import OrdinalEncoder
@@ -56,7 +56,7 @@ from server.utils.auth import get_current_active_user
 def get_adverse_drug_reaction_report_service(
     request: Request, db: Session = Depends(get_db)
 ):
-    ml_model: PyFuncModel = request.app.state.ml_model
+    ml_model: ModelPipeline = request.app.state.ml_model
     encoder: OrdinalEncoder = request.app.state.encoder
     explainer: KernelExplainer = request.app.state.explainer
 

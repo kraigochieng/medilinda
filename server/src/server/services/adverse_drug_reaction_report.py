@@ -4,7 +4,7 @@ import uuid
 
 import pandas as pd
 from fastapi_pagination import Page, Params
-from mlflow.pyfunc import PyFuncModel
+from medilinda_ml.model_store import ModelPipeline
 from pydantic import ValidationError
 from shap import Explanation, KernelExplainer
 from sklearn.preprocessing import OrdinalEncoder
@@ -47,7 +47,7 @@ class AdverseDrugReactionReportService:
     def __init__(
         self,
         db: Session,
-        ml_model: PyFuncModel,
+        ml_model: ModelPipeline,
         encoder: OrdinalEncoder,
         explainer: KernelExplainer,
     ):
@@ -208,6 +208,18 @@ class AdverseDrugReactionReportService:
             if field != "created_at"
         }
 
+    @staticmethod
+    def build_model_frame(model_inputs: list[MLModelInput]) -> pd.DataFrame:
+        """Build the data frame that the model reads: one row for each input."""
+        model_frame = pd.DataFrame([model_input.model_dump() for model_input in model_inputs])
+
+        # The model's schema expects 'created_at' to be a string, but the frame
+        # holds a datetime. Convert the column to a string to match the schema.
+        if "created_at" in model_frame.columns:
+            model_frame["created_at"] = model_frame["created_at"].astype(str)
+
+        return model_frame
+
     def _predict(self, adr_model: ADRModel) -> MLModelOutput:
         try:
             ml_model_input = MLModelInput.model_validate(adr_model)
@@ -216,15 +228,7 @@ class AdverseDrugReactionReportService:
             logging.error(f"Pydantic validation failed for ADR {adr_model.id}: {e}")
             raise e
 
-        ml_model_input_df = pd.DataFrame([ml_model_input.model_dump()])
-
-        # The MLflow model's schema expects 'created_at' to be a string,
-        # but the DataFrame has it as a datetime object (datetime64[ns]).
-        # We must explicitly convert the column to a string to match the schema.
-        if "created_at" in ml_model_input_df.columns:
-            ml_model_input_df["created_at"] = ml_model_input_df["created_at"].astype(
-                str
-            )
+        ml_model_input_df = self.build_model_frame(model_inputs=[ml_model_input])
 
         prediction = self.ml_model.predict(ml_model_input_df)
 

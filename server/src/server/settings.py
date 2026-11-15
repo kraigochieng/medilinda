@@ -6,15 +6,19 @@ from dotenv import find_dotenv
 class Settings(BaseSettings):
     client_url: str
 
-    mlflow_experiment_name: str
-    mlflow_experiment_path: str
-    mlflow_artifact_path: str
-    mlflow_tracking_uri: str
-    mlflow_model_name: str
-    mlflow_model_version: str
+    # A folder name in the model store, or "latest" for the newest version.
+    model_version: str = "latest"
 
-    databricks_host: str
-    databricks_token: str
+    # MLFLOW-DISABLED (#119): the server loads the model from the model store, not from MLflow.
+    # mlflow_experiment_name: str
+    # mlflow_experiment_path: str
+    # mlflow_artifact_path: str
+    # mlflow_tracking_uri: str
+    # mlflow_model_name: str
+    # mlflow_model_version: str
+
+    # databricks_host: str
+    # databricks_token: str
 
     africas_talking_username: str
     africas_talking_api_key: str

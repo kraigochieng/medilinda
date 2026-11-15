@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import numpy as np
 import pandas as pd
-from mlflow.pyfunc import PyFuncModel
+from medilinda_ml.model_store import ModelPipeline
 from pydantic import ValidationError
 from shap import Explanation, KernelExplainer
 from sklearn.preprocessing import OrdinalEncoder
@@ -255,7 +255,7 @@ def insert_adverse_drug_reaction_reports(session: Session) -> list[ADRModel]:
 
 def insert_causality_assessment_levels(
     session: Session,
-    ml_model: PyFuncModel,
+    ml_model: ModelPipeline,
     encoder: OrdinalEncoder,
     explainer: KernelExplainer,
     adr_entries: list[ADRModel],
