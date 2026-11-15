@@ -211,7 +211,18 @@ class AdverseDrugReactionReportService:
     @staticmethod
     def build_model_frame(model_inputs: list[MLModelInput]) -> pd.DataFrame:
         """Build the data frame that the model reads: one row for each input."""
-        model_frame = pd.DataFrame([model_input.model_dump() for model_input in model_inputs])
+        model_frame = pd.DataFrame(
+            [model_input.model_dump() for model_input in model_inputs]
+        )
+
+        # MLModelInput is the input schema. A float field that holds None would make an
+        # object column, so give each float field the float64 type, with NaN for None.
+        float_fields: dict[str, str] = {
+            name: "float64"
+            for name, field in MLModelInput.model_fields.items()
+            if field.annotation in (float, float | None)
+        }
+        model_frame = model_frame.astype(float_fields)
 
         # The model's schema expects 'created_at' to be a string, but the frame
         # holds a datetime. Convert the column to a string to match the schema.
