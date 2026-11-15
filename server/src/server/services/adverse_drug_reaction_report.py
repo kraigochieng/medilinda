@@ -1,5 +1,6 @@
 from collections.abc import Sequence
 import logging
+import uuid
 
 import pandas as pd
 from fastapi_pagination import Page, Params
@@ -7,6 +8,7 @@ from mlflow.pyfunc import PyFuncModel
 from pydantic import ValidationError
 from shap import Explanation, KernelExplainer
 from sklearn.preprocessing import OrdinalEncoder
+from sqlalchemy import inspect
 from sqlalchemy.orm import Session
 
 from server.basemodels.adverse_drug_reaction_report import (
@@ -25,6 +27,7 @@ from server.basemodels.adverse_drug_reaction_report import (
 from server.basemodels.causality_asssessment_level import (
     CausalityAssessmentLevelPostRequest,
 )
+from server.models._mixins import utcnow
 from server.models.adverse_drug_reaction_report import ADRModel
 from server.models.causality_assessment_level import (
     CausalityAssessmentLevelEnum,
@@ -94,11 +97,22 @@ class AdverseDrugReactionReportService:
         return ADRGetResponse.model_validate(model)
 
     def create_and_predict(self, data: ADRPostRequest) -> ADRGetResponse:
+        """Run the model first, then save the ADR and its assessment in one
+        transaction, so no database connection waits for the model (#110)."""
+        adr_id = str(uuid.uuid4())
+        # The model reads `created_at`, so the saved row must carry the same value.
+        # The column holds a naive UTC time, so the model sees the same string as before.
+        created_at = utcnow().replace(tzinfo=None)
+        candidate = ADRModel(id=adr_id, created_at=created_at, **data.model_dump())
+
+        self._release_database_connection()
+        cal_data = self._generate_causality_assessment_data(adr_model=candidate)
+
         # One transaction: either the ADR and its assessment are saved, or neither.
         try:
-            adr_model = self.repository.create(data=data, commit=False)
-
-            cal_data = self._generate_causality_assessment_data(adr_model=adr_model)
+            adr_model = self.repository.create(
+                data=data, commit=False, id=adr_id, created_at=created_at
+            )
 
             logging.info("Creating causality after prediction...")
             self.cal_repository.create(data=cal_data, commit=False)
@@ -118,20 +132,26 @@ class AdverseDrugReactionReportService:
     ) -> ADRGetResponse | None:
         """Save the edit. If it changes anything the ML model reads, add a new
         causality assessment. The old one stays, with the reviews given on it,
-        so the ADR shows as needing review again and nothing is lost."""
-        adr_model = self.repository.get_by_id(id=id)
-        inputs_before = self._ml_inputs(adr_model)
+        so the ADR shows as needing review again and nothing is lost.
+        The model runs before the first write, with no open transaction (#110)."""
+        saved_adr = self.repository.get_by_id(id=id)
+        inputs_before = self._ml_inputs(saved_adr)
+        had_assessment = bool(saved_adr.causality_assessment_levels)
+        candidate = self._candidate_after_edit(saved_adr=saved_adr, data=data)
+
+        needs_assessment = (
+            self._ml_inputs(candidate) != inputs_before or not had_assessment
+        )
+
+        cal_data: CausalityAssessmentLevelPostRequest | None = None
+        if needs_assessment:
+            self._release_database_connection()
+            cal_data = self._generate_causality_assessment_data(adr_model=candidate)
 
         try:
             adr_model = self.repository.update(id=id, data=data, commit=False)
 
-            if (
-                self._ml_inputs(adr_model) != inputs_before
-                or not adr_model.causality_assessment_levels
-            ):
-                cal_data = self._generate_causality_assessment_data(
-                    adr_model=adr_model
-                )
+            if cal_data is not None:
                 self.cal_repository.create(data=cal_data, commit=False)
 
             self.db.commit()
@@ -160,6 +180,24 @@ class AdverseDrugReactionReportService:
             raise
 
         return ADRGetResponse.model_validate(adr_model)
+
+    def _release_database_connection(self) -> None:
+        """Side effect: end the open transaction, so that no connection is idle
+        while the model runs. Turso closes an idle stream after a short time."""
+        if self.db.in_transaction():
+            self.db.rollback()
+
+    @staticmethod
+    def _candidate_after_edit(saved_adr: ADRModel, data: ADRPostRequest) -> ADRModel:
+        """The ADR as it will be after the edit, built in memory only. It is not
+        added to the session, so nothing is written."""
+        saved_values: dict[str, object] = {
+            attribute.key: getattr(saved_adr, attribute.key)
+            for attribute in inspect(ADRModel).column_attrs
+        }
+        # The creator of a report never changes when someone else edits it.
+        edited_values = data.model_dump(exclude={"user_id"})
+        return ADRModel(**{**saved_values, **edited_values})
 
     @staticmethod
     def _ml_inputs(adr_model: ADRModel) -> dict:
