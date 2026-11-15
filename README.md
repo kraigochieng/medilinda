@@ -230,10 +230,22 @@ Nothing deploys by itself, so the free plans are not used up. Deploy when you wa
 ## Project Structure
 
 ```
-client/         # Nuxt 3 frontend
-server/         # FastAPI backend
-medilinda_ml/   # ML pipeline and model code
+client/                    # Nuxt 3 frontend
+server/                    # FastAPI backend
+server/src/medilinda_ml/   # ML pipeline and model code (part of the server)
+medilinda_ml/              # Training data and notebooks
 ```
+
+### Train the model
+
+Run these commands from the `server` folder:
+
+```sh
+uv sync --group train
+PYTHONPATH=src uv run python -m medilinda_ml.modeling.train_model
+```
+
+The training code needs the MLflow and Databricks settings in `.env`.
 
 ## Acknowledgements
 

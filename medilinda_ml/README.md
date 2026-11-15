@@ -1,8 +1,6 @@
 # Medilinda-ML 💊
 
-[![PyPI version](https://badge.fury.io/py/medilinda-ml.svg)](https://badge.fury.io/py/medilinda-ml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python Version](https://img.shields.io/pypi/pyversions/medilinda-ml)](https://pypi.org/project/medilinda-ml/)
 
 A complete machine learning pipeline to predict the causality of Adverse Drug Reactions (ADRs) from patient and medication data. This package provides tools for data preprocessing, feature engineering, model training, and evaluation, with seamless MLflow integration for experiment tracking.
 
@@ -18,13 +16,23 @@ The goal of Medilinda-ML is to provide a reproducible and easy-to-use system for
 -   **Hyperparameter Tuning**: Leverages `RandomizedSearchCV` to find the best model configuration.
 -   **Experiment Tracking**: Integrated with MLflow to log parameters, metrics, and models.
 
-## Installation
+## Where the code lives
 
-Install Medilinda-ML directly from PyPI:
+The Python package `medilinda_ml` is part of the server. It is in `server/src/medilinda_ml/`.
+This folder holds the training data (`data/`) and the notebooks (`notebooks/`) only.
+Nothing publishes the package to PyPI.
+
+## Training
+
+Run the commands from the `server` folder:
 
 ```bash
-pip install medilinda-ml
+uv sync --group train
+PYTHONPATH=src uv run python -m medilinda_ml.modeling.train_model
 ```
+
+The training code reads `medilinda_ml/data/data.csv`.
+It needs the MLflow and Databricks settings in a `.env` file.
 
 ## License
 

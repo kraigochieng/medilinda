@@ -1,4 +1,5 @@
 from collections.abc import Sequence
+from datetime import datetime
 
 from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlalchemy import paginate
@@ -226,8 +227,22 @@ class AdverseDrugReactionReportRepository:
         if model is not None:
             self.db.refresh(model)
 
-    def create(self, data: ADRPostRequest, commit: bool = True) -> ADRModel:
+    def create(
+        self,
+        data: ADRPostRequest,
+        commit: bool = True,
+        *,
+        id: str | None = None,
+        created_at: datetime | None = None,
+    ) -> ADRModel:
+        """Insert the ADR. A caller that predicted before the insert passes the
+        `id` and `created_at` it used, so the saved row matches the model input."""
         model = ADRModel(**data.model_dump())
+
+        if id is not None:
+            model.id = id
+        if created_at is not None:
+            model.created_at = created_at
 
         self.db.add(model)
         self._save(model, commit)

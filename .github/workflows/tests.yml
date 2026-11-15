@@ -57,4 +57,8 @@ jobs:
 
             - run: uv sync --group dev
 
+            # The tests of the ML code are in server/tests/ml, so this one run tests both.
             - run: uv run pytest
+
+            # The training module starts MLflow when it loads, so check its syntax only.
+            - run: uv run python -m compileall -q src/medilinda_ml
