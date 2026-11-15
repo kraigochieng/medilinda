@@ -151,6 +151,7 @@ def write_version(
         (temporary_folder / MANIFEST_FILE_NAME).write_text(
             manifest.model_dump_json(indent=2), encoding="utf-8"
         )
+        temporary_folder.chmod(0o755)
         temporary_folder.rename(version_folder)
     except BaseException:
         shutil.rmtree(temporary_folder, ignore_errors=True)

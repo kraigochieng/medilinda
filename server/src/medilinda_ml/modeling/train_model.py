@@ -3,11 +3,11 @@ import matplotlib
 matplotlib.use("agg")
 
 import logging
-import os
+from contextlib import nullcontext
+from datetime import datetime, timezone
+from importlib.metadata import version as installed_version
 from pprint import pprint
 
-import joblib
-import mlflow
 import numpy as np
 import pandas as pd
 import shap
@@ -36,11 +36,15 @@ from medilinda_ml.features.build_features import (
     PatientBMITransformer,
 )
 from medilinda_ml.logging_config import setup_logging
-from medilinda_ml.paths import DATA_DIR
-from medilinda_ml.settings import settings
-from medilinda_ml.signature import signature
+from medilinda_ml.model_store import write_version
+from medilinda_ml.paths import DATA_DIR, MODELS_DIR
 from medilinda_ml.utils import ShapModelWrapper
-from mlflow.models import infer_signature
+# MLFLOW-DISABLED (#119): MLflow logging is off. The model goes to the model store.
+# import joblib
+# import mlflow
+# from medilinda_ml.settings import settings
+# from medilinda_ml.signature import signature
+# from mlflow.models import infer_signature
 from sklearn.ensemble import (
     AdaBoostClassifier,
     GradientBoostingClassifier,
@@ -61,30 +65,31 @@ from sklearn.preprocessing import OrdinalEncoder
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
-os.environ["DATABRICKS_HOST"] = settings.databricks_host
-os.environ["DATABRICKS_TOKEN"] = settings.databricks_token
-os.environ["MLFLOW_RECORD_ENV_VARS_IN_MODEL_LOGGING"] = "false"
+# MLFLOW-DISABLED (#119): these lines set up MLflow. They start MLflow when the module loads.
+# os.environ["DATABRICKS_HOST"] = settings.databricks_host
+# os.environ["DATABRICKS_TOKEN"] = settings.databricks_token
+# os.environ["MLFLOW_RECORD_ENV_VARS_IN_MODEL_LOGGING"] = "false"
 
 setup_logging()
 # # To allow uv to be used
 # os.environ["MLFLOW_LOCK_MODEL_DEPENDENCIES"] = "true"
 
 # Set MLFlow Tracking URI
-mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
+# mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
 
 # Create MLFlow Experiment if not created
-if mlflow.get_experiment_by_name(settings.mlflow_experiment_path) is None:
-    mlflow.create_experiment(
-        name=settings.mlflow_experiment_path,
-        artifact_location=settings.mlflow_artifact_path,
-    )
+# if mlflow.get_experiment_by_name(settings.mlflow_experiment_path) is None:
+#     mlflow.create_experiment(
+#         name=settings.mlflow_experiment_path,
+#         artifact_location=settings.mlflow_artifact_path,
+#     )
 
 # Set MLFlow Experiment if not created
-mlflow.set_experiment(settings.mlflow_experiment_path)
+# mlflow.set_experiment(settings.mlflow_experiment_path)
 
 
 def train_model(df_path: str) -> None:
-    mlflow.autolog()
+    # MLFLOW-DISABLED (#119): mlflow.autolog()
     df = pd.read_csv(df_path)
 
     X = df.drop(columns=[TARGET_COLUMN], axis=1)
@@ -246,7 +251,8 @@ def train_model(df_path: str) -> None:
             n_jobs=-1,
         )
 
-        with mlflow.start_run():
+        # MLFLOW-DISABLED (#119): with mlflow.start_run():
+        with nullcontext():
             search.fit(X_train, y_train_enc)
 
             # --- Results ---
@@ -300,49 +306,80 @@ def train_model(df_path: str) -> None:
             else:
                 logging.info("No verbose flags found.")
 
-            mlflow.sklearn.log_model(
-                sk_model=best_estimator,
-                name=model_name,
-                # input_example=input_example,
-                registered_model_name=registered_model_name,
-                signature=signature,
+            # MLFLOW-DISABLED (#119): the lines below logged the model, the encoder and the explainer to MLflow.
+#             mlflow.sklearn.log_model(
+#                 sk_model=best_estimator,
+#                 name=model_name,
+#                 # input_example=input_example,
+#                 registered_model_name=registered_model_name,
+#                 signature=signature,
+#             )
+#             print("📦 Model logged to MLflow successfully.")
+
+#             encoder_path = "ordinal_encoder.pkl"
+
+#             try:
+#                 joblib.dump(ordinal_encoder, encoder_path)
+#                 mlflow.log_artifact(encoder_path, artifact_path="encoders")
+#                 print("📦 Ordinal encoder logged to MLflow successfully.")
+#             finally:
+#                 if os.path.exists(encoder_path):
+#                     os.remove(encoder_path)
+
+#             print("📦 Creating and logging SHAP explainer...")
+
+#             # Temporarily disable autologging to prevent conflicts
+#             mlflow.autolog(disable=True)
+
+#             explainer_path = "shap_explainer.pkl"
+
+#             try:
+#                 # preprocessed_X_train, _ = best_estimator[:-1].fit_resample(
+#                 #     X_train, y_train_enc
+#                 # )
+#                 background_data = X_train.sample(100, random_state=42)
+
+#                 predict_fn = ShapModelWrapper(best_estimator, X_train.columns)
+
+#                 explainer = shap.KernelExplainer(predict_fn, background_data)
+
+#                 joblib.dump(explainer, explainer_path)
+#                 mlflow.log_artifact(explainer_path, artifact_path="explainers")
+#                 print("📦 SHAP explainer logged to MLflow successfully.")
+#             finally:
+#                 if os.path.exists(explainer_path):
+#                     os.remove(explainer_path)
+#                     print("🧹 Cleaned up local explainer file.")
+
+
+            print("📦 Creating the SHAP explainer...")
+
+            background_data = X_train.sample(100, random_state=42)
+            predict_function = ShapModelWrapper(best_estimator, X_train.columns)
+            explainer = shap.KernelExplainer(predict_function, background_data)
+
+            version_folder = write_version(
+                root=MODELS_DIR,
+                model_name=model_name,
+                pipeline=best_estimator,
+                encoder=ordinal_encoder,
+                explainer=explainer,
+                created_at=datetime.now(timezone.utc),
+                source="trained locally with medilinda_ml.modeling.train_model",
+                library_versions={
+                    library: installed_version(library)
+                    for library in (
+                        "scikit-learn",
+                        "imbalanced-learn",
+                        "numpy",
+                        "pandas",
+                        "scipy",
+                        "shap",
+                        "joblib",
+                    )
+                },
             )
-            print("📦 Model logged to MLflow successfully.")
-
-            encoder_path = "ordinal_encoder.pkl"
-
-            try:
-                joblib.dump(ordinal_encoder, encoder_path)
-                mlflow.log_artifact(encoder_path, artifact_path="encoders")
-                print("📦 Ordinal encoder logged to MLflow successfully.")
-            finally:
-                if os.path.exists(encoder_path):
-                    os.remove(encoder_path)
-
-            print("📦 Creating and logging SHAP explainer...")
-
-            # Temporarily disable autologging to prevent conflicts
-            mlflow.autolog(disable=True)
-
-            explainer_path = "shap_explainer.pkl"
-
-            try:
-                # preprocessed_X_train, _ = best_estimator[:-1].fit_resample(
-                #     X_train, y_train_enc
-                # )
-                background_data = X_train.sample(100, random_state=42)
-
-                predict_fn = ShapModelWrapper(best_estimator, X_train.columns)
-
-                explainer = shap.KernelExplainer(predict_fn, background_data)
-
-                joblib.dump(explainer, explainer_path)
-                mlflow.log_artifact(explainer_path, artifact_path="explainers")
-                print("📦 SHAP explainer logged to MLflow successfully.")
-            finally:
-                if os.path.exists(explainer_path):
-                    os.remove(explainer_path)
-                    print("🧹 Cleaned up local explainer file.")
+            print(f"📦 Model saved to {version_folder}")
 
         print("DONE")
 

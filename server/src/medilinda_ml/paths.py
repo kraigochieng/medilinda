@@ -5,3 +5,6 @@ from pathlib import Path
 PROJ_ROOT_DIR = Path(__file__).resolve().parents[3] / "medilinda_ml"
 
 DATA_DIR = PROJ_ROOT_DIR / "data"
+
+# The model store is in the server folder, so that the server image holds the models.
+MODELS_DIR = Path(__file__).resolve().parents[2] / "models"
