@@ -34,6 +34,15 @@ PYTHONPATH=src uv run python -m medilinda_ml.modeling.train_model
 The training code reads `data/data.csv` in this folder.
 It writes a new version folder in `server/models/`. See the README of the repository for the layout.
 
+## Notebooks
+
+The notebooks import `medilinda_ml`. Set `PYTHONPATH` to the `server/src` folder before you start the notebook kernel.
+Install the `train` group first: `cd server && uv sync --group train`.
+The `train` group has `ipykernel` and `faker`. It has no Jupyter server, so use your editor or install one.
+
+`notebooks/0.2-kraig-data_generation.ipynb` makes synthetic data with a fixed seed and a fixed date.
+It writes `data/data_seed42.csv`. It does not change `data/data.csv`, the file that the training uses.
+
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
