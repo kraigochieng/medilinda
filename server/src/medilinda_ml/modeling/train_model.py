@@ -3,7 +3,6 @@ import matplotlib
 matplotlib.use("agg")
 
 import logging
-import subprocess
 from datetime import datetime, timezone
 from importlib.metadata import version as installed_version
 from pathlib import Path
@@ -19,16 +18,16 @@ from medilinda_ml.columns import FINAL_COLUMNS, TARGET_COLUMN
 from medilinda_ml.candidates import candidate_named
 from medilinda_ml.logging_config import setup_logging
 from medilinda_ml.pipeline import build_pipeline
+from medilinda_ml.tracking import (
+    EXPERIMENT_NAME,
+    LIBRARIES_TO_RECORD,
+    current_git_commit,
+    portable_runs_folder,
+    start_local_tracking,
+)
 from medilinda_ml.evaluation import classify, headline_metrics, max_additivity_error
 from medilinda_ml.model_store import write_version
-from medilinda_ml.paths import (
-    DATA_DIR,
-    MODELS_DIR,
-    REPOSITORY_ROOT,
-    SERVER_DIR,
-    TRACKING_DIR,
-)
-from medilinda_ml.tracking_store import make_absolute, make_relative
+from medilinda_ml.paths import DATA_DIR, MODELS_DIR
 from medilinda_ml.utils import ShapModelWrapper
 # The model goes to the model store. MLflow tracks the experiment in a local folder.
 # MLFLOW-DISABLED (#119): the Databricks and model logging code below stays off.
@@ -70,7 +69,6 @@ setup_logging()
 # mlflow.set_experiment(settings.mlflow_experiment_path)
 
 
-EXPERIMENT_NAME = "medilinda-causality"
 SPLIT_SEED = 42
 TEST_FRACTION = 0.25
 VALIDATION_FRACTION = 0.2
@@ -81,57 +79,12 @@ MAX_SEARCH_DRAWS = 20
 SHAP_BACKGROUND_ROWS = 100
 SHAP_SEED = 42
 SHAP_ADDITIVITY_ROWS = 5
-LIBRARIES_TO_RECORD: tuple[str, ...] = (
-    "scikit-learn",
-    "imbalanced-learn",
-    "numpy",
-    "pandas",
-    "scipy",
-    "shap",
-    "joblib",
-    "mlflow",
-)
-
-
-def current_git_commit() -> str | None:
-    """Side effect (runs git): the commit of the code that trains, or None if unknown."""
-    try:
-        completed = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=Path(__file__).parent,
-        )
-    except (OSError, subprocess.CalledProcessError):
-        return None
-    return completed.stdout.strip()
-
-
-def start_local_tracking() -> None:
-    """Side effect (disk): send MLflow runs to the local folder, and pick the experiment."""
-    mlflow.set_tracking_uri(TRACKING_DIR.as_uri())
-    mlflow.set_experiment(EXPERIMENT_NAME)
-    # The search and its candidates are logged. The model goes to the model store.
-    mlflow.sklearn.autolog(log_models=False, log_datasets=False, silent=True)
 
 
 def train_model(df_path: str) -> None:
-    """Side effect (disk): train, and keep the runs folder in the relative form.
-
-    The folder is made absolute for MLflow, and relative again when training ends,
-    also after a failure. So git sees no path of this machine.
-    """
-    TRACKING_DIR.mkdir(parents=True, exist_ok=True)
-    make_absolute(tracking_dir=TRACKING_DIR, server_dir=SERVER_DIR)
-    try:
+    """Side effect (disk): train, and keep the runs folder in the relative form."""
+    with portable_runs_folder():
         run_training(df_path=df_path)
-    finally:
-        make_relative(
-            tracking_dir=TRACKING_DIR,
-            server_dir=SERVER_DIR,
-            repository_root=REPOSITORY_ROOT,
-        )
 
 
 def run_training(df_path: str) -> None:
