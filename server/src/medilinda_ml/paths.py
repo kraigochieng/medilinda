@@ -16,3 +16,6 @@ MODELS_DIR = SERVER_DIR / "models"
 # paths (see tracking_store.py), and not in the server image. Open it from the server
 # folder with `mlflow ui --backend-store-uri mlruns`.
 TRACKING_DIR = SERVER_DIR / "mlruns"
+
+# The experiment writes its decision here, and the training reads it. It is in git.
+SELECTION_PATH = PACKAGE_DIR / "selection.json"
