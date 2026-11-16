@@ -25,6 +25,12 @@ from medilinda_ml.tracking import (
     portable_runs_folder,
     start_local_tracking,
 )
+from medilinda_ml.data_split import (
+    SPLIT_SEED,
+    TEST_FRACTION,
+    VALIDATION_FRACTION,
+    split_dataset,
+)
 from medilinda_ml.evaluation import classify, headline_metrics, max_additivity_error
 from medilinda_ml.model_store import write_version
 from medilinda_ml.paths import DATA_DIR, MODELS_DIR
@@ -40,7 +46,6 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import (
     RandomizedSearchCV,
     RepeatedStratifiedKFold,
-    train_test_split,
 )
 
 # from sklearn.pipeline import Pipeline
@@ -69,9 +74,6 @@ setup_logging()
 # mlflow.set_experiment(settings.mlflow_experiment_path)
 
 
-SPLIT_SEED = 42
-TEST_FRACTION = 0.25
-VALIDATION_FRACTION = 0.2
 CV_SPLITS = 5
 CV_REPEATS = 3
 SCORING = "f1_weighted"
@@ -91,20 +93,9 @@ def run_training(df_path: str) -> None:
     start_local_tracking()
     df = pd.read_csv(df_path)
 
-    X = df.drop(columns=[TARGET_COLUMN], axis=1)
-    y = df[TARGET_COLUMN]
-
-    X_train_and_val, X_test, y_train_and_val, y_test = train_test_split(
-        X, y, stratify=y, test_size=TEST_FRACTION, random_state=SPLIT_SEED
-    )
-
-    X_train, X_val, y_train, y_val = train_test_split(
-        X_train_and_val,
-        y_train_and_val,
-        stratify=y_train_and_val,
-        test_size=VALIDATION_FRACTION,
-        random_state=SPLIT_SEED,
-    )
+    data_split = split_dataset(df=df)
+    X_train, X_val, X_test = data_split.X_train, data_split.X_val, data_split.X_test
+    y_train, y_val, y_test = data_split.y_train, data_split.y_val, data_split.y_test
 
     ordinal_encoder = OrdinalEncoder(
         categories=[["certain", "likely", "possible", "unlikely"]]
