@@ -1,4 +1,8 @@
-class ModelStoreError(Exception):
+class MedilindaMlError(Exception):
+    """The base of every error that the medilinda_ml package raises."""
+
+
+class ModelStoreError(MedilindaMlError):
     """The base of every error that the model store raises."""
 
 
@@ -33,3 +37,12 @@ class ModelVersionExistsError(ModelStoreError):
 
 class ModelVersionNameError(ModelStoreError):
     """The inputs of a model version name are not valid."""
+
+
+class UnknownCandidateError(MedilindaMlError):
+    """No estimator candidate has the requested name."""
+
+    def __init__(self, *, name: str, known: list[str]) -> None:
+        super().__init__(f"No candidate is named '{name}'. The known names are {known}.")
+        self.name: str = name
+        self.known: list[str] = known
