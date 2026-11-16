@@ -15,31 +15,10 @@ import mlflow.sklearn
 import numpy as np
 import pandas as pd
 import shap
-from imblearn.over_sampling import SMOTE
-from imblearn.pipeline import Pipeline
-from medilinda_ml.columns import (
-    COLUMNS_FOR_ONE_HOT,
-    COLUMNS_TO_DROP,
-    DATE_COLUMNS,
-    DRUG_NAMES,
-    FINAL_COLUMNS,
-    INITIAL_CATEGORICAL_COLUMNS,
-    NUMERICAL_COLUMNS,
-    TARGET_COLUMN,
-)
-from medilinda_ml.data.set_datatypes import DatatypeSetter
-from medilinda_ml.features.build_features import (
-    DropColumnsTransformer,
-    DrugDateDifferenceTransformer,
-    FinalColumnSelectorTransformer,
-    MinMaxScalingTransformer,
-    NumberOfSuspectedDrugsTransformer,
-    NumericalImputer,
-    OneHotEncodingTransformer,
-    PatientAgeImputer,
-    PatientBMITransformer,
-)
+from medilinda_ml.columns import FINAL_COLUMNS, TARGET_COLUMN
+from medilinda_ml.candidates import candidate_named
 from medilinda_ml.logging_config import setup_logging
+from medilinda_ml.pipeline import build_pipeline
 from medilinda_ml.evaluation import classify, headline_metrics, max_additivity_error
 from medilinda_ml.model_store import write_version
 from medilinda_ml.paths import (
@@ -58,25 +37,15 @@ from medilinda_ml.utils import ShapModelWrapper
 # from medilinda_ml.settings import settings
 # from medilinda_ml.signature import signature
 # from mlflow.models import infer_signature
-from sklearn.ensemble import (
-    AdaBoostClassifier,
-    GradientBoostingClassifier,
-    RandomForestClassifier,
-)
-from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 from sklearn.model_selection import (
     RandomizedSearchCV,
     RepeatedStratifiedKFold,
     train_test_split,
 )
-from sklearn.naive_bayes import GaussianNB
-from sklearn.neighbors import KNeighborsClassifier
 
 # from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OrdinalEncoder
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
 
 # MLFLOW-DISABLED (#119): these lines set up MLflow. They start MLflow when the module loads.
 # os.environ["DATABRICKS_HOST"] = settings.databricks_host
@@ -196,49 +165,11 @@ def run_training(df_path: str) -> None:
     print("✅ Validation shape:", X_val.shape)
     print("✅ Test shape:", X_test.shape)
 
+    # The experiment (notebook 3.3) compares all candidates. This training still
+    # trains the decision tree only.
+    selected_candidate = candidate_named(name="decision_tree")
     estimators_and_param_grids = {
-        "decision_tree": (
-            DecisionTreeClassifier(random_state=42),
-            {"max_depth": [25, 50, 100]},
-        ),
-        # "ada_boost": (
-        #     AdaBoostClassifier(random_state=42),
-        #     {"n_estimators": [10, 50], "learning_rate": [0.1, 1.0]},
-        # ),
-        # "logistic_regression": (
-        #     LogisticRegression(random_state=42, max_iter=1000, solver="saga"),
-        #     {"C": [0.01, 0.1, 1, 10], "penalty": ["l2"]},
-        # ),
-        # "random_forest": (
-        #     RandomForestClassifier(random_state=42),
-        #     {
-        #         "n_estimators": [50, 100, 200],
-        #         "max_depth": [None, 10, 30, 50],
-        #         "max_features": ["sqrt", "log2"],
-        #     },
-        # ),
-        # "gradient_boosting": (
-        #     GradientBoostingClassifier(random_state=42),
-        #     {
-        #         "n_estimators": [50, 100],
-        #         "learning_rate": [0.01, 0.1],
-        #         "max_depth": [3, 5],
-        #         "subsample": [0.8, 1.0],
-        #     },
-        # ),
-        # "svm": (
-        #     SVC(probability=True, random_state=42),
-        #     {
-        #         "kernel": ["rbf"],
-        #         "C": [0.1, 1, 3],
-        #         "gamma": ["scale", "auto"],
-        #     },
-        # ),
-        # "knn": (
-        #     KNeighborsClassifier(),
-        #     {"n_neighbors": [3, 5, 7], "weights": ["uniform", "distance"], "p": [1, 2]},
-        # ),
-        # "naive_bayes": (GaussianNB(), {}),
+        selected_candidate.name: (selected_candidate.estimator, selected_candidate.param_grid),
     }
     # --- Cross-validation setup ---
     cv = RepeatedStratifiedKFold(
@@ -252,52 +183,7 @@ def run_training(df_path: str) -> None:
         print("—" * 80)
 
         # --- Build full pipeline for this estimator ---
-        pipeline = Pipeline(
-            [
-                (
-                    "set_datatypes",
-                    DatatypeSetter(
-                        categorical_columns=INITIAL_CATEGORICAL_COLUMNS,
-                        date_columns=DATE_COLUMNS,
-                    ),
-                ),
-                ("patient_age_imputer", PatientAgeImputer()),
-                ("patient_bmi", PatientBMITransformer()),
-                (
-                    "drug_date_difference",
-                    DrugDateDifferenceTransformer(
-                        drug_names=DRUG_NAMES,
-                        date_columns=DATE_COLUMNS,
-                    ),
-                ),
-                (
-                    "num_of_suspected_drugs",
-                    NumberOfSuspectedDrugsTransformer(drug_names=DRUG_NAMES),
-                ),
-                (
-                    "drop_irrelevant_columns",
-                    DropColumnsTransformer(columns=COLUMNS_TO_DROP),
-                ),
-                (
-                    "numerical_imputer",
-                    NumericalImputer(numerical_columns=NUMERICAL_COLUMNS),
-                ),
-                (
-                    "one_hot_encoding",
-                    OneHotEncodingTransformer(categorical_columns=COLUMNS_FOR_ONE_HOT),
-                ),
-                (
-                    "numerical_scaling",
-                    MinMaxScalingTransformer(numerical_columns=["patient_bmi"]),
-                ),
-                (
-                    "final_column",
-                    FinalColumnSelectorTransformer(columns=FINAL_COLUMNS),
-                ),
-                ("smote", SMOTE(random_state=42)),
-                ("classifier", estimator),
-            ],
-        )
+        pipeline = build_pipeline(estimator=estimator, final_columns=FINAL_COLUMNS)
 
         # # --- Run pipeline on training data ---
         # print("\n🚀 Running pipeline...")
