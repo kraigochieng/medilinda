@@ -15,8 +15,11 @@ RUN pip install uv
 # Copy only the dependency definition files.
 COPY pyproject.toml uv.lock ./
 
-# Install project dependencies system-wide.
-RUN uv pip install --system -r pyproject.toml
+# Install the exact versions of uv.lock, system-wide. The model files in
+# models/ need the same library versions that trained them. Do not install from
+# pyproject.toml: it ignores the lock file. The export has no dev or train group.
+RUN uv export --frozen --no-dev --no-emit-project --no-hashes -o requirements.txt \
+    && uv pip install --system -r requirements.txt
 
 # Stage 3: Build the Runtime Image
 FROM base AS runtime
