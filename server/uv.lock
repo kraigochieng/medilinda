@@ -3304,18 +3304,14 @@ dependencies = [
     { name = "africastalking" },
     { name = "fastapi", extra = ["standard"] },
     { name = "fastapi-pagination" },
-    { name = "humps" },
     { name = "imbalanced-learn" },
     { name = "joblib" },
-    { name = "loguru" },
     { name = "matplotlib" },
     { name = "numpy" },
-    { name = "openpyxl" },
     { name = "pandas" },
     { name = "pydantic-settings" },
     { name = "pyjwt", extra = ["crypto"] },
     { name = "scikit-learn" },
-    { name = "scispacy" },
     { name = "shap" },
     { name = "sqlalchemy-libsql" },
 ]
@@ -3327,8 +3323,12 @@ dev = [
 ]
 train = [
     { name = "faker" },
+    { name = "humps" },
     { name = "ipykernel" },
+    { name = "loguru" },
     { name = "mlflow" },
+    { name = "openpyxl" },
+    { name = "scispacy" },
     { name = "seaborn" },
 ]
 
@@ -3337,18 +3337,14 @@ requires-dist = [
     { name = "africastalking", specifier = ">=2.0.1" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.118.0" },
     { name = "fastapi-pagination", specifier = ">=0.14.2" },
-    { name = "humps", specifier = ">=0.2.2" },
     { name = "imbalanced-learn", specifier = ">=0.14.0" },
     { name = "joblib", specifier = ">=1.5.2" },
-    { name = "loguru", specifier = ">=0.7.3" },
     { name = "matplotlib", specifier = ">=3.10.6" },
     { name = "numpy", specifier = ">=2.3.3" },
-    { name = "openpyxl", specifier = ">=3.1.5" },
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "pydantic-settings", specifier = ">=2.11.0" },
     { name = "pyjwt", extras = ["crypto"], specifier = ">=2.10.1" },
     { name = "scikit-learn", specifier = ">=1.7.2" },
-    { name = "scispacy", specifier = ">=0.5.5" },
     { name = "shap", specifier = ">=0.48.0" },
     { name = "sqlalchemy-libsql", specifier = ">=0.2.0" },
 ]
@@ -3360,8 +3356,12 @@ dev = [
 ]
 train = [
     { name = "faker", specifier = ">=37.8.0" },
+    { name = "humps", specifier = ">=0.2.2" },
     { name = "ipykernel", specifier = ">=6.30.1" },
+    { name = "loguru", specifier = ">=0.7.3" },
     { name = "mlflow", specifier = ">=3.4.0" },
+    { name = "openpyxl", specifier = ">=3.1.5" },
+    { name = "scispacy", specifier = ">=0.5.5" },
     { name = "seaborn", specifier = ">=0.13.2" },
 ]
 
