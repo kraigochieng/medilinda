@@ -1,7 +1,8 @@
 """The shared pipeline builder gives the same pipeline as the committed model (#141).
 
-The committed model was trained with the code that was inline in train_model.py.
-These tests load that model and the new builder, and compare them step by step.
+These tests load the committed model and build a pipeline with the same estimator
+class and the same columns. They compare the two step by step. The estimator and
+the columns change with each new model, so the test reads them from the model.
 """
 
 import pytest
@@ -10,6 +11,7 @@ from medilinda_ml.columns import FINAL_COLUMNS
 from medilinda_ml.model_store import read_version
 from medilinda_ml.pipeline import build_pipeline, preprocessing_steps
 from server.config import MODELS_DIR
+from sklearn.base import BaseEstimator
 from sklearn.tree import DecisionTreeClassifier
 
 
@@ -19,9 +21,11 @@ def committed_pipeline() -> Pipeline:
 
 
 @pytest.fixture
-def built_pipeline() -> Pipeline:
+def built_pipeline(committed_pipeline: Pipeline) -> Pipeline:
+    committed_classifier: BaseEstimator = committed_pipeline.steps[-1][1]
     return build_pipeline(
-        estimator=DecisionTreeClassifier(random_state=42), final_columns=FINAL_COLUMNS
+        estimator=type(committed_classifier)(),
+        final_columns=committed_pipeline.named_steps["final_column"].columns,
     )
 
 
@@ -71,10 +75,12 @@ def test_smote_comes_after_the_column_selection_and_before_the_classifier(
     assert names[-3:] == ["final_column", "smote", "classifier"]
 
 
-def test_the_final_columns_reach_the_column_selection_step(built_pipeline):
-    selector = built_pipeline.named_steps["final_column"]
+def test_the_final_columns_reach_the_column_selection_step():
+    pipeline = build_pipeline(
+        estimator=DecisionTreeClassifier(), final_columns=FINAL_COLUMNS
+    )
 
-    assert selector.columns == FINAL_COLUMNS
+    assert pipeline.named_steps["final_column"].columns == FINAL_COLUMNS
 
 
 def test_each_call_gives_new_step_objects():

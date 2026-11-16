@@ -31,8 +31,12 @@ uv sync --group train
 PYTHONPATH=src uv run python -m medilinda_ml.modeling.train_model
 ```
 
-The training code reads `data/data.csv` in this folder.
-It writes a new version folder in `server/models/`. See the README of the repository for the layout.
+The training code reads `selection.json`, which the experiment writes (see Experiment below).
+It stops if the hash of `data/data.csv` differs from the hash in `selection.json`. Run the experiment again then.
+It trains the selected estimator once, with the selected params and features. It does not search.
+It logs a run with the tag `stage=production` and the id of the experiment run.
+It writes a new version folder in `server/models/`. The manifest names both run ids.
+See the README of the repository for the layout.
 
 ## Experiment
 
