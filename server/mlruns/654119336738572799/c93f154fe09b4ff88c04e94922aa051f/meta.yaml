@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/c93f154fe09b4ff88c04e94922aa051f/artifacts
+end_time: 1794805345155
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: c93f154fe09b4ff88c04e94922aa051f
+run_name: resilient-foal-858
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805298116
+status: 3
+tags: []
+user_id: kraigochieng

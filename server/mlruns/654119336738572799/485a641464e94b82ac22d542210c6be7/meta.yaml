@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/485a641464e94b82ac22d542210c6be7/artifacts
+end_time: 1794805454707
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 485a641464e94b82ac22d542210c6be7
+run_name: popular-rook-992
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805452081
+status: 3
+tags: []
+user_id: kraigochieng

@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/cf0319e9a5c64ba7af8131ac821075aa/artifacts
+end_time: 1794805286183
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: cf0319e9a5c64ba7af8131ac821075aa
+run_name: ada_boost
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805276907
+status: 3
+tags: []
+user_id: kraigochieng

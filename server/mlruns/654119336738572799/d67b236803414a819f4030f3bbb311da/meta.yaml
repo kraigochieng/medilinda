@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/d67b236803414a819f4030f3bbb311da/artifacts
+end_time: 1794805418442
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: d67b236803414a819f4030f3bbb311da
+run_name: worried-shrimp-962
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805345845
+status: 3
+tags: []
+user_id: kraigochieng

@@ -1,0 +1,1 @@
+['patient_date_of_birth', 'date_of_onset_of_reaction', 'rifampicin_start_date', 'rifampicin_stop_date', 'isoniazid_start_date', 'isoniazid_stop_date', 'pyrazinamide_start_date', 'pyrazinamide_stop_date', 'ethambutol_start_date', 'ethambutol_stop_date']

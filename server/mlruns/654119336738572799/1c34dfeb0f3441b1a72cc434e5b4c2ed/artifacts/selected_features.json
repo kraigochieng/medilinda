@@ -1,0 +1,19 @@
+{
+  "features": [
+    "patient_weight_kg",
+    "patient_bmi",
+    "rifampicin_stop_to_onset_days",
+    "rifampicin_start_stop_difference",
+    "isoniazid_stop_to_onset_days",
+    "isoniazid_start_stop_difference",
+    "pyrazinamide_stop_to_onset_days",
+    "pyrazinamide_start_stop_difference",
+    "ethambutol_start_to_onset_days",
+    "ethambutol_start_stop_difference",
+    "dechallenge_yes",
+    "rechallenge_yes",
+    "severity_fatal",
+    "action_taken_dose not changed",
+    "num_suspected_drugs_1"
+  ]
+}

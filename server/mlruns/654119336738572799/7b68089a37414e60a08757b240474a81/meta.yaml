@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/7b68089a37414e60a08757b240474a81/artifacts
+end_time: 1794805418878
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 7b68089a37414e60a08757b240474a81
+run_name: gradient_boosting
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805345845
+status: 3
+tags: []
+user_id: kraigochieng

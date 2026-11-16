@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/5730ff05867f47998e5fe3a0b88a298f/artifacts
+end_time: 1794805276587
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 5730ff05867f47998e5fe3a0b88a298f
+run_name: loud-croc-901
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805270815
+status: 3
+tags: []
+user_id: kraigochieng

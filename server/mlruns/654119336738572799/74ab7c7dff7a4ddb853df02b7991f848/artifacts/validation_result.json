@@ -1,0 +1,74 @@
+{
+  "rows": 150,
+  "labels": [
+    "certain",
+    "likely",
+    "possible",
+    "unlikely"
+  ],
+  "report": {
+    "certain": {
+      "precision": 0.35,
+      "recall": 0.875,
+      "f1-score": 0.5,
+      "support": 8.0
+    },
+    "likely": {
+      "precision": 0.9230769230769231,
+      "recall": 0.7164179104477612,
+      "f1-score": 0.8067226890756303,
+      "support": 67.0
+    },
+    "possible": {
+      "precision": 0.8333333333333334,
+      "recall": 0.9302325581395349,
+      "f1-score": 0.8791208791208791,
+      "support": 43.0
+    },
+    "unlikely": {
+      "precision": 0.9666666666666667,
+      "recall": 0.90625,
+      "f1-score": 0.9354838709677419,
+      "support": 32.0
+    },
+    "accuracy": 0.8266666666666667,
+    "macro avg": {
+      "precision": 0.7682692307692308,
+      "recall": 0.856975117146824,
+      "f1-score": 0.7803318597910629,
+      "support": 150.0
+    },
+    "weighted avg": {
+      "precision": 0.8760854700854702,
+      "recall": 0.8266666666666667,
+      "f1-score": 0.8385873456082185,
+      "support": 150.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      7,
+      1,
+      0,
+      0
+    ],
+    [
+      12,
+      48,
+      6,
+      1
+    ],
+    [
+      0,
+      3,
+      40,
+      0
+    ],
+    [
+      1,
+      0,
+      2,
+      29
+    ]
+  ]
+}

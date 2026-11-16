@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/041afae5bf1442f9b0a589d8b8eb4e82/artifacts
+end_time: 1794805451642
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 041afae5bf1442f9b0a589d8b8eb4e82
+run_name: thundering-carp-583
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805432700
+status: 3
+tags: []
+user_id: kraigochieng

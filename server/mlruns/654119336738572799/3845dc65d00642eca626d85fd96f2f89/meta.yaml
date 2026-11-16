@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/3845dc65d00642eca626d85fd96f2f89/artifacts
+end_time: 1794805432259
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 3845dc65d00642eca626d85fd96f2f89
+run_name: whimsical-snail-401
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805418883
+status: 3
+tags: []
+user_id: kraigochieng

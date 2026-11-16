@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/1a60dac6d6834f2bbad1f9a74a6c2f4c/artifacts
+end_time: 1794805276587
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 1a60dac6d6834f2bbad1f9a74a6c2f4c
+run_name: selective-stork-832
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805270815
+status: 3
+tags: []
+user_id: kraigochieng

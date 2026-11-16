@@ -1,0 +1,11 @@
+DatatypeSetter(categorical_columns=['known_allergy', 'dechallenge',
+                                    'rechallenge', 'severity', 'is_serious',
+                                    'criteria_for_seriousness', 'action_taken',
+                                    'outcome'],
+               date_columns=['patient_date_of_birth',
+                             'date_of_onset_of_reaction',
+                             'rifampicin_start_date', 'rifampicin_stop_date',
+                             'isoniazid_start_date', 'isoniazid_stop_date',
+                             'pyrazinamide_start_date',
+                             'pyrazinamide_stop_date', 'ethambutol_start_date',
+                             'ethambutol_stop_date'])
