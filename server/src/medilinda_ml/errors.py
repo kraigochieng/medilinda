@@ -85,3 +85,10 @@ class SelectionDataMismatchError(SelectionError):
         self.data_path: Path = data_path
         self.expected: str = expected
         self.actual: str = actual
+
+
+class NoCandidateResultsError(MedilindaMlError):
+    """The experiment has no candidate result, so it has no winner."""
+
+    def __init__(self) -> None:
+        super().__init__("The experiment has no candidate result to choose from.")

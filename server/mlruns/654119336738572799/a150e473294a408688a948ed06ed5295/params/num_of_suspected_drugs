@@ -1,0 +1,2 @@
+NumberOfSuspectedDrugsTransformer(drug_names=['rifampicin', 'isoniazid',
+                                              'pyrazinamide', 'ethambutol'])

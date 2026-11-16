@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/92f01dd6c2ea40508f47d180862904c6/artifacts
+end_time: 1794805418442
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 92f01dd6c2ea40508f47d180862904c6
+run_name: overjoyed-bee-769
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805345845
+status: 3
+tags: []
+user_id: kraigochieng

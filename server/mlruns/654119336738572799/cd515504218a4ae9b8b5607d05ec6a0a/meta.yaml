@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/cd515504218a4ae9b8b5607d05ec6a0a/artifacts
+end_time: 1794805297746
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: cd515504218a4ae9b8b5607d05ec6a0a
+run_name: bright-skink-362
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805286185
+status: 3
+tags: []
+user_id: kraigochieng

@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/1c34dfeb0f3441b1a72cc434e5b4c2ed/artifacts
+end_time: 1794805455034
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 1c34dfeb0f3441b1a72cc434e5b4c2ed
+run_name: experiment
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805247581
+status: 3
+tags: []
+user_id: kraigochieng

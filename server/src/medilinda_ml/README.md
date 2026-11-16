@@ -34,6 +34,22 @@ PYTHONPATH=src uv run python -m medilinda_ml.modeling.train_model
 The training code reads `data/data.csv` in this folder.
 It writes a new version folder in `server/models/`. See the README of the repository for the layout.
 
+## Experiment
+
+The experiment picks the model that goes to production. Run it from the `server` folder:
+
+```bash
+PYTHONPATH=src uv run --group train python -m medilinda_ml.experiment
+```
+
+Notebook `notebooks/3.3-kraig-model_creation.ipynb` runs the same function.
+The experiment tries 8 candidates with cross-validation on the training rows only.
+It never scores the test rows.
+It logs each candidate as a run in MLflow (`mlruns/`, experiment `medilinda-causality`).
+It writes `selection.json` with the winner, its parameters, its features and the hash of `data/data.csv`.
+
+To look at the runs, start the MLflow interface: `uv run --group train mlflow ui --backend-store-uri mlruns`.
+
 ## Notebooks
 
 The notebooks import `medilinda_ml`. Set `PYTHONPATH` to the `server/src` folder before you start the notebook kernel.

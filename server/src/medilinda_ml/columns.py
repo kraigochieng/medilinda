@@ -1,5 +1,8 @@
 TARGET_COLUMN = "causality_assessment_level"
 
+# The levels of the target, in the order of the ordinal encoder.
+TARGET_LEVELS = ["certain", "likely", "possible", "unlikely"]
+
 INITIAL_CATEGORICAL_COLUMNS = [
     "known_allergy",
     "dechallenge",

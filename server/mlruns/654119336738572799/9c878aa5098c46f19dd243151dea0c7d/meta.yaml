@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/9c878aa5098c46f19dd243151dea0c7d/artifacts
+end_time: 1794805418442
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 9c878aa5098c46f19dd243151dea0c7d
+run_name: secretive-swan-542
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805345845
+status: 3
+tags: []
+user_id: kraigochieng

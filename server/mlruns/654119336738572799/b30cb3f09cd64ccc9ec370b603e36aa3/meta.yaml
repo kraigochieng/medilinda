@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/b30cb3f09cd64ccc9ec370b603e36aa3/artifacts
+end_time: 1794805297746
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: b30cb3f09cd64ccc9ec370b603e36aa3
+run_name: rare-squid-735
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805286185
+status: 3
+tags: []
+user_id: kraigochieng

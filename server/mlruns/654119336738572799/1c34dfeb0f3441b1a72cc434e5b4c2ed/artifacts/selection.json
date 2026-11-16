@@ -1,0 +1,30 @@
+{
+  "estimator": "gradient_boosting",
+  "params": {
+    "subsample": 0.8,
+    "n_estimators": 100,
+    "max_depth": 5,
+    "learning_rate": 0.1
+  },
+  "features": [
+    "patient_weight_kg",
+    "patient_bmi",
+    "rifampicin_stop_to_onset_days",
+    "rifampicin_start_stop_difference",
+    "isoniazid_stop_to_onset_days",
+    "isoniazid_start_stop_difference",
+    "pyrazinamide_stop_to_onset_days",
+    "pyrazinamide_start_stop_difference",
+    "ethambutol_start_to_onset_days",
+    "ethambutol_start_stop_difference",
+    "dechallenge_yes",
+    "rechallenge_yes",
+    "severity_fatal",
+    "action_taken_dose not changed",
+    "num_suspected_drugs_1"
+  ],
+  "data_sha256": "ad5eb607486816c1fd4782c9b6e57597f7144c7e6f12da397a14f47a9d5dd6b2",
+  "split_seed": 42,
+  "experiment_run_id": "1c34dfeb0f3441b1a72cc434e5b4c2ed",
+  "cv_weighted_f1": 0.9073535661655909
+}

@@ -1,0 +1,83 @@
+[
+  {
+    "name": "decision_tree",
+    "best_params": {
+      "max_depth": 25
+    },
+    "cv_mean_weighted_f1": 0.8579806055707253,
+    "cv_std_weighted_f1": 0.03556636586788379,
+    "validation_weighted_f1": 0.8937536667831091
+  },
+  {
+    "name": "ada_boost",
+    "best_params": {
+      "n_estimators": 50,
+      "learning_rate": 1.0
+    },
+    "cv_mean_weighted_f1": 0.7800160455909295,
+    "cv_std_weighted_f1": 0.052259198247141585,
+    "validation_weighted_f1": 0.8533885628338352
+  },
+  {
+    "name": "logistic_regression",
+    "best_params": {
+      "penalty": "l2",
+      "C": 10
+    },
+    "cv_mean_weighted_f1": 0.8568714053631783,
+    "cv_std_weighted_f1": 0.01918943489345743,
+    "validation_weighted_f1": 0.8385873456082185
+  },
+  {
+    "name": "random_forest",
+    "best_params": {
+      "n_estimators": 100,
+      "max_features": "sqrt",
+      "max_depth": 10
+    },
+    "cv_mean_weighted_f1": 0.8932877033977111,
+    "cv_std_weighted_f1": 0.02447823907812386,
+    "validation_weighted_f1": 0.9003499678338388
+  },
+  {
+    "name": "gradient_boosting",
+    "best_params": {
+      "subsample": 0.8,
+      "n_estimators": 100,
+      "max_depth": 5,
+      "learning_rate": 0.1
+    },
+    "cv_mean_weighted_f1": 0.9073535661655909,
+    "cv_std_weighted_f1": 0.02257272552263034,
+    "validation_weighted_f1": 0.8938747925182707
+  },
+  {
+    "name": "svm",
+    "best_params": {
+      "kernel": "rbf",
+      "gamma": "scale",
+      "C": 3
+    },
+    "cv_mean_weighted_f1": 0.7790594298993594,
+    "cv_std_weighted_f1": 0.02171866642286499,
+    "validation_weighted_f1": 0.8225164112847937
+  },
+  {
+    "name": "knn",
+    "best_params": {
+      "weights": "distance",
+      "p": 1,
+      "n_neighbors": 7
+    },
+    "cv_mean_weighted_f1": 0.7982124117772652,
+    "cv_std_weighted_f1": 0.027192236822177997,
+    "validation_weighted_f1": 0.8035858261345518
+  },
+  {
+    "name": "naive_bayes",
+    "best_params": {},
+    "cv_mean_weighted_f1": 0.7817175080589268,
+    "cv_std_weighted_f1": 0.0361655244904948,
+    "validation_weighted_f1": 0.7574629227628645
+  }
+]

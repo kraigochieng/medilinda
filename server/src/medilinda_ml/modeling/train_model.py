@@ -3,7 +3,6 @@ import matplotlib
 matplotlib.use("agg")
 
 import logging
-import subprocess
 from datetime import datetime, timezone
 from importlib.metadata import version as installed_version
 from pathlib import Path
@@ -15,20 +14,26 @@ import mlflow.sklearn
 import numpy as np
 import pandas as pd
 import shap
-from medilinda_ml.columns import FINAL_COLUMNS, TARGET_COLUMN
+from medilinda_ml.columns import FINAL_COLUMNS, TARGET_COLUMN, TARGET_LEVELS
 from medilinda_ml.candidates import candidate_named
 from medilinda_ml.logging_config import setup_logging
 from medilinda_ml.pipeline import build_pipeline
+from medilinda_ml.tracking import (
+    EXPERIMENT_NAME,
+    LIBRARIES_TO_RECORD,
+    current_git_commit,
+    portable_runs_folder,
+    start_local_tracking,
+)
+from medilinda_ml.data_split import (
+    SPLIT_SEED,
+    TEST_FRACTION,
+    VALIDATION_FRACTION,
+    split_dataset,
+)
 from medilinda_ml.evaluation import classify, headline_metrics, max_additivity_error
 from medilinda_ml.model_store import write_version
-from medilinda_ml.paths import (
-    DATA_DIR,
-    MODELS_DIR,
-    REPOSITORY_ROOT,
-    SERVER_DIR,
-    TRACKING_DIR,
-)
-from medilinda_ml.tracking_store import make_absolute, make_relative
+from medilinda_ml.paths import DATA_DIR, MODELS_DIR
 from medilinda_ml.utils import ShapModelWrapper
 # The model goes to the model store. MLflow tracks the experiment in a local folder.
 # MLFLOW-DISABLED (#119): the Databricks and model logging code below stays off.
@@ -41,7 +46,6 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import (
     RandomizedSearchCV,
     RepeatedStratifiedKFold,
-    train_test_split,
 )
 
 # from sklearn.pipeline import Pipeline
@@ -70,10 +74,6 @@ setup_logging()
 # mlflow.set_experiment(settings.mlflow_experiment_path)
 
 
-EXPERIMENT_NAME = "medilinda-causality"
-SPLIT_SEED = 42
-TEST_FRACTION = 0.25
-VALIDATION_FRACTION = 0.2
 CV_SPLITS = 5
 CV_REPEATS = 3
 SCORING = "f1_weighted"
@@ -81,80 +81,24 @@ MAX_SEARCH_DRAWS = 20
 SHAP_BACKGROUND_ROWS = 100
 SHAP_SEED = 42
 SHAP_ADDITIVITY_ROWS = 5
-LIBRARIES_TO_RECORD: tuple[str, ...] = (
-    "scikit-learn",
-    "imbalanced-learn",
-    "numpy",
-    "pandas",
-    "scipy",
-    "shap",
-    "joblib",
-    "mlflow",
-)
-
-
-def current_git_commit() -> str | None:
-    """Side effect (runs git): the commit of the code that trains, or None if unknown."""
-    try:
-        completed = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=Path(__file__).parent,
-        )
-    except (OSError, subprocess.CalledProcessError):
-        return None
-    return completed.stdout.strip()
-
-
-def start_local_tracking() -> None:
-    """Side effect (disk): send MLflow runs to the local folder, and pick the experiment."""
-    mlflow.set_tracking_uri(TRACKING_DIR.as_uri())
-    mlflow.set_experiment(EXPERIMENT_NAME)
-    # The search and its candidates are logged. The model goes to the model store.
-    mlflow.sklearn.autolog(log_models=False, log_datasets=False, silent=True)
 
 
 def train_model(df_path: str) -> None:
-    """Side effect (disk): train, and keep the runs folder in the relative form.
-
-    The folder is made absolute for MLflow, and relative again when training ends,
-    also after a failure. So git sees no path of this machine.
-    """
-    TRACKING_DIR.mkdir(parents=True, exist_ok=True)
-    make_absolute(tracking_dir=TRACKING_DIR, server_dir=SERVER_DIR)
-    try:
+    """Side effect (disk): train, and keep the runs folder in the relative form."""
+    with portable_runs_folder():
         run_training(df_path=df_path)
-    finally:
-        make_relative(
-            tracking_dir=TRACKING_DIR,
-            server_dir=SERVER_DIR,
-            repository_root=REPOSITORY_ROOT,
-        )
 
 
 def run_training(df_path: str) -> None:
     start_local_tracking()
     df = pd.read_csv(df_path)
 
-    X = df.drop(columns=[TARGET_COLUMN], axis=1)
-    y = df[TARGET_COLUMN]
-
-    X_train_and_val, X_test, y_train_and_val, y_test = train_test_split(
-        X, y, stratify=y, test_size=TEST_FRACTION, random_state=SPLIT_SEED
-    )
-
-    X_train, X_val, y_train, y_val = train_test_split(
-        X_train_and_val,
-        y_train_and_val,
-        stratify=y_train_and_val,
-        test_size=VALIDATION_FRACTION,
-        random_state=SPLIT_SEED,
-    )
+    data_split = split_dataset(df=df)
+    X_train, X_val, X_test = data_split.X_train, data_split.X_val, data_split.X_test
+    y_train, y_val, y_test = data_split.y_train, data_split.y_val, data_split.y_test
 
     ordinal_encoder = OrdinalEncoder(
-        categories=[["certain", "likely", "possible", "unlikely"]]
+        categories=[TARGET_LEVELS]
     )
 
     y_train_enc = ordinal_encoder.fit_transform(y_train.to_frame()).ravel()

@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/0c89838463364db681a73ccb0be90c83/artifacts
+end_time: 1794805285795
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 0c89838463364db681a73ccb0be90c83
+run_name: mercurial-sheep-643
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794805276907
+status: 3
+tags: []
+user_id: kraigochieng
