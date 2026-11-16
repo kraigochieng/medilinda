@@ -14,7 +14,7 @@ import mlflow.sklearn
 import numpy as np
 import pandas as pd
 import shap
-from medilinda_ml.columns import FINAL_COLUMNS, TARGET_COLUMN
+from medilinda_ml.columns import FINAL_COLUMNS, TARGET_COLUMN, TARGET_LEVELS
 from medilinda_ml.candidates import candidate_named
 from medilinda_ml.logging_config import setup_logging
 from medilinda_ml.pipeline import build_pipeline
@@ -98,7 +98,7 @@ def run_training(df_path: str) -> None:
     y_train, y_val, y_test = data_split.y_train, data_split.y_val, data_split.y_test
 
     ordinal_encoder = OrdinalEncoder(
-        categories=[["certain", "likely", "possible", "unlikely"]]
+        categories=[TARGET_LEVELS]
     )
 
     y_train_enc = ordinal_encoder.fit_transform(y_train.to_frame()).ravel()

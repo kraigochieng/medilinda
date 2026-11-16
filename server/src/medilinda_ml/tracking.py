@@ -40,9 +40,9 @@ def current_git_commit() -> str | None:
     return completed.stdout.strip()
 
 
-def start_local_tracking() -> None:
-    """Side effect (disk): send MLflow runs to the local folder, and pick the experiment."""
-    mlflow.set_tracking_uri(TRACKING_DIR.as_uri())
+def start_local_tracking(*, tracking_dir: Path = TRACKING_DIR) -> None:
+    """Side effect (disk): send MLflow runs to a local folder, and pick the experiment."""
+    mlflow.set_tracking_uri(tracking_dir.as_uri())
     mlflow.set_experiment(EXPERIMENT_NAME)
     # The search and its candidates are logged. The model goes to the model store.
     mlflow.sklearn.autolog(log_models=False, log_datasets=False, silent=True)
