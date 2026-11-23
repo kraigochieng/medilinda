@@ -6,6 +6,9 @@ PACKAGE_DIR = Path(__file__).resolve().parent
 
 DATA_DIR = PACKAGE_DIR / "data"
 
+# The generated WHO-UMC dataset (issue #164). The older data.csv stays for the tests and the history.
+TRAINING_DATA_PATH = DATA_DIR / "data_who_umc.csv.gz"
+
 SERVER_DIR = Path(__file__).resolve().parents[2]
 REPOSITORY_ROOT = SERVER_DIR.parent
 

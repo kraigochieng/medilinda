@@ -43,13 +43,18 @@ def headline_metrics(*, split: str, result: ClassificationResult) -> dict[str, f
     macro = result.report["macro avg"]
     assert isinstance(weighted, dict) and isinstance(macro, dict)
 
-    return {
+    metrics = {
         f"{split}_accuracy": float(result.report["accuracy"]),
         f"{split}_f1_weighted": weighted["f1-score"],
         f"{split}_precision_weighted": weighted["precision"],
         f"{split}_recall_weighted": weighted["recall"],
         f"{split}_f1_macro": macro["f1-score"],
     }
+    certain = result.report.get("certain")
+    if isinstance(certain, dict):
+        # A missed serious case is the worst error, so the recall of "certain" is a headline metric.
+        metrics[f"{split}_recall_certain"] = certain["recall"]
+    return metrics
 
 
 def max_additivity_error(

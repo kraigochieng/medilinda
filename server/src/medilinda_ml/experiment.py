@@ -8,6 +8,7 @@ Side effects (MLflow runs, the selection file) are in `run_experiment` and in
 the functions that it calls and that name MLflow in their doc comment.
 """
 
+import argparse
 import logging
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -21,7 +22,7 @@ import numpy as np
 import pandas as pd
 from imblearn.over_sampling import SMOTE
 from imblearn.pipeline import Pipeline
-from medilinda_ml.candidates import ESTIMATOR_SEED, Candidate, all_candidates
+from medilinda_ml.candidates import ESTIMATOR_SEED, Candidate, all_candidates, candidate_named
 from medilinda_ml.columns import TARGET_COLUMN, TARGET_LEVELS
 from medilinda_ml.data_split import (
     SPLIT_SEED,
@@ -36,9 +37,10 @@ from medilinda_ml.experiment_rules import (
     choose_winner,
     to_json_params,
 )
-from medilinda_ml.paths import DATA_DIR, SELECTION_PATH, TRACKING_DIR
+from medilinda_ml.paths import SELECTION_PATH, TRACKING_DIR, TRAINING_DATA_PATH
 from medilinda_ml.pipeline import RESAMPLING_SEED, build_pipeline, preprocessing_steps
 from medilinda_ml.selection import ModelSelection, hash_data_file, write_selection
+from medilinda_ml.training_data import FeatureSet, load_training_frame
 from medilinda_ml.tracking import (
     LIBRARIES_TO_RECORD,
     current_git_commit,
@@ -82,14 +84,18 @@ class ExperimentResult(BaseModel):
 
 
 def select_features(
-    *, X_train: pd.DataFrame, y_train_encoded: np.ndarray, cv: RepeatedStratifiedKFold
+    *,
+    X_train: pd.DataFrame,
+    y_train_encoded: np.ndarray,
+    cv: RepeatedStratifiedKFold,
+    include_history: bool = False,
 ) -> list[str]:
     """Return the columns that recursive feature elimination keeps.
 
     SMOTE is inside the estimator of the elimination, so it resamples inside each fold.
     The preprocessing is fitted once on all training rows, before the folds.
     """
-    prepared = Pipeline(preprocessing_steps()).fit_transform(X_train)
+    prepared = Pipeline(preprocessing_steps(include_history=include_history)).fit_transform(X_train)
     # Free-text columns (description_of_reaction) cannot be features of the model.
     prepared = prepared.select_dtypes(include=["number", "bool"])
     estimator = Pipeline(
@@ -119,6 +125,7 @@ def search_candidate(
     y_train_encoded: np.ndarray,
     y_val_encoded: np.ndarray,
     cv: RepeatedStratifiedKFold,
+    include_history: bool = False,
 ) -> CandidateResult:
     """Side effect (MLflow): search the grid of one candidate, and log it as a child run.
 
@@ -127,7 +134,9 @@ def search_candidate(
     tuned_grid = {f"classifier__{name}": values for name, values in candidate.param_grid.items()}
     draws = int(min(MAX_SEARCH_DRAWS, np.prod([len(values) for values in tuned_grid.values()])))
     search = RandomizedSearchCV(
-        estimator=build_pipeline(estimator=candidate.estimator, final_columns=features),
+        estimator=build_pipeline(
+            estimator=candidate.estimator, final_columns=features, include_history=include_history
+        ),
         param_distributions=tuned_grid,
         cv=cv,
         n_iter=draws,
@@ -170,18 +179,20 @@ def search_candidate(
 
 def run_experiment(
     *,
-    data_path: Path = DATA_DIR / "data.csv",
+    data_path: Path = TRAINING_DATA_PATH,
     selection_path: Path = SELECTION_PATH,
     tracking_dir: Path = TRACKING_DIR,
     candidates: list[Candidate] | None = None,
     cv_splits: int = CV_SPLITS,
     cv_repeats: int = CV_REPEATS,
+    feature_set: FeatureSet = "app",
 ) -> ExperimentResult:
     """Side effect (MLflow, disk): run the experiment and write the selection file.
 
     One parent run (tag stage=experiment) holds one child run for each candidate.
     """
-    df = pd.read_csv(data_path)
+    df = load_training_frame(path=data_path, feature_set=feature_set)
+    include_history = feature_set == "full"
     chosen_candidates = all_candidates() if candidates is None else candidates
 
     start_local_tracking(tracking_dir=tracking_dir)
@@ -212,6 +223,7 @@ def run_experiment(
                 "validation_fraction": VALIDATION_FRACTION,
                 "cv_splits": cv_splits,
                 "cv_repeats": cv_repeats,
+                "feature_set": feature_set,
                 "scoring": SCORING,
                 "train_rows": len(split.X_train),
                 "validation_rows": len(split.X_val),
@@ -219,7 +231,9 @@ def run_experiment(
             }
         )
 
-        features = select_features(X_train=split.X_train, y_train_encoded=y_train_encoded, cv=cv)
+        features = select_features(
+            X_train=split.X_train, y_train_encoded=y_train_encoded, cv=cv, include_history=include_history
+        )
         mlflow.log_param("n_selected_features", len(features))
         mlflow.log_dict({"features": features}, "selected_features.json")
 
@@ -231,6 +245,7 @@ def run_experiment(
                 y_train_encoded=y_train_encoded,
                 y_val_encoded=y_val_encoded,
                 cv=cv,
+                include_history=include_history,
             )
             for candidate in chosen_candidates
         ]
@@ -248,6 +263,7 @@ def run_experiment(
             split_seed=SPLIT_SEED,
             experiment_run_id=parent_run.info.run_id,
             cv_weighted_f1=winner.cv_mean_weighted_f1,
+            feature_set=feature_set,
         )
         write_selection(path=selection_path, selection=selection)
         mlflow.log_artifact(str(selection_path))
@@ -260,6 +276,28 @@ def run_experiment(
     )
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Side effect (MLflow, disk): read the arguments and run the experiment."""
+    parser = argparse.ArgumentParser(description="Run the experiment and write the selection file.")
+    parser.add_argument("--feature-set", choices=["app", "full"], default="app", help='the columns to use, for example "app"')
+    parser.add_argument("--data-path", type=Path, default=TRAINING_DATA_PATH, help="the dataset file")
+    parser.add_argument("--selection-path", type=Path, default=SELECTION_PATH, help="where to write the selection")
+    parser.add_argument("--cv-splits", type=int, default=CV_SPLITS, help="the folds of the cross-validation, for example 5")
+    parser.add_argument("--cv-repeats", type=int, default=CV_REPEATS, help="the repeats of the cross-validation, for example 3")
+    parser.add_argument("--candidates", default="", help="comma-separated names of the candidates; empty means all, for example decision_tree,random_forest")
+    arguments = parser.parse_args()
+    names = [name for name in arguments.candidates.split(",") if name]
+    chosen = [candidate_named(name=name) for name in names] if names else None
     with portable_runs_folder():
-        run_experiment()
+        run_experiment(
+            data_path=arguments.data_path,
+            selection_path=arguments.selection_path,
+            candidates=chosen,
+            cv_splits=arguments.cv_splits,
+            cv_repeats=arguments.cv_repeats,
+            feature_set=arguments.feature_set,
+        )
+
+
+if __name__ == "__main__":
+    main()

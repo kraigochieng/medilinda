@@ -33,8 +33,9 @@ from medilinda_ml.data_split import (
 )
 from medilinda_ml.evaluation import classify, headline_metrics, max_additivity_error
 from medilinda_ml.model_store import write_version
-from medilinda_ml.paths import DATA_DIR, MODELS_DIR, SELECTION_PATH
+from medilinda_ml.paths import MODELS_DIR, SELECTION_PATH, TRAINING_DATA_PATH
 from medilinda_ml.selection import check_data_matches, read_selection
+from medilinda_ml.training_data import load_training_frame
 from medilinda_ml.utils import ShapModelWrapper
 # The model goes to the model store. MLflow tracks the experiment in a local folder.
 # MLFLOW-DISABLED (#119): the Databricks and model logging code below stays off.
@@ -88,7 +89,7 @@ def run_training(df_path: str) -> None:
     start_local_tracking()
     selection = read_selection(path=SELECTION_PATH)
     check_data_matches(selection=selection, data_path=Path(df_path))
-    df = pd.read_csv(df_path)
+    df = load_training_frame(path=Path(df_path), feature_set=selection.feature_set)
 
     data_split = split_dataset(df=df)
     X_train, X_val, X_test = data_split.X_train, data_split.X_val, data_split.X_test
@@ -109,7 +110,9 @@ def run_training(df_path: str) -> None:
     candidate = candidate_named(name=name)
     estimator = candidate.estimator.set_params(**selection.params)
     best_estimator = build_pipeline(
-        estimator=estimator, final_columns=selection.features
+        estimator=estimator,
+        final_columns=selection.features,
+        include_history=selection.feature_set == "full",
     )
     print(f"\n🧠 Training model: {name}")
     print("—" * 80)
@@ -295,4 +298,4 @@ def run_training(df_path: str) -> None:
 
 
 if __name__ == "__main__":
-    train_model(f"{DATA_DIR}/data.csv")
+    train_model(str(TRAINING_DATA_PATH))

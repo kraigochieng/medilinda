@@ -46,3 +46,14 @@ One entry for each pull request. The entries are written during the work, in ord
 - Finding about size: the floor in DR-4 was proposed as 100 "certain" rows in the test split. With 30,000 rows the test split has about 86. I kept 30,000 rows because the grid search time grows with the rows. Stated as a deviation.
 - The dataset is not yet used by the training. The existing `data.csv` and `selection.json` are unchanged. PR 6 switches them.
 - Tests: 11 tests.
+
+## PR 6a: the training code for the new data
+
+- Added `training_data.py`: it loads the dataset (CSV or gzip), keeps the four levels that the model predicts, and drops the new columns for the feature set "app". It refuses a frame that has a diagnostic column (`TrainingDataLeakError`).
+- Added `features/history_features.py` and an `include_history` switch in the pipeline: flags become 1, 0 or -1 (not recorded), labs -1 when not measured, text columns become 0 or 1 columns.
+- `ModelSelection` has a `feature_set` ("app" or "full"; default "app", so the old selection file is still valid). The experiment and the training read it.
+- `headline_metrics` adds `<split>_recall_certain`.
+- The experiment has a command line: `python -m medilinda_ml.experiment --feature-set app --cv-splits 3 --cv-repeats 1 --candidates decision_tree,...`.
+- Why two feature sets: the production model must run on what the app sends today ("app"). The new report fields (history, labs) are not in the app (#174). The "full" set shows what the app could add.
+- The default data path is now `data_who_umc.csv.gz`. The old `data.csv` stays in the repo for the history and for the experiment test.
+- Tests: 14 new tests. The whole ML suite: 213 passed, with MLflow.
