@@ -35,3 +35,14 @@ One entry for each pull request. The entries are written during the work, in ord
 - Consequence for the next steps: the floor of 100 "certain" cases in the test split (DR-4) needs about 55,000 rows. That is too slow for the grid search. I will state the floor that I reach.
 - Assumption changed during the work: the history box is empty as a whole (25%), not field by field.
 - Tests: 17 tests. The whole ML suite: 191 passed.
+
+## PR 5: the generated dataset and its validation
+
+- Added `dataset_rows.py` (a case as a flat row, the way back to the report fields, label noise), `data_generation.py` (the command) and `dataset_validation.py` (15 checks and the Markdown report).
+- Generated `data_who_umc.csv.gz` (30,000 rows, seed 42, label noise 5%) and a separate diagnostics file. The diagnostics file has the clean rule label, the latent cause and the regimen. Training must never read it. The files are compressed with a fixed header, so the same seed gives the same bytes (checked: two runs gave the same SHA-256).
+- Validation: all 15 checks passed. The totals match the PPB report within 3 points. The rule label is a function of the visible fields in all 30,000 rows. The share of moved labels is 4.86% (stated 5%).
+- Class mix (rule label): possible 55.6%, unlikely 17.8%, likely 14.3%, unclassified 10.4%, unclassifiable 1.1%, certain 0.8% (244 rows).
+- **Finding about label noise:** noise moves labels one step along the scale, and "likely" is far larger than "certain". So noise adds about 107 false "certain" rows and removes about 12. In the final label, 343 rows are "certain" and about 30% of them were "likely" by the rules. Any recall of "certain" must be read with this in mind. The clean label is in the diagnostics file.
+- Finding about size: the floor in DR-4 was proposed as 100 "certain" rows in the test split. With 30,000 rows the test split has about 86. I kept 30,000 rows because the grid search time grows with the rows. Stated as a deviation.
+- The dataset is not yet used by the training. The existing `data.csv` and `selection.json` are unchanged. PR 6 switches them.
+- Tests: 11 tests.

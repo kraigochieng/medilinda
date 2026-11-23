@@ -52,6 +52,7 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - **server:** Keep the empty model folder in git
 - **server:** Move unused dependencies to the train group
 - Add git-cliff to generate the changelog
+- Leave the compressed data files out of the server image
 
 
 ### Chores
@@ -96,6 +97,7 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - Log PR 2 of the synthetic data work
 - Log PR 3 of the synthetic data work
 - Log PR 4 of the synthetic data work
+- Log PR 5 of the synthetic data work
 
 
 ### Features
@@ -169,6 +171,8 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - **ml:** Map the yellow form fields to the WHO-UMC facts
 - **ml:** Add the PPB report totals as a checked data module
 - **ml:** Sample a synthetic case in causal order
+- **ml:** Generate the dataset from the sampler and validate it
+- **ml:** Add the first WHO-UMC dataset of 30,000 rows and its report
 
 
 ### Performance
