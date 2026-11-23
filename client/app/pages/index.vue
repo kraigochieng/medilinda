@@ -42,6 +42,8 @@
 			<p>
 				New here? Read the
 				<ULink to="/about" class="text-primary">story of a case, from report to review</ULink>.
+				See also
+				<ULink to="/about#scope" class="text-primary">what MediLinda does, and what it does not do</ULink>.
 			</p>
 		</div>
 	</div>

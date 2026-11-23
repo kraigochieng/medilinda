@@ -136,6 +136,11 @@ export const STORY: StoryStep[] = [
 				to: "/communication/additional-information-requests",
 				note: "Requests for more facts about reports the model could not classify.",
 			},
+			{
+				label: "What MediLinda does not do",
+				to: "/about#scope",
+				note: "The story ends at the alert. The scope lists what happens after it, which MediLinda does not manage.",
+			},
 		],
 	},
 	{

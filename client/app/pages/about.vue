@@ -60,6 +60,31 @@
 			<UButton to="/adr/add" icon="i-lucide-plus" size="lg" label="Report a case" />
 		</div>
 
+		<section :id="scopeId" class="space-y-4 border-t border-default pt-6">
+			<h2 class="text-xl font-semibold">{{ scopeHeading }}</h2>
+			<p class="text-muted">{{ scopePurpose }}</p>
+			<div class="grid gap-4 sm:grid-cols-2">
+				<div class="space-y-2">
+					<h3 class="font-semibold">It does</h3>
+					<ul class="list-disc space-y-1 ps-5 text-sm text-muted">
+						<li v-for="item in scopeDoes" :key="item">{{ item }}</li>
+					</ul>
+				</div>
+				<div class="space-y-2">
+					<h3 class="font-semibold">It does not</h3>
+					<ul class="list-disc space-y-1 ps-5 text-sm text-muted">
+						<li v-for="item in scopeDoesNot" :key="item">{{ item }}</li>
+					</ul>
+				</div>
+			</div>
+			<div class="space-y-2">
+				<h3 class="font-semibold">{{ scopeModelHeading }}</h3>
+				<ul class="list-disc space-y-1 ps-5 text-sm text-muted">
+					<li v-for="item in scopeModel" :key="item">{{ item }}</li>
+				</ul>
+			</div>
+		</section>
+
 		<section class="space-y-2 border-t border-default pt-6 text-sm text-muted">
 			<h2 class="text-base font-semibold text-default">{{ creditsHeading }}</h2>
 			<p v-for="paragraph in credits" :key="paragraph.id">
@@ -76,10 +101,26 @@
 
 <script setup lang="ts">
 import { CREDITS, CREDITS_HEADING } from "~/utils/about-credits";
+import {
+	SCOPE_DOES,
+	SCOPE_DOES_NOT,
+	SCOPE_HEADING,
+	SCOPE_ID,
+	SCOPE_MODEL,
+	SCOPE_MODEL_HEADING,
+	SCOPE_PURPOSE,
+} from "~/utils/about-scope";
 import { STORY } from "~/utils/about-story";
 
 const steps = STORY;
 const credits = CREDITS;
+const scopeId = SCOPE_ID;
+const scopeHeading = SCOPE_HEADING;
+const scopePurpose = SCOPE_PURPOSE;
+const scopeDoes = SCOPE_DOES;
+const scopeDoesNot = SCOPE_DOES_NOT;
+const scopeModel = SCOPE_MODEL;
+const scopeModelHeading = SCOPE_MODEL_HEADING;
 const creditsHeading = CREDITS_HEADING;
 
 // One timeline item for each step. The value is its position, so the slot can find the step.

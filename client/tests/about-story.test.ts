@@ -8,7 +8,7 @@ const PAGES = join(__dirname, "../app/pages");
 
 // A page exists when a file or an index file matches its address.
 function pageExists(address: string): boolean {
-	const path = address.split("?")[0]!.replace(/^\//, "");
+	const path = address.split("#")[0]!.split("?")[0]!.replace(/^\//, "");
 	const files = path === "" ? ["index.vue"] : [`${path}.vue`, `${path}/index.vue`];
 	return files.some((file) => existsSync(join(PAGES, file)));
 }
