@@ -1,6 +1,8 @@
 // The section "What MediLinda does, and what it does not do" on the About page. It is
 // data, so a test can check each claim and the words stay the same on every page.
 
+import { MODEL_FACTS, formatCount } from "~/utils/model-facts";
+
 export const SCOPE_ID = "scope";
 export const SCOPE_HEADING = "What MediLinda does, and what it does not do";
 
@@ -34,8 +36,12 @@ export const SCOPE_MODEL: string[] = [
 export const SCOPE_DATA_HEADING = "The data, and its limits";
 
 export const SCOPE_DATA: string[] = [
-	"The data is synthetic. It was built by reverse engineering the quarterly reports of the Pharmacy and Poisons Board.",
-	"The levels follow the WHO-UMC causality assessment. The generator sets the level first, then makes the report fit it.",
-	"The scores show how well the model learns the generator. They do not show clinical accuracy.",
+	`The data is synthetic. It holds ${formatCount(MODEL_FACTS.rows)} reports. A sampler built each case in causal order: the patient, the history, the medicines, the reaction, the dates, and the follow-up.`,
+	"The sampler uses the totals of two quarterly reports of the Pharmacy and Poisons Board (Q2 and Q3 of 2025/26) and published facts on TB medicines. The reports hold all patients, not only TB patients. Where no source gave a number, the project chose one.",
+	"The WHO-UMC level of each report is the output of rules that read the facts of the report. The rules did not choose the report to fit a level.",
+	"The mix of levels comes from the rules. About 1 report in 100 is certain. About 5 labels in 100 move one step, because real assessors disagree.",
+	"The scores show how well a model learns the rules. They do not show clinical accuracy.",
+	"The model in the app reads only the fields that the app collects today. With these fields it predicts poorly. It finds few certain cases and often says certain by mistake.",
+	"A model that also reads the history, the other medicines, and the lab results scores much higher on this data. The app does not collect these fields yet.",
 	"MediLinda is a simulated solution. It shows what such a system can do. It is not for use on real patients.",
 ];
