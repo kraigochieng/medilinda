@@ -34,6 +34,7 @@ tag_pattern = "v[0-9].*"
 sort_commits = "oldest"
 commit_parsers = [
   { message = "^Merge", skip = true },
+  { message = "^docs: update the changelog", skip = true },
   { message = "^feat", group = "Features" },
   { message = "^fix", group = "Bug fixes" },
   { message = "^perf", group = "Performance" },

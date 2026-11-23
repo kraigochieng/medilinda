@@ -27,6 +27,32 @@ jobs:
 
             - run: npm test
 
+    # The changelog is part of the merge process. The last commit of a pull request is
+    # "docs: update the changelog". Run "npm run changelog" in client to make it.
+    changelog:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: client
+        steps:
+            # The generator reads the full history and the tags.
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+                  cache-dependency-path: client/package-lock.json
+
+            - run: npm ci --ignore-scripts
+
+            - run: npm run changelog
+
+            - name: Fail when CHANGELOG.md is not current
+              run: git diff --exit-code -- ../CHANGELOG.md
+
     server:
         runs-on: ubuntu-latest
         defaults:
