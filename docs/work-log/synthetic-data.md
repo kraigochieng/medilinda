@@ -15,3 +15,12 @@ One entry for each pull request. The entries are written during the work, in ord
 - Added `docs/yellow-form-mapping.md` with the mapping table, the other causes, and the time windows.
 - Assumptions of the run: the time windows for neuropathy, optic, gastrointestinal and joint reactions have no source number; the count rule for other causes (one possible, two plausible) is the project's reading; onset more than 14 days after the stop is improbable.
 - Tests: 23 tests for the mapping. With PR 1, 41 tests pass.
+
+## PR 3: the PPB report totals
+
+- Added `marginals.py`: the Q3 FY2025/26 totals (age group, gender, pregnancy, allergy, severity, seriousness, action taken, outcome), the TB combination medicines of Q2 and Q3, and the weights of the reaction categories.
+- Each distribution is a `CountedDistribution` that refuses counts that do not add up to the total, and names its page.
+- How the numbers were checked: the counts sum to n; the printed percent matches for 10 rows; page 7 was compared with the page image. The other pages were not compared with an image.
+- Findings: the reports have all patients, mostly not TB patients (DR-9). Liver injury is not among the 25 events of Q3 (skin events lead). The liver and optic counts are my assumptions (30 and 8) and are marked as such. The share of reports with separate drugs (5%) is an assumption (DR-7).
+- Mapping choices: "not indicated" and "unknown" severity map to "unknown"; the outcome "fatal" is the form's "death".
+- Tests: 34 tests.
