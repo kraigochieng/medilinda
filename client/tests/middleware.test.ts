@@ -25,6 +25,17 @@ describe("auth route middleware", () => {
 		expect(navigateTo).not.toHaveBeenCalled();
 	});
 
+	it("lets /about through without checking the session", async () => {
+		sessionResponse = () => Promise.reject(new Error("should not be called"));
+		expect(await runMiddleware("/about")).toBeUndefined();
+		expect(navigateTo).not.toHaveBeenCalled();
+	});
+
+	it("sends a signed-out visitor of Home to About", async () => {
+		sessionResponse = async () => null;
+		expect(await runMiddleware("/")).toEqual({ redirectedTo: "/about" });
+	});
+
 	it("redirects to login when there is no session", async () => {
 		sessionResponse = async () => null;
 		expect(await runMiddleware("/adr")).toEqual({ redirectedTo: "/auth/login" });

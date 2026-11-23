@@ -1,5 +1,7 @@
+import { decideAccess, isPublicPath } from "~/utils/route-access";
+
 export default defineNuxtRouteMiddleware(async (to) => {
-	if (to.path.startsWith("/auth/")) return;
+	if (isPublicPath({ path: to.path })) return;
 
 	// useRequestFetch forwards the browser's cookies when this runs on the
 	// server. The Better Auth client cannot be used here because it needs an
@@ -7,7 +9,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 	const requestFetch = useRequestFetch();
 	const session = await requestFetch("/api/auth/get-session").catch(() => null);
 
-	if (!session) {
-		return navigateTo("/auth/login");
+	const access = decideAccess({ path: to.path, hasSession: Boolean(session) });
+	if (access.kind === "redirect") {
+		return navigateTo(access.to);
 	}
 });
