@@ -101,6 +101,9 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - Log PR 6a of the synthetic data work
 - Add the results of the models on the synthetic data
 - Log PR 6b of the synthetic data work
+- **client:** Describe the new data and its limits on the About page and the Prediction tab
+- **ml:** Describe the data, the feature sets, the experiment and the results
+- Log PR 7 of the synthetic data work
 
 
 ### Features

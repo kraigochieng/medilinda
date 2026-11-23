@@ -50,11 +50,23 @@ describe("the scope", () => {
 		const text = SCOPE_DATA.join(" ");
 
 		expect(text).toContain("synthetic");
+		expect(text).toContain("30,000 reports");
 		expect(text).toContain("quarterly reports of the Pharmacy and Poisons Board");
 		expect(text).toContain("WHO-UMC");
-		expect(text).toContain("sets the level first");
+		expect(text).toContain("output of rules");
 		expect(text).toContain("do not show clinical accuracy");
 		expect(text).toContain("simulated solution");
+	});
+
+	it("says that the model in the app predicts poorly and what would help", () => {
+		const text = SCOPE_DATA.join(" ");
+
+		expect(text).toContain("predicts poorly");
+		expect(text).toContain("does not collect these fields yet");
+	});
+
+	it("does not say that the generator sets the level first", () => {
+		expect(SCOPE_DATA.join(" ")).not.toContain("sets the level first");
 	});
 
 	it("says the model covers TB patients in Kenya", () => {

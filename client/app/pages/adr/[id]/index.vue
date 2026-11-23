@@ -32,6 +32,10 @@
 			<ADRDetails v-if="adrData" :data="adrData" />
 		</template>
 		<template #causality-assessment>
+			<p class="mt-4 text-sm text-muted">
+				{{ modelNote.text }}
+				<ULink :to="modelNote.to" class="text-primary">{{ modelNote.linkLabel }}</ULink>.
+			</p>
 			<UAlert
 				v-if="!firstCausalityAssessmentLevel"
 				color="neutral"
@@ -92,6 +96,9 @@ import type { ADRGetResponseInterface } from "@/types/adr";
 import type { TableColumn, TabsItem } from "@nuxt/ui";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 import type { ReviewGetResponse } from "~/types/review";
+import { predictionTabNote } from "~/utils/model-facts";
+
+const modelNote = predictionTabNote();
 
 // Get ADR id
 const route = useRoute();

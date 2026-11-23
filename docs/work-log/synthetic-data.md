@@ -70,3 +70,12 @@ One entry for each pull request. The entries are written during the work, in ord
 - The "full" model is not saved as a version, because the app does not send its fields (issue #174). The selection is in `selection_full.json`. To train it, copy it over `selection.json` and run the training.
 - The scores show how well a model learns the generator. They do not show clinical accuracy.
 - Tests: 3 new tests. The whole suite: 526 passed.
+
+## PR 7: the documents
+
+- The About page now says what the data is: synthetic, 30,000 reports, built by a sampler in causal order from two PPB quarterly reports and published TB facts; the level is the output of rules; the class mix and the label noise; and that the model in the app predicts poorly with today's fields while a model with the new fields scores much higher.
+- The Prediction tab has a line: "This model learned from 30,000 synthetic reports about 4 TB medicines. The reports are not real patients." with a link to the scope section. The numbers come from `client/app/utils/model-facts.ts`.
+- Removed the old sentence "the generator sets the level first". It is no longer true.
+- The README of `medilinda_ml` describes the data command, the feature sets, the experiment options, the training, the golden file and the results report.
+- Tests: client 345 passed.
+- Not done: the root README (issue #111).
