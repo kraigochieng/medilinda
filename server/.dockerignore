@@ -13,11 +13,13 @@ Dockerfile
 notebooks/
 src/medilinda_ml/notebooks/
 src/medilinda_ml/data/*.csv
+src/medilinda_ml/data/*.csv.gz
 tests/
 artifacts/
 .pytest_cache/
 src/basic.log
 *.csv
+*.csv.gz
 *.xlsx
 
 # Python caches and virtual environments
