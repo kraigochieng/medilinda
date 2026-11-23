@@ -92,6 +92,7 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - Add the generated changelog and say how to generate it again
 - Say that the changelog is part of the merge process
 - Add the sources for the synthetic data research
+- Log PR 1 of the synthetic data work
 
 
 ### Features
@@ -161,6 +162,7 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - **client:** Make the About page public and send signed-out visitors from Home to About
 - **client:** Show the About page without the sidebar to a visitor who is not signed in
 - **client:** Link the logo on the login and signup pages to the About page
+- **ml:** Add the WHO-UMC rules as one pure function
 
 
 ### Performance
