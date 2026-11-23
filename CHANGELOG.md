@@ -51,6 +51,7 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - **server:** Move mlflow to the train group
 - **server:** Keep the empty model folder in git
 - **server:** Move unused dependencies to the train group
+- Add git-cliff to generate the changelog
 
 
 ### Chores
@@ -68,6 +69,7 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - Build on pull requests, publish on main, deploy only on request
 - Remove the workflow that publishes medilinda-ml to PyPI
 - Test the ML code in the same run as the server
+- Fail a pull request when the changelog is not current
 
 
 ### Documentation
@@ -87,6 +89,8 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - **client:** State the data and its limits on the About page
 - Say in the README scope that the data is synthetic
 - Add the OCR text of two PPB quarterly pharmacovigilance reports
+- Add the generated changelog and say how to generate it again
+- Say that the changelog is part of the merge process
 
 
 ### Features
