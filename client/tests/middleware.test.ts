@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const navigateTo = vi.fn((path: string) => ({ redirectedTo: path }));
+const setPageLayout = vi.fn();
 let sessionResponse: () => Promise<unknown>;
 
 async function runMiddleware(path: string) {
@@ -10,9 +11,11 @@ async function runMiddleware(path: string) {
 
 beforeEach(() => {
 	navigateTo.mockClear();
+	setPageLayout.mockClear();
 	vi.stubGlobal("defineNuxtRouteMiddleware", (fn: unknown) => fn);
 	vi.stubGlobal("useRequestFetch", () => () => sessionResponse());
 	vi.stubGlobal("navigateTo", navigateTo);
+	vi.stubGlobal("setPageLayout", setPageLayout);
 	vi.resetModules();
 });
 
@@ -25,10 +28,17 @@ describe("auth route middleware", () => {
 		expect(navigateTo).not.toHaveBeenCalled();
 	});
 
-	it("lets /about through without checking the session", async () => {
-		sessionResponse = () => Promise.reject(new Error("should not be called"));
+	it("lets a visitor open /about with the visitor layout", async () => {
+		sessionResponse = async () => null;
 		expect(await runMiddleware("/about")).toBeUndefined();
 		expect(navigateTo).not.toHaveBeenCalled();
+		expect(setPageLayout).toHaveBeenCalledWith("visitor");
+	});
+
+	it("gives a signed-in user /about with the default layout", async () => {
+		sessionResponse = async () => ({ session: { id: "s" }, user: { id: "u" } });
+		expect(await runMiddleware("/about")).toBeUndefined();
+		expect(setPageLayout).toHaveBeenCalledWith("default");
 	});
 
 	it("sends a signed-out visitor of Home to About", async () => {
