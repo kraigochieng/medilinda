@@ -24,3 +24,14 @@ One entry for each pull request. The entries are written during the work, in ord
 - Findings: the reports have all patients, mostly not TB patients (DR-9). Liver injury is not among the 25 events of Q3 (skin events lead). The liver and optic counts are my assumptions (30 and 8) and are marked as such. The share of reports with separate drugs (5%) is an assumption (DR-7).
 - Mapping choices: "not indicated" and "unknown" severity map to "unknown"; the outcome "fatal" is the form's "death".
 - Tests: 34 tests.
+
+## PR 4: the case sampler
+
+- Added `case_sampler.py` (`sample_case`) and `sampler_assumptions.py` (every number that no source gives, in one place).
+- Causal order: patient, history, regimen, event and its latent cause, timeline, follow-up (dechallenge, rechallenge), labs, grading, then missing information. The sampler does not import the WHO-UMC rules; a test checks this.
+- The latent "drug related" variable (70%, assumption) is an upstream cause. It is kept in `SampledCase.is_drug_related` for checks and is not a model feature. The level still comes only from `assess`.
+- The totals come from `marginals.py`. Tests: gender, severity, seriousness and action taken match the PPB report within 3 points over 4,000 cases.
+- First look at the class mix (5,000 cases, seed 1, rules applied): possible 56%, unlikely 17%, likely 14%, unclassified 11%, unclassifiable 1%, **certain 0.8%**. Certain is rare: it needs a definitive lab or eye finding, no other cause, a plausible time and an improved dechallenge. DR-4 accepts this mix.
+- Consequence for the next steps: the floor of 100 "certain" cases in the test split (DR-4) needs about 55,000 rows. That is too slow for the grid search. I will state the floor that I reach.
+- Assumption changed during the work: the history box is empty as a whole (25%), not field by field.
+- Tests: 17 tests. The whole ML suite: 191 passed.
