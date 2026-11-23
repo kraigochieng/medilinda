@@ -1,0 +1,919 @@
+ae | PHARMACY AND POISONS BOARD
+5 aii |
+REPUBLIC OF KENVA
+Pharmacovigilance Summary Report: Oct 1st to Dec 31st 2025 (Q2)
+
+The Pharmacy and Poisons Board is the National Regulatory Authority established
+under the Pharmacy and Poisons Act, Chapter 244 of the Laws of. Kenya. The Board
+is mandated to protect and promote public health by regulating the pharmacy
+profession and ensuring access to quality, safe, and effective health products and
+technologies (HPTs).
+
+Further, Rule 5 of the Pharmacy and Poisons (Pharmacovigilance and Post-Market
+Surveillance) Rules, 2022 mandates the Board to establish and maintain a National
+Pharmacovigilance Centre responsible for coordinating the national
+pharmacovigilance and post-market surveillance system, including receiving,
+collating, assessing, and maintaining information on adverse events associated
+with authorized HPTs.
+
+As part of this mandate, the Board provides quarterly pharmacovigilance reports to
+stakeholders as a feedback mechanism, aiming to enhance collaboration and
+encourage the timely reporting of adverse events.
+
+In this quarter, the National Pharmacovigilance Centre engaged in several
+pharmacovigilance activities in an effort to ensure the quality, safety and efficacy of
+Health products and Technologies.
+
+Below is a summary of Pharmacovigilance activities conducted between October 1st
+to December 31st 2025.
+> Pharmacovigilance Activities - Quarter 2 =
+Receiving & Processing of ICSRs Training of Healthcare Providers
+ae
+"RG QO Kisumu, Bungoma, Kili > 88 Participants
+a
+= @ 314 SADR Reports ——— a
+a SI T10 AEFI Reports ———— pee Q Uasin Gishu, Nairobi, Nakury 2 87 Participants
+- 14 PADR Reports ———— @ in
+qi Repo cain ea
+_ oe 126 Medication Error _ SM Q 16 PPS Staffiin Nairobi
+= a 5 Medical Device Incident Reports —
+= @ 12 Transfusion Reaction Reports —
+Cre WD esat Melasma Secu eae aed leg
+Receiving and Processing of ICSRs ,
+During Quarter 2, a total of 581 Individual Case Safety Reports (ICSRs) were
+received at the National Pharmacovigilance Centre. These included 314 suspected
+adverse drug reaction (SADR) reports, 110 adverse events following immunization
+(AEFI) reports, 14 public adverse drug reaction (PADR) reports, 126 medication
+error reports, 5 medical device incident reports, and -12 transfusion reaction
+reports. Collectively, these reports provided critical data to support signal
+detection, safety monitoring, and continuous benefit-risk assessment.
+Training of Healthcare Providers
+During Quarter 2, six pharmacovigilance trainings were conducted, including three
+routine trainings and three SAE investigation trainings. These activities
+strengthened healthcare worker and regulator capacity in safety reporting,
+investigation, and regulatory compliance.
+Routine Trainings: Conducted in Kisumu, Bungoma, and Kilifi in December
+2025, reaching a total of 88 participants and enhancing adverse event reporting at
+county level.
+SAE Investigation Trainings: Held in Uasin Gishu, Nairobi, and Nakuru in
+November 2025, training 87 participants on serious adverse event investigation,
+documentation, and submission for causality assessment.
+PPB Staff Training: Sixteen Pharmacy and Poisons Board (PPB) staff were trained
+in Nairobi to strengthen internal pharmacovigilance capacity.
+Stakeholder Engagements
+In addition to the routine pharmacovigilance training conducted across various
+counties, the National Pharmacovigilance Centre carried out several stakeholder
+engagement activities during the reporting period. These activities were aimed at
+strengthening collaboration, promoting shared responsibility, and enhancing the
+overall safety of HPTs.
+Key stakeholder engagement activities included:
+Joint PPB/NVIP Secretariat Meeting: Conducted to discuss cases that occurred
+during the quarter prior to being tabled to the expert committee.
+PPB/NTD Mass Drug Administration Activities: Collaborated with the NTD on
+pharmacovigilance monitoring of NTD mass drug administration exercise.
+Maternal Immunization Safety Surveillance Planning Project Leadership
+Workshop: Convened various stakeholders to as part of the strategic planning of
+an upcoming maternal immunization active safety surveillance.
+GAP Analysis Survey Planning and Implementation: Undertaken to identify
+gaps to reporting and inform targeted strengthening of pharmacovigilance
+structures and processes.
+Quarterly KAPI Meeting with PPB: Held to review and update pharmaceutical
+industry stakeholders on pharmacovigilance updates to enable alignment with
+regulatory priorities.
+Safety Communication
+During the reporting period, the Pharmacy and Poisons Board issued a safety
+communication regarding the safe use of Health Products and Technologies (HPTs).
+This communication was intended to inform stakeholders of emerging safety
+concerns and to promote the appropriate use of medical products in order to
+minimize potential risks.
+Key safety communication issued during the quarter:
+e Public alert on paracetamol uses during pregnancy
+The safety communication can be accessed on the Pharmacy and Poisons Board
+website via the following link:
+https:/ /web.pharmacyboardkenya.org/safety-communication-2025/
+SUSPECTED ADVERSE DRUG REACTIONS (SADRS)s—=<“‘i‘S™S
+During Quarter 2 of the 2025/2026 financial year (1st October - 31st December
+2025), a total of 314 Suspected Adverse Drug Reaction (SADR) reports were
+submitted to the National Pharmacovigilance Centre. Of these, 306 (9'7.45%) were
+initial reports, while 8 (2.55%) were follow-up reports. To avoid duplication, only
+one copy of each Individual Case Safety Report (ICSR) was included in the analysis,
+resulting in 306 reports being analyzed in this quarterly summary. Among the
+306 initial reports:
+° 301 reports (98.36%) were categorized as Suspected Adverse Drug
+Reactions (SADRs),
+e 3 reports (0.98%) involved both SADRs and Therapeutic Ineffectiveness
+(TI), and
+e 2 reports (0.65%) were related solely to Therapeutic Ineffectiveness (TI).
+Product Category (n=306) Age Group (n=306)
+Product Category Neonate 1
+Count Proportion Infant | 5
+Adolescent 12
+Medicinal Product 277 90.52%
+Child § 19
+Diagnostic product 8 2.61% Elderly M35
+Adult DTT! 234
+
+Not Indicated 21 6.86%
+Of the 306 ADR reports received, the | The majority of ADR reports were
+majority were associated with medicinal | from adults, accounting for 234
+products, accounting for 277 cases|cases (76.47%). Elderly patients
+(90.52%). A smaller number of reports| comprised 35 reports (11.44%),
+involved diagnostic products, with 8 cases | followed by children with 19 reports
+(2.61%). Additionally, 21 reports (6.86%) | (6.21%) and adolescents with 12
+were classified as Not Indicated, where the | reports (3.92%). Reports involving
+product category was not specified. infants accounted for 5 cases
+
+(1.63%), while neonates represented
+
+the smallest proportion, with 1
+
+report (0.33%).
+Gender (n=306) Pregnancy Status (n=183)
+
+1 Pregnancy Coun  Proportio
+
+Status t =
+
+1st Trimester 3 1.64%
+
+2nd Trimester 2 1.09%
+
+3rd Trimester 2 1.09%
+
+Not Applicable 26 14.21%
+
+Not pregnant 122 66.67%
+
+Not Indicated 28 15.30%
+
+=Female =Male «Unknown —
+
+Grand Total 183 100.00%
+Most ADR reports were associated with | Among the 183 female ADR reports,
+female patients, accounting for 183 cases | most cases involved non-pregnant
+(59.80%). Male patients accounted for 122 | patients, accounting for 122 reports
+reports (39.87%), while the patient’s sex was | (66.67%). Pregnancy-related reports
+unknown in 1 report (0.33%). were uncommon, with 3 cases
+
+1.64%) occurring in the first
+trimester, and 2 cases each (1.09%)
+reported in the second and third
+trimesters. In 26 reports (14.21%),
+pregnancy status was not
+applicable, while 28 reports
+(15.30%) did not indicate pregnancy
+status.
+Known Allergy (n=306) Reported Allergen (n=20)
+Cou
+42 Allergen nt %
+a Sulphur 6 30
+20 NSAIDS 2 10
+\ Not Indicated 2 10
+bs penicillin / Cotrimoxazol
+e/
+Ibuprofen 1 5
+Ceftriaxone 1 5
+Tramadol 1 5
+Cotrimoxazole/Mara 5
+244 Moja 1
+Penicillin 1 8
+=No «yes «Not Indicated Diclofenac 1 5
+CEFTRIAXONE 1 8
+Ampicillin /Cloxacillin 1 5
+Azithromycin /Amoxicill iD
+in
+Clavulanate/Ascoril/
+Solvin Plus 1
+Paracetamol 1 5
+10
+Grand Total 20 oO
+Most patients who experienced an adverse Fi 7
+drug reaction did not have a known allergy, pinang| ie) 2Dreports) ml which sa
+: known allergy was documented,
+accounting for 244 reports (79.74%). A
+: sulphur was the most frequently
+known allergy was reported in 20 cases :
+(6.54%). In 42 reports (13.73%), the all reported allergen, accounting for 6
+te a ° t ae. t -73%), the allergy cases (30%). NSAIDs were reported
+re in 2 cases (10%), while in 2 cases
+(10%) the specific allergen was not
+indicated. The remaining allergens
+were each reported in single cases
+(5%) and included penicillins (alone
+or in combination), ceftriaxone,
+tramadol, diclofenac, paracetamol,
+ampicillin /cloxacillin, and
+combinations such as azithromycin
+with amoxicillin clavulanate and
+other medications.
+Suspected medicines (n=324)
+Proportio
+Suspected Medicine Count 2
+Rifampicin /Isoniazid /Pyrazinamide/Ethambutol
+Hydrochloride (150mg/75mg/400mg/275mg) 89 27.47%
+Tenofovir /Lamivudine/Dolutegravir (300mg/300mg/50mg) 26 8.02%
+Carbamazepine 10 3.09%
+Nifedipine 9 2.78%
+Iohexol usp 8 2.47%
+Rifapentine/Isoniazid (300mg/300mg) 8 2.47%
+Paracetamol 7 2.16%
+Ceftriaxone 6 1.85%
+Linezolid 6 1.85%
+Iron sucrose injection USP 6 1.85%
+Rifampicin /Isoniazid /Pyrazinamide (75mg/50mg/ 150mg) 5 1.54%
+Tenofovir Disoproxil Fumarate 5 1.54%
+Amlodipine 5 1.54%
+Rifampicin /Isoniazid (150mg/75mg) 5 1.54%
+Nitrofurantoin 4 1.23%
+Vancomycin Hydrochloride 4 1.23%
+Tenofovir Alafenamide/Lamuvidine/Dolutegravir
+(50mg/300mg/25mg) 4 1.23%
+Metronidazole 4 1.23%
+A total of 98 generic names and fixed-dose combinations (FDCs) were reported as
+suspected medicines during the quarter. The most frequently reported suspected
+medicine was Rifampicin/Isoniazid/Pyrazinamide/Ethambutol hydrochloride
+(150mg/75mg/400mg/275mg), accounting for 89 reports (27.47%). This was
+followed by Tenofovir/Lamivudine/Dolutegravir (300mg/300mg/50mg) with 26
+reports (8.02%). Other commonly reported suspected medicines included
+carbamazepine with 10 reports (3.09%), Nifedipine with 9 reports (2.78%), and
+Iohexol Injection USP with 8 reports (2.47%). The table above presents the most
+frequently reported suspected medicines during the quarter.
+Commonly reported adverse reactions
+The most frequently reported suspected adverse drug reaction was urine
+discoloration, with 54 reports (11.49%). This was followed by itching in 35 cases
+(7.45%) and rash in 34 cases (7.23%). Vomiting was reported in 18 cases (3.83%),
+while joint pain accounted for 15 reports (3.19%). Other commonly reported
+reactions included itchy rash (13 reports; 2.77%), renal insufficiency (12 reports;
+2.55%), headache (11 reports; 2.34%), and nausea, shivering, limb swelling, and
+jaundice, each reported in 10 cases (2.13%). Less frequently reported reactions
+included dizziness (8 reports; 1.70%), and stool discoloration, peripheral
+neuropathy, abdominal pain, and chills, each reported in 6 cases (1.28%).
+Most Commonly Reported Suspected Adverse Drug Reactions
+Urine Discoloration 54
+Itching 35
+Rash = 34
+Vomiting Sees 18
+Join Pain Gus 15
+Itchy Rash ma 13
+Renal Insufficiency EEE 12
+Headache == 11
+Nausea EEE 10
+Limb Swelling = 10
+Jaundice BE 10
+Shivering === 10
+Dizziness =a 8
+Abdominal Pain ™6
+Stool Discoloration =m 6
+Chills mmm 6
+Peripheral Neuropathy mmm 6
+Severity (n=306)
+129 126
+37
+by
+came} "3 10
+| fennel 3 1
+Moderate Mild Severe Not Indicated Fatal Unknown
+Most adverse drug reactions were classified as moderate in severity, accounting for
+129 reports (42.16%), closely followed by mild reactions with 126 reports (41.18%).
+Severe reactions were reported in 37 cases (12.09%). In 10 reports (3.27%), severity
+was not indicated, while 1 report (0.33%) was classified as unknown.
+Fatal outcomes were rare, with 3 reports (0.98%).
+Was the reaction serious? (n=306) Reason for seriousness (n=56)
+56 Hospitalization/ ie
+Prolonged ; 38
+Hospitalization = T .
+Life threatening (ee 11
+Disability [fl] 4
+250
+Death ff 3
+=No «Yes
+The majority of adverse drug reactions were | Among the 56 serious adverse drug
+not serious, accounting for 250 reports | reaction reports, hospitalization or
+(81.70%). Serious reactions were reported in | prolonged hospitalization was the
+56 cases (18.30%). most common reason for
+seriousness, accounting for 38
+cases (67.86%). Life-threatening
+reactions were reported in 11 cases
+(19.64%), while disability was
+reported in 4 cases (7.14%). Death
+was reported in 3 cases (5.36%).
+Actions taken (n=306)
+Action Taken Count Proportion
+Drug withdrawn 152 49.67%
+Dose not changed 115 37.58%
+Not applicable 19 6.21%
+Dose reduced 14 4.58%
+Unknown 6 1.96%
+Grand Total 306 100.00%
+In response to the reported adverse drug reactions, the suspected drug was
+withdrawn in nearly half of the cases, accounting for 152 reports (49.67%). In 115
+cases (37.58%), the dose was not changed. Other actions taken included no
+applicable action in 19 reports (6.21%) and dose reduction in 14 reports (4.58%).
+In 6 reports (1.96%), the action taken was unknown.
+Qutcome (n=306)
+
+Outcome Count Proportion
+
+Recovering/Resolving 101 33.01%
+
+Recovered/ Resolved 91 29.74%
+
+Not Recovered/Not Resolved 67 21.90%
+
+Unknown 41 13.40%
+
+Fatal 3 0.98%
+
+Recovered/Resolved with Sequelae 3 0.98%
+
+Grand Total 306 100.00%
+Regarding patient outcomes, most cases were either recovering or resolving,
+accounting for 101 reports (33.01%), or had fully recovered or resolved, with 91
+reports (29.74%). Not recovered or not resolved outcomes were reported in 67
+cases (21.90%). In 41 reports (13.40%), the outcome was unknown. Fatal
+outcomes were rare, with 3 reports (0.98%), and an additional 3 cases (0.98%)
+had recovered or resolved with sequelae.
+
+Reporter designation (n=306) Reporter designation (n=306)
+Most adverse drug reaction reports
+Pharmacist SE 195 were submitted by pharmacists,
+accounting for 195 _ reports
+Pharmaceutical im 49 (63.73%). Pharmaceutical
+technologist technologists contributed 49
+Clinical officer [EJ 46 reports (16.01%), followed by
+clinical officers with 46 reports
+
+Nurse 9 13 (15.03%). :
+Nurses submitted 13 reports
+Anaesthetist 1 (4.25%). Medical officers,
+anesthetists, and other health care
+
+a 1 professionals each accounted for 1
+
+report (0.33%).
+Medical officer 1
+
+Institution
+
+In this quarter, adverse drug reaction reports were received from a total of 110
+health facilities across the reporting period. The highest number of adverse drug
+reaction reports was submitted by Maralal District Hospital, accounting for 57
+reports (18.63%). This was followed by Aga Khan Hospital with 24 reports (7.84%).
+Kilifi County Hospital and Kakamega County General Hospital contributed 13
+(4.25%) and 11 reports (3.59%), respectively. Below is a list of top 11 facilities with
+at least 5 reports and above.
+Facility/Institution Count Proportion
+
+Maralal District Hospital 57 18.63%
+
+Aga Khan Hospital 24 7.84%
+
+Kilifi County Hospital 13 4.25%
+
+Kakamega County General Hospital 11 3.59%
+
+Meru Teaching and Refferal Hospital hospital 10 3.27%
+
+Port Reitz District Hospital 7 2.29%
+
+Kenyatta National Hospital 7 2.29%
+
+TOPSTONE PHARMA LIMITED 6 1.96%
+
+Difathas Health Centre 5 1.63%
+
+Mlaleo Health Centre (MOH) 5 1.63%
+
+Mweiga Health Centre 5 1.63%
+
+County
+
+SADR reports were received from 31 out of the 47 counties during the quarter.
+Nairobi County contributed the highest number of reports with 62 cases (20.26%),
+followed closely by Samburu with 57 reports (18.63%). Kirinyaga accounted for 27
+reports (8.82%), while Mombasa contributed 24 reports (7.84%). Below is a table
+of the counties that submitted SADR reports in Quarter 2.
+
+[Mo [County | _Gount [2 [ No [Count Coun [|
+[1 [Nairobicounty | __62| 20.26% 0.98%
+
+[2 |sambuu | 57 | 18.63% | 18 |isiolo | 3 | 0.98%
+
+[3 |Kirinyaga | 27| 8.82% [19 |Laikipia | 3. | 0.98%
+
+[4 [Mombasa | 24| 7.84% [20 |Siaya || 0.65%
+
+[5 |Kiambu | 17] 5.56% [21 [xii S| 2 | 0.65%
+
+(6 [xc S| = t6 | 5.29%|22 [Turkana | 2 | 0.65%
+
+[7 [meu | a | 4.58% [28 | kitui S| | 0.65%
+
+[8 |Kakamega | 12|_ 3.92% [24 [Nandi || 0.65%
+
+[9 [nyei | St | 3.27% | 25 | raitaTaveta | 1 0.33%
+
+[10 |Bungoma | 8 | 2.61% | 26 | Kericho |_| 0.33%
+
+[11 [Makueni | 7 | 2.20% | 27 | Migori |__| 0.83%
+
+[12 [Nakua | 7 | 2.20% [28 |Garissa | | (0.38%
+
+[13 |Kisums | 7 | 2.20% | 29 | Kajiado | | 0.33%
+
+[14 |HomaBay | 4 | 1.31% | 30 [embu || 0.33%
+
+[15 |uasincishn | 4 | 1.31% | 81 | Machakos | _1| 0.38%
+
+[16 |viniga Tf zmf oT
+During Quarter 2 of the 2025/2026 financial year (1st October - 31st December
+2025), a total of 110 Adverse Events following immunization (AEFIs) reports
+were submitted to the National Pharmacovigilance Centre. A total of 110 adverse
+events following immunization (AEFIs) were reported during the period, the
+majority of which were initial reports, accounting for 105 cases (95.45%). Follow-
+up reports were few, with 5 cases (4.55%). To avoid duplication, only one copy of
+each Individual Case Safety Report (ICSR) was included in the analysis, resulting
+in 105 reports being analyzed in this quarterly summary.
+Age Group (n=105) Gender {(n=105)
+bint Dy 6°
+Child 25
+53 52
+Adolescent |) 5
+Neonate [J 5
+Adult | 1
+=Female «Male
+Of the 105 AEFI reports, the majority | Among the 105 AEFI reports, cases
+occurred among infants aged 1 month to 12 | were almost equally distributed by
+months, accounting for 69 cases (65.71%). | gender. Males accounted for 53
+Children aged 1 to 12 years accounted for 25 | reports (50.48%), while females
+reports (23.81%). Adolescents aged 13 to 17 | accounted for 52 reports (49.52%).
+years and neonates aged O to 28 days each
+accounted for 5 reports (4.76%). Only 1 report
+(0.95%) involved an adult aged 18 to 65 years.
+Suspected Vaccines
+Among the 105 AEFI reports, the Pentavalent vaccine (DTP-HepB-Hib) was the
+most frequently reported suspected vaccine, accounting for 24 cases (22.86%).
+This was closely followed by the Typhoid Conjugate Vaccine (TCV) with 23 reports
+(21.90%). Combinations of the Pentavalent vaccine with the pneumococcal
+conjugate vaccine were also common, contributing 16 reports (15.24%).
+Additionally, 11 reports (10.48%) involved co-administration of the Pentavalent
+vaccine, pneumococcal conjugate vaccine, bivalent oral polio vaccine, and
+rotavirus vaccine.
+Other notable combinations included Measles Rubella vaccine with TCV, which
+accounted for 7 reports (6.67%), and the malaria (RTSS) vaccine with 4 reports
+(3.81%). Smaller proportions of reports involved single vaccines or less common
+combinations such as pneumococcal conjugate vaccine, measles rubella vaccine
+alone, tetanus diphtheria vaccine, hepatitis B vaccine, rotavirus vaccine,
+inactivated polio vaccine, and various multi-vaccine combinations.
+Cou  Proportio
+nt n
+
+Suspected Vaccines/Vaccine Combination
+
+Pentavalent Vaccine (DTP-HepB-Hib) 24 22.86%
+
+Typhoid Conjugate Vaccine (TCV) 23 21.90%
+
+Pentavalent Vaccine (DTP-HepB-Hib); Pneumococcal conjugate
+
+vaccine 16 15.24%
+
+Pentavalent Vaccine (DTP-HepB-Hib); Pneumococcal conjugate
+
+vaccine; Bivalent oral Polio vaccine; Rota virus vaccine 11 10.48%
+
+Measles Rubella Vaccine; Typhoid Conjugate Vaccine (TCV) 7 6.67%
+
+Malaria (RTSS)Vaccine 4 3.81%
+
+Pneumococcal conjugate vaccine 3 2.86%
+
+Pentavalent Vaccine (DTP-HepB-Hib); Pneumococcal conjugate
+
+vaccine; Inactivated polio vaccine 2 1.90%
+
+BCG; Bivalent oral Polio vaccine 2 1.90%
+
+Bivalent oral Polio vaccine; Inactivated polio vaccine; Pneumococcal
+
+conjugate vaccine; Rota virus vaccine; Pentavalent Vaccine (DTP-
+
+HepB-Hib) 2 1.90%
+
+Measles Rubella Vaccine 2 1.90%
+
+Tetanus Diptheria Vaccine 1 0.95%
+
+Pneumococcal conjugate vaccine; Pentavalent Vaccine (DTP-HepB-
+
+Hib); Inactivated polio vaccine 1 0.95%
+
+Inactivated polio vaccine 1 0.95%
+
+Inactivated polio vaccine; Bivalent oral Polio vaccine; Pneumococcal
+
+conjugate vaccine; Rota virus vaccine; Pentavalent Vaccine (DTP-
+
+HepB-Hib) 1 0.95%
+
+Rota virus vaccine 1 0.95%
+
+Bivalent oral Polio vaccine; Inactivated polio vaccine 1 0.95%
+
+Hepatitis B Vaccine 1 0.95%
+
+Malaria (RTSS)Vaccine; Measles Rubella Vaccine 1 0.95%
+
+BCG; Pentavalent Vaccine (DTP-HepB-Hib); Pneumococcal
+
+conjugate vaccine 1 0.95%
+
+Grand Total 105 100.00%
+Commonly reported adverse events following immunization
+The most frequently reported adverse reactions were fever, accounting for 46 cases
+(22.66%), followed by injection site abscess with 21 reports (10.34%), and injection
+site swelling in 18 cases (8.87%). Other common reactions included irritability (16
+reports, 7.88%), vomiting (12 reports, 5.91%), urticaria and injection site pain
+(each 9 reports, 4.43%), and rash and convulsion (each 7 reports, 3.45%). Less
+frequent reactions included diarrhea and headache (each 5 reports, 2.46%), crying
+(4 reports, 1.97%), and injection site redness, severe local reaction, fainting, and
+sweating (each 3 reports, 1.48%). Below is a summary of the commonly reported
+AEFIs this quarter.
+Most commonly reported Adverse Event Following
+Immunization
+Fever 46
+Injection Site Abscess 21
+Injection Site Swelling EES 18
+Irritability ( 16
+Vomiting I 12
+Urticaria — 9
+Injection Site Pain —N 9
+Convulsion EN 7
+Rash ES 7
+Diarrhea ER 5
+Headache 9 5
+Crying +
+Sweating 3
+Injection Site Redness [jj 3
+Severe Local Reaction [J 3
+Fainting EJ 3
+Was the reaction serious? (n=105) Reason for seriousness (n=10)
+10
+Persistent or
+\ ig Say A
+Life threatening fe 2
+Hospitalization or
+prolongation of
+«No «Yes hospitalization
+The majority of reactions were not serious, | Among the serious reactions, the
+accounting for 95 reports (90.48%). Serious| most common reason was
+reactions were reported in 10 cases (9.52%). | hospitalization or prolongation of
+existing hospitalization, reported
+in 7 cases (70.00%).  Life-
+threatening reactions were
+reported in 2 cases (20.00%), while
+persistent or significant disability
+occurred in 1 case (10.00%).
+Actions taken (n=105)
+Action Taken Count Proportion
+Drug withdrawn 152 49.67%
+Dose not changed 115 37.58%
+Not applicable 19 6.21%
+Dose reduced 14 4.58%
+Unknown 6 1.96%
+Grand Total 306 100.00%
+In response to the reported adverse drug reactions, the suspected drug was
+withdrawn in nearly half of the cases, accounting for 152 reports (49.67%). In 115
+cases (37.58%), the dose was not changed. Other actions taken included no
+applicable action in 19 reports (6.21%) and dose reduction in 14 reports (4.58%).
+In 6 reports (1.96%), the action taken was unknown.
+Outcome (n=105)
+Outcome Count Proportion
+Recovered /Resolved - 54 51.43%
+Recovering/ Resolving 43 40.95%
+Unknown 4 3.81%
+Not recovered/Not resolved/Ongoing 2 1.90%
+Fatal il! 0.95%
+Recovered / Resolved with sequelae il 0.95%
+Grand Total 105 100.00%
+Regarding patient outcomes, most cases had recovered or resolved, accounting
+for 54 reports (51.43%), or were recovering or resolving, with 43 reports (40.95%).
+Outcomes were not recovered/not resolved/ongoing in 2 cases (1.90%), and
+unknown in 4 reports (3.81%). Fatal outcomes were rare, with 1 report (0.95%),
+and an additional 1 case (0.95%) had recovered/resolved with sequelae.
+Reporter designation (n=105) Reporter designation (n=105)
+Regarding reporter designation,
+most reports were submitted by
+Nurse eee 50 nurses, accounting for 50 reports
+(47.62%), followed by pharmacists
+with 41 reports (39.05%). Reports
+Pharmacist 41 from physicians accounted for 7
+cases (6.67%), while clinical
+|i officers and pharmaceutical
+Physician (| 7 technologists submitted 4 (3.81%)
+and 3 reports (2.86%),
+respectively.
+Clinical officer 9 4 P y
+Pharmaceutical i 3
+technologist
+Institution
+In this quarter, adverse events following immunization reports were received from
+a total of 54 health facilities across the reporting period. The highest number of
+reports was submitted by Ngecha Health Centre, accounting for 18 reports
+(17.14%), followed by Maralal District Hospital with 17 reports (16.19%). Masogo
+Sub County Hospital contributed 4 reports (3.81%), while Chepngombe Health
+Centre, Kilifi County Hospital, Kangu Dispensary, and Tudor District Hospital
+(Mombasa) each submitted 3 reports (2.86%). Below is a list of top 11 facilities with
+at least 3 reports and above.
+Facility /Institution Count Proportion
+
+Ngecha Health Centre 18 17.14%
+
+Maralal District Hospital 17 16.19%
+
+Masogo Sub County Hospital 4 3.81%
+
+Chepngombe Health Centre 3 2.86%
+
+Kilifi County Hospital 3 2.86%
+
+Kangu Dispensary 3 2.86%
+
+Tudor District Hospital (Mombasa) 3 2.86%
+
+County
+
+AEFI reports were received from 26 out of the 47 counties during the quarter.
+Kiambu County contributed the highest number of reports with 26 cases (24.76%),
+followed by Samburu with 17 reports (16.19%). Kisumu accounted for 9 reports
+(8.57%), while Kirinyaga contributed 7 reports (6.67%). Below is a table of the
+counties that submitted AEFI reports in this quarter.
+
+[Be [County | Soune| [Me [County | Sount|
+[P [Kamba [26] 24.76% [a7 | Kakamega | 2 | 1.90% |
+[2 [sembura 7 6.19%] 18 embaF| 180%
+[3 [Kuma Tf 887% [49 [Bungoma | 1] 0.95% |
+cc (
+[S| Nvemira | Of 8.7% fan | Kwale | 1] 0.95% |
+a ee
+i Dd
+pe peenng Seine ae [esi Cieza Y 11 0.95% |
+[9 [vite TB 280% [a8 [Ke Tt] 0.98%
+de
+pa [Natura | 8] 280% [27 [Kajido | 1] 0.98% |
+[12 [Neri TP 190%] 28 [Nani || 0.95% |
+pig [Nenceme tee ae ent
+i MEDICATION ERRORS (MEs)
+Gender (n=126) — Age Group (n=126)_ " :
+No. of
+Report | Percenta
+Age Group |s ge
+elderly | 8 7.26%
+= Female # Male Not
+Indicated 2 0.00%
+Grand
+Total 100.00%
+A total of 126 medication errors were | Of the reported medication errors,
+reported in Quarter 2. Of this, 58% (73) | about 66% (82) involved adults
+involved the female gender while 42% (53) | while 21 (16.94%) occurred in
+involved the male gender. children.
+Reporter Designation Did the Error Reach the Patient?
+No. of
+Cadre Reports | Percentage
+Pharmaceutica
+1 technologist 22 17.46%
+Clinical officer 0.79%
+Grand Total —as| 100.00% =No =Yes
+Most medication errors were reported by | In Quarter 2, 93 (74%) errors did
+Pharmacists 103 (81.75%), followed by | not reach patients while 33 (26%)
+pharmaceutical technilogisits 22 (17.46%), | reached patients.
+and clinical officers 1 (0.79%)
+Medication Error Outcome
+
+Potential error, circumstances/events have
+
+potential to cause incident 58 46.03%
+
+Not Indicated 16.67%
+
+Actual error-did not reach patient 16.67%
+
+Additional monitoring required-caused no
+
+harm 12 9.52%
+
+Actual error-caused no harm 8.73%
+
+Treatment /intervention required-caused
+
+temporary harm 3 2.38%
+
+Grand Total a eae] 100.00%
+Most of the medication errors 58 (46.03%) did not reach patients but had potential
+to cause harm if they would have reached patients. Moreover, 21 (16.67%) errors
+did not reach the patient and for those that reached the patient, they caused no
+harm 11 (8.73%), while 3 (2.38%) caused temporary harm.
+Number of medication errors per product Process Where the Error
+
+Occurred
+No. of
+Repor | Percent
+
+Reported Drug ts age
+
+Aceclofenac/serratiop
+
+eptidase 7 5.56%
+2.38%
+2.38%
+2.38%
+
+Potassium chloride 1.59%
+
+Phenytoin;
+
+Amlodipine 5mg;
+
+Asprin 2 1.59%
+
+Ampicillin/cloxacillin 1.59%
+
+Tenofovir disoproxil
+
+fumarate, lamivudine,
+
+dolutegravir 2 1.59%
+
+Atorvastatin 20mg
+
+Nocte 2 1.59%
+
+Losartan-H 1 OD;
+
+Atorvastatin 20mg N 2 1.59%
+079%
+103
+| 15
+8
+a
+-% Se &
+Se . Ss Ss
+at *
+a s
+Y s
+ES
+a
+or
+Of the reported errors, 7 (5.56%) were | In quarter 2, most medication errors
+associated  Aceclofenac/serratiopeptidase | 103 (81.7%) occurred during
+followed by ceftriaxone 3 (2.38%), and| prescription, followed by 15 (12%),
+Amoxicillin 3 (2.38%). administration errrors and 8 (6.3%)
+as dispensing errors.
+Description of the Error
+Error Description No. of Reports
+Prescribed overdose 15.20%
+Prescribed underdose 14.40%
+Prescribed wrong drug combination 8.80%
+Non-adherence to medication 8.00%
+Not Indicated 4.00%
+Dispensed wrong medication 3.20%
+Fe =
+Irrational antibiotic prescribing 3.20%
+Prescribed wrong dose 2.40%
+Dose not specified 2.40%
+Not a medication error 2.40%
+Of the reports received, majority involved prescription overdose 19 (15.20%),
+prescription underdose 18 (14.40%), prescribed wrong drug combination 11
+(8.8%). The frequency of other errors is as captured in the table.
+Factors Contributing to the Error Occurrence
+Inadequate knowledge 31.44
+eee
+DL
+ae i
+The most commonly reported contributing factor was inadequate knowledge 50
+(31.44%), followed by Inexperienced personnel 38 (23.9%), and heavy workload 21
+(13.2%). The impact of other contributing factors is as shown.
+r= sae _ PUBLIC ADVERSE DRUG REACTIONS (PADRS)
+Age Group (n=11) - Gender (n=11) —_ -
+81.82%
+Pye
+u Female
+_ 9.09% 9.09% = Male
+—— Kee
+Adult (18-64 Infant(1 Neonate (0-1
+years) month-1 month)
+year) a
+The incidence of PADRs was highest | The incidences of PADRs were highest
+amongst adults at 81.82% followed by | amongst females at 73% (8). Male
+infants (9.09%) and neonates (9.09%) reporters constituted 27% (3) of all the
+PADRs.
+Suspect medicine
+The most commonly reported suspected medicine are as shown in the table
+below:
+[No| Drug | Count | Proportion| No| Drug | Count | Proportion |
+1 5 Aceclofenac,
+Paracetamol
+Vitamin A 9.09% and 9.09%
+il Chlorzoxazone | 1
+2 Amlodipine
+9.09% and Losartan 9,09%
+Semaglutide 1 Potassium 1
+9.09% 7
+Paclitaxel 1 Not indicated | 5 45.05%
+4 9.09%
+AZITHROMYCIN | 1
+Reaction
+The most commonly reported PADRs were rash (17.64%), headache (11.76%) and
+palpitations (11.76%) The other reported reactions (each less than 6%) are
+highlighted in the table below.
+[se [Reston [Count roponon [Wo] Reto [Count | Proportion
+1 7 | Bulging fontanelle
+after getting
+Rash 3 17.64% Vitamin A 1 5.88%
+2 Joints and muscle
+Headache 2 11.76% pain 1 5.88%
+3 ius :
+[3 |Patpitations|2 [11.76% |° [Haemorhoia |__| 5.88%
+4 | Unusual 10
+packet or
+bottle 2 11.76% Lack of sleep 1 5.88%
+5 | Dizziness 11
+or Empty box and
+drowsiness | 1 5.88% not sealed 1 5.88%
+decrease
+blood
+pressure 1 5.88%
+County
+PADRs were received from 8 of the 47 counties. Nairobi County submitted the
+highest number of PADRs (4, 36.36%).
+The rest of the counties submitted 1 report as shown in the table below.
+ieee cf ag ae |e ee
+Nairobi
+County 4 36.36% Machakos 1 9.09%
+Pie Pee eee
+=| P =
+Slee eee eee
+fee ‘ransfusion | Reactions ine Re we ees i
+I ~* = ——_ = ame =o = = s ——— tee |
+During Quarter 2(Q2), a total of twelve (12) reports of blood transfusion
+reactions were received. All the reports were submitted by pharmacists.
+Seven incidents of blood transfusion reactions involved adult (18-64 years)
+patients, three elderly (above 64 years) patients, one incident in an
+adolescent (12-17 years) patient and one incident in a child (1-11 years).
+Most transfusion reaction were noted in female patients (7) compared to
+male patients (5).
+Eight of the patients had received a blood transfusion due to severe anemia
+and four patients were transfused due to low hemoglobin levels.
+Five of the patients had a history of prior transfusions; two of the patients
+had experienced a previous transfusion reaction.
+The reported blood transfusion reactions had the following incidences;
+a re
+1 Other skin
+Chills /Rigors 24% rash 2 8%
+3 Tachycardia
+and
+Involuntary
+nodding of
+Tachycardia | 4 16% the head 1 4%
+4 | Nausea/
+Vomiting 3 12%
+a
+Medical Device Incidence Reports n ; 2 ;
+i =F Las
+‘In the past quarter, ‘there were ‘three reports of a medical device incident (MDI) which |
+was received from Meru (1), Mombasa (1) and Uasin Gishu (1) County
+The incidents involved (1) adult male patient, (1) neonate female patient and (1) neonate
+male patient.
+During the reporting period, the following medical devices were associated with incidents
+reported from healthcare facilities:
+The details of the reported medical device incidents are presented in the table below:
+Medical Manufacturer Incident (Event)
+Device
+HIV Self-Test | Revital Healthcare | The HIV self-test kits (Serial/Lot No HIVST
+LTD 250604) yield false positive results.
+The observed issues include the appearance of
+up to three test lines and, in some cases,
+merging of two lines, leading to result
+misinterpretation.
+Upon follow-up with testing using alternative
+HIV test kits produced negative results after
+initial positive outcomes with these devices.
+CORD BTHOPE The cord clamp (Serial/Lot No HIVST 240557)
+CLAMP INDUSTRY& unexpectedly opened after application,
+TRADE CO. LTD resulting in bleeding of the newborn.
+CORD REVITAL The cord clamps (Serial/Lot No HIVST 041123)
+CLAMP HEALTHCARE fail to lock as required during the delivery
+(EPZ) procedure compromising proper cord clamping.
+The reports were primarily made by a pharmaceutical technologist and (2) pharmacists.
+The incidents were classified as mild (2) and moderate. The outcome of the patients was
+(2) recovered and one was unknown.
+For any queries, please contact the PV department on pu@pharmacyboardkenya.org
+or call 0795743049.
+This document is produced by the National Pharmacovigilance Center
+Data sources: PPB PV Center; WHO VigiLyze Database (NB: the information does not
+represent the opinion of the World Health Organization)
+Report Approved By: Dr Ahmed I. Mohamed
+Ag. CEO, Pharmacy and Poisons Board
+Date: 29th January 2026
+Signature: SS
+
