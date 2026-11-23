@@ -1,8 +1,12 @@
 <template>
 	<div class="flex justify-center py-8">
-		<Logo />
+		<NuxtLink :to="aboutPath" aria-label="Read about MediLinda"><Logo /></NuxtLink>
 	</div>
 	<slot />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ABOUT_PATH } from "~/utils/route-access";
+
+const aboutPath = ABOUT_PATH;
+</script>
