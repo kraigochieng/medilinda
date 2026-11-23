@@ -98,6 +98,7 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - Log PR 3 of the synthetic data work
 - Log PR 4 of the synthetic data work
 - Log PR 5 of the synthetic data work
+- Log PR 6a of the synthetic data work
 
 
 ### Features
@@ -173,6 +174,9 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - **ml:** Sample a synthetic case in causal order
 - **ml:** Generate the dataset from the sampler and validate it
 - **ml:** Add the first WHO-UMC dataset of 30,000 rows and its report
+- **ml:** Load the training frame for one feature set and refuse diagnostic columns
+- **ml:** Add the features of the new report fields
+- **ml:** Run the experiment and the training on a feature set and report recall of certain
 
 
 ### Performance
