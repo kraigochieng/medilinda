@@ -12,6 +12,10 @@ MediLinda is a fourth-year project. It shows how causality assessment in pharmac
 
 Read [what MediLinda does, and what it does not do](https://medilinda.vercel.app/about#scope).
 
+## Changelog
+
+[`CHANGELOG.md`](CHANGELOG.md) is generated from the Conventional Commits and the tags. Do not edit it by hand. To generate it again, run `npm run changelog` in `client`.
+
 ## Demo screenshots
 
 ### Predicted Causality Assessment level
