@@ -95,6 +95,7 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - Log PR 1 of the synthetic data work
 - Log PR 2 of the synthetic data work
 - Log PR 3 of the synthetic data work
+- Log PR 4 of the synthetic data work
 
 
 ### Features
@@ -167,6 +168,7 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - **ml:** Add the WHO-UMC rules as one pure function
 - **ml:** Map the yellow form fields to the WHO-UMC facts
 - **ml:** Add the PPB report totals as a checked data module
+- **ml:** Sample a synthetic case in causal order
 
 
 ### Performance
