@@ -83,6 +83,12 @@
 					<li v-for="item in scopeModel" :key="item">{{ item }}</li>
 				</ul>
 			</div>
+			<div class="space-y-2">
+				<h3 class="font-semibold">{{ scopeDataHeading }}</h3>
+				<ul class="list-disc space-y-1 ps-5 text-sm text-muted">
+					<li v-for="item in scopeData" :key="item">{{ item }}</li>
+				</ul>
+			</div>
 		</section>
 
 		<section class="space-y-2 border-t border-default pt-6 text-sm text-muted">
@@ -103,6 +109,8 @@
 import { CREDITS, CREDITS_HEADING } from "~/utils/about-credits";
 import {
 	SCOPE_DOES,
+	SCOPE_DATA,
+	SCOPE_DATA_HEADING,
 	SCOPE_DOES_NOT,
 	SCOPE_HEADING,
 	SCOPE_ID,
@@ -120,6 +128,8 @@ const scopePurpose = SCOPE_PURPOSE;
 const scopeDoes = SCOPE_DOES;
 const scopeDoesNot = SCOPE_DOES_NOT;
 const scopeModel = SCOPE_MODEL;
+const scopeData = SCOPE_DATA;
+const scopeDataHeading = SCOPE_DATA_HEADING;
 const scopeModelHeading = SCOPE_MODEL_HEADING;
 const creditsHeading = CREDITS_HEADING;
 

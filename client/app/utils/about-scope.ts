@@ -28,4 +28,14 @@ export const SCOPE_MODEL: string[] = [
 	"The form and the model cover four first-line TB medicines: rifampicin, isoniazid, pyrazinamide and ethambutol.",
 	"A report about another medicine cannot be entered or judged.",
 	"The model predicts four levels: certain, likely, possible and unlikely. The server sets the levels unclassified and unclassifiable by rule, when facts are missing.",
+	"The model covers TB patients in Kenya.",
+];
+
+export const SCOPE_DATA_HEADING = "The data, and its limits";
+
+export const SCOPE_DATA: string[] = [
+	"The data is synthetic. It was built by reverse engineering the quarterly reports of the Pharmacy and Poisons Board.",
+	"The levels follow the WHO-UMC causality assessment. The generator sets the level first, then makes the report fit it.",
+	"The scores show how well the model learns the generator. They do not show clinical accuracy.",
+	"MediLinda is a simulated solution. It shows what such a system can do. It is not for use on real patients.",
 ];
