@@ -59,13 +59,28 @@
 		<div class="flex justify-center">
 			<UButton to="/adr/add" icon="i-lucide-plus" size="lg" label="Report a case" />
 		</div>
+
+		<section class="space-y-2 border-t border-default pt-6 text-sm text-muted">
+			<h2 class="text-base font-semibold text-default">{{ creditsHeading }}</h2>
+			<p v-for="paragraph in credits" :key="paragraph.id">
+				{{ paragraph.before }}
+				<template v-for="(link, position) in paragraph.links" :key="link.to">
+					<template v-if="position > 0"> and the </template>
+					<ULink :to="link.to" target="_blank" class="text-primary">{{ link.label }}</ULink>
+				</template>
+				{{ paragraph.after }}
+			</p>
+		</section>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { CREDITS, CREDITS_HEADING } from "~/utils/about-credits";
 import { STORY } from "~/utils/about-story";
 
 const steps = STORY;
+const credits = CREDITS;
+const creditsHeading = CREDITS_HEADING;
 
 // One timeline item for each step. The value is its position, so the slot can find the step.
 const items = STORY.map((step, index) => ({

@@ -43,23 +43,6 @@
 				New here? Read the
 				<ULink to="/about" class="text-primary">story of a case, from report to review</ULink>.
 			</p>
-			<p>
-				The ADR data comes from the
-				<ULink to="https://web.pharmacyboardkenya.org/" target="_blank" class="text-primary">
-					Pharmacy and Poisons Board
-				</ULink>.
-				The Board did not work on MediLinda.
-			</p>
-			<p>
-				Thanks to
-				<ULink to="https://www.intellisoftkenya.com" target="_blank" class="text-primary">
-					IntelliSOFT Consulting Ltd
-				</ULink>
-				and the
-				<ULink to="https://computerscience.uonbi.ac.ke/" target="_blank" class="text-primary">
-					Department of Computer Science, University of Nairobi
-				</ULink>.
-			</p>
 		</div>
 	</div>
 </template>
