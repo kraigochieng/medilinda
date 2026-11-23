@@ -57,3 +57,16 @@ One entry for each pull request. The entries are written during the work, in ord
 - Why two feature sets: the production model must run on what the app sends today ("app"). The new report fields (history, labs) are not in the app (#174). The "full" set shows what the app could add.
 - The default data path is now `data_who_umc.csv.gz`. The old `data.csv` stays in the repo for the history and for the experiment test.
 - Tests: 14 new tests. The whole ML suite: 213 passed, with MLflow.
+
+## PR 6b: the models on the WHO-UMC data
+
+- Ran the experiment twice on the 30,000-row dataset (26,5xx rows of the four levels): feature set "app" (what the app sends today) and feature set "full" (with the new fields of DR-8). Settings: 3-fold cross-validation, one repeat, six candidates (decision tree, AdaBoost, logistic regression, random forest, gradient boosting, naive Bayes). I left out the SVM and the k-nearest-neighbours candidates: their cost grows with the square of the rows. This is a deviation from the earlier experiment (5-fold, three repeats, eight candidates).
+- **"app" set:** the winner is gradient boosting with 3 features. Cross-validation weighted F1 0.658, validation 0.654. A model that always predicts the most common level scores 0.464.
+- **"full" set:** the winner is gradient boosting with 45 features. Cross-validation 0.848, validation 0.832.
+- Held-out test (6,641 rows; 57 are "certain" by the rules), against the clean rule label: "app" weighted F1 0.675, recall of "certain" 0.16; "full" weighted F1 0.879, recall of "certain" 1.00 (57 of 57). The "full" model predicts "certain" 108 times, and 57 are right (precision 0.53). The "app" model predicts "certain" 651 times, and 9 are right (precision 0.014).
+- Without the date features the "full" model scores 0.810 (clean label), and recall of "unlikely" falls from 0.81 to 0.45. So the dates carry real information (the time rule), not only a shortcut.
+- Label noise: against the clean label the "full" model keeps 0.879 to 0.887 at noise 0%, 5% and 10%. Against the noisy label it falls from 0.887 to 0.798. So the noise lowers the measured score, not the model.
+- **Production model:** I trained the "app" model and saved it as the new `LATEST` (with its golden file). It runs on what the app sends today. **It is weak: it over-predicts "certain". Do not deploy it before you read `docs/model-results.md`.** The old model stays in `server/models/`. To restore it, put its folder name in `server/models/LATEST`.
+- The "full" model is not saved as a version, because the app does not send its fields (issue #174). The selection is in `selection_full.json`. To train it, copy it over `selection.json` and run the training.
+- The scores show how well a model learns the generator. They do not show clinical accuracy.
+- Tests: 3 new tests. The whole suite: 526 passed.

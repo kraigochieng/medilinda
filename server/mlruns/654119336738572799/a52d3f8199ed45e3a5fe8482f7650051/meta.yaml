@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/a52d3f8199ed45e3a5fe8482f7650051/artifacts
+end_time: 1795472460328
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: a52d3f8199ed45e3a5fe8482f7650051
+run_name: ambitious-wren-106
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472452901
+status: 3
+tags: []
+user_id: kraigochieng

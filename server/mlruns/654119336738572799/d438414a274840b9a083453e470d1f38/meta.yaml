@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/d438414a274840b9a083453e470d1f38/artifacts
+end_time: 1795472994342
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: d438414a274840b9a083453e470d1f38
+run_name: agreeable-moose-772
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472859139
+status: 3
+tags: []
+user_id: kraigochieng

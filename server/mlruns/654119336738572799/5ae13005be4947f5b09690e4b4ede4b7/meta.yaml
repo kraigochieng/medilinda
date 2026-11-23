@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/5ae13005be4947f5b09690e4b4ede4b7/artifacts
+end_time: 1795473714290
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 5ae13005be4947f5b09690e4b4ede4b7
+run_name: whimsical-squid-254
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795473135383
+status: 3
+tags: []
+user_id: kraigochieng

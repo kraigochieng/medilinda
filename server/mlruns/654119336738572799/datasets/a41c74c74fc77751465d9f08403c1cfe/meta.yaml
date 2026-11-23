@@ -1,0 +1,58 @@
+digest: 063d86ca
+name: data_who_umc.csv.gz
+profile: '{"num_rows": 26564, "num_elements": 1726660}'
+schema: '{"mlflow_colspec": [{"type": "string", "name": "patient_name", "required":
+  true}, {"type": "double", "name": "inpatient_or_outpatient_number", "required":
+  false}, {"type": "string", "name": "patient_date_of_birth", "required": true}, {"type":
+  "double", "name": "patient_age", "required": true}, {"type": "double", "name": "patient_address",
+  "required": false}, {"type": "double", "name": "ward_or_clinic", "required": false},
+  {"type": "string", "name": "patient_gender", "required": true}, {"type": "string",
+  "name": "known_allergy", "required": true}, {"type": "string", "name": "pregnancy_status",
+  "required": true}, {"type": "double", "name": "patient_weight_kg", "required": true},
+  {"type": "double", "name": "patient_height_cm", "required": true}, {"type": "string",
+  "name": "date_of_onset_of_reaction", "required": true}, {"type": "string", "name":
+  "description_of_reaction", "required": true}, {"type": "boolean", "name": "rifampicin_suspected",
+  "required": true}, {"type": "string", "name": "rifampicin_start_date", "required":
+  false}, {"type": "string", "name": "rifampicin_stop_date", "required": false}, {"type":
+  "double", "name": "rifampicin_dose_amount", "required": false}, {"type": "double",
+  "name": "rifampicin_frequency_number", "required": false}, {"type": "string", "name":
+  "rifampicin_route", "required": false}, {"type": "string", "name": "rifampicin_batch_no",
+  "required": false}, {"type": "string", "name": "rifampicin_manufacturer", "required":
+  false}, {"type": "boolean", "name": "isoniazid_suspected", "required": true}, {"type":
+  "string", "name": "isoniazid_start_date", "required": false}, {"type": "string",
+  "name": "isoniazid_stop_date", "required": false}, {"type": "double", "name": "isoniazid_dose_amount",
+  "required": false}, {"type": "double", "name": "isoniazid_frequency_number", "required":
+  false}, {"type": "string", "name": "isoniazid_route", "required": false}, {"type":
+  "string", "name": "isoniazid_batch_no", "required": false}, {"type": "string", "name":
+  "isoniazid_manufacturer", "required": false}, {"type": "boolean", "name": "pyrazinamide_suspected",
+  "required": true}, {"type": "string", "name": "pyrazinamide_start_date", "required":
+  false}, {"type": "string", "name": "pyrazinamide_stop_date", "required": false},
+  {"type": "double", "name": "pyrazinamide_dose_amount", "required": false}, {"type":
+  "double", "name": "pyrazinamide_frequency_number", "required": false}, {"type":
+  "string", "name": "pyrazinamide_route", "required": false}, {"type": "string", "name":
+  "pyrazinamide_batch_no", "required": false}, {"type": "string", "name": "pyrazinamide_manufacturer",
+  "required": false}, {"type": "boolean", "name": "ethambutol_suspected", "required":
+  true}, {"type": "string", "name": "ethambutol_start_date", "required": false}, {"type":
+  "string", "name": "ethambutol_stop_date", "required": false}, {"type": "double",
+  "name": "ethambutol_dose_amount", "required": false}, {"type": "double", "name":
+  "ethambutol_frequency_number", "required": false}, {"type": "string", "name": "ethambutol_route",
+  "required": false}, {"type": "string", "name": "ethambutol_batch_no", "required":
+  false}, {"type": "string", "name": "ethambutol_manufacturer", "required": false},
+  {"type": "string", "name": "dechallenge", "required": true}, {"type": "string",
+  "name": "rechallenge", "required": true}, {"type": "string", "name": "severity",
+  "required": true}, {"type": "string", "name": "is_serious", "required": true}, {"type":
+  "string", "name": "criteria_for_seriousness", "required": false}, {"type": "string",
+  "name": "action_taken", "required": true}, {"type": "string", "name": "outcome",
+  "required": true}, {"type": "string", "name": "created_at", "required": true}, {"type":
+  "boolean", "name": "alcohol_use", "required": false}, {"type": "boolean", "name":
+  "hepatic_dysfunction", "required": false}, {"type": "boolean", "name": "renal_dysfunction",
+  "required": false}, {"type": "boolean", "name": "hiv_positive", "required": false},
+  {"type": "boolean", "name": "hepatitis_b_or_c", "required": false}, {"type": "string",
+  "name": "antiretroviral", "required": true}, {"type": "boolean", "name": "on_cotrimoxazole",
+  "required": false}, {"type": "boolean", "name": "other_hepatotoxic_medicine", "required":
+  false}, {"type": "double", "name": "alt_multiple_of_upper_limit", "required": false},
+  {"type": "double", "name": "bilirubin_umol_per_l", "required": false}, {"type":
+  "string", "name": "visual_exam", "required": true}, {"type": "string", "name": "causality_assessment_level",
+  "required": true}]}'
+source: '{"uri": "server/src/medilinda_ml/data/data_who_umc.csv.gz"}'
+source_type: local

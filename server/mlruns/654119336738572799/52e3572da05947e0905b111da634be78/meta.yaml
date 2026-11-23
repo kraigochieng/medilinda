@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/52e3572da05947e0905b111da634be78/artifacts
+end_time: 1795472570418
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 52e3572da05947e0905b111da634be78
+run_name: classy-rook-840
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472508597
+status: 3
+tags: []
+user_id: kraigochieng

@@ -1,0 +1,22 @@
+{
+  "model_name": "medilinda_rf_smote_pipeline_gradient_boosting",
+  "version": "medilinda_rf_smote_pipeline_gradient_boosting-20261123T224311Z-bacdf6a9f0ef",
+  "created_at": "2026-11-23T22:43:11.611563Z",
+  "source": "trained locally; MLflow experiment medilinda-causality, run ec259eda9c714a8c868df363932a2c84; experiment run c48145ea2323415995b26f0cc21ac6cf",
+  "library_versions": {
+    "scikit-learn": "1.7.2",
+    "imbalanced-learn": "0.14.0",
+    "numpy": "2.3.3",
+    "pandas": "2.3.3",
+    "scipy": "1.16.2",
+    "shap": "0.48.0",
+    "joblib": "1.5.2",
+    "mlflow": "3.4.0"
+  },
+  "file_hashes": {
+    "pipeline.pkl": "3be834e2ddd351c7d6babe455128ed97d539df00edf7a993366232ee74f95d1d",
+    "encoder.pkl": "57b2b0b5c142bac04d6ce489f1efa04092eb669279d22189a622280d52832e9d",
+    "explainer.pkl": "b84f64af270cc07fc6e45dde2f8ef8898c61f1f20b90aaea47788c4076b35b44"
+  },
+  "digest": "bacdf6a9f0ef9958a1e020168c72a61f4b96752dca0d24ae60fd46df286a1501"
+}

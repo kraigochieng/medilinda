@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/16d0ab88a48d4222ae71b97a5872eb90/artifacts
+end_time: 1795472994342
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 16d0ab88a48d4222ae71b97a5872eb90
+run_name: glamorous-hawk-215
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472859139
+status: 3
+tags: []
+user_id: kraigochieng

@@ -1,0 +1,19 @@
+{
+  "estimator": "gradient_boosting",
+  "params": {
+    "subsample": 0.8,
+    "n_estimators": 100,
+    "max_depth": 5,
+    "learning_rate": 0.1
+  },
+  "features": [
+    "patient_height_cm",
+    "rifampicin_start_to_onset_days",
+    "dechallenge_yes"
+  ],
+  "data_sha256": "60d72298b316344298e07a69108926b78f627b722afe7d646977b32036f81ffa",
+  "split_seed": 42,
+  "experiment_run_id": "c48145ea2323415995b26f0cc21ac6cf",
+  "cv_weighted_f1": 0.6579975761953398,
+  "feature_set": "app"
+}

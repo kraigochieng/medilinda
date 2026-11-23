@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/f160bf52882242bead51c5b9239435c4/artifacts
+end_time: 1795472468637
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: f160bf52882242bead51c5b9239435c4
+run_name: awesome-stork-524
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472461778
+status: 3
+tags: []
+user_id: kraigochieng

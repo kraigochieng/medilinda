@@ -1,0 +1,61 @@
+[
+  {
+    "name": "decision_tree",
+    "best_params": {
+      "max_depth": 25
+    },
+    "cv_mean_weighted_f1": 0.6020706253872155,
+    "cv_std_weighted_f1": 0.0069862290998489035,
+    "validation_weighted_f1": 0.5900153677517973
+  },
+  {
+    "name": "ada_boost",
+    "best_params": {
+      "n_estimators": 50,
+      "learning_rate": 0.1
+    },
+    "cv_mean_weighted_f1": 0.5922540850803025,
+    "cv_std_weighted_f1": 0.043294624445920485,
+    "validation_weighted_f1": 0.5569529635702392
+  },
+  {
+    "name": "logistic_regression",
+    "best_params": {
+      "penalty": "l2",
+      "C": 10
+    },
+    "cv_mean_weighted_f1": 0.5884011923122072,
+    "cv_std_weighted_f1": 0.016281389541707984,
+    "validation_weighted_f1": 0.5927022634432955
+  },
+  {
+    "name": "random_forest",
+    "best_params": {
+      "n_estimators": 100,
+      "max_features": "sqrt",
+      "max_depth": 10
+    },
+    "cv_mean_weighted_f1": 0.6518068088471404,
+    "cv_std_weighted_f1": 0.0013105369643626583,
+    "validation_weighted_f1": 0.6441042204705617
+  },
+  {
+    "name": "gradient_boosting",
+    "best_params": {
+      "subsample": 0.8,
+      "n_estimators": 100,
+      "max_depth": 5,
+      "learning_rate": 0.1
+    },
+    "cv_mean_weighted_f1": 0.6579975761953398,
+    "cv_std_weighted_f1": 0.0008967914686218688,
+    "validation_weighted_f1": 0.6535341651969679
+  },
+  {
+    "name": "naive_bayes",
+    "best_params": {},
+    "cv_mean_weighted_f1": 0.5519993183991291,
+    "cv_std_weighted_f1": 0.004269356755494454,
+    "validation_weighted_f1": 0.5479152287899445
+  }
+]

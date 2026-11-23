@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/f7699123f74544d2a26489a4261420f8/artifacts
+end_time: 1795472857313
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: f7699123f74544d2a26489a4261420f8
+run_name: gregarious-mule-787
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472840122
+status: 3
+tags: []
+user_id: kraigochieng

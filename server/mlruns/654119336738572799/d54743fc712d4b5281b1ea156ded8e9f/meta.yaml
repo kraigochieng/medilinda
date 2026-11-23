@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/d54743fc712d4b5281b1ea156ded8e9f/artifacts
+end_time: 1795472996169
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: d54743fc712d4b5281b1ea156ded8e9f
+run_name: logistic_regression
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472859139
+status: 3
+tags: []
+user_id: kraigochieng

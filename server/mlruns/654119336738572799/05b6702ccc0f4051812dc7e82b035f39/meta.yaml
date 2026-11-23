@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/05b6702ccc0f4051812dc7e82b035f39/artifacts
+end_time: 1795472678478
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 05b6702ccc0f4051812dc7e82b035f39
+run_name: learned-vole-642
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472572151
+status: 3
+tags: []
+user_id: kraigochieng
