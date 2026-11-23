@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/df082b56b5ac47518dd61aaa9608ce0f/artifacts
+end_time: 1795472572148
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: df082b56b5ac47518dd61aaa9608ce0f
+run_name: random_forest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472508597
+status: 3
+tags: []
+user_id: kraigochieng

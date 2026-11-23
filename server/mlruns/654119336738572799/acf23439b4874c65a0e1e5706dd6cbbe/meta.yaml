@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/acf23439b4874c65a0e1e5706dd6cbbe/artifacts
+end_time: 1795472857313
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: acf23439b4874c65a0e1e5706dd6cbbe
+run_name: fun-cow-452
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472840122
+status: 3
+tags: []
+user_id: kraigochieng

@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/ddd43d56783d44e891b22f6f4c0462ec/artifacts
+end_time: 1795472678478
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: ddd43d56783d44e891b22f6f4c0462ec
+run_name: puzzled-owl-534
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472572151
+status: 3
+tags: []
+user_id: kraigochieng

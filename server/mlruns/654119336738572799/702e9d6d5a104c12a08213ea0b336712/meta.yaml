@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/702e9d6d5a104c12a08213ea0b336712/artifacts
+end_time: 1795472507060
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 702e9d6d5a104c12a08213ea0b336712
+run_name: crawling-shrew-881
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472470203
+status: 3
+tags: []
+user_id: kraigochieng

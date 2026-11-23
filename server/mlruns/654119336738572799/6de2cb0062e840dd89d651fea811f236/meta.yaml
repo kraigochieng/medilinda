@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/6de2cb0062e840dd89d651fea811f236/artifacts
+end_time: 1795472460328
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 6de2cb0062e840dd89d651fea811f236
+run_name: kindly-gnu-1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472452901
+status: 3
+tags: []
+user_id: kraigochieng

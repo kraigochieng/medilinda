@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/3ba3d6a7f5b14b2eb9fe239707f234fc/artifacts
+end_time: 1795472570418
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 3ba3d6a7f5b14b2eb9fe239707f234fc
+run_name: fortunate-ape-553
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472508597
+status: 3
+tags: []
+user_id: kraigochieng

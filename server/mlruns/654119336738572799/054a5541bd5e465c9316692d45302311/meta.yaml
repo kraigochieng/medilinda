@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/054a5541bd5e465c9316692d45302311/artifacts
+end_time: 1795472678478
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 054a5541bd5e465c9316692d45302311
+run_name: powerful-shrimp-996
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472572151
+status: 3
+tags: []
+user_id: kraigochieng

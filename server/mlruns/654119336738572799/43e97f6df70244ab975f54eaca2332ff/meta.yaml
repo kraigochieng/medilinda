@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/43e97f6df70244ab975f54eaca2332ff/artifacts
+end_time: 1795472857313
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 43e97f6df70244ab975f54eaca2332ff
+run_name: silent-crow-320
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472840122
+status: 3
+tags: []
+user_id: kraigochieng

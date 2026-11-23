@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/487ec36fef8640aaa6d247b8e88fac94/artifacts
+end_time: 1795473133294
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 487ec36fef8640aaa6d247b8e88fac94
+run_name: youthful-penguin-14
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472996171
+status: 3
+tags: []
+user_id: kraigochieng

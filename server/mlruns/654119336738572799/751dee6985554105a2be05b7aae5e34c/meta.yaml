@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/751dee6985554105a2be05b7aae5e34c/artifacts
+end_time: 1795472507060
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 751dee6985554105a2be05b7aae5e34c
+run_name: ambitious-shoat-957
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472470203
+status: 3
+tags: []
+user_id: kraigochieng

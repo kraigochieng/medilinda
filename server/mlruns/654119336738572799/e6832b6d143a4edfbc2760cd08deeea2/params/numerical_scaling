@@ -1,0 +1,1 @@
+MinMaxScalingTransformer(numerical_columns=['patient_bmi'])

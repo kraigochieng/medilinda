@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/0256c65138484d1c891ca3d9c54cca1d/artifacts
+end_time: 1795472678478
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 0256c65138484d1c891ca3d9c54cca1d
+run_name: classy-whale-406
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472572151
+status: 3
+tags: []
+user_id: kraigochieng

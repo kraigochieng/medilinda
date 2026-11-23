@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/687171e5afa84fe89422ac73dccdec70/artifacts
+end_time: 1795473714290
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 687171e5afa84fe89422ac73dccdec70
+run_name: redolent-mouse-311
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795473135383
+status: 3
+tags: []
+user_id: kraigochieng

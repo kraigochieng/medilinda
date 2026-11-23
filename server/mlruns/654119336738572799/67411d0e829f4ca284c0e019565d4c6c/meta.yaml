@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/67411d0e829f4ca284c0e019565d4c6c/artifacts
+end_time: 1795472570418
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 67411d0e829f4ca284c0e019565d4c6c
+run_name: monumental-sow-679
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472508597
+status: 3
+tags: []
+user_id: kraigochieng

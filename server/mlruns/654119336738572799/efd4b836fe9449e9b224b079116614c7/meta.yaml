@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/efd4b836fe9449e9b224b079116614c7/artifacts
+end_time: 1795472838301
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: efd4b836fe9449e9b224b079116614c7
+run_name: bemused-quail-241
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472828379
+status: 3
+tags: []
+user_id: kraigochieng

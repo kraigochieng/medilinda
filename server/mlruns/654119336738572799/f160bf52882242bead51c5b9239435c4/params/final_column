@@ -1,0 +1,3 @@
+FinalColumnSelectorTransformer(columns=['patient_height_cm',
+                                        'rifampicin_start_to_onset_days',
+                                        'dechallenge_yes'])

@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/a68b1ea356874bac86c0626c685c0788/artifacts
+end_time: 1795472994342
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: a68b1ea356874bac86c0626c685c0788
+run_name: dazzling-roo-858
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472859139
+status: 3
+tags: []
+user_id: kraigochieng

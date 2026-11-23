@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/278dbec77ae84c41b59860b3302bd030/artifacts
+end_time: 1795473133294
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 278dbec77ae84c41b59860b3302bd030
+run_name: unique-lamb-127
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472996171
+status: 3
+tags: []
+user_id: kraigochieng

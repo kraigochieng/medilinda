@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/740479d069474054bf6ff6bfe4d5e2b0/artifacts
+end_time: 1795472685963
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 740479d069474054bf6ff6bfe4d5e2b0
+run_name: naive_bayes
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795472680095
+status: 3
+tags: []
+user_id: kraigochieng

@@ -1,0 +1,14 @@
+artifact_uri: mlruns/654119336738572799/7df341b982b542d99556f22d2e8ba2a1/artifacts
+end_time: 1795473720396
+entry_point_name: ''
+experiment_id: '654119336738572799'
+lifecycle_stage: active
+run_id: 7df341b982b542d99556f22d2e8ba2a1
+run_name: angry-bat-926
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795473716277
+status: 3
+tags: []
+user_id: kraigochieng
