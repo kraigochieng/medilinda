@@ -6,6 +6,12 @@ It directly addresses a **critical patient safety gap** in tuberculosis (TB) tre
 
 > **First-line anti-TB drugs (Pyrazinamide, Ethambutol, Isoniazid, Rifampin)** are among the **most frequently reported for serious ADRs** in Kenya’s national pharmacovigilance database — yet manual causality assessment is **slow, subjective, and resource-constrained**.
 
+## Scope
+
+MediLinda is a fourth-year project. It shows how causality assessment in pharmacovigilance can work with a model, its reasons, and a review by experts. It does not manage what happens after an alert reaches a facility.
+
+Read [what MediLinda does, and what it does not do](https://medilinda.vercel.app/about#scope).
+
 ## Demo screenshots
 
 ### Predicted Causality Assessment level
