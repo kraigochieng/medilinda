@@ -92,3 +92,14 @@ class NoCandidateResultsError(MedilindaMlError):
 
     def __init__(self) -> None:
         super().__init__("The experiment has no candidate result to choose from.")
+
+
+class TrainingDataLeakError(MedilindaMlError):
+    """The training frame has a column that holds the answer, such as the clean label of the generator."""
+
+    def __init__(self, *, columns: list[str]) -> None:
+        super().__init__(
+            f"The training data has columns that must not be read in training: {columns}. "
+            "They belong to the diagnostics file."
+        )
+        self.columns: list[str] = columns

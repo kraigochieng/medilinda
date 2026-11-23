@@ -6,6 +6,7 @@ the model in production is the model that the experiment chose.
 
 import os
 from pathlib import Path
+from typing import Literal
 
 from medilinda_ml.errors import (
     SelectionDataMismatchError,
@@ -28,6 +29,8 @@ class ModelSelection(BaseModel):
     split_seed: int
     experiment_run_id: str = Field(min_length=1)
     cv_weighted_f1: float
+    # "app": the columns that the app collects. "full": with the new report fields (decision DR-8).
+    feature_set: Literal["app", "full"] = "app"
 
 
 def hash_data_file(*, path: Path) -> str:

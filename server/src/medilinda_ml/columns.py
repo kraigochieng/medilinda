@@ -1,5 +1,23 @@
 TARGET_COLUMN = "causality_assessment_level"
 
+# The columns that decision DR-8 adds. The app does not collect them yet (issue #174).
+HISTORY_FLAG_COLUMNS = [
+    "alcohol_use",
+    "hepatic_dysfunction",
+    "renal_dysfunction",
+    "hiv_positive",
+    "hepatitis_b_or_c",
+    "on_cotrimoxazole",
+    "other_hepatotoxic_medicine",
+]
+LAB_COLUMNS = ["alt_multiple_of_upper_limit", "bilirubin_umol_per_l"]
+REPORT_EXTRA_COLUMNS = [
+    *HISTORY_FLAG_COLUMNS,
+    "antiretroviral",
+    *LAB_COLUMNS,
+    "visual_exam",
+]
+
 # The levels of the target, in the order of the ordinal encoder.
 TARGET_LEVELS = ["certain", "likely", "possible", "unlikely"]
 
