@@ -91,6 +91,7 @@ All notable changes to MediLinda are in this file. A tool generates it from the 
 - Add the OCR text of two PPB quarterly pharmacovigilance reports
 - Add the generated changelog and say how to generate it again
 - Say that the changelog is part of the merge process
+- Add the sources for the synthetic data research
 
 
 ### Features
