@@ -16,6 +16,8 @@ Read [what MediLinda does, and what it does not do](https://medilinda.vercel.app
 
 [`CHANGELOG.md`](CHANGELOG.md) is generated from the Conventional Commits and the tags. Do not edit it by hand. To generate it again, run `npm run changelog` in `client`.
 
+The changelog is part of the merge process. The last commit of each pull request is `docs: update the changelog`. CI generates the file again and fails when the committed file differs.
+
 ## Demo screenshots
 
 ### Predicted Causality Assessment level
