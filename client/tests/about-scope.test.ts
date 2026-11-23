@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+	SCOPE_DATA,
 	SCOPE_DOES,
 	SCOPE_DOES_NOT,
 	SCOPE_HEADING,
@@ -45,6 +46,21 @@ describe("the scope", () => {
 		}
 	});
 
+	it("says the data is synthetic and names its source and its limits", () => {
+		const text = SCOPE_DATA.join(" ");
+
+		expect(text).toContain("synthetic");
+		expect(text).toContain("quarterly reports of the Pharmacy and Poisons Board");
+		expect(text).toContain("WHO-UMC");
+		expect(text).toContain("sets the level first");
+		expect(text).toContain("do not show clinical accuracy");
+		expect(text).toContain("simulated solution");
+	});
+
+	it("says the model covers TB patients in Kenya", () => {
+		expect(SCOPE_MODEL.join(" ")).toContain("TB patients in Kenya");
+	});
+
 	it("does not promise a feature the app does not have", () => {
 		const text = [...SCOPE_DOES, ...SCOPE_DOES_NOT, ...SCOPE_MODEL, SCOPE_PURPOSE].join(" ").toLowerCase();
 
@@ -53,7 +69,7 @@ describe("the scope", () => {
 	});
 
 	it("uses short sentences, as the project style asks", () => {
-		const sentences = allSentences([SCOPE_PURPOSE, ...SCOPE_DOES, ...SCOPE_DOES_NOT, ...SCOPE_MODEL]);
+		const sentences = allSentences([SCOPE_PURPOSE, ...SCOPE_DOES, ...SCOPE_DOES_NOT, ...SCOPE_MODEL, ...SCOPE_DATA]);
 
 		for (const sentence of sentences) expect(sentence.split(/\s+/).length, sentence).toBeLessThanOrEqual(28);
 	});

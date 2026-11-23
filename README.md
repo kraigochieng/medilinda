@@ -8,7 +8,7 @@ It directly addresses a **critical patient safety gap** in tuberculosis (TB) tre
 
 ## Scope
 
-MediLinda is a fourth-year project. It shows how causality assessment in pharmacovigilance can work with a model, its reasons, and a review by experts. It does not manage what happens after an alert reaches a facility.
+MediLinda is a fourth-year project. It shows how causality assessment in pharmacovigilance can work with a model, its reasons, and a review by experts. It does not manage what happens after an alert reaches a facility. The data is synthetic.
 
 Read [what MediLinda does, and what it does not do](https://medilinda.vercel.app/about#scope).
 
